@@ -1,0 +1,4 @@
+- name: Reddit
+  enabled: true
+  id: reddit
+  url: https://www.reddit.com/best.json

@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+
+spring:
+  profiles:
+    active: localdev
+  main:
+    allow-bean-definition-overriding: true
+#  data:
+#    mongodb:
+#      uri: mongodb://memeory:memeory@localhost:27017
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    export:
+      simple:
+        enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
