@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
 import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.ServerHttpRequest
+import ru.sokomishalov.memeory.MemeoryApplication
 import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors.basePackage
@@ -25,7 +26,7 @@ class SwaggerConfig {
     fun customImplementation(): Docket =
             Docket(SWAGGER_2)
                     .select()
-                    .apis(basePackage("ru.sokomishalov.memeory"))
+                    .apis(basePackage(MemeoryApplication::class.java.packageName))
                     .paths(PathSelectors.any())
                     .build()
                     .ignoredParameterTypes(ServerHttpRequest::class.java)

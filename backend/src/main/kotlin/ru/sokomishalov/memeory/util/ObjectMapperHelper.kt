@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.databind.DeserializationFeature.*
 import com.fasterxml.jackson.databind.MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.LOWER_CAMEL_CASE
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE
 import com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
@@ -17,13 +15,9 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
  * @author sokomishalov
  */
 object ObjectMapperHelper {
-    val defaultObjectMapper = ObjectMapper()
+    val objectMapper: ObjectMapper = buildComplexObjectMapper()
 
-    val snakeCaseObjectMapper = buildComplexObjectMapper().setPropertyNamingStrategy(SNAKE_CASE)
-
-    val objectMapper = buildComplexObjectMapper().setPropertyNamingStrategy(LOWER_CAMEL_CASE)
-
-    val yamlObjectMapper = buildComplexObjectMapper(YAMLFactory()).setPropertyNamingStrategy(LOWER_CAMEL_CASE)
+    val yamlObjectMapper: ObjectMapper = buildComplexObjectMapper(YAMLFactory())
 
     private fun buildComplexObjectMapper(factory: JsonFactory? = null): ObjectMapper =
             ObjectMapper(factory)

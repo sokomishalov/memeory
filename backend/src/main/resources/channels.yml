@@ -1,0 +1,10 @@
+- name: Reddit memes channel
+  enabled: true
+  sourceType: REDDIT
+  id: reddit/memes
+  uri: /r/memes
+- name: Reddit video channel
+  enabled: true
+  sourceType: REDDIT
+  id: reddit/videos
+  uri: /r/videos

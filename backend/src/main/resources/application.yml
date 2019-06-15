@@ -3,15 +3,17 @@ server:
   servlet:
     context-path: /
 
+memeory:
+  fetch-interval-ms: 60000
 
 spring:
   profiles:
     active: localdev
   main:
     allow-bean-definition-overriding: true
-#  data:
-#    mongodb:
-#      uri: mongodb://memeory:memeory@localhost:27017
+  data:
+    mongodb:
+      uri: mongodb://memeory:memeory@localhost:27017/admin
 
 management:
   endpoint:

@@ -14,7 +14,7 @@ version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 val developmentOnly by configurations.creating
-configurations.runtimeClasspath.extendsFrom(developmentOnly)
+configurations.runtimeClasspath.get().extendsFrom(developmentOnly)
 
 repositories {
     mavenCentral()
@@ -50,10 +50,13 @@ dependencies {
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
     implementation("io.projectreactor.netty:reactor-netty:0.8.8.RELEASE")
 
+    implementation("org.apache.commons:commons-lang3:3.9")
+    implementation("com.google.guava:guava:28.0-jre")
+
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-
+    
+    
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
@@ -69,6 +72,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = "11"
     }
 }
