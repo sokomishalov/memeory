@@ -15,7 +15,7 @@ class ChannelController(private val channelServiceMongo: ChannelService) {
 
     @GetMapping("/list")
     fun all(): Flux<ChannelDTO> {
-        return channelServiceMongo.findAll()
+        return channelServiceMongo.findAllEnabled()
     }
 
     @PostMapping("/add")

@@ -3,32 +3,19 @@ server:
   servlet:
     context-path: /
 
-memeory:
-  fetch-interval-ms: 60000
-
 spring:
   profiles:
     active: localdev
   main:
     allow-bean-definition-overriding: true
-  data:
-    mongodb:
-      uri: mongodb://memeory:memeory@localhost:27017/admin
 
-management:
-  endpoint:
-    metrics:
-      enabled: true
-    prometheus:
-      enabled: true
-    export:
-      simple:
-        enabled: true
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+memeory:
+  fetch-interval-ms: 60000
+  fetch-count: 100
+
+channel:
+  reddit:
+    base-url: https://www.reddit.com
+  vk:
+    app-id: 7024306
+    access-token: ceea6953ceea6953ceea6953ecce8147e1cceeaceea695393edbd336b29a7c8ed2d0b91

@@ -7,7 +7,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 
 interface ApiService {
 
-    fun fetchMemesFromChannels(vararg channels: ChannelDTO): Flux<MemeDTO>
+    fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO>
 
     fun sourceType(): SourceType
 

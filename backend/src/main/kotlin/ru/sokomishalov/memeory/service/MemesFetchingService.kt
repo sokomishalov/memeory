@@ -3,17 +3,19 @@ package ru.sokomishalov.memeory.service
 import com.fasterxml.jackson.core.type.TypeReference
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux.*
-import reactor.core.scheduler.Schedulers.newSingle
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
 import ru.sokomishalov.memeory.util.loggerFor
-import java.lang.Thread.sleep
 import java.time.Duration.ofMillis
+import java.time.LocalDateTime.now
 import javax.annotation.PostConstruct
 import reactor.core.publisher.Flux.interval as scheduled
 
@@ -24,50 +26,45 @@ import reactor.core.publisher.Flux.interval as scheduled
 @Service
 class MemesFetchingService(
         private val channelService: ChannelService,
-        private val memeoryProperties: MemeoryProperties,
+        private val props: MemeoryProperties,
         private val apiServices: List<ApiService>,
         private val memeService: MemeService,
         @Value("classpath:channels.yml")
         private val resource: Resource
 ) {
-
     companion object {
-        private val log: Logger = loggerFor(this::class.java)
+        private val log: Logger = loggerFor(MemesFetchingService::class.java)
     }
 
-    // FIXME make non blocking
-    // FIXME make clusterable
     @PostConstruct
     fun init() {
-        val sourcesTypeRef: TypeReference<Array<ChannelDTO>> = object : TypeReference<Array<ChannelDTO>>() {}
-        val sourcesFromYaml: Array<ChannelDTO> = ObjectMapperHelper.yamlObjectMapper.readValue(resource.inputStream, sourcesTypeRef)
-
-        channelService
-                .saveChannelsIfNotExist(*sourcesFromYaml)
+        just(object : TypeReference<Array<ChannelDTO>>() {})
+                .map { ObjectMapperHelper.yamlObjectMapper.readValue(resource.inputStream, it) as Array<ChannelDTO> }
+                .flatMapMany { channelService.saveChannelsIfNotExist(*it) }
                 .then()
                 .subscribe()
+    }
 
-        sleep(100)
-
-        scheduled(ofMillis(memeoryProperties.fetchIntervalMs))
-                .flatMap { channelService.findAll() }
+    // FIXME make clusterable
+    @EventListener(ApplicationReadyEvent::class)
+    fun startUp() {
+        scheduled(ofMillis(props.fetchIntervalMs))
+                .doOnNext { log.info("About to fetch some new memes at ${now()}") }
+                .flatMap { channelService.findAllEnabled() }
                 .flatMap { channel ->
-                    val fetchedMemesFlux = fromIterable(apiServices)
+                    val fetchedMemesFlux = Flux.fromIterable(apiServices)
                             .filter { it.sourceType() == channel.sourceType }
-                            .flatMap { it.fetchMemesFromChannels(channel) }
+                            .flatMap { it.fetchMemesFromChannel(channel) }
                             .doOnNext { it.channel = channel.name }
 
                     memeService
                             .saveMemesIfNotExist(fetchedMemesFlux)
                             .onErrorResume { t ->
                                 log.debug(t.message)
-                                empty()
+                                Flux.empty()
                             }
                 }
                 .then()
-                .subscribeOn(newSingle(javaClass.simpleName))
                 .subscribe()
-
-        sleep(100)
     }
 }

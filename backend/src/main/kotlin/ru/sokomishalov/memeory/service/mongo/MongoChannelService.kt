@@ -35,9 +35,10 @@ class MongoChannelService(private val repository: ChannelRepository) : ChannelSe
                 .map { channelMapper.toDto(it) }
     }
 
-    override fun findAll(): Flux<ChannelDTO> {
+    override fun findAllEnabled(): Flux<ChannelDTO> {
         return repository
                 .findAll()
+                .filter { it.enabled }
                 .map { channelMapper.toDto(it) }
     }
 }

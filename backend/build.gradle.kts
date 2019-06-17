@@ -53,9 +53,12 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
 
+    implementation("com.vk.api:sdk:1.0.2") {
+        exclude(group = "org.apache.logging.log4j")
+    }
+
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 import reactor.tools.agent.ReactorDebugAgent.init
 import reactor.tools.agent.ReactorDebugAgent.processExistingClasses
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
+import ru.sokomishalov.memeory.service.api.reddit.RedditConfigurationProperties
+import ru.sokomishalov.memeory.service.api.vk.VkConfigurationProperties
 import ru.sokomishalov.memeory.util.loggerFor
 
 /**
@@ -16,7 +18,11 @@ import ru.sokomishalov.memeory.util.loggerFor
 
 @SpringBootApplication
 @EnableReactiveMongoRepositories
-@EnableConfigurationProperties(value = [MemeoryProperties::class])
+@EnableConfigurationProperties(
+        MemeoryProperties::class,
+        RedditConfigurationProperties::class,
+        VkConfigurationProperties::class
+)
 class MemeoryApplication
 
 private val log: Logger = loggerFor(MemeoryApplication::class.java)

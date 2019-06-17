@@ -10,5 +10,5 @@ interface ChannelService {
 
     fun saveChannelsIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO>
 
-    fun findAll(): Flux<ChannelDTO>
+    fun findAllEnabled(): Flux<ChannelDTO>
 }
