@@ -13,6 +13,8 @@ import ru.sokomishalov.memeory.enums.SourceType.REDDIT
 import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.service.api.reddit.model.Listing
 import ru.sokomishalov.memeory.util.EMPTY
+import java.lang.System.currentTimeMillis
+import java.util.*
 
 @Service
 class RedditService : ApiService {
@@ -39,8 +41,9 @@ class RedditService : ApiService {
                 .map { it?.data }
                 .map {
                     MemeDTO(
-                            id = "${sourceType()}:${it?.id}",
+                            id = "${sourceType().name}:${it?.id}",
                             caption = it?.title,
+                            publishedAt = Date(it?.createdUtc?.toLong()?.times(1000) ?: currentTimeMillis()),
                             attachments = listOf(AttachmentDTO(
                                     url = it?.url ?: EMPTY
                             ))

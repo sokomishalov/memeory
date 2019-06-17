@@ -9,4 +9,4 @@ import ru.sokomishalov.memeory.entity.Channel
  * @author sokomishalov
  */
 @Repository
-interface SourceRepository : ReactiveMongoRepository<Channel, String>
+interface ChannelRepository : ReactiveMongoRepository<Channel, String>

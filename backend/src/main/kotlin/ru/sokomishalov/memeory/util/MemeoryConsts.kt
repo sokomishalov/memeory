@@ -1,3 +1,3 @@
 package ru.sokomishalov.memeory.util
 
-const val EMPTY = ""
+const val EMPTY: String = ""

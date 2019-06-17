@@ -2,16 +2,16 @@ package ru.sokomishalov.memeory.service
 
 import com.fasterxml.jackson.core.type.TypeReference
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux.fromIterable
+import reactor.core.publisher.Flux.*
 import reactor.core.scheduler.Schedulers.newSingle
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
+import ru.sokomishalov.memeory.util.loggerFor
 import java.lang.Thread.sleep
 import java.time.Duration.ofMillis
 import javax.annotation.PostConstruct
@@ -30,33 +30,44 @@ class MemesFetchingService(
         @Value("classpath:channels.yml")
         private val resource: Resource
 ) {
-    private val log: Logger = LoggerFactory.getLogger(MemesFetchingService::class.java)
 
+    companion object {
+        private val log: Logger = loggerFor(this::class.java)
+    }
+
+    // FIXME make non blocking
+    // FIXME make clusterable
     @PostConstruct
     fun init() {
         val sourcesTypeRef: TypeReference<Array<ChannelDTO>> = object : TypeReference<Array<ChannelDTO>>() {}
         val sourcesFromYaml: Array<ChannelDTO> = ObjectMapperHelper.yamlObjectMapper.readValue(resource.inputStream, sourcesTypeRef)
 
-        // FIXME make non blocking
         channelService
                 .saveChannelsIfNotExist(*sourcesFromYaml)
                 .then()
-                .block()
+                .subscribe()
 
-        // FIXME make clusterable
+        sleep(100)
+
         scheduled(ofMillis(memeoryProperties.fetchIntervalMs))
                 .flatMap { channelService.findAll() }
                 .flatMap { channel ->
                     val fetchedMemesFlux = fromIterable(apiServices)
                             .filter { it.sourceType() == channel.sourceType }
                             .flatMap { it.fetchMemesFromChannels(channel) }
+                            .doOnNext { it.channel = channel.name }
 
-                    memeService.saveMemesIfNotExist(fetchedMemesFlux)
+                    memeService
+                            .saveMemesIfNotExist(fetchedMemesFlux)
+                            .onErrorResume { t ->
+                                log.debug(t.message)
+                                empty()
+                            }
                 }
                 .then()
                 .subscribeOn(newSingle(javaClass.simpleName))
                 .subscribe()
 
-        sleep(2000)
+        sleep(100)
     }
 }

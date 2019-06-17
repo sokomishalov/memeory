@@ -2,7 +2,6 @@ package ru.sokomishalov.memeory.exception
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
@@ -20,6 +19,7 @@ import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.web.reactive.function.server.ServerRequest.create
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
+import ru.sokomishalov.memeory.util.loggerFor
 import java.time.format.DateTimeParseException
 import java.util.*
 import javax.naming.AuthenticationException
@@ -29,8 +29,10 @@ import javax.naming.OperationNotSupportedException
 @ControllerAdvice
 class ExceptionHandlerController {
 
-    private val messageReaders = listOf<HttpMessageReader<*>>(DecoderHttpMessageReader(Jackson2JsonDecoder()))
-    private val log: Logger = LoggerFactory.getLogger(ExceptionHandlerController::class.java)
+    companion object {
+        private val messageReaders = listOf<HttpMessageReader<*>>(DecoderHttpMessageReader(Jackson2JsonDecoder()))
+        private val log: Logger = loggerFor(this::class.java)
+    }
 
     @ExceptionHandler(IllegalArgumentException::class, NoSuchElementException::class, InvalidFormatException::class, DateTimeParseException::class, HttpMessageNotReadableException::class, MethodArgumentNotValidException::class, WebExchangeBindException::class)
     @ResponseStatus(BAD_REQUEST)

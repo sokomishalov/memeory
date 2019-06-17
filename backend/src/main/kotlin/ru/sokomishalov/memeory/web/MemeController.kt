@@ -9,7 +9,7 @@ import ru.sokomishalov.memeory.service.MemeService
 
 @RestController
 @RequestMapping("/memes")
-class MemesController(private val memeService: MemeService) {
+class MemeController(private val memeService: MemeService) {
 
     @GetMapping("/all")
     fun all(): Flux<MemeDTO> {
