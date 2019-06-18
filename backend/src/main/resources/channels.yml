@@ -1,16 +1,16 @@
-- name: Reddit memes channel
+- name: memes (Reddit)
   enabled: true
   sourceType: REDDIT
   id: reddit:memes
   uri: /r/memes
 
-- name: Reddit video channel
+- name: videos (Reddit)
   enabled: true
   sourceType: REDDIT
   id: reddit:videos
   uri: /r/videos
 
-- name: VK VGIK
+- name: ВГИК (VK)
   enabled: true
   sourceType: VK
   id: vk:vgik

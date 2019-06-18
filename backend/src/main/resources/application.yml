@@ -10,7 +10,7 @@ spring:
     allow-bean-definition-overriding: true
 
 memeory:
-  fetch-interval-ms: 60000
+  fetch-interval-ms: 600000
   fetch-count: 100
 
 channel:

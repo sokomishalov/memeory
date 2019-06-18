@@ -8,10 +8,13 @@ import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Flux.*
 import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
+import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.api.ApiService
+import ru.sokomishalov.memeory.util.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
 import ru.sokomishalov.memeory.util.loggerFor
 import java.time.Duration.ofMillis
@@ -49,10 +52,10 @@ class MemesFetchingService(
     @EventListener(ApplicationReadyEvent::class)
     fun startUp() {
         scheduled(ofMillis(props.fetchIntervalMs))
-                .doOnNext { log.info("About to fetch some new memes at ${now()}") }
+                .doOnNext { log.info("About to fetch some new memes at ${now().format(DATE_FORMATTER)}") }
                 .flatMap { channelService.findAllEnabled() }
                 .flatMap { channel ->
-                    val fetchedMemesFlux = Flux.fromIterable(apiServices)
+                    val fetchedMemesFlux: Flux<MemeDTO> = fromIterable(apiServices)
                             .filter { it.sourceType() == channel.sourceType }
                             .flatMap { it.fetchMemesFromChannel(channel) }
                             .doOnNext { it.channel = channel.name }
@@ -60,8 +63,8 @@ class MemesFetchingService(
                     memeService
                             .saveMemesIfNotExist(fetchedMemesFlux)
                             .onErrorResume { t ->
-                                log.debug(t.message)
-                                Flux.empty()
+                                log.error(t.message)
+                                empty()
                             }
                 }
                 .then()
