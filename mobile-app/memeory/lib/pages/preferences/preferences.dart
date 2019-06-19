@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/cache/repository/visits_repo.dart';
 import 'package:memeory/pages/memes/memes.dart';
 import 'package:memeory/pages/preferences/widgets/channels.dart';
-import 'package:memeory/pages/preferences/widgets/scrolls.dart';
+import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
-import 'package:memeory/util/storage.dart';
 
 class UserPreferencesPage extends StatelessWidget {
   final _controller = PageController();
@@ -45,15 +45,15 @@ class UserPreferencesPage extends StatelessWidget {
             child: ThemePreferences(),
           ),
           PreferencesPageWrapper(
-            title: "Выберите источники мемов, которые Вам интересны!",
-            nextPage: nextPage,
-            child: ChannelPreferences(),
-          ),
-          PreferencesPageWrapper(
             title: "Выберите, как вам удобнее будет орать с мемов!",
             previousPage: previousPage,
             nextPage: nextPage,
-            child: ScrollPreferences(),
+            child: OrientationPreferences(),
+          ),
+          PreferencesPageWrapper(
+            title: "Выберите источники мемов, которые Вам интересны!",
+            nextPage: nextPage,
+            child: ChannelPreferences(),
           ),
           PreferencesPageWrapper(
             title: "Авторизуйтесь в соцсетях!",

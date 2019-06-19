@@ -1,6 +1,6 @@
 import 'package:memeory/app.dart';
 
-import 'env/env.dart';
+import 'package:memeory/util/env.dart';
 
 void main() {
   BuildEnvironment.init(

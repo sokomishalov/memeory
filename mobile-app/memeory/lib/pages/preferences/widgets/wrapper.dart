@@ -45,14 +45,20 @@ class PreferencesPageWrapper extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          header,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: header,
+          ),
           child,
-          bottomButton,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: bottomButton,
+          ),
         ],
       ),
     );

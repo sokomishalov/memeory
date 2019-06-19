@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:memeory/env/env.dart';
+import 'package:memeory/util/env.dart';
 import 'package:memeory/util/http.dart';
 
 Future<List> fetchChannels() async {

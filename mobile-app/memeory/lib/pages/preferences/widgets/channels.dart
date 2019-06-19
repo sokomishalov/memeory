@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
+import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/common/containers/future_builder.dart';
-import 'package:memeory/util/storage.dart';
 
 class ChannelPreferences extends StatefulWidget {
   @override
@@ -62,7 +62,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                 child: GridTile(
                   child: Card(
                     color: isActive
-                        ? Colors.green.shade300
+                        ? Colors.greenAccent.shade200
                         : CardTheme.of(context).color,
                     child: new Center(
                       child: Text(name),
