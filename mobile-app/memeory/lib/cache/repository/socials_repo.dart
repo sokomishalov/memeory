@@ -12,3 +12,11 @@ getGoogleProfile() async {
 setGoogleProfile(profile) async {
   await put(GOOGLE_PROFILE_KEY, json.encode(profile));
 }
+
+getFacebookProfile() async {
+  return json.decode(await get(FACEBOOK_PROFILE_KEY));
+}
+
+setFacebookProfile(profile) async {
+  await put(FACEBOOK_PROFILE_KEY, json.encode(profile));
+}
