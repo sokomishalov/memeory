@@ -7,6 +7,5 @@ interface MemeService {
 
     fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO>
 
-    fun findAllMemes(): Flux<MemeDTO>
-
+    fun pageOfMemes(page: Int, count: Int): Flux<MemeDTO>
 }

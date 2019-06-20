@@ -6,7 +6,8 @@ import 'package:memeory/util/consts.dart';
 import '../storage.dart';
 
 getGoogleProfile() async {
-  return GoogleAccount.fromJson(json.decode(await get(GOOGLE_PROFILE_KEY)));
+  var profile = await get(GOOGLE_PROFILE_KEY);
+  return profile != null ? GoogleAccount.fromJson(json.decode(profile)) : null;
 }
 
 setGoogleProfile(profile) async {
@@ -14,7 +15,8 @@ setGoogleProfile(profile) async {
 }
 
 getFacebookProfile() async {
-  return json.decode(await get(FACEBOOK_PROFILE_KEY));
+  var profile = await get(FACEBOOK_PROFILE_KEY);
+  return profile != null ? json.decode(profile) : null;
 }
 
 setFacebookProfile(profile) async {

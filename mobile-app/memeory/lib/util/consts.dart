@@ -1,6 +1,8 @@
 // Keys
 import 'package:flutter/material.dart';
 
+const MEMES_COUNT_ON_PAGE = 50;
+
 const APP_VISIT_DATETIME_KEY = "APP_VISIT_DATETIME";
 const SELECTED_CHANNELS_KEY = "CHANNELS";
 const SELECTED_ORIENTATION_KEY = "ORIENTATION";

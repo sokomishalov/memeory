@@ -1,5 +1,8 @@
 package ru.sokomishalov.memeory.service.mongo
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
 import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
@@ -24,11 +27,9 @@ class MongoMemeService(
                 .map { memeMapper.toDto(it) }
     }
 
-    override fun findAllMemes(): Flux<MemeDTO> {
+    override fun pageOfMemes(page: Int, count: Int): Flux<MemeDTO> {
         return repository
-                .findAll()
+                .findMemeBy(PageRequest.of(page, count, Sort.by(DESC, "publishedAt")))
                 .map { memeMapper.toDto(it) }
-                .sort { o1, o2 -> o2.publishedAt.compareTo(o1.publishedAt) }
     }
-
 }
