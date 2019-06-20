@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "142446820744",
+    "firebase_url": "https://memeory-aed31.firebaseio.com",
+    "project_id": "memeory-aed31",
+    "storage_bucket": "memeory-aed31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142446820744:android:2febf5bf5be03fff",
+        "android_client_info": {
+          "package_name": "ru.sokomishalov.memeory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142446820744-2ev2p083grumiv089k4dk6ai6q5d7h41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQhCt3Pn5ERj_RZYsjfIwPa8Jh-YzzpfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142446820744-2ev2p083grumiv089k4dk6ai6q5d7h41.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
