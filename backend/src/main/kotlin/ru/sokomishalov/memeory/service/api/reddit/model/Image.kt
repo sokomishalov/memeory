@@ -13,10 +13,6 @@ class Image {
     @get:JsonProperty("resolutions")
     @set:JsonProperty("resolutions")
     var resolutions: List<Resolution> = ArrayList()
-    @JsonProperty("variants")
-    @get:JsonProperty("variants")
-    @set:JsonProperty("variants")
-    var variants: Variants? = null
     @JsonProperty("id")
     @get:JsonProperty("id")
     @set:JsonProperty("id")

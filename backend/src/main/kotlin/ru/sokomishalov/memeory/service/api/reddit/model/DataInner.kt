@@ -101,10 +101,6 @@ class DataInner {
     @get:JsonProperty("total_awards_received")
     @set:JsonProperty("total_awards_received")
     var totalAwardsReceived: Int? = null
-    @JsonProperty("media_embed")
-    @get:JsonProperty("media_embed")
-    @set:JsonProperty("media_embed")
-    var mediaEmbed: MediaEmbed? = null
     @JsonProperty("thumbnail_width")
     @get:JsonProperty("thumbnail_width")
     @set:JsonProperty("thumbnail_width")
@@ -137,10 +133,6 @@ class DataInner {
     @get:JsonProperty("category")
     @set:JsonProperty("category")
     var category: Any? = null
-    @JsonProperty("secure_media_embed")
-    @get:JsonProperty("secure_media_embed")
-    @set:JsonProperty("secure_media_embed")
-    var secureMediaEmbed: SecureMediaEmbed? = null
     @JsonProperty("link_flair_text")
     @get:JsonProperty("link_flair_text")
     @set:JsonProperty("link_flair_text")
@@ -169,10 +161,6 @@ class DataInner {
     @get:JsonProperty("author_flair_richtext")
     @set:JsonProperty("author_flair_richtext")
     var authorFlairRichtext: List<Any> = ArrayList()
-    @JsonProperty("gildings")
-    @get:JsonProperty("gildings")
-    @set:JsonProperty("gildings")
-    var gildings: Gildings? = null
     @JsonProperty("post_hint")
     @get:JsonProperty("post_hint")
     @set:JsonProperty("post_hint")
@@ -257,10 +245,6 @@ class DataInner {
     @get:JsonProperty("preview")
     @set:JsonProperty("preview")
     var preview: Preview? = null
-    @JsonProperty("all_awardings")
-    @get:JsonProperty("all_awardings")
-    @set:JsonProperty("all_awardings")
-    var allAwardings: List<AllAwarding> = ArrayList()
     @JsonProperty("media_only")
     @get:JsonProperty("media_only")
     @set:JsonProperty("media_only")
@@ -384,7 +368,7 @@ class DataInner {
     @JsonProperty("media")
     @get:JsonProperty("media")
     @set:JsonProperty("media")
-    var media: Any? = null
+    var media: Media? = null
     @JsonProperty("is_video")
     @get:JsonProperty("is_video")
     @set:JsonProperty("is_video")

@@ -2,13 +2,13 @@
   enabled: true
   sourceType: REDDIT
   id: reddit:memes
-  uri: /r/memes
+  uri: memes
 
 - name: videos (Reddit)
   enabled: true
   sourceType: REDDIT
   id: reddit:videos
-  uri: /r/videos
+  uri: videos
 
 - name: ВГИК (VK)
   enabled: true

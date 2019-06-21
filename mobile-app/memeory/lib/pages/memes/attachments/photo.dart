@@ -8,12 +8,16 @@ class PhotoAttachment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+//      // FIXME CachedNetworkImage works much slower :(
 //      child: CachedNetworkImage(
 //        imageUrl: url,
 //        placeholder: (context, url) => Loader(),
-//        errorWidget: (context, url, error) => new Icon(Icons.error),
+//        errorWidget: (context, url, error) => ErrorContainer(error: error),
 //      ),
-      child: Image.network(url),
+      child: Image.network(
+        url,
+        width: MediaQuery.of(context).size.width,
+      ),
     );
   }
 }

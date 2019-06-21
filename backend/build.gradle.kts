@@ -53,9 +53,11 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
 
-    implementation("com.vk.api:sdk:1.0.2") {
+    implementation("com.vk.api:sdk:0.5.12") {
         exclude(group = "org.apache.logging.log4j")
+        exclude(group = "org.asynchttpclient")
     }
+    implementation("com.github.jreddit:jreddit:1.0.3")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -7,21 +7,24 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono.just
+import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
+import ru.sokomishalov.memeory.enums.AttachmentType.*
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.REDDIT
 import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.service.api.reddit.model.Listing
-import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID
 
+
 @Service
-class RedditService(props: RedditConfigurationProperties) : ApiService {
+class RedditService(props: RedditConfigurationProperties,
+                    private val globalProps: MemeoryProperties) : ApiService {
 
     private val client: WebClient = WebClient
             .builder()
@@ -32,10 +35,15 @@ class RedditService(props: RedditConfigurationProperties) : ApiService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
-                .flatMap { client.get().uri("${it.uri}.json").exchange() }
+                .flatMap {
+                    client
+                            .get()
+                            .uri("/r/${it.uri}/new.json?limit=${globalProps.fetchCount}")
+                            .exchange()
+                }
                 .flatMap { it.bodyToMono(Listing::class.java) }
                 .map { it?.data }
-                .flatMapMany { fromIterable(it!!.children) }
+                .flatMapMany { fromIterable(it?.children ?: emptyList()) }
                 .map { it?.data }
                 .map {
                     MemeDTO(
@@ -44,7 +52,12 @@ class RedditService(props: RedditConfigurationProperties) : ApiService {
                             caption = it?.title,
                             publishedAt = Date(it?.createdUtc?.toLong()?.times(1000) ?: currentTimeMillis()),
                             attachments = listOf(AttachmentDTO(
-                                    url = it?.url ?: EMPTY
+                                    url = it?.url,
+                                    type = when {
+                                        it?.media != null -> VIDEO
+                                        it?.url != null -> IMAGE
+                                        else -> NONE
+                                    }
                             ))
                     )
                 }
