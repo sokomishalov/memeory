@@ -14,8 +14,8 @@ class PhotoAttachment extends StatelessWidget {
 //        placeholder: (context, url) => Loader(),
 //        errorWidget: (context, url, error) => ErrorContainer(error: error),
 //      ),
-      child: Image.network(
-        url,
+      child: Image(
+        image: NetworkImage(url),
         width: MediaQuery.of(context).size.width,
       ),
     );

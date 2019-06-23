@@ -35,7 +35,9 @@ ThemeData themeBuilder(Brightness brightness) {
           buttonTheme: ButtonThemeData(
             buttonColor: Colors.teal,
           ),
-          primaryColorLight: Color(0xFF444444),
+          primaryColorLight: Color.fromRGBO(26, 26, 27, 1),
+          primaryColor: Color.fromRGBO(26, 26, 27, 1),
+          primaryColorDark: Colors.black,
           toggleableActiveColor: Colors.teal[300],
         );
 }
