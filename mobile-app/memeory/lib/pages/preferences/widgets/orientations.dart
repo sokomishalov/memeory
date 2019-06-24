@@ -55,11 +55,11 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
 
   @override
   void dispose() {
-    _verticalVideoController.dispose();
-    _horizontalVideoController.dispose();
+    _verticalVideoController?.dispose();
+    _horizontalVideoController?.dispose();
 
-    _verticalChewieController.dispose();
-    _horizontalChewieController.dispose();
+    _verticalChewieController?.dispose();
+    _horizontalChewieController?.dispose();
 
     super.dispose();
   }

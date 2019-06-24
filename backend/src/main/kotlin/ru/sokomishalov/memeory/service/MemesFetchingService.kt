@@ -7,16 +7,16 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Flux.*
+import reactor.core.publisher.Flux.empty
+import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
 import ru.sokomishalov.memeory.util.loggerFor
+import java.time.Duration.ZERO
 import java.time.Duration.ofMillis
 import java.time.LocalDateTime.now
 import javax.annotation.PostConstruct
@@ -51,14 +51,17 @@ class MemesFetchingService(
     // FIXME make clusterable
     @EventListener(ApplicationReadyEvent::class)
     fun startUp() {
-        scheduled(ofMillis(props.fetchIntervalMs))
+        scheduled(ZERO, ofMillis(props.fetchIntervalMs))
                 .doOnNext { log.info("About to fetch some new memes at ${now().format(DATE_FORMATTER)}") }
                 .flatMap { channelService.findAllEnabled() }
                 .flatMap { channel ->
-                    val fetchedMemesFlux: Flux<MemeDTO> = fromIterable(apiServices)
+                    val fetchedMemesFlux = fromIterable(apiServices)
                             .filter { it.sourceType() == channel.sourceType }
                             .flatMap { it.fetchMemesFromChannel(channel) }
-                            .doOnNext { it.channel = channel.name }
+                            .doOnNext {
+                                it.channelId = channel.id
+                                it.channelName = channel.name
+                            }
 
                     memeService
                             .saveMemesIfNotExist(fetchedMemesFlux)

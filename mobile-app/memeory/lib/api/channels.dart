@@ -8,3 +8,5 @@ Future<List> fetchChannels() async {
   final response = await http.get(url);
   return json.decode(utf8.decode(response.bodyBytes));
 }
+
+String getLogoUrl(channelId) => '${env.backendUrl}/channels/logo/$channelId';

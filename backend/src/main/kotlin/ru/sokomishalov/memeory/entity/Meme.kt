@@ -10,7 +10,8 @@ data class Meme(
         @Id
         var id: String = EMPTY,
         var caption: String? = null,
-        var channel: String? = null,
+        var channelId: String? = null,
+        var channelName: String? = null,
         var attachments: List<Attachment>? = null,
         var publishedAt: Date = Date(),
         var createdAt: Date = Date()

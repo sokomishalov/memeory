@@ -1,17 +1,23 @@
-- name: memes (Reddit)
+- id: reddit:memes
+  name: memes (Reddit)
   enabled: true
   sourceType: REDDIT
-  id: reddit:memes
   uri: memes
 
-- name: videos (Reddit)
+- id: reddit:videos
+  name: videos (Reddit)
   enabled: true
   sourceType: REDDIT
-  id: reddit:videos
   uri: videos
 
-- name: ВГИК (VK)
+- id: vk:vgik
+  name: ВГИК (VK)
   enabled: true
   sourceType: VK
-  id: vk:vgik
   uri: komment
+
+- id: vk:p_drogba
+  name: Портье Дрогба (VK)
+  enabled: true
+  sourceType: VK
+  uri: p_drogba

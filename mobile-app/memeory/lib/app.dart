@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memeory/pages/home/home.dart';
 import 'package:memeory/util/theme.dart';
+import 'package:memeory/util/time.dart';
 
 void runMemeory() {
   HttpOverrides.global = CustomHttp();
+  initLocale();
   runApp(DmsApp());
 }
 

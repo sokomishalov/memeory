@@ -1,3 +1,4 @@
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 ThemeData themeBuilder(Brightness brightness) {
@@ -42,6 +43,14 @@ ThemeData themeBuilder(Brightness brightness) {
         );
 }
 
-Color dependingOnThemeChoice({light, dark, context}) {
+dependingOnThemeChoice({context, light, dark}) {
   return Theme.of(context).brightness == Brightness.light ? light : dark;
+}
+
+changeTheme(bool value, BuildContext context) {
+  DynamicTheme.of(context).setBrightness(
+    Theme.of(context).brightness == Brightness.dark
+        ? Brightness.light
+        : Brightness.dark,
+  );
 }

@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.service.api.reddit.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Listing {
+class About {
 
     @JsonProperty("kind")
     @get:JsonProperty("kind")
@@ -11,6 +11,6 @@ class Listing {
     @JsonProperty("data")
     @get:JsonProperty("data")
     @set:JsonProperty("data")
-    var data: ListingData? = null
+    var data: AboutData? = null
 
 }

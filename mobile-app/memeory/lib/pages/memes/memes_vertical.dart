@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/cupertino/icons.dart' show CupertinoIcons;
 import 'package:loadmore/loadmore.dart';
+import 'package:memeory/api/channels.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/common/message/messages.dart';
 import 'package:memeory/pages/memes/attachments/photo.dart';
 import 'package:memeory/pages/memes/attachments/video.dart';
+import 'package:memeory/util/time.dart';
 
 class MemesVertical extends StatefulWidget {
   @override
@@ -31,7 +34,7 @@ class _MemesVerticalState extends State<MemesVertical> {
       child: ListView.builder(
         itemCount: _memes?.length ?? 0,
         itemBuilder: (context, index) {
-          var item = _memes[index];
+          var item = _memes[index] ?? {};
           var attachments = item["attachments"]?.map((a) {
             if (a["type"] == "IMAGE") {
               return PhotoAttachment(url: a["url"]);
@@ -62,23 +65,36 @@ class _MemesVerticalState extends State<MemesVertical> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        child: Icon(
-                          Icons.insert_emoticon,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        padding: EdgeInsets.all(3),
+                        width: 35,
+                        height: 35,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            width: 1,
-                            color: Theme.of(context).accentColor,
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              getLogoUrl(item["channelId"]),
+                            ),
                           ),
                         ),
                       ),
                       Spacer(flex: 1),
-                      Text(
-                        item["channel"],
-                        style: TextStyle(fontSize: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            item["channelName"],
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 4),
+                            child: Opacity(
+                              child: Text(
+                                timeAgo(item["publishedAt"]),
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              opacity: 0.5,
+                            ),
+                          ),
+                        ],
                       ),
                       Spacer(flex: 20),
                       GestureDetector(

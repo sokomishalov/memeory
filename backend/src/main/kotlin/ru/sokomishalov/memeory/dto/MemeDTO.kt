@@ -5,8 +5,9 @@ import java.util.*
 
 data class MemeDTO(
         var id: String = EMPTY,
+        var channelId: String? = null,
+        var channelName: String? = null,
         var caption: String? = null,
-        var channel: String? = null,
         var publishedAt: Date = Date(),
         var attachments: List<AttachmentDTO>? = null
 )

@@ -3,7 +3,7 @@ package ru.sokomishalov.memeory.service.api.reddit.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
-class Data {
+class ListingData {
 
     @JsonProperty("modhash")
     @get:JsonProperty("modhash")

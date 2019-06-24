@@ -11,4 +11,6 @@ interface ChannelService {
     fun saveChannelsIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO>
 
     fun findAllEnabled(): Flux<ChannelDTO>
+
+    fun getLogoByChannelId(channelId: String): Mono<ByteArray>
 }

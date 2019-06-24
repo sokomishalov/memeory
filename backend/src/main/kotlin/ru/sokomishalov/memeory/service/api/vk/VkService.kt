@@ -4,9 +4,12 @@ import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
+import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
+import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
+import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import reactor.core.scheduler.Schedulers.elastic
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
@@ -17,6 +20,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.NONE
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.api.ApiService
+import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import java.util.*
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
@@ -32,6 +36,9 @@ class VkService(
         private val vkServiceActor: ServiceActor,
         private val props: MemeoryProperties
 ) : ApiService {
+
+    private val reactiveClient: WebClient = WebClient.builder().build()
+
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
                 .map {
@@ -47,7 +54,6 @@ class VkService(
                 .map {
                     MemeDTO(
                             id = "${channel.id}$ID_DELIMITER${it.id}",
-                            channel = channel.name,
                             caption = it.text,
                             publishedAt = Date(it.date.toLong().times(1000)),
                             attachments = it?.attachments?.map { attachment ->
@@ -69,6 +75,25 @@ class VkService(
                     )
                 }
                 .subscribeOn(elastic())
+    }
+
+    override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
+        return just(channel)
+                .map {
+                    vkApiClient
+                            .wall()
+                            .getExtended(vkServiceActor)
+                            .domain(it.uri)
+                            .count(1)
+                            .execute()
+                }
+                .map { it.groups }
+                .flatMapMany { fromIterable(it) }
+                .map { it?.photo100 ?: it.photo50 ?: it?.photo200 ?: EMPTY }
+                .next()
+                .flatMap { reactiveClient.get().uri(it).exchange() }
+                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
+                .map { it.byteArray }
     }
 
     override fun sourceType(): SourceType = VK

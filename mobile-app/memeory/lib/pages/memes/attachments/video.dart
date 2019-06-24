@@ -31,8 +31,8 @@ class _VideoAttachmentState extends State<VideoAttachment> {
 
   @override
   void dispose() {
-    _memeVideoController.dispose();
-    _memeChewieController.dispose();
+    _memeVideoController?.dispose();
+    _memeChewieController?.dispose();
     super.dispose();
   }
 
