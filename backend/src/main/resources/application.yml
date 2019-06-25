@@ -15,10 +15,13 @@ memeory:
 
 channel:
   reddit:
+    enabled: true
     base-url: https://www.reddit.com
   vk:
+    enabled: true
     app-id: 7024306
     access-token: ceea6953ceea6953ceea6953ecce8147e1cceeaceea695393edbd336b29a7c8ed2d0b91
   facebook:
+    enabled: false
     app-id: 687820971640772
     secret: 0f6b3a2cd35b13c2e620fc6533a97aa2

@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = "channel.vk")
 class VkConfigurationProperties {
+    var enabled: Boolean = false
     var appId: Int = 0
     lateinit var accessToken: String
 }

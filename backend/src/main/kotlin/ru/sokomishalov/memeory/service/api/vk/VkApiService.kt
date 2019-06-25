@@ -4,7 +4,7 @@ import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -31,7 +31,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-@ConditionalOnBean(VkApiClient::class)
+@Conditional(VkCondition::class)
 class VkApiService(
         private var vkApiClient: VkApiClient,
         private val vkServiceActor: ServiceActor,

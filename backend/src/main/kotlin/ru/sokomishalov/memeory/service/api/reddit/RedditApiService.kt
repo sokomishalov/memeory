@@ -1,5 +1,6 @@
 package ru.sokomishalov.memeory.service.api.reddit
 
+import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders.CONTENT_TYPE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -26,6 +27,7 @@ import java.util.*
 import java.util.UUID.randomUUID
 
 @Service
+@Conditional(RedditCondition::class)
 class RedditApiService(props: RedditConfigurationProperties,
                        private val globalProps: MemeoryProperties) : ApiService {
 

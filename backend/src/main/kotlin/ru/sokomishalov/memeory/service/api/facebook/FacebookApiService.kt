@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.service.api.facebook
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
+import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.social.facebook.api.Facebook
 import org.springframework.social.facebook.api.Post.PostType.PHOTO
@@ -27,7 +27,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-@ConditionalOnBean(Facebook::class)
+@Conditional(FacebookCondition::class)
 class FacebookApiService(private val facebook: Facebook) : ApiService {
 
     private val reactiveClient: WebClient = WebClient.create()

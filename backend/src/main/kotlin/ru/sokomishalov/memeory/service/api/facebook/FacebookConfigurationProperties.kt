@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = "channel.facebook")
 class FacebookConfigurationProperties {
+    var enabled: Boolean = false
     lateinit var appId: String
     lateinit var secret: String
 }
