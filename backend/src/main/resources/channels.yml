@@ -21,3 +21,9 @@
   enabled: true
   sourceType: VK
   uri: p_drogba
+
+- id: facebook:originaltrollfootball
+  name: Troll Football (Facebook)
+  enabled: true
+  sourceType: FACEBOOK
+  uri: originaltrollfootball

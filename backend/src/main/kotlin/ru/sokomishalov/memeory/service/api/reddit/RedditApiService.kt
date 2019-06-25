@@ -26,8 +26,8 @@ import java.util.*
 import java.util.UUID.randomUUID
 
 @Service
-class RedditService(props: RedditConfigurationProperties,
-                    private val globalProps: MemeoryProperties) : ApiService {
+class RedditApiService(props: RedditConfigurationProperties,
+                       private val globalProps: MemeoryProperties) : ApiService {
 
     private val client: WebClient = WebClient
             .builder()

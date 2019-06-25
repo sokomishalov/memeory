@@ -31,6 +31,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
 
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -61,7 +62,6 @@ dependencies {
         exclude(group = "org.apache.logging.log4j")
         exclude(group = "org.asynchttpclient")
     }
-    implementation("com.github.jreddit:jreddit:1.0.3")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

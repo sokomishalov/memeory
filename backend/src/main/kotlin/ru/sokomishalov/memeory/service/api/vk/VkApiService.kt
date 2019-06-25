@@ -4,6 +4,7 @@ import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -11,7 +12,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
-import reactor.core.scheduler.Schedulers.elastic
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -31,13 +31,14 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-class VkService(
+@ConditionalOnBean(VkApiClient::class)
+class VkApiService(
         private var vkApiClient: VkApiClient,
         private val vkServiceActor: ServiceActor,
         private val props: MemeoryProperties
 ) : ApiService {
 
-    private val reactiveClient: WebClient = WebClient.builder().build()
+    private val reactiveClient: WebClient = WebClient.create()
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -74,7 +75,6 @@ class VkService(
                             }
                     )
                 }
-                .subscribeOn(elastic())
     }
 
     override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
