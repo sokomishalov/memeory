@@ -35,10 +35,9 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 class VkApiService(
         private var vkApiClient: VkApiClient,
         private val vkServiceActor: ServiceActor,
-        private val props: MemeoryProperties
+        private val props: MemeoryProperties,
+        private val webClient: WebClient
 ) : ApiService {
-
-    private val reactiveClient: WebClient = WebClient.create()
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -91,7 +90,7 @@ class VkApiService(
                 .flatMapMany { fromIterable(it) }
                 .map { it?.photo100 ?: it.photo50 ?: it?.photo200 ?: EMPTY }
                 .next()
-                .flatMap { reactiveClient.get().uri(it).exchange() }
+                .flatMap { webClient.get().uri(it).exchange() }
                 .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
                 .map { it.byteArray }
     }

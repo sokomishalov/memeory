@@ -1,9 +1,8 @@
 package ru.sokomishalov.memeory.service.api.reddit
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
-import org.springframework.http.HttpHeaders.CONTENT_TYPE
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -28,20 +27,14 @@ import java.util.UUID.randomUUID
 
 @Service
 @Conditional(RedditCondition::class)
-class RedditApiService(props: RedditConfigurationProperties,
-                       private val globalProps: MemeoryProperties) : ApiService {
-
-    private val client: WebClient = WebClient
-            .builder()
-            .baseUrl(props.baseUrl)
-            .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-            .build()
-
+class RedditApiService(private val globalProps: MemeoryProperties,
+                       @Qualifier("reddit-web-client")
+                       private val webClient: WebClient) : ApiService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
                 .flatMap {
-                    client
+                    webClient
                             .get()
                             .uri("/r/${it.uri}/hot.json?limit=${globalProps.fetchCount}")
                             .exchange()
@@ -70,7 +63,7 @@ class RedditApiService(props: RedditConfigurationProperties,
     override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
         return just(channel)
                 .flatMap {
-                    client
+                    webClient
                             .get()
                             .uri("/r/${it.uri}/about.json")
                             .exchange()
@@ -78,7 +71,7 @@ class RedditApiService(props: RedditConfigurationProperties,
                 .flatMap { it.bodyToMono(About::class.java) }
                 .map { it?.data }
                 .map { it?.communityIcon?.ifBlank { it.iconImg } ?: EMPTY }
-                .flatMap { client.get().uri(it).exchange() }
+                .flatMap { webClient.get().uri(it).exchange() }
                 .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
                 .map { it.byteArray }
 

@@ -27,3 +27,9 @@
   enabled: true
   sourceType: FACEBOOK
   uri: originaltrollfootball
+
+- id: instagram:originaltrollfootball
+  name: Troll Football (Instagram)
+  enabled: true
+  sourceType: INSTAGRAM
+  uri: originaltrollfootball

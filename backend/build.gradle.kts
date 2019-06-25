@@ -56,12 +56,14 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
     implementation("com.github.ben-manes.caffeine:caffeine:2.7.0")
+    implementation("javax.xml.bind:jaxb-api:2.2.11")
 
 
     implementation("com.vk.api:sdk:0.5.12") {
         exclude(group = "org.apache.logging.log4j")
         exclude(group = "org.asynchttpclient")
     }
+    implementation("com.github.igor-suhorukov:instagramscraper:2.2")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

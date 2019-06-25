@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.scheduling.annotation.EnableAsync
+import org.springframework.web.reactive.function.client.WebClient
 import ru.sokomishalov.memeory.util.GsonHelper
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
 
@@ -33,5 +34,9 @@ class CommonConfig {
     fun placeholder(@Value("classpath:images/logo.png") logoPlaceHolder: Resource): ByteArray {
         return toByteArray(logoPlaceHolder.inputStream)
     }
+
+    @Bean
+    @Primary
+    fun reactiveWebClient(): WebClient = WebClient.create()
 }
 

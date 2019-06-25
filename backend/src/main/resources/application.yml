@@ -25,3 +25,5 @@ channel:
     enabled: false
     app-id: 687820971640772
     secret: 0f6b3a2cd35b13c2e620fc6533a97aa2
+  instagram:
+    enabled: true
