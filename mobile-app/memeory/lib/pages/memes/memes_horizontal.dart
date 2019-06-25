@@ -1,11 +1,62 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/api/memes.dart';
+import 'package:memeory/common/containers/future_builder.dart';
+import 'package:memeory/pages/memes/mixin.dart';
 
-class MemesHorizontal extends StatelessWidget {
+class MemesHorizontal extends StatefulWidget {
+  @override
+  _MemesHorizontalState createState() => _MemesHorizontalState();
+}
+
+class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
+  PageController _controller;
+  int _currentPage;
+  Future<List> _memes;
+
+  @override
+  void initState() {
+    _controller = new PageController();
+    _currentPage = 0;
+    _memes = fetchMemes(_currentPage);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Здесь будут мемы по горизонтальному!',
+    return FutureWidget(
+      future: _memes,
+      render: (memes) => PageView.builder(
+        itemCount: memes?.length ?? 0,
+        controller: _controller,
+        itemBuilder: (context, index) {
+          var item = memes[index] ?? {};
+
+          return Container(
+            key: Key(item["id"]),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColorLight,
+            ),
+            child: Center(
+              child: Container(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    prepareHeader(item, context),
+                    prepareCaption(item, context),
+                    ...prepareAttachments(item)
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
