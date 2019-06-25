@@ -36,14 +36,15 @@ class InstagramApiService(private val instagram: Instagram,
                     MemeDTO(
                             id = "${channel.id}$ID_DELIMITER${it.id}",
                             caption = it.caption,
-                            publishedAt = it.lastUpdated,
+                            publishedAt = it.created,
                             attachments = listOf(
                                     AttachmentDTO(
                                             url = it.videoUrl ?: it.displayUrl,
                                             type = when {
                                                 it.isVideo -> VIDEO
                                                 else -> IMAGE
-                                            }
+                                            },
+                                            aspectRatio = it.width.toDouble().div(it.height)
                                     )
                             )
 

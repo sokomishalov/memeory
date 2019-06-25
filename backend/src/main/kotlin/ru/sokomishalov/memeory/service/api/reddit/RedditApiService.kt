@@ -54,6 +54,9 @@ class RedditApiService(private val globalProps: MemeoryProperties,
                                         it?.media != null -> VIDEO
                                         it?.url != null -> IMAGE
                                         else -> NONE
+                                    },
+                                    aspectRatio = it?.preview?.images?.get(0)?.source?.run {
+                                        width?.toDouble()?.div(height?.toDouble() ?: 1.0)
                                     }
                             ))
                     )

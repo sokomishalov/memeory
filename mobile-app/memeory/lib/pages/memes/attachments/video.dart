@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoAttachment extends StatefulWidget {
-  const VideoAttachment({Key key, this.url}) : super(key: key);
+  const VideoAttachment({
+    Key key,
+    this.url,
+    this.aspectRatio = 1,
+  }) : super(key: key);
 
   final String url;
+  final double aspectRatio;
 
   @override
   _VideoAttachmentState createState() => _VideoAttachmentState();
@@ -22,7 +27,7 @@ class _VideoAttachmentState extends State<VideoAttachment> {
     _memeChewieController = ChewieController(
       videoPlayerController: _memeVideoController,
       showControls: false,
-      aspectRatio: 4 / 4,
+      aspectRatio: widget.aspectRatio,
       autoPlay: false,
     );
 

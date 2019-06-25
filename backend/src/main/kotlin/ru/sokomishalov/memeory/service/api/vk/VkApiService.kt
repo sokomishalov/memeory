@@ -69,6 +69,9 @@ class VkApiService(
                                                 VIDEO -> VIDEO_ATTACHMENT
                                                 else -> NONE
                                             }
+                                        },
+                                        aspectRatio = attachment?.photo?.run {
+                                            width.toDouble().div(height.toDouble())
                                         }
                                 )
                             }

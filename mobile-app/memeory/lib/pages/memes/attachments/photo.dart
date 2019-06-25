@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PhotoAttachment extends StatelessWidget {
-  const PhotoAttachment({Key key, this.url}) : super(key: key);
+  const PhotoAttachment({Key key, this.url, this.aspectRatio})
+      : super(key: key);
 
   final String url;
+  final double aspectRatio;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,9 @@ class PhotoAttachment extends StatelessWidget {
 //      // FIXME CachedNetworkImage works much slower :(
 //      child: CachedNetworkImage(
 //        width: MediaQuery.of(context).size.width,
+//        height: aspectRatio != null
+//            ? MediaQuery.of(context).size.width / aspectRatio
+//            : null,
 //        imageUrl: url,
 //        placeholder: (context, url) => Loader(),
 //        errorWidget: (context, url, error) => ErrorContainer(error: error),
@@ -18,6 +23,9 @@ class PhotoAttachment extends StatelessWidget {
       child: Image(
         image: NetworkImage(url),
         width: MediaQuery.of(context).size.width,
+        height: aspectRatio != null
+            ? MediaQuery.of(context).size.width / aspectRatio
+            : null,
       ),
     );
   }

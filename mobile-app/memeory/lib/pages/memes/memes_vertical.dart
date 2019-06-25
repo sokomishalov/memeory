@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/cupertino/icons.dart' show CupertinoIcons;
@@ -5,6 +7,7 @@ import 'package:loadmore/loadmore.dart';
 import 'package:memeory/api/channels.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/common/message/messages.dart';
+import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
 import 'package:memeory/pages/memes/attachments/photo.dart';
 import 'package:memeory/pages/memes/attachments/video.dart';
 import 'package:memeory/util/time.dart';
@@ -35,15 +38,6 @@ class _MemesVerticalState extends State<MemesVertical> {
         itemCount: _memes?.length ?? 0,
         itemBuilder: (context, index) {
           var item = _memes[index] ?? {};
-          var attachments = item["attachments"]?.map((a) {
-            if (a["type"] == "IMAGE") {
-              return PhotoAttachment(url: a["url"]);
-            } else if (a["type"] == "VIDEO") {
-              return VideoAttachment(url: a["url"]);
-            } else {
-              return Container();
-            }
-          })?.toList();
 
           return Container(
             key: Key(item["id"]),
@@ -111,7 +105,35 @@ class _MemesVerticalState extends State<MemesVertical> {
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
-                ...attachments
+                AttachmentCarousel(
+                  minAspectRatio: item["attachments"]
+                          ?.map((a) => a["aspectRatio"])
+                          ?.cast<double>()
+                          ?.reduce((double o1, double o2) => min(o1, o2)) ??
+                      1.0,
+                  items: item["attachments"]
+                      ?.map((a) {
+                        var aspectRatio = a["aspectRatio"];
+                        var url = a["url"];
+                        var type = a["type"];
+
+                        if (type == "IMAGE") {
+                          return PhotoAttachment(
+                            url: url,
+                            aspectRatio: aspectRatio,
+                          );
+                        } else if (type == "VIDEO") {
+                          return VideoAttachment(
+                            url: url,
+                            aspectRatio: aspectRatio,
+                          );
+                        } else {
+                          return Container();
+                        }
+                      })
+                      ?.cast<Widget>()
+                      ?.toList(),
+                )
               ],
             ),
           );
