@@ -64,6 +64,7 @@ dependencies {
         exclude(group = "org.asynchttpclient")
     }
     implementation("com.github.igor-suhorukov:instagramscraper:2.2")
+    implementation("org.twitter4j:twitter4j-core:4.0.7")
 
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

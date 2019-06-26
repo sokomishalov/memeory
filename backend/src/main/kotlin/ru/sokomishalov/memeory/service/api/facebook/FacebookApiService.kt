@@ -28,9 +28,8 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  */
 @Service
 @Conditional(FacebookCondition::class)
-class FacebookApiService(private val facebook: Facebook) : ApiService {
-
-    private val reactiveClient: WebClient = WebClient.create()
+class FacebookApiService(private val facebook: Facebook,
+                         private val webClient: WebClient) : ApiService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -59,7 +58,7 @@ class FacebookApiService(private val facebook: Facebook) : ApiService {
         return just(channel)
                 .map { facebook.groupOperations().getGroup(it.uri) }
                 .map { it.icon }
-                .flatMap { reactiveClient.get().uri(it).exchange() }
+                .flatMap { webClient.get().uri(it).exchange() }
                 .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
                 .map { it.byteArray }
     }

@@ -33,3 +33,9 @@
   enabled: true
   sourceType: INSTAGRAM
   uri: originaltrollfootball
+
+- id: twitter:russianmemesltd
+  name: Russian Memes United (Twitter)
+  enabled: true
+  sourceType: TWITTER
+  uri: russianmemesltd
