@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.api.facebook
+package ru.sokomishalov.memeory.service.api.facebook.graph
 
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
@@ -18,6 +18,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.NONE
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.api.ApiService
+import ru.sokomishalov.memeory.service.api.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
@@ -27,9 +28,10 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-@Conditional(FacebookCondition::class)
-class FacebookApiService(private val facebook: Facebook,
-                         private val webClient: WebClient) : ApiService {
+@Conditional(FacebookCondition::class, FacebookGraphApiCondition::class)
+class FacebookGraphApiService(private val facebook: Facebook,
+                              private val webClient: WebClient
+) : ApiService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)

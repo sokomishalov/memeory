@@ -55,20 +55,15 @@ class MemesFetchingService(
                 .doOnNext { log.info("About to fetch some new memes at ${now().format(DATE_FORMATTER)}") }
                 .flatMap { channelService.findAllEnabled() }
                 .flatMap { channel ->
-                    val fetchedMemesFlux = fromIterable(apiServices)
+                    fromIterable(apiServices)
                             .filter { it.sourceType() == channel.sourceType }
                             .flatMap { it.fetchMemesFromChannel(channel) }
                             .doOnNext {
                                 it.channelId = channel.id
                                 it.channelName = channel.name
                             }
-
-                    memeService
-                            .saveMemesIfNotExist(fetchedMemesFlux)
-                            .onErrorResume { t ->
-                                log.error(t.message)
-                                empty()
-                            }
+                            .onErrorResume { empty() }
+                            .let { memeService.saveMemesIfNotExist(it) }
                 }
                 .then()
                 .subscribe()

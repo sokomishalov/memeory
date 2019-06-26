@@ -7,6 +7,10 @@ import java.time.format.DateTimeFormatter.ofPattern
 const val EMPTY: String = ""
 const val ID_DELIMITER: String = ":"
 
+const val FACEBOOK_BASE_URl: String = "https://www.facebook.com"
+const val FACEBOOK_GRAPH_BASE_URl: String = "http://graph.facebook.com"
+const val REDDIT_BASE_URl: String = "https://www.reddit.com"
+
 // Keys
 const val CHANNEL_LOGO_CACHE_KEY: String = "CHANNEL_LOGO"
 

@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.service.api.reddit
 
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
@@ -21,6 +20,7 @@ import ru.sokomishalov.memeory.service.api.reddit.model.About
 import ru.sokomishalov.memeory.service.api.reddit.model.Listing
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.REDDIT_BASE_URl
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID
@@ -28,15 +28,15 @@ import java.util.UUID.randomUUID
 @Service
 @Conditional(RedditCondition::class)
 class RedditApiService(private val globalProps: MemeoryProperties,
-                       @Qualifier("reddit-web-client")
-                       private val webClient: WebClient) : ApiService {
+                       private val webClient: WebClient
+) : ApiService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
                 .flatMap {
                     webClient
                             .get()
-                            .uri("/r/${it.uri}/hot.json?limit=${globalProps.fetchCount}")
+                            .uri("$REDDIT_BASE_URl/r/${it.uri}/hot.json?limit=${globalProps.fetchCount}")
                             .exchange()
                 }
                 .flatMap { it.bodyToMono(Listing::class.java) }
@@ -68,7 +68,7 @@ class RedditApiService(private val globalProps: MemeoryProperties,
                 .flatMap {
                     webClient
                             .get()
-                            .uri("/r/${it.uri}/about.json")
+                            .uri("$REDDIT_BASE_URl/r/${it.uri}/about.json")
                             .exchange()
                 }
                 .flatMap { it.bodyToMono(About::class.java) }
