@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.mongo
+package ru.sokomishalov.memeory.service.db.mongo
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.dto.MemeDTO
-import ru.sokomishalov.memeory.entity.Meme
 import ru.sokomishalov.memeory.repository.MemeRepository
-import ru.sokomishalov.memeory.service.MemeService
+import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMapper
 
 @Service
@@ -18,13 +17,12 @@ class MongoMemeService(
 ) : MemeService {
 
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> {
-        val memesToSaveFlux: Flux<Meme> = memes
-                .filterWhen { !repository.existsById(it.id) }
+        return memes
+                .filterWhen { repository.existsById(it.id).not() }
                 .map { memeMapper.toEntity(it) }
-
-        return repository
-                .saveAll(memesToSaveFlux)
+                .let { repository.saveAll(it) }
                 .map { memeMapper.toDto(it) }
+
     }
 
     override fun pageOfMemes(page: Int, count: Int): Flux<MemeDTO> {

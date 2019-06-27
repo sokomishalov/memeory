@@ -6,4 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class MemeoryProperties {
     var fetchIntervalMs: Long = 60000
     val fetchCount: Int = 100
+    val memeExpirationDays: Int = 30
 }

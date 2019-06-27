@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service
+package ru.sokomishalov.memeory.service.schedulers
 
 import com.fasterxml.jackson.core.type.TypeReference
 import org.slf4j.Logger
@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.api.ApiService
+import ru.sokomishalov.memeory.service.db.ChannelService
+import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.ObjectMapperHelper
 import ru.sokomishalov.memeory.util.loggerFor
@@ -27,7 +29,7 @@ import reactor.core.publisher.Flux.interval as scheduled
  * @author sokomishalov
  */
 @Service
-class MemesFetchingService(
+class MemesFetchingScheduler(
         private val channelService: ChannelService,
         private val props: MemeoryProperties,
         private val apiServices: List<ApiService>,
@@ -36,7 +38,7 @@ class MemesFetchingService(
         private val resource: Resource
 ) {
     companion object {
-        private val log: Logger = loggerFor(MemesFetchingService::class.java)
+        private val log: Logger = loggerFor(MemesFetchingScheduler::class.java)
     }
 
     @PostConstruct

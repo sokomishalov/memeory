@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.dto.MemeDTO
-import ru.sokomishalov.memeory.service.MemeService
+import ru.sokomishalov.memeory.service.db.MemeService
 
 @RestController
 @RequestMapping("/memes")

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service
+package ru.sokomishalov.memeory.service.db
 
 import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.dto.MemeDTO

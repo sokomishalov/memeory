@@ -10,7 +10,10 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.service.ChannelService
+import ru.sokomishalov.memeory.service.api.ApiService
+import ru.sokomishalov.memeory.service.cache.CacheService
+import ru.sokomishalov.memeory.service.db.ChannelService
+import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 
 /**
  * @author sokomishalov
@@ -19,7 +22,9 @@ import ru.sokomishalov.memeory.service.ChannelService
 @RequestMapping("/channels")
 class ChannelController(private val channelService: ChannelService,
                         @Qualifier("placeholder")
-                        private val placeholder: ByteArray) {
+                        private val placeholder: ByteArray,
+                        private val apiServices: List<ApiService>,
+                        private val cache: CacheService) {
 
     @GetMapping("/list")
     fun all(): Flux<ChannelDTO> {
@@ -33,8 +38,19 @@ class ChannelController(private val channelService: ChannelService,
 
     @GetMapping("/logo/{channelId}")
     fun logo(@PathVariable channelId: String): Mono<ResponseEntity<out AbstractResource>> {
-        return channelService
-                .getLogoByChannelId(channelId)
+        return cache
+                .getFromCache(
+                        cache = CHANNEL_LOGO_CACHE_KEY,
+                        key = channelId,
+                        orElse = channelService
+                                .findById(channelId)
+                                .flatMap { c ->
+                                    Flux.fromIterable(apiServices)
+                                            .filter { it.sourceType() == c.sourceType }
+                                            .next()
+                                            .flatMap { it.getLogoByChannel(c) }
+                                }
+                )
                 .defaultIfEmpty(placeholder)
                 .onErrorResume { just(placeholder) }
                 .map {
@@ -43,5 +59,6 @@ class ChannelController(private val channelService: ChannelService,
                             .contentType(APPLICATION_OCTET_STREAM)
                             .body(ByteArrayResource(it))
                 }
+
     }
 }

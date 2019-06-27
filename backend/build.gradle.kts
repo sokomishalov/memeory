@@ -39,6 +39,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
+    implementation("javax.xml.bind:jaxb-api:2.2.11")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -56,7 +57,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
     implementation("com.github.ben-manes.caffeine:caffeine:2.7.0")
-    implementation("javax.xml.bind:jaxb-api:2.2.11")
+    implementation("org.jsoup:jsoup:1.12.1")
 
 
     implementation("com.vk.api:sdk:0.5.12") {
