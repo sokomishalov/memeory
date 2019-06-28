@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.reddit
 
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -21,6 +20,7 @@ import ru.sokomishalov.memeory.service.provider.reddit.model.Listing
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.REDDIT_BASE_URl
+import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID
@@ -74,9 +74,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 .flatMap { it.bodyToMono(About::class.java) }
                 .map { it?.data }
                 .map { it?.communityIcon?.ifBlank { it.iconImg } ?: EMPTY }
-                .flatMap { webClient.get().uri(it).exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
 
     }
 

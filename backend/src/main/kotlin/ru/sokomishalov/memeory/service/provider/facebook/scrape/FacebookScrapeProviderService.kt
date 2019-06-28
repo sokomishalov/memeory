@@ -3,7 +3,6 @@ package ru.sokomishalov.memeory.service.provider.facebook.scrape
 import org.jsoup.Jsoup.connect
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -18,10 +17,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
-import ru.sokomishalov.memeory.util.FACEBOOK_BASE_URl
-import ru.sokomishalov.memeory.util.FACEBOOK_GRAPH_BASE_URl
-import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.getImageAspectRatio
+import ru.sokomishalov.memeory.util.*
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -52,9 +48,7 @@ class FacebookScrapeProviderService(
 
     override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
         return just(channel)
-                .flatMap { webClient.get().uri("$FACEBOOK_GRAPH_BASE_URl/${it.uri}/picture?type=small").exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl("$FACEBOOK_GRAPH_BASE_URl/${it.uri}/picture?type=small", webClient) }
     }
 
     override fun sourceType(): SourceType = FACEBOOK

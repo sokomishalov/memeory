@@ -3,6 +3,7 @@ package ru.sokomishalov.memeory.web
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.io.AbstractResource
 import org.springframework.core.io.ByteArrayResource
+import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.APPLICATION_OCTET_STREAM
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,6 +15,7 @@ import ru.sokomishalov.memeory.service.cache.CacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
+import ru.sokomishalov.memeory.util.ID_DELIMITER
 
 /**
  * @author sokomishalov
@@ -57,6 +59,8 @@ class ChannelController(private val channelService: ChannelService,
                     ResponseEntity
                             .ok()
                             .contentType(APPLICATION_OCTET_STREAM)
+                            .contentLength(it.size.toLong())
+                            .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${ID_DELIMITER}logo.png")
                             .body(ByteArrayResource(it))
                 }
 

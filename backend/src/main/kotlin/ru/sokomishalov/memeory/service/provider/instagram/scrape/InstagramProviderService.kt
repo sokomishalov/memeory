@@ -2,7 +2,6 @@ package ru.sokomishalov.memeory.service.provider.instagram.scrape
 
 import me.postaddict.instagram.scraper.Instagram
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -19,6 +18,7 @@ import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
 
 
 /**
@@ -57,9 +57,7 @@ class InstagramProviderService(private val instagram: Instagram,
         return just(channel)
                 .map { instagram.getAccountByUsername(it.uri) }
                 .map { it.profilePicUrl }
-                .flatMap { webClient.get().uri(it).exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = INSTAGRAM

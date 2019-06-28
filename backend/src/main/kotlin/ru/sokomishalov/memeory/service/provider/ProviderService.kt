@@ -13,5 +13,4 @@ interface ProviderService {
     fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray>
 
     fun sourceType(): SourceType
-
 }

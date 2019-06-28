@@ -1,5 +1,8 @@
 package ru.sokomishalov.memeory.util
 
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 import reactor.util.function.Tuple2
 import reactor.util.function.Tuples.of
 import java.net.URL
@@ -23,4 +26,13 @@ fun getImageDimensions(url: String): Tuple2<Int, Int> {
     } catch (t: Throwable) {
         of(1, 1)
     }
+}
+
+fun getImageByteArrayMonoByUrl(url: String, webClient: WebClient = WebClient.create()): Mono<ByteArray> {
+    return webClient
+            .get()
+            .uri(url)
+            .exchange()
+            .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
+            .map { it.byteArray }
 }

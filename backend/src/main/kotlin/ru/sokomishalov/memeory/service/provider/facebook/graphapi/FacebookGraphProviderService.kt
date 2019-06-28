@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.facebook.graphapi
 
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.social.facebook.api.Facebook
 import org.springframework.social.facebook.api.Post.PostType.PHOTO
 import org.springframework.social.facebook.api.Post.PostType.VIDEO
@@ -20,6 +19,7 @@ import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 
@@ -60,9 +60,7 @@ class FacebookGraphProviderService(private val facebook: Facebook,
         return just(channel)
                 .map { facebook.groupOperations().getGroup(it.uri) }
                 .map { it.icon }
-                .flatMap { webClient.get().uri(it).exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = FACEBOOK

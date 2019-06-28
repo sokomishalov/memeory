@@ -4,7 +4,6 @@ import org.jsoup.Jsoup.connect
 import org.jsoup.Jsoup.parse
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -22,6 +21,7 @@ import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.TWITTER_URL
 import ru.sokomishalov.memeory.util.getImageAspectRatio
+import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
 import java.util.*
 import java.util.UUID.randomUUID
 import kotlin.collections.ArrayList
@@ -58,9 +58,7 @@ class TwitterScrapeProviderService(
                 .map { connect("$TWITTER_URL/${it.uri}").get() }
                 .map { it.body().getElementsByClass("ProfileAvatar-image").first() }
                 .map { it.attr("src") }
-                .flatMap { webClient.get().uri(it).exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = TWITTER

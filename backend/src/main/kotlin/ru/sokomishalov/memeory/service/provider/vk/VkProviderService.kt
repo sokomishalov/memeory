@@ -5,7 +5,6 @@ import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
 import org.springframework.context.annotation.Conditional
-import org.springframework.core.io.ByteArrayResource
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
@@ -22,6 +21,7 @@ import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
 import java.util.*
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
@@ -93,9 +93,7 @@ class VkProviderService(
                 .flatMapMany { fromIterable(it) }
                 .map { it?.photo100 ?: it.photo50 ?: it?.photo200 ?: EMPTY }
                 .next()
-                .flatMap { webClient.get().uri(it).exchange() }
-                .flatMap { it.bodyToMono(ByteArrayResource::class.java) }
-                .map { it.byteArray }
+                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = VK
