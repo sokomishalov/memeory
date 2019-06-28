@@ -45,7 +45,7 @@ class MemesFetchingScheduler(
     fun init() {
         just(object : TypeReference<Array<ChannelDTO>>() {})
                 .map { YAML_OBJECT_MAPPER.readValue(resource.inputStream, it) as Array<ChannelDTO> }
-                .flatMapMany { channelService.saveChannelsIfNotExist(*it) }
+                .flatMapMany { channelService.saveIfNotExist(*it) }
                 .then()
                 .subscribe()
     }

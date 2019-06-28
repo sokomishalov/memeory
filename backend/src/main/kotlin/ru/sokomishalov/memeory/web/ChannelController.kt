@@ -30,7 +30,22 @@ class ChannelController(private val channelService: ChannelService,
 
     @GetMapping("/list")
     fun all(): Flux<ChannelDTO> {
+        return channelService.findAll()
+    }
+
+    @GetMapping("/list/enabled")
+    fun enabled(): Flux<ChannelDTO> {
         return channelService.findAllEnabled()
+    }
+
+    @PostMapping("/enable")
+    fun enable(@RequestBody channelIds: List<String>): Mono<Void> {
+        return channelService.toggleEnabled(true, *channelIds.toTypedArray())
+    }
+
+    @PostMapping("/disable")
+    fun disable(@RequestBody channelIds: List<String>): Mono<Void> {
+        return channelService.toggleEnabled(false, *channelIds.toTypedArray())
     }
 
     @PostMapping("/add")

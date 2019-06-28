@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter.ofPattern
 // Strings
 const val EMPTY: String = ""
 const val ID_DELIMITER: String = ":"
+const val MONGO_ID_FIELD: String = "_id"
 
 const val FACEBOOK_BASE_URl: String = "https://www.facebook.com"
 const val FACEBOOK_GRAPH_BASE_URl: String = "http://graph.facebook.com"
