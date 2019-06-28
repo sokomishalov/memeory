@@ -47,8 +47,7 @@ class FacebookScrapeProviderService(
     }
 
     override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
-        return just(channel)
-                .flatMap { getImageByteArrayMonoByUrl("$FACEBOOK_GRAPH_BASE_URl/${it.uri}/picture?type=small", webClient) }
+        return getImageByteArrayMonoByUrl("$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small", webClient)
     }
 
     override fun sourceType(): SourceType = FACEBOOK

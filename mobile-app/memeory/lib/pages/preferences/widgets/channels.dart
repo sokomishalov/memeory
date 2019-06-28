@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
+import 'package:memeory/common/components/channel_logo.dart';
 import 'package:memeory/common/containers/future_builder.dart';
 
 class ChannelPreferences extends StatefulWidget {
@@ -64,8 +65,25 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                     color: isActive
                         ? Colors.greenAccent.shade200
                         : CardTheme.of(context).color,
-                    child: new Center(
-                      child: Text(name),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(top: 22),
+                          child: ChannelLogo(
+                            channelId: item["id"],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            name,
+                            softWrap: true,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

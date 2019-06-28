@@ -1,6 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:memeory/api/channels.dart';
+import 'package:memeory/common/components/channel_logo.dart';
 import 'package:memeory/common/message/messages.dart';
 import 'package:memeory/util/time.dart';
 
@@ -18,18 +17,7 @@ mixin MemesMixin {
       ),
       child: Row(
         children: <Widget>[
-          Container(
-            width: 35,
-            height: 35,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  getLogoUrl(item["channelId"]),
-                ),
-              ),
-            ),
-          ),
+          ChannelLogo(channelId: item["channelId"]),
           Spacer(flex: 1),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

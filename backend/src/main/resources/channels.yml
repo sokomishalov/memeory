@@ -6,7 +6,7 @@
 
 - id: reddit:videos
   name: videos (Reddit)
-  enabled: true
+  enabled: false
   sourceType: REDDIT
   uri: videos
 
