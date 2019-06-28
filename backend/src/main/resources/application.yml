@@ -14,7 +14,7 @@ memeory:
   fetch-count: 100
   meme-expiration-days: 30
 
-channel:
+provider:
   reddit:
     enabled: true
     base-url: https://www.reddit.com
@@ -29,5 +29,6 @@ channel:
     secret: 0f6b3a2cd35b13c2e620fc6533a97aa2
   instagram:
     enabled: true
+    scrape-enabled: true
   twitter:
     enabled: false

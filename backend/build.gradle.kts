@@ -1,11 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.2.0.M3"
-    id("io.spring.dependency-management") version "1.0.7.RELEASE"
+    id("org.springframework.boot") version "2.2.0.M4"
+    id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("net.linguica.maven-settings") version "0.5"
+    id("com.github.ben-manes.versions") version "0.20.0"
     kotlin("jvm") version "1.3.31"
-    kotlin("plugin.spring") version "1.3.31"
+    kotlin("plugin.spring") version "1.3.40"
     kotlin("kapt") version "1.3.31"
 }
 
@@ -34,8 +35,8 @@ dependencies {
     implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
 
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")

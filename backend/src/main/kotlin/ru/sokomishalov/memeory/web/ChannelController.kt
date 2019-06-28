@@ -10,9 +10,9 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.service.api.ApiService
 import ru.sokomishalov.memeory.service.cache.CacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
+import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 
 /**
@@ -23,7 +23,7 @@ import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 class ChannelController(private val channelService: ChannelService,
                         @Qualifier("placeholder")
                         private val placeholder: ByteArray,
-                        private val apiServices: List<ApiService>,
+                        private val providerServices: List<ProviderService>,
                         private val cache: CacheService) {
 
     @GetMapping("/list")
@@ -45,7 +45,7 @@ class ChannelController(private val channelService: ChannelService,
                         orElse = channelService
                                 .findById(channelId)
                                 .flatMap { c ->
-                                    Flux.fromIterable(apiServices)
+                                    Flux.fromIterable(providerServices)
                                             .filter { it.sourceType() == c.sourceType }
                                             .next()
                                             .flatMap { it.getLogoByChannel(c) }
