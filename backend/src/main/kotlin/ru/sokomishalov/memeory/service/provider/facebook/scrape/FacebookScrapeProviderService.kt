@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.facebook.scrape
 
-import org.jsoup.Jsoup
+import org.jsoup.Jsoup.connect
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
-import ru.sokomishalov.memeory.enums.AttachmentType
+import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
@@ -21,6 +21,7 @@ import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.FACEBOOK_BASE_URl
 import ru.sokomishalov.memeory.util.FACEBOOK_GRAPH_BASE_URl
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.getImageAspectRatio
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -36,7 +37,7 @@ class FacebookScrapeProviderService(
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
-                .map { Jsoup.connect("$FACEBOOK_BASE_URl/${it.uri}/posts").get() }
+                .map { connect("$FACEBOOK_BASE_URl/${it.uri}/posts").get() }
                 .map { it.getElementsByClass("userContentWrapper") }
                 .flatMapMany { fromIterable(it) }
                 .map {
@@ -88,14 +89,16 @@ class FacebookScrapeProviderService(
     }
 
     private fun getAttachmentsByUserContentWrapper(contentWrapper: Element?): List<AttachmentDTO>? {
-        return listOf(
-                AttachmentDTO(
-                        url = contentWrapper
-                                ?.getElementsByClass("scaledImageFitWidth")
-                                ?.first()
-                                ?.attr("src"),
-                        type = AttachmentType.IMAGE
-                )
-        )
+        return contentWrapper
+                ?.getElementsByClass("scaledImageFitWidth")
+                ?.first()
+                ?.attr("src")
+                ?.let {
+                    listOf(AttachmentDTO(
+                            url = it,
+                            type = IMAGE,
+                            aspectRatio = getImageAspectRatio(it)
+                    ))
+                }
     }
 }

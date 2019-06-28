@@ -16,7 +16,7 @@ import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
-import ru.sokomishalov.memeory.util.ObjectMapperHelper
+import ru.sokomishalov.memeory.util.YAML_OBJECT_MAPPER
 import ru.sokomishalov.memeory.util.loggerFor
 import java.time.Duration.ZERO
 import java.time.Duration.ofMillis
@@ -44,7 +44,7 @@ class MemesFetchingScheduler(
     @PostConstruct
     fun init() {
         just(object : TypeReference<Array<ChannelDTO>>() {})
-                .map { ObjectMapperHelper.yamlObjectMapper.readValue(resource.inputStream, it) as Array<ChannelDTO> }
+                .map { YAML_OBJECT_MAPPER.readValue(resource.inputStream, it) as Array<ChannelDTO> }
                 .flatMapMany { channelService.saveChannelsIfNotExist(*it) }
                 .then()
                 .subscribe()

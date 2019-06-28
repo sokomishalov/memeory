@@ -1,14 +1,12 @@
 package ru.sokomishalov.memeory.util
 
 
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
-object GsonHelper {
+val GSON: Gson = GsonBuilder()
+        .create()
 
-    val gson = GsonBuilder()
-            .create()
-
-    val prettyGson = GsonBuilder()
-            .setPrettyPrinting()
-            .create()
-}
+val PRETTY_GSON = GsonBuilder()
+        .setPrettyPrinting()
+        .create()

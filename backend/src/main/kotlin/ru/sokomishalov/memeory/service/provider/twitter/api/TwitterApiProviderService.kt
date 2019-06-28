@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.provider.twitter
+package ru.sokomishalov.memeory.service.provider.twitter.api
 
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.io.ByteArrayResource
@@ -15,7 +15,8 @@ import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.twitter.TwitterAttachmentType.*
+import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
+import ru.sokomishalov.memeory.service.provider.twitter.api.TwitterApiAttachmentType.*
 import twitter4j.Paging
 import twitter4j.Twitter
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
@@ -26,10 +27,10 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-@Conditional(TwitterCondition::class)
-class TwitterProviderService(private val props: MemeoryProperties,
-                             private val twitter: Twitter,
-                             private val webClient: WebClient
+@Conditional(TwitterCondition::class, TwitterApiCondition::class)
+class TwitterApiProviderService(private val props: MemeoryProperties,
+                                private val twitter: Twitter,
+                                private val webClient: WebClient
 ) : ProviderService {
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)

@@ -31,4 +31,5 @@ provider:
     enabled: true
     scrape-enabled: true
   twitter:
-    enabled: false
+    enabled: true
+    scrape-enabled: true

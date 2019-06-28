@@ -13,8 +13,8 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.netty.http.client.HttpClient
-import ru.sokomishalov.memeory.util.GsonHelper
-import ru.sokomishalov.memeory.util.ObjectMapperHelper
+import ru.sokomishalov.memeory.util.GSON
+import ru.sokomishalov.memeory.util.OBJECT_MAPPER
 
 /**
  * @author sokomishalov
@@ -25,11 +25,11 @@ class CommonConfig {
 
     @Bean
     @Primary
-    fun objectMapper(): ObjectMapper = ObjectMapperHelper.objectMapper
+    fun objectMapper(): ObjectMapper = OBJECT_MAPPER
 
     @Bean
     @Primary
-    fun gson(): Gson = GsonHelper.gson
+    fun gson(): Gson = GSON
 
     @Bean
     @Qualifier("placeholder")
