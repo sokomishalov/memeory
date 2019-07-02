@@ -9,5 +9,5 @@ data class MemeDTO(
         var channelName: String? = null,
         var caption: String? = null,
         var publishedAt: Date = Date(),
-        var attachments: List<AttachmentDTO>? = null
+        var attachments: List<AttachmentDTO> = emptyList()
 )

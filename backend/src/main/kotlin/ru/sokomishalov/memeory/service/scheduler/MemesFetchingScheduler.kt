@@ -59,11 +59,16 @@ class MemesFetchingScheduler(
                 .flatMap { channel ->
                     fromIterable(providerServices)
                             .filter { it.sourceType() == channel.sourceType }
-                            .flatMap { it.fetchMemesFromChannel(channel) }
+                            .flatMap {
+                                it
+                                        .fetchMemesFromChannel(channel)
+                                        .limitRequest(props.fetchCount.toLong())
+                            }
                             .doOnNext {
                                 it.channelId = channel.id
                                 it.channelName = channel.name
                             }
+                            .filter { it.attachments.isNotEmpty() }
                             .onErrorResume { empty() }
                             .let { memeService.saveMemesIfNotExist(it) }
                 }

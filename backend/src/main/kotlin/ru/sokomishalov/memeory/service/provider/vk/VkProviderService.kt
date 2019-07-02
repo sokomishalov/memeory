@@ -2,6 +2,7 @@ package ru.sokomishalov.memeory.service.provider.vk
 
 import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
+import com.vk.api.sdk.objects.wall.WallPostFull
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
 import org.springframework.context.annotation.Conditional
@@ -56,27 +57,34 @@ class VkProviderService(
                             id = "${channel.id}$ID_DELIMITER${it.id}",
                             caption = it.text,
                             publishedAt = Date(it.date.toLong().times(1000)),
-                            attachments = it?.attachments?.map { attachment ->
-                                AttachmentDTO(
-                                        url = attachment?.photo?.let { p ->
-                                            p.photo807 ?: p.photo604 ?: p.photo1280 ?: p.photo130
-                                        },
-                                        type = attachment.type.let { t ->
-                                            when (t) {
-                                                PHOTO,
-                                                POSTED_PHOTO,
-                                                PHOTOS_LIST -> IMAGE_ATTACHMENT
-                                                VIDEO -> VIDEO_ATTACHMENT
-                                                else -> NONE
-                                            }
-                                        },
-                                        aspectRatio = attachment?.photo?.run {
-                                            width.toDouble().div(height.toDouble())
-                                        }
-                                )
+                            attachments = getAttachmentsByWallPost(it)
+                    )
+                }
+    }
+
+    private fun getAttachmentsByWallPost(post: WallPostFull?): List<AttachmentDTO> {
+        return post
+                ?.attachments
+                ?.map { attachment ->
+                    AttachmentDTO(
+                            url = attachment?.photo?.let { p ->
+                                p.photo807 ?: p.photo604 ?: p.photo1280 ?: p.photo130
+                            },
+                            type = attachment.type.let { t ->
+                                when (t) {
+                                    PHOTO,
+                                    POSTED_PHOTO,
+                                    PHOTOS_LIST -> IMAGE_ATTACHMENT
+                                    VIDEO -> VIDEO_ATTACHMENT
+                                    else -> NONE
+                                }
+                            },
+                            aspectRatio = attachment?.photo?.run {
+                                width.toDouble().div(height.toDouble())
                             }
                     )
                 }
+                ?: emptyList()
     }
 
     override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {

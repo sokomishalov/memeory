@@ -81,7 +81,7 @@ class FacebookScrapeProviderService(
                 ?: Date(0)
     }
 
-    private fun getAttachmentsByUserContentWrapper(contentWrapper: Element?): List<AttachmentDTO>? {
+    private fun getAttachmentsByUserContentWrapper(contentWrapper: Element?): List<AttachmentDTO> {
         return contentWrapper
                 ?.getElementsByClass("scaledImageFitWidth")
                 ?.first()
@@ -93,5 +93,6 @@ class FacebookScrapeProviderService(
                             aspectRatio = getImageAspectRatio(it)
                     ))
                 }
+                ?: emptyList()
     }
 }

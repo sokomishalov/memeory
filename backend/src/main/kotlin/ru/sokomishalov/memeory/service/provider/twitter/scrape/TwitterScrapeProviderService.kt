@@ -103,17 +103,20 @@ class TwitterScrapeProviderService(
         } ?: Date(0)
     }
 
-    private fun getAttachmentsByTweet(tweet: Element?): List<AttachmentDTO>? {
+    private fun getAttachmentsByTweet(tweet: Element?): List<AttachmentDTO> {
         return tweet
                 ?.getElementsByClass("AdaptiveMedia-photoContainer")
-                ?.first()
-                ?.attr("data-image-url")
-                ?.let {
-                    listOf(AttachmentDTO(
-                            url = it,
-                            type = IMAGE,
-                            aspectRatio = getImageAspectRatio(it)
-                    ))
+                ?.map { e ->
+                    e
+                            .attr("data-image-url")
+                            .let {
+                                AttachmentDTO(
+                                        url = it,
+                                        type = IMAGE,
+                                        aspectRatio = getImageAspectRatio(it)
+                                )
+                            }
                 }
+                ?: emptyList()
     }
 }
