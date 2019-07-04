@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/common/message/messages.dart';
 import 'package:memeory/model/orientation.dart';
+import 'package:memeory/pages/about/about.dart';
 import 'package:memeory/pages/memes/memes_horizontal.dart';
 import 'package:memeory/pages/memes/memes_vertical.dart';
+import 'package:memeory/pages/preferences/widgets/channels.dart';
+import 'package:memeory/pages/preferences/widgets/orientations.dart';
+import 'package:memeory/pages/preferences/widgets/socials.dart';
+import 'package:memeory/pages/preferences/widgets/wrapper.dart';
+import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/theme.dart';
 
 class MemesPage extends StatelessWidget {
@@ -19,7 +25,7 @@ class MemesPage extends StatelessWidget {
         preferredSize: Size.fromHeight(50),
         child: AppBar(
           centerTitle: true,
-          title: Text("Мемесы"),
+          title: Text(MEMES),
         ),
       ),
       drawer: Drawer(
@@ -45,19 +51,15 @@ class MemesPage extends StatelessWidget {
                             image: DecorationImage(
                               image: dependingOnThemeChoice(
                                 context: context,
-                                light: AssetImage(
-                                  "assets/logo/logo.png",
-                                ),
-                                dark: AssetImage(
-                                  "assets/logo/logo-inverted.png",
-                                ),
+                                light: AssetImage(LOGO_ASSET),
+                                dark: AssetImage(LOGO_INVERTED_ASSET),
                               ),
                             ),
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
-                          child: Text('Мемеори!'),
+                          child: Text('$APP_NAME!'),
                         ),
                       ],
                     ),
@@ -74,26 +76,42 @@ class MemesPage extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.person_outline),
-                    title: Text('Профиль'),
+                    title: Text(PROFILE),
                     onTap: () {
-                      infoToast("Пока не реализовано", context);
-                      Navigator.pop(context);
+                      pushToPrefs(
+                        context: context,
+                        body: SocialPreferences(),
+                      );
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.star_border),
-                    title: Text('Источники'),
+                    title: Text(CHANNELS),
                     onTap: () {
-                      infoToast("Пока не реализовано", context);
-                      return Navigator.pop(context);
+                      pushToPrefs(
+                        context: context,
+                        body: ChannelPreferences(),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.rss_feed),
+                    title: Text(ORIENTATION),
+                    onTap: () {
+                      pushToPrefs(
+                        context: context,
+                        body: OrientationPreferences(),
+                      );
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.info_outline),
-                    title: Text('О приложении'),
+                    title: Text(ABOUT_APP),
                     onTap: () {
-                      infoToast("Пока не реализовано", context);
-                      return Navigator.pop(context);
+                      pushToPrefs(
+                        context: context,
+                        body: AboutApp(),
+                      );
                     },
                   )
                 ],
@@ -115,6 +133,26 @@ class MemesPage extends StatelessWidget {
           ? MemesVertical()
           : MemesHorizontal(),
       backgroundColor: Theme.of(context).primaryColorDark,
+    );
+  }
+
+  void pushToPrefs({BuildContext context, Widget body, Future apply}) {
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (pageContext) => Scaffold(
+          appBar: AppBar(),
+          body: PreferencesPageWrapper(
+            apply: () async {
+              if (apply != null) await apply;
+              Navigator.pop(pageContext);
+            },
+            applyText: BACK_TO_WATCH_MEMES,
+            child: body,
+          ),
+        ),
+      ),
     );
   }
 }

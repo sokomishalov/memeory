@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:memeory/common/components/channel_logo.dart';
 import 'package:memeory/common/message/messages.dart';
+import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/time.dart';
 
 import 'attachments/photo.dart';
@@ -85,6 +86,6 @@ mixin MemesMixin {
   }
 
   void onTapEllipsis(context) {
-    infoToast("Пока не реализовано", context);
+    infoToast(NOT_REALIZED_YET, context);
   }
 }

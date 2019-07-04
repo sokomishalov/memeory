@@ -5,6 +5,11 @@ import 'package:memeory/util/consts.dart';
 
 import '../storage.dart';
 
+isAuthorized() async {
+  var profile = await getGoogleProfile() ?? await getFacebookProfile();
+  return profile != null;
+}
+
 getGoogleProfile() async {
   var profile = await get(GOOGLE_PROFILE_KEY);
   return profile != null ? GoogleAccount.fromJson(json.decode(profile)) : null;

@@ -2,6 +2,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/model/orientation.dart';
+import 'package:memeory/util/consts.dart';
 import 'package:video_player/video_player.dart';
 
 class OrientationPreferences extends StatefulWidget {
@@ -27,7 +28,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
     });
 
     _verticalVideoController = VideoPlayerController.asset(
-      'assets/orientation/vertical.mp4',
+      VERTICAL_ORIENTATION_ASSET,
     );
 
     _verticalChewieController = ChewieController(
@@ -39,7 +40,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
     );
 
     _horizontalVideoController = VideoPlayerController.asset(
-      'assets/orientation/horizontal.mp4',
+      HORIZONTAL_ORIENTATION_ASSET,
     );
 
     _horizontalChewieController = ChewieController(

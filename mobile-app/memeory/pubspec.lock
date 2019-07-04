@@ -28,7 +28,7 @@ packages:
       name: boolean_selector
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -117,7 +117,7 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.2"
+    version: "0.7.2+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -208,7 +208,7 @@ packages:
     source: hosted
     version: "0.5.0+1"
   pedantic:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pedantic
       url: "https://pub.dartlang.org"
@@ -220,7 +220,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.0"
   quiver:
     dependency: transitive
     description:
@@ -260,7 +260,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6+1"
   stack_trace:
     dependency: transitive
     description:
@@ -309,7 +309,7 @@ packages:
       name: timeago
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.16"
+    version: "2.0.17"
   toast:
     dependency: "direct main"
     description:
@@ -360,5 +360,5 @@ packages:
     source: hosted
     version: "2.1.16"
 sdks:
-  dart: ">=2.3.0 <3.0.0"
+  dart: ">=2.4.0 <3.0.0"
   flutter: ">=1.5.0 <2.0.0"

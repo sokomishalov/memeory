@@ -7,19 +7,13 @@ import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
+import 'package:memeory/strings/ru.dart';
 
 class UserPreferencesPage extends StatelessWidget {
   final _controller = PageController();
 
   void nextPage() {
     _controller.nextPage(
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void previousPage() {
-    _controller.previousPage(
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
@@ -43,27 +37,26 @@ class UserPreferencesPage extends StatelessWidget {
         controller: _controller,
         children: <Widget>[
           PreferencesPageWrapper(
-            title: "Выберите тему приложения!",
+            title: PLEASE_AUTHORIZE,
+            nextPage: nextPage,
+            child: SocialPreferences(),
+          ),
+          PreferencesPageWrapper(
+            title: CHOOSE_THEME,
             nextPage: nextPage,
             child: ThemePreferences(),
           ),
           PreferencesPageWrapper(
-            title: "Выберите, как вам удобнее будет орать с мемов!",
-            previousPage: previousPage,
+            title: CHOOSE_ORIENTATION,
             nextPage: nextPage,
             child: OrientationPreferences(),
           ),
           PreferencesPageWrapper(
-            title: "Выберите источники мемов, которые Вам интересны!",
-            nextPage: nextPage,
+            title: CHOOSE_CHANNELS,
+            apply: () => close(context),
+            applyText: START_WATCHING_MEMES,
             child: ChannelPreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: "Авторизуйтесь в соцсетях!",
-            previousPage: previousPage,
-            close: () => close(context),
-            child: SocialPreferences(),
-          ),
+          )
         ],
       ),
     );

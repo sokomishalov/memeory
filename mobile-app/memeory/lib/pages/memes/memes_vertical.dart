@@ -49,7 +49,8 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
                   minAspectRatio: item["attachments"]
                           ?.map((a) => a["aspectRatio"])
                           ?.cast<double>()
-                          ?.reduce((double o1, double o2) => min(o1, o2)) ??
+                          ?.reduce((double o1, double o2) =>
+                              o1 != null && o2 != null ? min(o1, o2) : 1.0) ??
                       1.0,
                   items: prepareAttachments(item),
                 )

@@ -4,6 +4,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memeory/pages/home/home.dart';
+import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/theme.dart';
 import 'package:memeory/util/time.dart';
 
@@ -22,7 +23,7 @@ class DmsApp extends StatelessWidget {
       themedWidgetBuilder: (context, theme) {
         return MaterialApp(
           theme: theme,
-          title: "Memeory",
+          title: APP_NAME,
           home: HomePage(),
         );
       },

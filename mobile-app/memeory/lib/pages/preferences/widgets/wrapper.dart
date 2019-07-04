@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/common/buttons/rounded_button.dart';
+import 'package:memeory/strings/ru.dart';
 
 class PreferencesPageWrapper extends StatelessWidget {
   PreferencesPageWrapper({
     this.title,
     this.nextPage,
-    this.previousPage,
-    this.close,
+    this.apply,
+    this.applyText,
     @required this.child,
   });
 
   final String title;
   final VoidCallback nextPage;
-  final VoidCallback previousPage;
-  final VoidCallback close;
+  final VoidCallback apply;
+  final String applyText;
   final Widget child;
 
   @override
@@ -32,13 +33,13 @@ class PreferencesPageWrapper extends StatelessWidget {
 
     if (nextPage != null) {
       bottomButton = RoundedButton(
-        caption: "Далее",
+        caption: NEXT,
         onPressed: nextPage,
       );
-    } else if (close != null) {
+    } else if (apply != null) {
       bottomButton = RoundedButton(
-        caption: "Пора орать с мемесов!",
-        onPressed: close,
+        caption: applyText ?? SAVE_CHANGES,
+        onPressed: apply,
       );
     } else {
       bottomButton = Container();

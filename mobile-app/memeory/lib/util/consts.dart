@@ -10,8 +10,14 @@ const GOOGLE_PROFILE_KEY = "GOOGLE_PROFILE";
 const FACEBOOK_PROFILE_KEY = "FACEBOOK_PROFILE";
 const VK_PROFILE_KEY = "VK_PROFILE";
 
-//Light Theme
+// Asset names
+const LOGO_ASSET = "assets/logo/logo.png";
+const LOGO_INVERTED_ASSET = "assets/logo/logo-inverted.png";
+const HORIZONTAL_ORIENTATION_ASSET = 'assets/orientation/horizontal.mp4';
+const VERTICAL_ORIENTATION_ASSET = 'assets/orientation/vertical.mp4';
+
+// Light Theme
 const INVERTED_TEXT_COLOR_LIGHT = Colors.black38;
 
-//Dark Theme
+// Dark Theme
 const INVERTED_TEXT_COLOR_DARK = Colors.white70;
