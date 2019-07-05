@@ -123,7 +123,10 @@ class MemesPage extends StatelessWidget {
               child: SwitchListTile(
                 title: Text("Темная тема"),
                 value: Theme.of(context).brightness == Brightness.dark,
-                onChanged: (value) => changeTheme(value, context),
+                onChanged: (value) {
+                  Navigator.pop(context);
+                  return changeTheme(value, context);
+                },
               ),
             ),
           ],

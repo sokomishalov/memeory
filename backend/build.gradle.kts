@@ -5,9 +5,9 @@ plugins {
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("net.linguica.maven-settings") version "0.5"
     id("com.github.ben-manes.versions") version "0.20.0"
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.40"
     kotlin("plugin.spring") version "1.3.40"
-    kotlin("kapt") version "1.3.31"
+    kotlin("kapt") version "1.3.40"
 }
 
 group = "ru.sokomishalov"

@@ -3,6 +3,7 @@ import 'package:memeory/api/channels.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/common/components/channel_logo.dart';
 import 'package:memeory/common/containers/future_builder.dart';
+import 'package:memeory/strings/ru.dart';
 
 class ChannelPreferences extends StatefulWidget {
   @override
@@ -12,12 +13,20 @@ class ChannelPreferences extends StatefulWidget {
 class _ChannelPreferencesState extends State<ChannelPreferences> {
   Future<List> _channels;
   List _selectedChannels;
+  bool _watchAll;
 
   @override
   void initState() {
     _channels = fetchChannels();
+    _watchAll = false;
 
     super.initState();
+
+    getWatchAll().then((val) {
+      setState(() {
+        _watchAll = val;
+      });
+    });
 
     getSelectedChannels().then((channels) {
       setState(() {
@@ -27,70 +36,101 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
   }
 
   onTapChannel(String id) async {
-    bool toRemove = _selectedChannels.contains(id);
-    if (toRemove) {
-      await removeChannel(id);
-    } else {
-      await addChannel(id);
+    if (!_watchAll) {
+      bool toRemove = _selectedChannels.contains(id);
+      if (toRemove) {
+        await removeChannel(id);
+      } else {
+        await addChannel(id);
+      }
+      var newSelectedChannels = await getSelectedChannels();
+
+      setState(() {
+        _selectedChannels = newSelectedChannels;
+      });
     }
-    var newSelectedChannels = await getSelectedChannels();
+  }
+
+  onTapWatchAll(bool value) async {
+    await setWatchAll(value);
+    await removeAllChannels();
 
     setState(() {
-      _selectedChannels = newSelectedChannels;
+      _watchAll = value;
+      _selectedChannels = [];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: FutureWidget(
-        future: _channels,
-        render: (data) {
-          return GridView.builder(
-            itemCount: data.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              var item = data[index];
-              var id = item["id"];
-              var name = item["name"] ?? id;
-
-              var isActive = _selectedChannels.contains(id);
-
-              return GestureDetector(
-                onTap: () async => await onTapChannel(id),
-                child: GridTile(
-                  child: Card(
-                    color: isActive
-                        ? Colors.greenAccent.shade200
-                        : CardTheme.of(context).color,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 22),
-                          child: ChannelLogo(
-                            channelId: item["id"],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text(
-                            name,
-                            softWrap: true,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(),
-                          ),
-                        ),
-                      ],
-                    ),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 10),
+            child: SwitchListTile(
+                title: Text(WATCH_ALL),
+                subtitle: Text(
+                  WATCH_ALL_SUBTITLE,
+                  style: TextStyle(fontSize: 11),
+                ),
+                value: _watchAll,
+                onChanged: onTapWatchAll),
+          ),
+          FutureWidget(
+            future: _channels,
+            render: (data) {
+              return Expanded(
+                child: GridView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  shrinkWrap: true,
+                  itemCount: data.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
                   ),
+                  itemBuilder: (BuildContext context, int index) {
+                    var item = data[index];
+                    var id = item["id"];
+                    var name = item["name"] ?? id;
+
+                    var isActive = _selectedChannels.contains(id);
+
+                    return GestureDetector(
+                      onTap: () async => await onTapChannel(id),
+                      child: GridTile(
+                        child: Card(
+                          color: _watchAll || isActive
+                              ? Colors.greenAccent.shade200
+                              : CardTheme.of(context).color,
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(top: 22),
+                                child: ChannelLogo(
+                                  channelId: item["id"],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Text(
+                                  name,
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }

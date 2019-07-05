@@ -15,3 +15,5 @@ const CHANNELS = 'Источники';
 const PROFILE = 'Профиль';
 const NOT_REALIZED_YET = "Пока не реализовано";
 const NEXT = "Далее";
+const WATCH_ALL = "Смотреть все!";
+const WATCH_ALL_SUBTITLE = "Это будет распространяться и на все новые каналы";
