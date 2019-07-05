@@ -18,8 +18,8 @@ import reactor.core.publisher.Mono.just
 import reactor.util.function.Tuples.of
 import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.entity.Channel
-import ru.sokomishalov.memeory.entity.Meme
+import ru.sokomishalov.memeory.entity.mongo.Channel
+import ru.sokomishalov.memeory.entity.mongo.Meme
 import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.util.MONGO_ID_FIELD

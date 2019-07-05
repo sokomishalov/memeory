@@ -2,12 +2,9 @@ package ru.sokomishalov.memeory
 
 import org.slf4j.Logger
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 import reactor.tools.agent.ReactorDebugAgent.init
 import reactor.tools.agent.ReactorDebugAgent.processExistingClasses
-import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.util.loggerFor
 
 /**
@@ -15,8 +12,6 @@ import ru.sokomishalov.memeory.util.loggerFor
  */
 
 @SpringBootApplication
-@EnableReactiveMongoRepositories
-@EnableConfigurationProperties(MemeoryProperties::class)
 class MemeoryApplication
 
 private val log: Logger = loggerFor(MemeoryApplication::class.java)

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.entity
+package ru.sokomishalov.memeory.entity.mongo
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

@@ -3,7 +3,7 @@ package ru.sokomishalov.memeory.mapper
 import org.mapstruct.Mapper
 import org.mapstruct.factory.Mappers
 import ru.sokomishalov.memeory.dto.MemeDTO
-import ru.sokomishalov.memeory.entity.Meme
+import ru.sokomishalov.memeory.entity.mongo.Meme
 
 @Mapper
 interface MemeMapper {

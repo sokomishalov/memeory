@@ -13,6 +13,10 @@ const val FACEBOOK_GRAPH_BASE_URl: String = "http://graph.facebook.com"
 const val REDDIT_BASE_URl: String = "https://www.reddit.com"
 const val TWITTER_URL = "https://twitter.com"
 
+@Suppress("unused")
+const val HORIZONTAL_ORIENTATION = "HORIZONTAL"
+const val VERTICAL_ORIENTATION = "VERTICAL"
+
 // Keys
 const val CHANNEL_LOGO_CACHE_KEY: String = "CHANNEL_LOGO"
 

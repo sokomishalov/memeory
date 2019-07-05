@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import org.apache.commons.io.IOUtils.toByteArray
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -13,6 +14,7 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.netty.http.client.HttpClient
+import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.util.GSON
 import ru.sokomishalov.memeory.util.OBJECT_MAPPER
 
@@ -21,6 +23,7 @@ import ru.sokomishalov.memeory.util.OBJECT_MAPPER
  */
 @Configuration
 @EnableAsync
+@EnableConfigurationProperties(MemeoryProperties::class)
 class CommonConfig {
 
     @Bean
