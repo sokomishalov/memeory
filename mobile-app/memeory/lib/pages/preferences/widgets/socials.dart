@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradient_text/gradient_text.dart';
+import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/common/message/messages.dart';
 import 'package:memeory/model/google_account.dart';
+import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/http.dart';
 
 final _googleSignIn = GoogleSignIn(
@@ -14,6 +17,8 @@ final _googleSignIn = GoogleSignIn(
 );
 
 final _facebookSignIn = FacebookLogin();
+const facebookBaseUrl =
+    'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email';
 
 class SocialPreferences extends StatefulWidget {
   @override
@@ -52,8 +57,8 @@ class _SocialPreferencesState extends State<SocialPreferences> {
               onPressed: () async => await _googleAuth(context),
               child: GradientText(
                 _googleProfile == null
-                    ? "Авторизация через Google"
-                    : _googleProfile.email ?? "",
+                    ? AUTH_GOOGLE
+                    : _googleProfile.email ?? EMPTY,
                 gradient: LinearGradient(colors: [
                   Color.fromRGBO(234, 67, 53, 1),
                   Color.fromRGBO(251, 188, 5, 1),
@@ -71,8 +76,8 @@ class _SocialPreferencesState extends State<SocialPreferences> {
               onPressed: () async => await _facebookAuth(context),
               child: Text(
                 _facebookProfile == null
-                    ? "Авторизация через Facebook"
-                    : _facebookProfile["email"] ?? "",
+                    ? AUTH_FACEBOOK
+                    : _facebookProfile["email"] ?? EMPTY,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -88,7 +93,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
     try {
       var signIn = await _googleSignIn.signIn();
 
-      if (signIn == null) throw new FlutterError("");
+      if (signIn == null) throw new FlutterError(EMPTY);
 
       var profile = GoogleAccount(
         id: signIn?.id,
@@ -102,10 +107,12 @@ class _SocialPreferencesState extends State<SocialPreferences> {
         _googleProfile = profile;
       });
 
-      successToast("Добро пожаловать, ${signIn?.email}", context);
+      await saveProfile();
+
+      successToast("$WELCOME, ${signIn?.email}", context);
     } catch (e) {
       debugPrint(e.toString());
-      errorToast("Неудачная попытка авторизации в Google", context);
+      errorToast(UNSUCCESSFUL_AUTH_GOOGLE, context);
     }
   }
 
@@ -118,7 +125,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       case FacebookLoginStatus.loggedIn:
         final token = result.accessToken.token;
         final profileResponse = await http.get(
-          'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token',
+          '$facebookBaseUrl&access_token=$token',
         );
         final profile = json.decode(profileResponse.body);
         await setFacebookProfile(profile);
@@ -127,13 +134,15 @@ class _SocialPreferencesState extends State<SocialPreferences> {
           _facebookProfile = profile;
         });
 
-        successToast("Добро пожаловать, $profile", context);
+        await saveProfile();
+
+        successToast("$WELCOME, $profile", context);
 
         break;
       case FacebookLoginStatus.cancelledByUser:
       case FacebookLoginStatus.error:
         debugPrint(result.toString());
-        errorToast("Неудачная попытка авторизации в FB", context);
+        errorToast(UNSUCCESSFUL_AUTH_FACEBOOK, context);
         break;
     }
   }

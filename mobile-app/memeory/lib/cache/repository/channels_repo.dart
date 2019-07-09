@@ -6,8 +6,7 @@ import 'package:quiver/strings.dart';
 import '../storage.dart';
 
 getWatchAll() async {
-  var val = await get(WATCH_ALL_CHANNELS_KEY);
-  return val == true.toString();
+  return await get(WATCH_ALL_CHANNELS_KEY) != false.toString();
 }
 
 setWatchAll(bool value) async {

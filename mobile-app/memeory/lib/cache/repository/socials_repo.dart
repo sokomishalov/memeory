@@ -5,6 +5,22 @@ import 'package:memeory/util/consts.dart';
 
 import '../storage.dart';
 
+Future<Map> getProfilesMap() async {
+  var resultMap = {};
+
+  var google = await getGoogleProfile();
+  if (google != null) {
+    resultMap["GOOGLE"] = google;
+  }
+
+  var facebook = await getGoogleProfile();
+  if (google != null) {
+    resultMap["FACEBOOK"] = facebook;
+  }
+
+  return resultMap;
+}
+
 isAuthorized() async {
   var profile = await getGoogleProfile() ?? await getFacebookProfile();
   return profile != null;

@@ -1,6 +1,7 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.dto.ProfileDTO
@@ -14,6 +15,8 @@ class MongoProfileService(
         private val repository: ProfileRepository
 ) : ProfileService {
 
+    // fixme improve
+    @Transactional
     override fun saveProfileInfo(profile: ProfileDTO): Mono<ProfileDTO> {
         return just(profile)
                 .doOnNext {

@@ -22,5 +22,4 @@ class ProfileController(
     fun saveProfileInfo(@RequestBody profile: ProfileDTO): Mono<ProfileDTO> {
         return service.saveProfileInfo(profile)
     }
-
 }

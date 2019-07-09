@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 const MEMES_COUNT_ON_THE_PAGE = 50;
 
 const EMPTY = "";
+const TOKEN_KEY = "TOKEN";
+const THEME_KEY = "THEME";
 const APP_VISIT_DATETIME_KEY = "APP_VISIT_DATETIME";
 const SELECTED_CHANNELS_KEY = "CHANNELS";
 const WATCH_ALL_CHANNELS_KEY = "WATCH_ALL";
 const SELECTED_ORIENTATION_KEY = "ORIENTATION";
 const GOOGLE_PROFILE_KEY = "GOOGLE_PROFILE";
 const FACEBOOK_PROFILE_KEY = "FACEBOOK_PROFILE";
-const VK_PROFILE_KEY = "VK_PROFILE";
 
 // Asset names
 const LOGO_ASSET = "assets/logo/logo.png";

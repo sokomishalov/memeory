@@ -35,7 +35,7 @@ class UserPreferencesPage extends StatelessWidget {
     return Scaffold(
       body: PageView(
         controller: _controller,
-        children: <Widget>[
+        children: [
           PreferencesPageWrapper(
             title: PLEASE_AUTHORIZE,
             nextPage: nextPage,

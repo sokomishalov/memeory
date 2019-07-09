@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/api/profile.dart';
 import 'package:memeory/util/theme.dart';
 
 class ThemePreferences extends StatelessWidget {
@@ -9,7 +10,10 @@ class ThemePreferences extends StatelessWidget {
       child: SwitchListTile(
         title: Text("Темная тема"),
         value: Theme.of(context).brightness == Brightness.dark,
-        onChanged: (value) => changeTheme(value, context),
+        onChanged: (value) async {
+          await changeTheme(context);
+          await saveProfile();
+        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/model/orientation.dart';
 import 'package:memeory/util/consts.dart';
@@ -88,6 +89,8 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
         setState(() {
           _preferredOrientation = newOrientation;
         });
+
+        await saveProfile();
       },
       child: Container(
         padding: EdgeInsets.all(20),
