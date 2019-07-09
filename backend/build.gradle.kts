@@ -44,6 +44,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.2.2")
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")

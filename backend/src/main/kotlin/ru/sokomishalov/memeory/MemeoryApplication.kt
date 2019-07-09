@@ -30,6 +30,4 @@ private fun initReactorDebugTools() {
     } catch (e: Throwable) {
         log.warn("ReactorDebugAgent failed to start: ${e.message}")
     }
-
 }
-

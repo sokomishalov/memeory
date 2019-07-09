@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
  * @author sokomishalov
  */
 @EnableReactiveMongoRepositories
+@Suppress("unused")
 class MongoConfig {
 
     @Bean
