@@ -12,6 +12,7 @@ import ru.sokomishalov.memeory.entity.mongo.Meme
 @Repository
 interface MemeRepository : ReactiveMongoRepository<Meme, String> {
 
-    fun findMemeBy(page: Pageable): Flux<Meme>
+    fun findAllMemesBy(page: Pageable): Flux<Meme>
 
+    fun findAllByChannelIdIn(channelIds: Iterable<String>, page: Pageable): Flux<Meme>
 }

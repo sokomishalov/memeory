@@ -19,6 +19,8 @@ const LOGO_INVERTED_ASSET = "assets/logo/logo-inverted.png";
 const HORIZONTAL_ORIENTATION_ASSET = 'assets/orientation/horizontal.mp4';
 const VERTICAL_ORIENTATION_ASSET = 'assets/orientation/vertical.mp4';
 
+const MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN";
+
 // Light Theme
 const INVERTED_TEXT_COLOR_LIGHT = Colors.black38;
 

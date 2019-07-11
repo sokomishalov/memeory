@@ -22,7 +22,7 @@ Future saveProfile() async {
   });
 
   final headers = <String, String>{
-    HttpHeaders.contentTypeHeader: 'application/json'
+    HttpHeaders.contentTypeHeader: 'application/json',
   };
 
   final response = await http.post(url, body: body, headers: headers);
