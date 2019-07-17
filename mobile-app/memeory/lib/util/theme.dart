@@ -1,6 +1,5 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/cache/repository/theme_repo.dart';
 
 ThemeData themeBuilder(Brightness brightness) {
   return brightness == Brightness.light
@@ -54,6 +53,4 @@ changeTheme(BuildContext context) async {
   DynamicTheme.of(context).setBrightness(
     wantToUseDarkThemeNow ? Brightness.dark : Brightness.light,
   );
-
-  await setUsesDarkTheme(wantToUseDarkThemeNow);
 }

@@ -8,6 +8,7 @@ import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/strings/ru.dart';
+import 'package:page_transition/page_transition.dart';
 
 class UserPreferencesPage extends StatelessWidget {
   final _controller = PageController();
@@ -24,8 +25,9 @@ class UserPreferencesPage extends StatelessWidget {
     var orientation = await getPreferredOrientation();
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => MemesPage(orientation: orientation),
+      PageTransition(
+        type: PageTransitionType.upToDown,
+        child: MemesPage(orientation: orientation),
       ),
     );
   }
@@ -37,14 +39,14 @@ class UserPreferencesPage extends StatelessWidget {
         controller: _controller,
         children: [
           PreferencesPageWrapper(
-            title: PLEASE_AUTHORIZE,
-            nextPage: nextPage,
-            child: SocialPreferences(),
-          ),
-          PreferencesPageWrapper(
             title: CHOOSE_THEME,
             nextPage: nextPage,
             child: ThemePreferences(),
+          ),
+          PreferencesPageWrapper(
+            title: PLEASE_AUTHORIZE,
+            nextPage: nextPage,
+            child: SocialPreferences(),
           ),
           PreferencesPageWrapper(
             title: CHOOSE_ORIENTATION,

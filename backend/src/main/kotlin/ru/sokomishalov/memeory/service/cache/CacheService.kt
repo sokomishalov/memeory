@@ -16,7 +16,7 @@ import reactor.core.publisher.Signal
 class CacheService(private val cacheManager: CacheManager) {
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getFromCache(cache: String, key: String, orElse: Mono<T>): Mono<T> {
+    fun <T> getFromCache(cache: String, key: String, orElse: Mono<out T>): Mono<out T> {
         return lookup({ justOrEmpty(cacheManager.getCache(cache)?.get(it)?.get() as Signal<*>?) }, key)
                 .onCacheMissResume { orElse.map { it } }
                 .andWriteWith { k: String, v: Signal<*> -> fromRunnable { cacheManager.getCache(cache)?.put(k, v) } }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/model/orientation.dart';
 import 'package:memeory/pages/about/about.dart';
 import 'package:memeory/pages/memes/memes_horizontal.dart';
@@ -10,6 +11,7 @@ import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/theme.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MemesPage extends StatelessWidget {
   const MemesPage({
@@ -145,11 +147,20 @@ class MemesPage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (pageContext) => Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            leading: Container(),
+          ),
           body: PreferencesPageWrapper(
             apply: () async {
               if (apply != null) await apply;
-              Navigator.pop(pageContext);
+              var orientation = await getPreferredOrientation();
+
+              Navigator.of(pageContext).pushReplacement(
+                PageTransition(
+                  type: PageTransitionType.leftToRightWithFade,
+                  child: MemesPage(orientation: orientation),
+                ),
+              );
             },
             applyText: BACK_TO_WATCH_MEMES,
             child: body,

@@ -1,14 +1,14 @@
 package ru.sokomishalov.memeory.mapper
 
 import org.mapstruct.Mapper
-import org.mapstruct.factory.Mappers
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
+import org.mapstruct.factory.Mappers.getMapper as generateMapper
 
 @Mapper
 interface MemeMapper {
     companion object {
-        val INSTANCE: MemeMapper = Mappers.getMapper(MemeMapper::class.java)
+        val INSTANCE: MemeMapper = generateMapper(MemeMapper::class.java)
     }
 
     fun toEntity(dto: MemeDTO): Meme

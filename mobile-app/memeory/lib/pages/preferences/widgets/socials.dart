@@ -7,10 +7,10 @@ import 'package:gradient_text/gradient_text.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/common/message/messages.dart';
-import 'package:memeory/model/google_account.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/http.dart';
+import 'package:pedantic/pedantic.dart';
 
 final _googleSignIn = GoogleSignIn(
   scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
@@ -26,22 +26,12 @@ class SocialPreferences extends StatefulWidget {
 }
 
 class _SocialPreferencesState extends State<SocialPreferences> {
-  GoogleAccount _googleProfile;
+  Map<String, dynamic> _googleProfile;
   Map<String, dynamic> _facebookProfile;
 
   @override
   void initState() {
-    getGoogleProfile().then((p) {
-      setState(() {
-        _googleProfile = p;
-      });
-    });
-
-    getFacebookProfile().then((p) {
-      setState(() {
-        _facebookProfile = p;
-      });
-    });
+    unawaited(_refreshProfiles());
     super.initState();
   }
 
@@ -58,7 +48,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
               child: GradientText(
                 _googleProfile == null
                     ? AUTH_GOOGLE
-                    : _googleProfile.email ?? EMPTY,
+                    : _googleProfile["name"] ?? EMPTY,
                 gradient: LinearGradient(colors: [
                   Color.fromRGBO(234, 67, 53, 1),
                   Color.fromRGBO(251, 188, 5, 1),
@@ -77,7 +67,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
               child: Text(
                 _facebookProfile == null
                     ? AUTH_FACEBOOK
-                    : _facebookProfile["email"] ?? EMPTY,
+                    : _facebookProfile["name"] ?? EMPTY,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -89,25 +79,33 @@ class _SocialPreferencesState extends State<SocialPreferences> {
     );
   }
 
+  _refreshProfiles() async {
+    var googleProfile = await getGoogleProfile();
+    var facebookProfile = await getFacebookProfile();
+
+    setState(() {
+      _facebookProfile = facebookProfile;
+      _googleProfile = googleProfile;
+    });
+  }
+
   _googleAuth(context) async {
     try {
       var signIn = await _googleSignIn.signIn();
 
       if (signIn == null) throw new FlutterError(EMPTY);
 
-      var profile = GoogleAccount(
-        id: signIn?.id,
-        name: signIn?.displayName,
-        email: signIn?.email,
-        photo: signIn?.photoUrl,
-      );
+      var profile = {
+        "id": signIn?.id,
+        "name": signIn?.displayName,
+        "email": signIn?.email,
+        "photo": signIn?.photoUrl,
+      };
       await setGoogleProfile(profile);
 
-      setState(() {
-        _googleProfile = profile;
-      });
-
       await saveProfile();
+
+      await _refreshProfiles();
 
       successToast("$WELCOME, ${signIn?.email}", context);
     } catch (e) {
@@ -130,11 +128,9 @@ class _SocialPreferencesState extends State<SocialPreferences> {
         final profile = json.decode(profileResponse.body);
         await setFacebookProfile(profile);
 
-        setState(() {
-          _facebookProfile = profile;
-        });
-
         await saveProfile();
+
+        await _refreshProfiles();
 
         successToast("$WELCOME, $profile", context);
 

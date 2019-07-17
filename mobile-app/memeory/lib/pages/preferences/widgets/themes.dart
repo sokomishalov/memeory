@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/api/profile.dart';
 import 'package:memeory/util/theme.dart';
 
 class ThemePreferences extends StatelessWidget {
@@ -12,7 +11,6 @@ class ThemePreferences extends StatelessWidget {
         value: Theme.of(context).brightness == Brightness.dark,
         onChanged: (value) async {
           await changeTheme(context);
-          await saveProfile();
         },
       ),
     );

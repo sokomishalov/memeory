@@ -32,7 +32,7 @@ import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channe
  */
 @Service
 class MongoChannelService(private val repository: ChannelRepository,
-                          private val reactiveMongoTemplate: ReactiveMongoTemplate,
+                          private val template: ReactiveMongoTemplate,
                           private val props: MemeoryProperties
 ) : ChannelService {
     override fun findAllEnabled(): Flux<ChannelDTO> {
@@ -74,7 +74,7 @@ class MongoChannelService(private val repository: ChannelRepository,
         return fromArray(channelIds)
                 .map { query(where(MONGO_ID_FIELD).`in`(*channelIds)) }
                 .map { of(it, update("enabled", enabled)) }
-                .flatMap { reactiveMongoTemplate.findAndModify(it.t1, it.t2, Channel::class.java) }
+                .flatMap { template.findAndModify(it.t1, it.t2, Channel::class.java) }
                 .then()
     }
 
@@ -86,7 +86,7 @@ class MongoChannelService(private val repository: ChannelRepository,
                         Index().on("publishedAt", DESC)
                 ))
                 .flatMap {
-                    reactiveMongoTemplate
+                    template
                             .indexOps(Meme::class.java)
                             .ensureIndex(it)
                 }
