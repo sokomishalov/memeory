@@ -19,7 +19,11 @@ const LOGO_INVERTED_ASSET = "assets/logo/logo-inverted.png";
 const HORIZONTAL_ORIENTATION_ASSET = 'assets/orientation/horizontal.mp4';
 const VERTICAL_ORIENTATION_ASSET = 'assets/orientation/vertical.mp4';
 
-const MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN";
+const MEMEORY_TOKEN_HEADER_NAME = "MEMEORY_TOKEN";
+const APPLICATION_JSON_HEADER_VALUE = 'application/json';
+
+const YANDEX_DONATE_PAGE = "https://money.yandex.ru/to/410016644283944";
+const CREATOR_LINK = "https://www.facebook.com/sokomishalov";
 
 // Light Theme
 const INVERTED_TEXT_COLOR_LIGHT = Colors.black38;

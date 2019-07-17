@@ -71,5 +71,7 @@
         <key>NSAllowsLocalNetworking</key>
         <true/>
     </dict>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>

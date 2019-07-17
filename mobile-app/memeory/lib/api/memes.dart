@@ -8,8 +8,8 @@ import 'package:memeory/util/http.dart';
 
 Future<List> fetchMemes(page) async {
   final headers = <String, String>{
-    HttpHeaders.contentTypeHeader: 'application/json',
-    MEMEORY_TOKEN_HEADER: await getToken()
+    HttpHeaders.contentTypeHeader: APPLICATION_JSON_HEADER_VALUE,
+    MEMEORY_TOKEN_HEADER_NAME: await getToken()
   };
 
   final url = '${env.backendUrl}/memes/page/$page/$MEMES_COUNT_ON_THE_PAGE';

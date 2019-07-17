@@ -26,7 +26,7 @@ class MongoMemeService(
 ) : MemeService {
 
     companion object {
-        private val log: Logger = loggerFor(this::class.java)
+        private val log: Logger = loggerFor(MongoMemeService::class.java)
     }
 
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> {

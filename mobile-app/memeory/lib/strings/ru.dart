@@ -1,6 +1,7 @@
 // TODO use i18n in future
 
-const APP_NAME = "Мемеори";
+const CREATOR = "sokomishalov";
+const APP_NAME = "Memeory";
 const MEMES = "Мемесы";
 const CHOOSE_THEME = "Выберите тему приложения!";
 const CHOOSE_ORIENTATION = "Выберите, как вам удобнее будет орать с мемов!";
@@ -22,3 +23,5 @@ const AUTH_FACEBOOK = "Авторизация через Facebook";
 const UNSUCCESSFUL_AUTH_GOOGLE = "Неудачная попытка авторизации в Google";
 const UNSUCCESSFUL_AUTH_FACEBOOK = "Неудачная попытка авторизации в Facebook";
 const WELCOME = "Добро пожаловать";
+const DONATE = "Отблагодарить шекелями";
+const MADE_BY = "Создатель: ";

@@ -1,11 +1,11 @@
 package ru.sokomishalov.memeory.util
 
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.slf4j.LoggerFactory.getLogger
 
 
 /**
  * @author sokomishalov
  */
 
-fun <T> loggerFor(clazz: Class<T>): Logger = LoggerFactory.getLogger(clazz.simpleName)
+fun <T> loggerFor(clazz: Class<T>): Logger = getLogger(clazz.simpleName)
