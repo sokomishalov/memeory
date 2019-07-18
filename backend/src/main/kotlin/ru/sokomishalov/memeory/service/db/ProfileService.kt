@@ -5,6 +5,6 @@ import ru.sokomishalov.memeory.dto.ProfileDTO
 
 interface ProfileService {
 
-    fun saveProfileInfo(profile: ProfileDTO): Mono<ProfileDTO>
+    fun saveProfileInfoIfNecessary(profile: ProfileDTO): Mono<ProfileDTO>
 
 }
