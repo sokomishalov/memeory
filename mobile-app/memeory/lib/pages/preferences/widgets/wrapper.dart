@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/common/buttons/rounded_button.dart';
+import 'package:memeory/components/buttons/rounded_button.dart';
 import 'package:memeory/strings/ru.dart';
 
 class PreferencesPageWrapper extends StatelessWidget {

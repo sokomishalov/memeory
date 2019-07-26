@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/model/orientation.dart';
+import 'package:memeory/theme/dark.dart';
+import 'package:memeory/theme/light.dart';
+import 'package:memeory/theme/theme.dart';
 import 'package:memeory/util/consts.dart';
 import 'package:video_player/video_player.dart';
 
@@ -95,7 +98,11 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
       child: Container(
         padding: EdgeInsets.all(20),
         color: _preferredOrientation == orientation
-            ? Colors.greenAccent.shade200
+            ? dependingOnThemeChoice(
+                context: context,
+                light: ORIENTATION_CHOICE_COLOR_LIGHT,
+                dark: ORIENTATION_CHOICE_COLOR_DARK,
+              )
             : Colors.transparent,
         child: Chewie(
           controller: orientation == MemesOrientation.HORIZONTAL

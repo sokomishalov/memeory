@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/common/containers/web_view.dart';
+import 'package:memeory/components/containers/web_view.dart';
 
 class LinkTextSpan extends TextSpan {
   LinkTextSpan({

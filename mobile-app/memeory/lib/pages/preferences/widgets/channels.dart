@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
-import 'package:memeory/common/components/channel_logo.dart';
-import 'package:memeory/common/containers/future_builder.dart';
+import 'package:memeory/components/common/channel_logo.dart';
+import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/strings/ru.dart';
 
 class ChannelPreferences extends StatefulWidget {

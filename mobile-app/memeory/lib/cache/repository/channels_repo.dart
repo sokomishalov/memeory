@@ -11,7 +11,9 @@ Future<bool> getWatchAll() async {
 
 Future<List> getSelectedChannels() async {
   final channels = await get(SELECTED_CHANNELS_KEY);
-  return isNotEmpty(channels) ? json.decode(channels) : [];
+  return (isNotEmpty(channels) && channels != NULL_STRING)
+      ? json.decode(channels)
+      : [];
 }
 
 setWatchAll(bool value) async {
@@ -19,7 +21,8 @@ setWatchAll(bool value) async {
 }
 
 setChannels(List<dynamic> ids) async {
-  final res = json.encode(ids);
+  final channels = ids ?? [];
+  final res = json.encode(channels);
   await put(SELECTED_CHANNELS_KEY, res);
 }
 

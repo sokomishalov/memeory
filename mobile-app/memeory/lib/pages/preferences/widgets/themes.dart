@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/util/theme.dart';
+import 'package:memeory/theme/theme.dart';
 
 class ThemePreferences extends StatelessWidget {
   @override

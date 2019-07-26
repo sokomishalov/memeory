@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memeory/pages/home/home.dart';
 import 'package:memeory/strings/ru.dart';
-import 'package:memeory/util/theme.dart';
+import 'package:memeory/theme/theme.dart';
 import 'package:memeory/util/time.dart';
 
 void runMemeory() {

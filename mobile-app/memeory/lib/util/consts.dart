@@ -1,9 +1,9 @@
 // Keys
-import 'package:flutter/material.dart';
 
 const MEMES_COUNT_ON_THE_PAGE = 50;
 
 const EMPTY = "";
+const NULL_STRING = "null";
 const TOKEN_KEY = "TOKEN";
 const THEME_KEY = "THEME";
 const KEY_DELIMITER = "_";
@@ -29,9 +29,3 @@ const APPLICATION_JSON_HEADER_VALUE = 'application/json';
 
 const YANDEX_DONATE_PAGE = "https://money.yandex.ru/to/410016644283944";
 const CREATOR_LINK = "https://www.facebook.com/sokomishalov";
-
-// Light Theme
-const INVERTED_TEXT_COLOR_LIGHT = Colors.black38;
-
-// Dark Theme
-const INVERTED_TEXT_COLOR_DARK = Colors.white70;

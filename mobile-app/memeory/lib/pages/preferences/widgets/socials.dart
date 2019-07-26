@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
-import 'package:memeory/common/message/messages.dart';
+import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/http.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/common/buttons/rounded_button.dart';
-import 'package:memeory/common/components/link_text_span.dart';
-import 'package:memeory/common/containers/web_view.dart';
+import 'package:memeory/components/buttons/rounded_button.dart';
+import 'package:memeory/components/common/link_text_span.dart';
+import 'package:memeory/components/containers/web_view.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/consts.dart';
 
@@ -14,7 +14,7 @@ class AboutApp extends StatelessWidget {
         children: <Widget>[
           Text(APP_NAME),
           Padding(
-            padding: const EdgeInsets.only(top: 24.0),
+            padding: EdgeInsets.only(top: 24.0),
             child: RichText(
               text: TextSpan(
                 children: <TextSpan>[

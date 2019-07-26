@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:memeory/api/memes.dart';
-import 'package:memeory/common/containers/future_builder.dart';
+import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/pages/memes/mixin.dart';
+import 'package:memeory/theme/dark.dart';
+import 'package:memeory/theme/light.dart';
+import 'package:memeory/theme/theme.dart';
 
 class MemesHorizontal extends StatefulWidget {
   @override
@@ -41,7 +44,11 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
           return Container(
             key: Key(item["id"]),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight,
+              color: dependingOnThemeChoice(
+                context: context,
+                light: MEME_BACKGROUND_COLOR_LIGHT,
+                dark: MEME_BACKGROUND_COLOR_DARK,
+              ),
             ),
             child: Center(
               child: Container(

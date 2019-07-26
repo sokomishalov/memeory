@@ -5,6 +5,9 @@ import 'package:loadmore/loadmore.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
 import 'package:memeory/pages/memes/mixin.dart';
+import 'package:memeory/theme/dark.dart';
+import 'package:memeory/theme/light.dart';
+import 'package:memeory/theme/theme.dart';
 
 class MemesVertical extends StatefulWidget {
   @override
@@ -35,10 +38,13 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
 
           return Container(
             key: Key(item["id"]),
-            margin: EdgeInsets.symmetric(vertical: 10),
-            padding: EdgeInsets.only(bottom: 25),
+            margin: EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight,
+              color: dependingOnThemeChoice(
+                context: context,
+                light: MEME_BACKGROUND_COLOR_LIGHT,
+                dark: MEME_BACKGROUND_COLOR_DARK,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
