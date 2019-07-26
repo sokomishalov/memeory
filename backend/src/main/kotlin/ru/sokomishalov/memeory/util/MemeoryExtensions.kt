@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package ru.sokomishalov.memeory.util
 
@@ -6,16 +6,25 @@ package ru.sokomishalov.memeory.util
  * @author sokomishalov
  */
 
-fun CharSequence?.isNotNullOrBlank(): Boolean {
+
+inline fun CharSequence?.isNotNullOrBlank(): Boolean {
     return (this == null || this.isBlank()).not()
 }
 
-fun <K, V> Map<out K, V>?.isNotNullOrEmpty(): Boolean {
+inline fun <K, V> Map<out K, V>?.isNullOrEmpty(): Boolean {
+    return this == null || isEmpty()
+}
+
+inline fun <K, V> Map<out K, V>?.isNotNullOrEmpty(): Boolean {
     return (this == null || isEmpty()).not()
 }
 
-fun <K, V> Map<out K, V>?.isNullOrEmpty(): Boolean {
-    return this == null || isEmpty()
+inline fun ByteArray?.isNullOrEmpty(): Boolean {
+    return (this == null || isEmpty()).not()
+}
+
+inline fun ByteArray?.isNotNullOrEmpty(): Boolean {
+    return (this == null || isEmpty()).not()
 }
 
 infix fun <K, V> Map<K, V>.containsEntryFrom(other: Map<K, V>): Boolean {

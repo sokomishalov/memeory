@@ -14,7 +14,7 @@ const val MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN"
 const val FACEBOOK_BASE_URl: String = "https://www.facebook.com"
 const val FACEBOOK_GRAPH_BASE_URl: String = "http://graph.facebook.com"
 const val REDDIT_BASE_URl: String = "https://www.reddit.com"
-const val TWITTER_URL = "https://twitter.com"
+const val TWITTER_URL: String = "https://twitter.com"
 
 const val HORIZONTAL_ORIENTATION = "HORIZONTAL"
 const val VERTICAL_ORIENTATION = "VERTICAL"

@@ -55,7 +55,8 @@ dependencies {
     implementation("io.projectreactor:reactor-tools:1.0.0.M1")
     implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
-    implementation("io.projectreactor.netty:reactor-netty:0.8.8.RELEASE")
+    implementation("io.projectreactor.netty:reactor-netty:0.8.9.RELEASE")
+    implementation("io.netty:netty-transport-native-epoll:4.1.37.Final")
 
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
