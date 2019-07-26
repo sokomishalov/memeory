@@ -55,11 +55,11 @@ TextTheme getDefaultTextTheme(context) {
       : ThemeData.dark().textTheme;
 }
 
-dynamic dependingOnThemeChoice({context, light, dark}) {
+T dependingOnThemeChoice<T>({BuildContext context, T light, T dark}) {
   return Theme.of(context).brightness == Brightness.light ? light : dark;
 }
 
-changeTheme(BuildContext context) async {
+Future<void> changeTheme(BuildContext context) async {
   bool wantToUseDarkThemeNow = Theme.of(context).brightness == Brightness.light;
 
   DynamicTheme.of(context).setBrightness(

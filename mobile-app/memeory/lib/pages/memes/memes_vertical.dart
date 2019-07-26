@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
-import 'package:memeory/pages/memes/mixin.dart';
 import 'package:memeory/theme/dark.dart';
 import 'package:memeory/theme/light.dart';
 import 'package:memeory/theme/theme.dart';
+
+import 'memes_mixin.dart';
 
 class MemesVertical extends StatefulWidget {
   @override

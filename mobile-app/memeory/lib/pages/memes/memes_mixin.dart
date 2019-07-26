@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/common/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/strings/ru.dart';
@@ -86,6 +88,24 @@ mixin MemesMixin {
   }
 
   void onTapEllipsis(context) {
-    infoToast(NOT_REALIZED_YET, context);
+    showMemeoryBottomSheet(
+      context: context,
+      children: [
+        BottomSheetItem(
+          caption: SHARE_MEME,
+          icon: Icon(Icons.share),
+          onPressed: () {
+            infoToast(NOT_REALIZED_YET, context);
+          },
+        ),
+        BottomSheetItem(
+          caption: REMOVE_CHANNEL,
+          icon: Icon(Icons.report),
+          onPressed: () {
+            infoToast(NOT_REALIZED_YET, context);
+          },
+        )
+      ],
+    );
   }
 }

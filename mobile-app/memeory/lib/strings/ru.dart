@@ -25,3 +25,6 @@ const UNSUCCESSFUL_AUTH_FACEBOOK = "Неудачная попытка автор
 const WELCOME = "Добро пожаловать";
 const DONATE = "Отблагодарить шекелями";
 const MADE_BY = "Создатель: ";
+const CLOSE = "Закрыть";
+const SHARE_MEME = "Поделиться мемом";
+const REMOVE_CHANNEL = "Не показывать больше мемы из этого источника";
