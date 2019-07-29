@@ -1,4 +1,5 @@
 import 'package:localstorage/localstorage.dart';
+import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/os.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,15 +8,17 @@ final _desktopStorage = LocalStorage('storage');
 Future _mobileStorage() async => await SharedPreferences.getInstance();
 
 put(String key, dynamic value) async {
-  return isMobile()
+  isMobile()
       ? (await _mobileStorage()).setString(key, value.toString())
       : await _desktopStorage.setItem(key, value);
 }
 
 get(String key) async {
-  return isMobile()
+  final val = isMobile()
       ? (await _mobileStorage()).getString(key)
       : await _desktopStorage.getItem(key);
+
+  return val != NULL_STRING ? val : null;
 }
 
 // ignore: unused_element

@@ -13,7 +13,7 @@ Future<Map> getProfilesMap() async {
   }
 
   var facebook = await getFacebookProfile();
-  if (google != null) {
+  if (facebook != null) {
     resultMap[FACEBOOK] = facebook;
   }
 

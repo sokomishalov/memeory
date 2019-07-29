@@ -24,3 +24,9 @@ class BuildEnvironment {
         backendUrl: backendUrl,
       );
 }
+
+bool isDebugModeOn() {
+  bool inDebugMode = false;
+  assert(inDebugMode = true);
+  return inDebugMode;
+}
