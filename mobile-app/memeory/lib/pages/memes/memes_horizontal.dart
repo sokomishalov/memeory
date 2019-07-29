@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/api/memes.dart';
-import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/theme/dark.dart';
 import 'package:memeory/theme/light.dart';
 import 'package:memeory/theme/theme.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'memes_mixin.dart';
 
@@ -13,35 +13,41 @@ class MemesHorizontal extends StatefulWidget {
 }
 
 class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
-  PageController _controller;
-  int _currentPage;
-  Future<List> _memes;
+  PageController _pageController;
 
   @override
   void initState() {
-    _controller = new PageController();
-    _currentPage = 0;
-    _memes = fetchMemes(_currentPage);
+    _pageController = PageController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _pageController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureWidget(
-      future: _memes,
-      render: (memes) => PageView.builder(
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: true,
+      header: buildLoaderHeader(),
+      footer: buildLoaderFooter(),
+      controller: refreshController,
+      onRefresh: onRefresh,
+      onLoading: onLoading,
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        controller: _pageController,
+        physics: PageScrollPhysics(),
         itemCount: memes?.length ?? 0,
-        controller: _controller,
         itemBuilder: (context, index) {
           var item = memes[index] ?? {};
 
           return Container(
+            width: MediaQuery.of(context).size.width,
             key: Key(item["id"]),
             decoration: BoxDecoration(
               color: dependingOnThemeChoice(
@@ -51,13 +57,14 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
               ),
             ),
             child: Center(
-              child: Container(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    prepareHeader(item, context),
-                    prepareCaption(item, context),
-                    ...prepareAttachments(item)
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildMemeHeader(item, context),
+                    buildMemeCaption(item, context),
+                    ...buildMemeAttachments(item),
                   ],
                 ),
               ),

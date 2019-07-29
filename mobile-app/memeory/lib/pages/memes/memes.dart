@@ -25,141 +25,142 @@ class MemesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: dependingOnThemeChoice(
-          context: context,
-          light: MEME_BACKGROUND_COLOR_LIGHT,
-          dark: MEME_BACKGROUND_COLOR_DARK,
-        ),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: AppBar(
-            backgroundColor: dependingOnThemeChoice(
-              context: context,
-              light: APP_BAR_COLOR_LIGHT,
-              dark: APP_BAR_COLOR_DARK,
-            ),
-            iconTheme: getDefaultIconThemeData(context),
-            centerTitle: true,
-            title: Text(
-              MEMES,
-              style: TextStyle(
-                color: dependingOnThemeChoice(
-                  context: context,
-                  light: TEXT_COLOR_LIGHT,
-                  dark: TEXT_COLOR_DARK,
-                ),
+      backgroundColor: dependingOnThemeChoice(
+        context: context,
+        light: MEME_BACKGROUND_COLOR_LIGHT,
+        dark: MEME_BACKGROUND_COLOR_DARK,
+      ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(50),
+        child: AppBar(
+          backgroundColor: dependingOnThemeChoice(
+            context: context,
+            light: APP_BAR_COLOR_LIGHT,
+            dark: APP_BAR_COLOR_DARK,
+          ),
+          iconTheme: getDefaultIconThemeData(context),
+          centerTitle: true,
+          title: Text(
+            MEMES,
+            style: TextStyle(
+              color: dependingOnThemeChoice(
+                context: context,
+                light: TEXT_COLOR_LIGHT,
+                dark: TEXT_COLOR_DARK,
               ),
             ),
           ),
         ),
-        drawer: Drawer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              DrawerHeader(
-                child: Stack(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Icon(Icons.close),
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: dependingOnThemeChoice(
-                                  context: context,
-                                  light: AssetImage(LOGO_ASSET),
-                                  dark: AssetImage(LOGO_INVERTED_ASSET),
-                                ),
+      ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            DrawerHeader(
+              child: Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.close),
+                  ),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: dependingOnThemeChoice(
+                                context: context,
+                                light: AssetImage(LOGO_ASSET),
+                                dark: AssetImage(LOGO_INVERTED_ASSET),
                               ),
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text('$APP_NAME!'),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text('$APP_NAME!'),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.person_outline),
-                      title: Text(PROFILE),
-                      onTap: () {
-                        pushToPrefs(
-                          title: PLEASE_AUTHORIZE,
-                          context: context,
-                          body: SocialPreferences(),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.star_border),
-                      title: Text(CHANNELS),
-                      onTap: () {
-                        pushToPrefs(
-                          title: CHOOSE_CHANNELS,
-                          context: context,
-                          body: ChannelPreferences(),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.rss_feed),
-                      title: Text(ORIENTATION),
-                      onTap: () {
-                        pushToPrefs(
-                          title: CHOOSE_ORIENTATION,
-                          context: context,
-                          body: OrientationPreferences(),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.info_outline),
-                      title: Text(ABOUT_APP),
-                      onTap: () {
-                        pushToPrefs(
-                          title: ABOUT_APP,
-                          context: context,
-                          body: AboutApp(),
-                        );
-                      },
-                    )
-                  ],
-                ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.person_outline),
+                    title: Text(PROFILE),
+                    onTap: () {
+                      pushToPrefs(
+                        title: PLEASE_AUTHORIZE,
+                        context: context,
+                        body: SocialPreferences(),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.star_border),
+                    title: Text(CHANNELS),
+                    onTap: () {
+                      pushToPrefs(
+                        title: CHOOSE_CHANNELS,
+                        context: context,
+                        body: ChannelPreferences(),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.rss_feed),
+                    title: Text(ORIENTATION),
+                    onTap: () {
+                      pushToPrefs(
+                        title: CHOOSE_ORIENTATION,
+                        context: context,
+                        body: OrientationPreferences(),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.info_outline),
+                    title: Text(ABOUT_APP),
+                    onTap: () {
+                      pushToPrefs(
+                        title: ABOUT_APP,
+                        context: context,
+                        body: AboutApp(),
+                      );
+                    },
+                  )
+                ],
               ),
-              Container(
-                height: 50,
-                margin: EdgeInsets.only(bottom: 20),
-                child: SwitchListTile(
-                  title: Text("Темная тема"),
-                  value: Theme.of(context).brightness == Brightness.dark,
-                  onChanged: (value) async {
-                    Navigator.pop(context);
-                    await changeTheme(context);
-                  },
-                ),
+            ),
+            Container(
+              height: 50,
+              margin: EdgeInsets.only(bottom: 20),
+              child: SwitchListTile(
+                title: Text("Темная тема"),
+                value: Theme.of(context).brightness == Brightness.dark,
+                onChanged: (value) async {
+                  Navigator.pop(context);
+                  await changeTheme(context);
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        body: orientation == MemesOrientation.VERTICAL
-            ? MemesVertical()
-            : MemesHorizontal());
+      ),
+      body: orientation == MemesOrientation.VERTICAL
+          ? MemesVertical()
+          : MemesHorizontal(),
+    );
   }
 
   void pushToPrefs({

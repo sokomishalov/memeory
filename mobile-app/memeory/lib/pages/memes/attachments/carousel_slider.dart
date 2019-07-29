@@ -5,7 +5,7 @@ class AttachmentCarousel extends StatefulWidget {
   const AttachmentCarousel({
     Key key,
     @required this.items,
-    this.minAspectRatio = 1,
+    this.minAspectRatio = 1.0,
   }) : super(key: key);
 
   final List<Widget> items;

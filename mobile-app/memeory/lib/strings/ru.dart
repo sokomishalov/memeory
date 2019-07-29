@@ -28,3 +28,6 @@ const MADE_BY = "Создатель: ";
 const CLOSE = "Закрыть";
 const SHARE_MEME = "Поделиться мемом";
 const REMOVE_CHANNEL = "Не показывать больше мемы из этого источника";
+const ERROR_LOADING_MEMES = "Ошибка при загрузке мемесов :(";
+const LOADING_MEMES = "Подождите, гружу мемесы ...";
+const NO_MORE_MEMES = "Нет больше мемесов :(";

@@ -1,16 +1,57 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/common/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/collections.dart';
+import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/time.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'attachments/photo.dart';
 import 'attachments/video.dart';
 
-mixin MemesMixin {
-  Widget prepareHeader(item, context) {
+mixin MemesMixin<T extends StatefulWidget> on State<T> {
+  int _currentPage;
+  List memes;
+  RefreshController refreshController;
+
+  @override
+  void initState() {
+    _currentPage = -1;
+    memes = [];
+    refreshController = RefreshController(initialRefresh: true);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    refreshController?.dispose();
+    super.dispose();
+  }
+
+  Future<void> onRefresh() async {
+    await _loadMore(0);
+    refreshController.refreshCompleted();
+  }
+
+  Future<void> onLoading() async {
+    await _loadMore(_currentPage + 1);
+    refreshController.loadComplete();
+  }
+
+  Future<void> _loadMore(int page) async {
+    var newMemes = await fetchMemes(page);
+
+    setState(() {
+      _currentPage = page;
+      memes = distinctByProperty([...memes, ...newMemes], "id");
+    });
+  }
+
+  Widget buildMemeHeader(item, context) {
     return Container(
       padding: EdgeInsets.only(
         left: 10,
@@ -51,29 +92,30 @@ mixin MemesMixin {
     );
   }
 
-  Widget prepareCaption(item, context) {
+  Widget buildMemeCaption(item, context) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Text(
         item["caption"],
+        softWrap: true,
         style: TextStyle(fontSize: 16),
       ),
     );
   }
 
-  List<Widget> prepareAttachments(item) {
+  List<Widget> buildMemeAttachments(item) {
     return item["attachments"]
             ?.map((a) {
               var aspectRatio = a["aspectRatio"];
               var url = a["url"];
               var type = a["type"];
 
-              if (type == "IMAGE") {
+              if (type == IMAGE_ATTACHMENT_TYPE) {
                 return PhotoAttachment(
                   url: url,
                   aspectRatio: aspectRatio,
                 );
-              } else if (type == "VIDEO") {
+              } else if (type == VIDEO_ATTACHMENT_TYPE) {
                 return VideoAttachment(
                   url: url,
                   aspectRatio: aspectRatio,
@@ -85,6 +127,51 @@ mixin MemesMixin {
             ?.cast<Widget>()
             ?.toList() ??
         [];
+  }
+
+  Widget buildLoaderHeader() {
+    return WaterDropHeader(
+      complete: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.done, color: Colors.grey),
+          Container(width: 15.0)
+        ],
+      ),
+      failed: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.close, color: Colors.grey),
+          Container(width: 15.0),
+          Text(ERROR_LOADING_MEMES, style: TextStyle(color: Colors.grey))
+        ],
+      ),
+    );
+  }
+
+  Widget buildLoaderFooter() {
+    return CustomFooter(
+      builder: (BuildContext context, LoadStatus mode) {
+        Widget widget;
+        switch (mode) {
+          case LoadStatus.idle:
+          case LoadStatus.loading:
+            widget = Text(LOADING_MEMES);
+            break;
+          case LoadStatus.noMore:
+            widget = Text(NO_MORE_MEMES);
+            break;
+          case LoadStatus.failed:
+            widget = Text(ERROR_LOADING_MEMES);
+            break;
+        }
+
+        return Container(
+          height: 55.0,
+          child: Center(child: widget),
+        );
+      },
+    );
   }
 
   void onTapEllipsis(context) {
