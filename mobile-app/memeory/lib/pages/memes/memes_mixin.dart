@@ -10,7 +10,7 @@ import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'attachments/photo.dart';
+import 'attachments/image.dart';
 import 'attachments/video.dart';
 
 mixin MemesMixin<T extends StatefulWidget> on State<T> {
@@ -111,7 +111,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
               var type = a["type"];
 
               if (type == IMAGE_ATTACHMENT_TYPE) {
-                return PhotoAttachment(
+                return ImageAttachment(
                   url: url,
                   aspectRatio: aspectRatio,
                 );
