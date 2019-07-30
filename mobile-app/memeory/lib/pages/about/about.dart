@@ -4,6 +4,9 @@ import 'package:memeory/components/buttons/rounded_button.dart';
 import 'package:memeory/components/containers/web_view.dart';
 import 'package:memeory/components/text/link_text_span.dart';
 import 'package:memeory/strings/ru.dart';
+import 'package:memeory/theme/dark.dart';
+import 'package:memeory/theme/light.dart';
+import 'package:memeory/theme/theme.dart';
 import 'package:memeory/util/consts.dart';
 
 class AboutApp extends StatelessWidget {
@@ -19,8 +22,14 @@ class AboutApp extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                    text: MADE_BY,
-                  ),
+                      text: MADE_BY,
+                      style: TextStyle(
+                        color: dependingOnThemeChoice(
+                          context: context,
+                          light: TEXT_COLOR_LIGHT,
+                          dark: TEXT_COLOR_DARK,
+                        ),
+                      )),
                   LinkTextSpan(
                     context: context,
                     url: CREATOR_LINK,
