@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
-import 'package:memeory/components/common/channel_logo.dart';
+import 'package:memeory/components/containers/loader.dart';
+import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
+import 'package:memeory/model/orientation.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/collections.dart';
 import 'package:memeory/util/consts.dart';
@@ -129,24 +132,39 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
         [];
   }
 
-  Widget buildLoaderHeader() {
-    return WaterDropHeader(
-      complete: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.done, color: Colors.grey),
-          Container(width: 15.0)
-        ],
-      ),
-      failed: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.close, color: Colors.grey),
-          Container(width: 15.0),
-          Text(ERROR_LOADING_MEMES, style: TextStyle(color: Colors.grey))
-        ],
-      ),
-    );
+  Widget buildLoaderHeader(MemesOrientation orientation) {
+    return orientation == MemesOrientation.HORIZONTAL
+        ? ClassicHeader(
+            releaseText: EMPTY,
+            refreshingText: EMPTY,
+            completeText: EMPTY,
+            idleText: EMPTY,
+            failedText: ERROR_LOADING_MEMES,
+            idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
+          )
+        : WaterDropHeader(
+            completeDuration: Duration(milliseconds: 400),
+            refresh: SizedBox(
+              width: 25,
+              height: 25,
+              child: Loader(),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.done, color: Colors.grey),
+                Container(width: 15.0)
+              ],
+            ),
+            failed: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.close, color: Colors.grey),
+                Container(width: 15.0),
+                Text(ERROR_LOADING_MEMES, style: TextStyle(color: Colors.grey))
+              ],
+            ),
+          );
   }
 
   Widget buildLoaderFooter() {

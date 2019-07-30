@@ -3,9 +3,10 @@ import 'package:memeory/util/consts.dart';
 import 'package:memeory/util/os.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _desktopStorage = LocalStorage('storage');
+final LocalStorage _desktopStorage = LocalStorage('storage');
 
-Future _mobileStorage() async => await SharedPreferences.getInstance();
+Future<SharedPreferences> _mobileStorage() async =>
+    await SharedPreferences.getInstance();
 
 put(String key, dynamic value) async {
   isMobile()

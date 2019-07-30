@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/components/buttons/rounded_button.dart';
+import 'package:memeory/components/containers/empty.dart';
 import 'package:memeory/strings/ru.dart';
 
 class PreferencesPageWrapper extends StatelessWidget {
@@ -28,7 +29,7 @@ class PreferencesPageWrapper extends StatelessWidget {
         child: Text(title),
       );
     } else {
-      header = Container();
+      header = Empty();
     }
 
     if (nextPage != null) {
@@ -42,7 +43,7 @@ class PreferencesPageWrapper extends StatelessWidget {
         onPressed: apply,
       );
     } else {
-      bottomButton = Container();
+      bottomButton = Empty();
     }
 
     return Container(

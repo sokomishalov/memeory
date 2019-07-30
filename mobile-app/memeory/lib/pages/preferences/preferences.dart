@@ -9,18 +9,19 @@ import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 class UserPreferencesPage extends StatelessWidget {
-  final _controller = PageController();
+  final _controller = PreloadPageController();
 
-  void nextPage() {
+  void _nextPage() {
     _controller.nextPage(
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
 
-  void close(context) async {
+  void _close(context) async {
     await setAppVisitDatetime();
     var orientation = await getPreferredOrientation();
 
@@ -35,27 +36,27 @@ class UserPreferencesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
+      body: PreloadPageView(
         controller: _controller,
         children: [
           PreferencesPageWrapper(
             title: CHOOSE_THEME,
-            nextPage: nextPage,
+            nextPage: _nextPage,
             child: ThemePreferences(),
           ),
           PreferencesPageWrapper(
             title: PLEASE_AUTHORIZE,
-            nextPage: nextPage,
+            nextPage: _nextPage,
             child: SocialPreferences(),
           ),
           PreferencesPageWrapper(
             title: CHOOSE_ORIENTATION,
-            nextPage: nextPage,
+            nextPage: _nextPage,
             child: OrientationPreferences(),
           ),
           PreferencesPageWrapper(
             title: CHOOSE_CHANNELS,
-            apply: () => close(context),
+            apply: () => _close(context),
             applyText: START_WATCHING_MEMES,
             child: ChannelPreferences(),
           )

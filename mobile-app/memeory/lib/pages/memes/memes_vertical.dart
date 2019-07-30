@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:memeory/model/orientation.dart';
 import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
 import 'package:memeory/theme/dark.dart';
 import 'package:memeory/theme/light.dart';
@@ -20,7 +21,7 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: buildLoaderHeader(),
+      header: buildLoaderHeader(MemesOrientation.VERTICAL),
       footer: buildLoaderFooter(),
       controller: refreshController,
       onRefresh: onRefresh,

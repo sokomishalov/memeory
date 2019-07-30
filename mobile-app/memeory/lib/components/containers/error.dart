@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/consts.dart';
 
 class ErrorContainer extends StatelessWidget {
-  const ErrorContainer({Key key, this.error, this.reload()}) : super(key: key);
+  const ErrorContainer({Key key, this.error, this.reload}) : super(key: key);
 
-  final error;
-  final reload;
+  final dynamic error;
+  final VoidCallback reload;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ErrorContainer extends StatelessWidget {
           padding: EdgeInsets.only(left: 20, right: 20, top: 20),
           child: RichText(
             text: TextSpan(
-              text: "Возникла ошибка: ",
+              text: ERROR_OCCURED,
               style: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.bold,
@@ -29,7 +31,7 @@ class ErrorContainer extends StatelessWidget {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: error?.toString() ?? "",
+                  text: error?.toString() ?? EMPTY,
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Theme.of(context).textTheme.title.color,
@@ -42,13 +44,7 @@ class ErrorContainer extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: 20),
           child: reload == null
-              ? Text(
-                  "Попробуйте перезапустить приложение",
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    color: Theme.of(context).textTheme.title.color,
-                  ),
-                )
+              ? Container()
               : RaisedButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
@@ -56,7 +52,7 @@ class ErrorContainer extends StatelessWidget {
                   onPressed: reload,
                   padding: EdgeInsets.all(12),
                   child: Text(
-                    'Повторить попытку',
+                    RETRY,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

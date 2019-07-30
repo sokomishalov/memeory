@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/util/os.dart';
 
 class Loader extends StatelessWidget {
   const Loader({Key key, this.width, this.height}) : super(key: key);
@@ -12,7 +14,9 @@ class Loader extends StatelessWidget {
       width: width,
       height: height,
       child: Center(
-        child: CircularProgressIndicator(),
+        child: isIos()
+            ? const CupertinoActivityIndicator()
+            : const CircularProgressIndicator(strokeWidth: 2),
       ),
     );
   }
