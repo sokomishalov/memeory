@@ -1,6 +1,6 @@
 // Keys
 
-const MEMES_COUNT_ON_THE_PAGE = 5;
+const MEMES_COUNT_ON_THE_PAGE = 50;
 const MEMES_HORIZONTAL_LOAD_FACTOR = 0.75;
 
 const EMPTY = "";
