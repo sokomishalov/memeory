@@ -15,9 +15,7 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.DATE_FORMATTER
-import ru.sokomishalov.memeory.util.YAML_OBJECT_MAPPER
-import ru.sokomishalov.memeory.util.loggerFor
+import ru.sokomishalov.memeory.util.*
 import java.time.Duration.ZERO
 import java.time.Duration.ofMillis
 import java.time.LocalDateTime.now
@@ -60,15 +58,17 @@ class MemesFetchingScheduler(
                     fromIterable(providerServices)
                             .filter { it.sourceType() == channel.sourceType }
                             .flatMap {
-                                it
-                                        .fetchMemesFromChannel(channel)
-                                        .limitRequest(props.fetchCount.toLong())
+                                it.fetchMemesFromChannel(channel).limitRequest(props.fetchCount.toLong())
                             }
                             .doOnNext {
                                 it.channelId = channel.id
                                 it.channelName = channel.name
                             }
-                            .filter { it.attachments.isNotEmpty() }
+                            .filter {
+                                it?.attachments?.all { att ->
+                                    checkAttachmentAvailability(att.url ?: EMPTY)
+                                } ?: false
+                            }
                             .onErrorResume { empty() }
                             .let { memeService.saveMemesIfNotExist(it) }
                 }

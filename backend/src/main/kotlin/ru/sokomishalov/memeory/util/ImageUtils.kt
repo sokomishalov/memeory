@@ -13,6 +13,15 @@ import javax.imageio.ImageIO.read as readImage
  * @author sokomishalov
  */
 
+fun checkAttachmentAvailability(url: String): Boolean {
+    return try {
+        readImage(URL(url))
+        true
+    } catch (t: Throwable) {
+        false
+    }
+}
+
 fun getImageDimensions(url: String): Tuple2<Int, Int> {
     return try {
         readImage(URL(url)).let { tupleOf(it.width, it.height) }
