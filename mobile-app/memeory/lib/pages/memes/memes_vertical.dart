@@ -6,6 +6,7 @@ import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
 import 'package:memeory/theme/dark.dart';
 import 'package:memeory/theme/light.dart';
 import 'package:memeory/theme/theme.dart';
+import 'package:memeory/util/collections.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'memes_mixin.dart';
@@ -48,11 +49,13 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
                 buildMemeHeader(item, context),
                 buildMemeCaption(item, context),
                 AttachmentCarousel(
-                  minAspectRatio: item["attachments"]
-                      ?.map((a) => a["aspectRatio"])
-                      ?.cast<double>()
-                      ?.reduce((double o1, double o2) =>
-                          (o1 != null && o2 != null) ? min(o1, o2) : 1.0),
+                  minAspectRatio: isNotEmpty(item["attachments"])
+                      ? item["attachments"]
+                          ?.map((a) => a["aspectRatio"])
+                          ?.cast<double>()
+                          ?.reduce((double o1, double o2) =>
+                              (o1 != null && o2 != null) ? min(o1, o2) : 1.0)
+                      : 1,
                   items: buildMemeAttachments(item),
                 )
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
 import 'package:memeory/pages/memes/memes.dart';
@@ -22,6 +23,8 @@ class UserPreferencesPage extends StatelessWidget {
   }
 
   void _close(context) async {
+    await saveProfile();
+
     await setAppVisitDatetime();
     var orientation = await getPreferredOrientation();
 

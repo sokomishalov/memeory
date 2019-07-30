@@ -26,9 +26,11 @@ class _VideoAttachmentState extends State<VideoAttachment> {
 
     _memeChewieController = ChewieController(
       videoPlayerController: _memeVideoController,
-      showControls: false,
       aspectRatio: widget.aspectRatio,
-      autoPlay: false,
+      showControls: false,
+      autoInitialize: true,
+      autoPlay: true,
+      looping: true,
     );
 
     super.initState();
@@ -43,6 +45,15 @@ class _VideoAttachmentState extends State<VideoAttachment> {
 
   @override
   Widget build(BuildContext context) {
-    return Chewie(controller: _memeChewieController);
+    final width = MediaQuery.of(context).size.width;
+    final height = width / widget.aspectRatio;
+
+    return Container(
+      width: width,
+      height: height,
+      child: Chewie(
+        controller: _memeChewieController,
+      ),
+    );
   }
 }
