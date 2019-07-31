@@ -13,10 +13,9 @@ import org.springframework.core.io.Resource
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.netty.http.client.HttpClient
-import ru.sokomishalov.memeory.config.props.MemeoryProperties
 import ru.sokomishalov.memeory.util.GSON
 import ru.sokomishalov.memeory.util.OBJECT_MAPPER
+import reactor.netty.http.client.HttpClient.create as createHttpClient
 
 /**
  * @author sokomishalov
@@ -44,7 +43,7 @@ class CommonConfig {
     @Primary
     fun reactiveWebClient(): WebClient = WebClient
             .builder()
-            .clientConnector(ReactorClientHttpConnector(HttpClient.create().followRedirect(true)))
+            .clientConnector(ReactorClientHttpConnector(createHttpClient().followRedirect(true)))
             .build()
 }
 

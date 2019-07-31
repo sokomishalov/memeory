@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
-import ru.sokomishalov.memeory.config.props.MemeoryProperties
+import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO

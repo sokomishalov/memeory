@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.config.props
+package ru.sokomishalov.memeory.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

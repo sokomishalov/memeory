@@ -8,21 +8,20 @@ import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.empty
-import reactor.core.publisher.Mono.justOrEmpty
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.repository.MemeRepository
-import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.loggerFor
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy
+import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
 import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMapper
 
 @Service
 class MongoMemeService(
         private val repository: MemeRepository,
-        private val profileRepository: ProfileRepository
+        private val profileService: MongoProfileService
 ) : MemeService {
 
     companion object {
@@ -31,7 +30,7 @@ class MongoMemeService(
 
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> {
         return memes
-                .filterWhen { repository.existsById(it.id).not() }
+                .filterWhen { !repository.existsById(it.id) }
                 .map { memeMapper.toEntity(it) }
                 .let { repository.saveAll(it) }
                 .map { memeMapper.toDto(it) }
@@ -39,9 +38,9 @@ class MongoMemeService(
     }
 
     override fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO> {
-        return justOrEmpty(token)
+        return monoJustOrEmpty(token)
                 .defaultIfEmpty(EMPTY)
-                .flatMap { profileRepository.findById(it) }
+                .flatMap { profileService.findById(it) }
                 .flatMapMany {
                     val pageRequest = pageOf(page, count, sortBy(Order(DESC, "publishedAt", NULLS_LAST)))
 

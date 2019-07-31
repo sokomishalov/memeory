@@ -1,11 +1,11 @@
 package ru.sokomishalov.memeory.util
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import org.junit.Assert.*
+import org.junit.Test
 import ru.sokomishalov.memeory.AbstractMemeoryTest
 import kotlin.math.abs
 
-internal class ImageUtilsTest : AbstractMemeoryTest() {
+class ImageUtilsTest : AbstractMemeoryTest() {
 
     private val imageWidth = 200
     private val imageHeight = 300

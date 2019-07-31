@@ -20,6 +20,6 @@ class ProfileController(
 
     @PostMapping("/save")
     fun saveProfileInfo(@RequestBody profile: ProfileDTO): Mono<ProfileDTO> {
-        return service.saveProfileInfoIfNecessary(profile)
+        return service.saveIfNecessary(profile)
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux.empty
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono.just
-import ru.sokomishalov.memeory.config.props.MemeoryProperties
+import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService

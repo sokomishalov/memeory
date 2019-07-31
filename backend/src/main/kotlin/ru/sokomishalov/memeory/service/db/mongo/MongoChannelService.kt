@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import reactor.util.function.Tuples.of
-import ru.sokomishalov.memeory.config.props.MemeoryProperties
+import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
 import ru.sokomishalov.memeory.entity.mongo.Meme

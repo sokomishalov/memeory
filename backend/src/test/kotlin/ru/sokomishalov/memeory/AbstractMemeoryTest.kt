@@ -8,7 +8,7 @@ import reactor.blockhound.BlockHound.install as blockHoundInstall
 /**
  * @author sokomishalov
  */
-open class AbstractMemeoryTest {
+abstract class AbstractMemeoryTest {
 
     @BeforeEach
     fun `Set up tests`() {

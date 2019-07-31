@@ -32,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
 
 
@@ -63,7 +64,6 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:2.7.0")
     implementation("org.jsoup:jsoup:1.12.1")
 
-
     implementation("com.vk.api:sdk:0.5.12") {
         exclude(group = "org.apache.logging.log4j")
         exclude(group = "org.asynchttpclient")
@@ -71,12 +71,11 @@ dependencies {
     implementation("com.github.igor-suhorukov:instagramscraper:2.2")
     implementation("org.twitter4j:twitter4j-core:4.0.7")
 
-
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+    testImplementation("junit:junit:4.12")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-        exclude(group = "junit", module = "junit")
     }
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.0.M3")
