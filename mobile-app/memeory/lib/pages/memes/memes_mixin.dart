@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:memeory/api/channels.dart';
 import 'package:memeory/api/memes.dart';
+import 'package:memeory/api/profile.dart';
+import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/containers/loader.dart';
 import 'package:memeory/components/images/channel_logo.dart';
-import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/model/orientation.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/collections.dart';
@@ -87,7 +89,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
           ),
           Spacer(flex: 20),
           GestureDetector(
-            onTap: () => onTapEllipsis(context),
+            onTap: () => onTapEllipsis(context, item),
             child: Icon(CupertinoIcons.ellipsis),
           ),
         ],
@@ -192,22 +194,38 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  void onTapEllipsis(context) {
+  void onTapEllipsis(BuildContext context, Map<String, dynamic> item) {
     showMemeoryBottomSheet(
       context: context,
       children: [
         BottomSheetItem(
-          caption: SHARE_MEME,
-          icon: Icon(Icons.share),
-          onPressed: () {
-            infoToast(NOT_REALIZED_YET, context);
-          },
-        ),
-        BottomSheetItem(
           caption: REMOVE_CHANNEL,
           icon: Icon(Icons.report),
-          onPressed: () {
-            infoToast(NOT_REALIZED_YET, context);
+          onPressed: () async {
+            final watchAll = await getWatchAll();
+
+            if (watchAll) {
+              var channelsToSave = (await fetchChannels())
+                  .map((it) => it["id"])
+                  .where((it) => it != item["channelId"])
+                  .toList();
+
+              await setChannels(channelsToSave);
+              await setWatchAll(false);
+            } else {
+              await removeChannel(item["channelId"]);
+            }
+
+            await saveProfile();
+
+            Navigator.pop(context);
+
+            setState(() {
+              _currentPage = -1;
+              memes = [];
+            });
+
+            await onRefresh();
           },
         )
       ],

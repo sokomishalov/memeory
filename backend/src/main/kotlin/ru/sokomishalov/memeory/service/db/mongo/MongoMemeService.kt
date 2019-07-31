@@ -48,7 +48,7 @@ class MongoMemeService(
                     if (it.watchAllChannels) {
                         repository.findAllMemesBy(pageRequest)
                     } else {
-                        repository.findAllByChannelIdIn(it.channels ?: emptyList(), pageRequest)
+                        repository.findAllByChannelIdIn(it?.channels ?: emptyList(), pageRequest)
                     }
                 }
                 .map { memeMapper.toDto(it) }
