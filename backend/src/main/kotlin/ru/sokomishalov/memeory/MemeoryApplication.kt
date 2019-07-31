@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import reactor.tools.agent.ReactorDebugAgent.init
 import reactor.tools.agent.ReactorDebugAgent.processExistingClasses
-import ru.sokomishalov.memeory.util.loggerFor
+import ru.sokomishalov.memeory.util.log.loggerFor
 
 /**
  * @author sokomishalov

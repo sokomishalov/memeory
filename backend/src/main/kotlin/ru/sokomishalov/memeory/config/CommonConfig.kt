@@ -13,8 +13,8 @@ import org.springframework.core.io.Resource
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
-import ru.sokomishalov.memeory.util.GSON
-import ru.sokomishalov.memeory.util.OBJECT_MAPPER
+import ru.sokomishalov.memeory.util.serialization.GSON
+import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
 import reactor.netty.http.client.HttpClient.create as createHttpClient
 
 /**

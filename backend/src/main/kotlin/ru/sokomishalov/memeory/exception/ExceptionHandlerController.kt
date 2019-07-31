@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.exception
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
-import org.slf4j.Logger
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
@@ -19,18 +18,17 @@ import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.web.reactive.function.server.ServerRequest.create
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
-import ru.sokomishalov.memeory.util.loggerFor
+import ru.sokomishalov.memeory.util.log.Loggable
 import java.time.format.DateTimeParseException
 import javax.naming.AuthenticationException
 import javax.naming.NoPermissionException
 import javax.naming.OperationNotSupportedException
 
 @ControllerAdvice
-class ExceptionHandlerController {
+class ExceptionHandlerController : Loggable {
 
     companion object {
         private val messageReaders = listOf<HttpMessageReader<*>>(DecoderHttpMessageReader(Jackson2JsonDecoder()))
-        private val log: Logger = loggerFor(this::class.java)
     }
 
     @ExceptionHandler(IllegalArgumentException::class, NoSuchElementException::class, InvalidFormatException::class, DateTimeParseException::class, HttpMessageNotReadableException::class, MethodArgumentNotValidException::class, WebExchangeBindException::class)
@@ -70,7 +68,7 @@ class ExceptionHandlerController {
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ResponseBody
     fun internalServerError(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
-        log.error(e.message, e)
+        logError(e)
         val attributes = getErrorAttributes(exchange, INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера")
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(attributes)
     }

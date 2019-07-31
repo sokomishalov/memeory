@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
-import org.slf4j.Logger
 import org.springframework.data.domain.Sort.Direction.DESC
 import org.springframework.data.domain.Sort.NullHandling.NULLS_LAST
 import org.springframework.data.domain.Sort.Order
@@ -12,7 +11,7 @@ import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.repository.MemeRepository
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.util.EMPTY
-import ru.sokomishalov.memeory.util.loggerFor
+import ru.sokomishalov.memeory.util.log.Loggable
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy
 import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
@@ -22,11 +21,7 @@ import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMappe
 class MongoMemeService(
         private val repository: MemeRepository,
         private val profileService: MongoProfileService
-) : MemeService {
-
-    companion object {
-        private val log: Logger = loggerFor(MongoMemeService::class.java)
-    }
+) : MemeService, Loggable {
 
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> {
         return memes
@@ -52,7 +47,7 @@ class MongoMemeService(
                 }
                 .map { memeMapper.toDto(it) }
                 .onErrorResume {
-                    log.error(it.message, it)
+                    logError(it)
                     empty()
                 }
     }

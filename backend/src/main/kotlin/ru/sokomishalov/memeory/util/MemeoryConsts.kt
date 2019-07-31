@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter.ofPattern
 const val EMPTY: String = ""
 const val ID_DELIMITER: String = ":"
 const val MONGO_ID_FIELD: String = "_id"
+const val COROUTINE_PATH_PREFIX = "/coroutine"
 const val MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN"
 
 const val FACEBOOK_BASE_URl: String = "https://www.facebook.com"

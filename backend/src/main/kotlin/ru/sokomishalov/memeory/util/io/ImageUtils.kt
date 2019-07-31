@@ -1,5 +1,7 @@
-package ru.sokomishalov.memeory.util
+package ru.sokomishalov.memeory.util.io
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
@@ -12,6 +14,15 @@ import javax.imageio.ImageIO.read as readImage
 /**
  * @author sokomishalov
  */
+
+suspend fun checkAttachmentAvailabilityAsync(url: String?) = withContext(Dispatchers.IO) {
+    try {
+        readImage(URL(url))
+        true
+    } catch (t: Throwable) {
+        false
+    }
+}
 
 fun checkAttachmentAvailability(url: String): Boolean {
     return try {

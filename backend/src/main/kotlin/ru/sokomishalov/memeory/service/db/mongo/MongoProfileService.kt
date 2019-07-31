@@ -10,7 +10,7 @@ import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.ProfileService
 import ru.sokomishalov.memeory.util.EMPTY
-import ru.sokomishalov.memeory.util.isNotNullOrEmpty
+import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
 import reactor.core.publisher.Flux.fromIterable as fluxFromIterable

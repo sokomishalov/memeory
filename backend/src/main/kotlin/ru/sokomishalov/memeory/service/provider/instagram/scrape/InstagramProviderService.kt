@@ -18,7 +18,7 @@ import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
+import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 
 
 /**

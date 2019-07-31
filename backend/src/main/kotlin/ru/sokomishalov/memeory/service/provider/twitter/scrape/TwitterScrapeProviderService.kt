@@ -20,8 +20,8 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.TWITTER_URL
-import ru.sokomishalov.memeory.util.getImageAspectRatio
-import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
+import ru.sokomishalov.memeory.util.io.getImageAspectRatio
+import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import java.util.*
 import java.util.UUID.randomUUID
 import kotlin.collections.ArrayList

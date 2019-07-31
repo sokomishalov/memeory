@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package ru.sokomishalov.memeory.util
+package ru.sokomishalov.memeory.util.serialization
 
 
 import com.google.gson.Gson

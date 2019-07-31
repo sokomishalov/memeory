@@ -20,7 +20,7 @@ import ru.sokomishalov.memeory.service.provider.reddit.model.Listing
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.REDDIT_BASE_URl
-import ru.sokomishalov.memeory.util.getImageByteArrayMonoByUrl
+import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID

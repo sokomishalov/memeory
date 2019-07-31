@@ -17,7 +17,11 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
-import ru.sokomishalov.memeory.util.*
+import ru.sokomishalov.memeory.util.FACEBOOK_BASE_URl
+import ru.sokomishalov.memeory.util.FACEBOOK_GRAPH_BASE_URl
+import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.io.getImageAspectRatio
+import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import java.util.*
 import java.util.UUID.randomUUID
 

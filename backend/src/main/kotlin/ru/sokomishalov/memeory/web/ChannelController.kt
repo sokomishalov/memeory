@@ -16,6 +16,7 @@ import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import org.springframework.http.ResponseEntity.ok as responseEntityOk
 
 /**
  * @author sokomishalov
@@ -71,8 +72,7 @@ class ChannelController(private val channelService: ChannelService,
                 .defaultIfEmpty(placeholder)
                 .onErrorResume { just(placeholder) }
                 .map {
-                    ResponseEntity
-                            .ok()
+                    responseEntityOk()
                             .contentType(APPLICATION_OCTET_STREAM)
                             .contentLength(it.size.toLong())
                             .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${ID_DELIMITER}logo.png")

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.util
+package ru.sokomishalov.memeory.util.serialization
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.core.JsonFactory
