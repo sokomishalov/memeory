@@ -15,12 +15,12 @@ import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.pFilter
-import ru.sokomishalov.memeory.util.extensions.pForEach
-import ru.sokomishalov.memeory.util.extensions.pMap
+import ru.sokomishalov.memeory.util.extensions.coFilter
+import ru.sokomishalov.memeory.util.extensions.coForEach
+import ru.sokomishalov.memeory.util.extensions.coMap
 import ru.sokomishalov.memeory.util.io.checkAttachmentAvailabilityAsync
 import ru.sokomishalov.memeory.util.log.Loggable
-import ru.sokomishalov.memeory.util.log.measureTime
+import ru.sokomishalov.memeory.util.log.measureTimeAndReturn
 import ru.sokomishalov.memeory.util.serialization.YAML_OBJECT_MAPPER
 import java.time.LocalDateTime.now
 import java.util.*
@@ -53,14 +53,14 @@ class MemesFetchingScheduler(
     // FIXME make clusterable
     @EventListener(ApplicationReadyEvent::class)
     fun startUpCoroutine() {
-        Timer().schedule(delay = 0, period = props.fetchIntervalMs) {
+        Timer(true).schedule(delay = 0, period = props.fetchIntervalMs) {
             log("About to fetch some new memes at ${now().format(DATE_FORMATTER)}")
 
             GlobalScope.launch {
-                measureTime("Finished downloading new memes after:") {
+                measureTimeAndReturn("Finished to download new memes after:") {
                     val channels = channelService.findAllEnabled().await()
 
-                    channels.pForEach { channel ->
+                    channels.coForEach { channel ->
                         val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 
                         val fetchedMemes = providerService
@@ -69,10 +69,10 @@ class MemesFetchingScheduler(
                                 .await()
 
                         val memesToSave = fetchedMemes
-                                .pFilter {
+                                .coFilter {
                                     it?.attachments?.all { att -> checkAttachmentAvailabilityAsync(att.url) } ?: false
                                 }
-                                .pMap {
+                                .coMap {
                                     it.apply {
                                         it.channelId = channel.id
                                         it.channelName = channel.name

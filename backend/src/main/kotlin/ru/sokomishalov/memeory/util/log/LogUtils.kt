@@ -10,9 +10,10 @@ import java.lang.System.currentTimeMillis as systemCurrentTimeMillis
 
 fun <T> loggerFor(clazz: Class<T>): Logger = getLogger(clazz.simpleName)
 
-inline fun measureTime(pretext: String = "Execution time", block: () -> Unit) {
+inline fun <T> measureTimeAndReturn(preCaption: String = "Execution time", block: () -> T): T {
     val start = systemCurrentTimeMillis()
-    block()
+    val res = block()
     val time = systemCurrentTimeMillis() - start
-    println("$pretext : $time ms")
+    println("$preCaption : $time ms")
+    return res
 }

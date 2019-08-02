@@ -17,6 +17,7 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
+import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
 
 /**
  * @author sokomishalov
@@ -63,7 +64,7 @@ class ChannelController(private val channelService: ChannelService,
                         orElse = channelService
                                 .findById(channelId)
                                 .flatMap { c ->
-                                    Flux.fromIterable(providerServices)
+                                    fluxFromIterable(providerServices)
                                             .filter { it.sourceType() == c.sourceType }
                                             .next()
                                             .flatMap { it.getLogoByChannel(c) }

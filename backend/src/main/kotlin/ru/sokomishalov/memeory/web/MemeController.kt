@@ -8,13 +8,15 @@ import ru.sokomishalov.memeory.util.MEMEORY_TOKEN_HEADER
 
 @RestController
 @RequestMapping("/memes")
-class MemeController(private val memeService: MemeService) {
+class MemeController(
+        private val service: MemeService
+) {
 
     @GetMapping("/page/{page}/{count}")
     fun page(@PathVariable page: Int,
              @PathVariable count: Int,
              @RequestHeader(required = false, name = MEMEORY_TOKEN_HEADER) token: String?
     ): Flux<MemeDTO> {
-        return memeService.pageOfMemes(page, count, token)
+        return service.pageOfMemes(page, count, token)
     }
 }

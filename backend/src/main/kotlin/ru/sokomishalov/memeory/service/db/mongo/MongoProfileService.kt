@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
@@ -14,7 +15,6 @@ import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
 import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
-import reactor.core.publisher.Mono as monoJustOrEmpty
 import reactor.core.publisher.Mono.just as monoJust
 import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
 import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profileMapper
@@ -25,14 +25,14 @@ class MongoProfileService(
         private val template: ReactiveMongoTemplate
 ) : ProfileService {
 
-    override fun findById(id: String): monoJustOrEmpty<ProfileDTO> {
+    override fun findById(id: String): Mono<ProfileDTO> {
         return monoJustOrEmpty(id)
                 .flatMap { repository.findById(it) }
                 .map { profileMapper.toDto(it) }
     }
 
     @Transactional
-    override fun saveIfNecessary(profile: ProfileDTO): monoJustOrEmpty<ProfileDTO> {
+    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> {
         return monoJust(profile)
                 .flatMap { p ->
                     when {
@@ -59,7 +59,7 @@ class MongoProfileService(
                 .onErrorResume { monoJustOrEmpty(profile) }
     }
 
-    private fun saveProfile(profile: ProfileDTO): monoJustOrEmpty<ProfileDTO> {
+    private fun saveProfile(profile: ProfileDTO): Mono<ProfileDTO> {
         return monoJust(profile)
                 .doOnNext {
                     if (it.id.isNullOrBlank()) it.id = randomUUID().toString()

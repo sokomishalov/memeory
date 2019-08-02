@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux.empty
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.repository.MemeRepository
 import ru.sokomishalov.memeory.service.db.MemeService
+import ru.sokomishalov.memeory.service.db.ProfileService
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.log.Loggable
 import org.springframework.data.domain.PageRequest.of as pageOf
@@ -20,7 +21,7 @@ import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMappe
 @Service
 class MongoMemeService(
         private val repository: MemeRepository,
-        private val profileService: MongoProfileService
+        private val profileService: ProfileService
 ) : MemeService, Loggable {
 
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> {

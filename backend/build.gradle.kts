@@ -5,9 +5,9 @@ plugins {
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("net.linguica.maven-settings") version "0.5"
     id("com.github.ben-manes.versions") version "0.20.0"
-    kotlin("jvm") version "1.3.40"
-    kotlin("plugin.spring") version "1.3.40"
-    kotlin("kapt") version "1.3.40"
+    kotlin("jvm") version "1.3.41"
+    kotlin("plugin.spring") version "1.3.41"
+    kotlin("kapt") version "1.3.41"
 }
 
 group = "ru.sokomishalov"
@@ -47,6 +47,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
@@ -56,7 +57,7 @@ dependencies {
     implementation("io.projectreactor:reactor-tools:1.0.0.M1")
     implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
-    implementation("io.projectreactor.netty:reactor-netty:0.8.9.RELEASE")
+    implementation("io.projectreactor.netty:reactor-netty:0.9.0.M1")
     implementation("io.netty:netty-transport-native-epoll:4.1.37.Final")
 
     implementation("org.apache.commons:commons-lang3:3.9")
