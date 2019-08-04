@@ -1,10 +1,6 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
-import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.event.EventListener
-import org.springframework.data.domain.Sort.Direction.DESC
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.data.mongodb.core.index.Index
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
@@ -12,18 +8,14 @@ import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromArray
-import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import reactor.util.function.Tuples.of
-import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
-import ru.sokomishalov.memeory.entity.mongo.Meme
 import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.util.MONGO_ID_FIELD
-import java.time.Duration.ofDays
 import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 
 
@@ -32,8 +24,7 @@ import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channe
  */
 @Service
 class MongoChannelService(private val repository: ChannelRepository,
-                          private val template: ReactiveMongoTemplate,
-                          private val props: MemeoryProperties
+                          private val template: ReactiveMongoTemplate
 ) : ChannelService {
     override fun findAllEnabled(): Flux<ChannelDTO> {
         return repository
@@ -76,20 +67,5 @@ class MongoChannelService(private val repository: ChannelRepository,
                 .map { of(it, update("enabled", enabled)) }
                 .flatMap { template.findAndModify(it.t1, it.t2, Channel::class.java) }
                 .then()
-    }
-
-    @EventListener(ApplicationReadyEvent::class)
-    fun startUp() {
-        fromIterable(
-                listOf(
-                        Index().on("createdAt", DESC).expire(ofDays(props.memeExpirationDays.toLong())),
-                        Index().on("publishedAt", DESC)
-                ))
-                .flatMap {
-                    template
-                            .indexOps(Meme::class.java)
-                            .ensureIndex(it)
-                }
-                .subscribe()
     }
 }
