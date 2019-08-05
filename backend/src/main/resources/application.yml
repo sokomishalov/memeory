@@ -18,7 +18,6 @@ memeory:
 provider:
   reddit:
     enabled: true
-    base-url: https://www.reddit.com
   vk:
     enabled: true
     app-id: 7024306

@@ -33,6 +33,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    kapt("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
 
 
