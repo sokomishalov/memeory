@@ -7,12 +7,14 @@ import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.fromRunnable
 import reactor.core.publisher.Mono.justOrEmpty
 import reactor.core.publisher.Signal
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 
 
 /**
  * @author sokomishalov
  */
 @Service
+@ConditionalOnNotUsingCoroutines
 class CacheService(private val cacheManager: CacheManager) {
 
     @Suppress("UNCHECKED_CAST")

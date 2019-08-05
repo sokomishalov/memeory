@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.awaitBody
 import org.springframework.web.reactive.function.server.bodyAndAwait
+import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.cache.coroutine.CoroutineCacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
@@ -25,6 +26,7 @@ import org.springframework.web.reactive.function.server.ServerResponse.ok as ser
  * @author sokomishalov
  */
 @Component
+@ConditionalOnUsingCoroutines
 class CoroutineChannelHandler(
         private val channelService: ChannelService,
         private val providerServices: List<ProviderService>,

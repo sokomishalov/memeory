@@ -4,12 +4,14 @@ package ru.sokomishalov.memeory.service.cache.coroutine
 
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
+import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 
 
 /**
  * @author sokomishalov
  */
 @Service
+@ConditionalOnUsingCoroutines
 class CoroutineCacheService(private val cacheManager: CacheManager) {
 
     suspend fun <T> getFromCache(cacheName: String, key: String, orElse: suspend () -> T): T {

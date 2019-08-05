@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
+import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
@@ -30,6 +31,7 @@ import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMappe
 
 @Service
 @Primary
+@ConditionalOnUsingCoroutines
 class CoroutineMongoMemeService(
         private val repository: MemeRepository,
         private val profileService: ProfileService,

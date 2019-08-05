@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.service.db.ProfileService
 
@@ -14,6 +15,7 @@ import ru.sokomishalov.memeory.service.db.ProfileService
  */
 @RestController
 @RequestMapping("/profile")
+@ConditionalOnNotUsingCoroutines
 class ProfileController(
         private val service: ProfileService
 ) {

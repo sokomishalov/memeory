@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.cache.CacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
@@ -24,6 +25,7 @@ import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
  */
 @RestController
 @RequestMapping("/channels")
+@ConditionalOnNotUsingCoroutines
 class ChannelController(private val channelService: ChannelService,
                         @Qualifier("placeholder")
                         private val placeholder: ByteArray,

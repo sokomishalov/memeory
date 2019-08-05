@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import reactor.core.publisher.ofType
 import reactor.util.function.Tuples.of
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
 import ru.sokomishalov.memeory.repository.ChannelRepository
@@ -24,6 +25,7 @@ import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channe
  * @author sokomishalov
  */
 @Service
+@ConditionalOnNotUsingCoroutines
 class MongoChannelService(private val repository: ChannelRepository,
                           private val template: ReactiveMongoTemplate
 ) : ChannelService {

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
+import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
@@ -29,6 +30,7 @@ import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profil
  */
 @Service
 @Primary
+@ConditionalOnUsingCoroutines
 class CoroutineMongoProfileService(
         private val repository: ProfileRepository,
         private val template: ReactiveMongoTemplate

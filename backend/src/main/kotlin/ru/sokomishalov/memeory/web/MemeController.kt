@@ -2,12 +2,14 @@ package ru.sokomishalov.memeory.web
 
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.util.MEMEORY_TOKEN_HEADER
 
 @RestController
 @RequestMapping("/memes")
+@ConditionalOnNotUsingCoroutines
 class MemeController(
         private val service: MemeService
 ) {

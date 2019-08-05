@@ -1,38 +1,37 @@
 package ru.sokomishalov.memeory.service.scheduler
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux.empty
+import reactor.core.publisher.Flux.fromIterable
+import reactor.core.publisher.Mono.just
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
-import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.coFilter
-import ru.sokomishalov.memeory.util.extensions.coForEach
-import ru.sokomishalov.memeory.util.extensions.coMap
-import ru.sokomishalov.memeory.util.io.checkAttachmentAvailabilityAsync
+import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.io.checkAttachmentAvailability
 import ru.sokomishalov.memeory.util.log.Loggable
-import ru.sokomishalov.memeory.util.log.measureTimeAndReturn
 import ru.sokomishalov.memeory.util.serialization.YAML_OBJECT_MAPPER
+import java.time.Duration.ZERO
+import java.time.Duration.ofMillis
 import java.time.LocalDateTime.now
-import java.util.*
 import javax.annotation.PostConstruct
-import kotlin.concurrent.schedule
-import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
+import reactor.core.publisher.Flux.interval as scheduled
 
 
 /**
  * @author sokomishalov
  */
 @Service
+@ConditionalOnNotUsingCoroutines
 class MemesFetchingScheduler(
         private val channelService: ChannelService,
         private val props: MemeoryProperties,
@@ -44,45 +43,38 @@ class MemesFetchingScheduler(
 
     @PostConstruct
     fun init() {
-        GlobalScope.launch {
-            val channelDTOs = YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream)
-            channelService.saveIfNotExist(*channelDTOs).await()
-        }
+        just(EMPTY)
+                .map { YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream) }
+                .flatMapMany { channelService.saveIfNotExist(*it) }
+                .then()
+                .subscribe()
     }
 
     // FIXME make clusterable
     @EventListener(ApplicationReadyEvent::class)
-    fun startUpCoroutine() {
-        Timer(true).schedule(delay = 0, period = props.fetchIntervalMs) {
-            log("About to fetch some new memes at ${now().format(DATE_FORMATTER)}")
-
-            GlobalScope.launch {
-                measureTimeAndReturn("Finished to download new memes after:") {
-                    val channels = channelService.findAllEnabled().await()
-
-                    channels.coForEach { channel ->
-                        val providerService = providerServices.find { it.sourceType() == channel.sourceType }
-
-                        val fetchedMemes = providerService
-                                ?.fetchMemesFromChannel(channel)
-                                ?.limitRequest(props.fetchCount.toLong())
-                                .await()
-
-                        val memesToSave = fetchedMemes
-                                .coFilter {
-                                    it?.attachments?.all { att -> checkAttachmentAvailabilityAsync(att.url) } ?: false
-                                }
-                                .coMap {
-                                    it.apply {
-                                        it.channelId = channel.id
-                                        it.channelName = channel.name
-                                    }
-                                }
-
-                        memeService.saveMemesIfNotExist(fluxFromIterable(memesToSave)).then().await()
-                    }
+    fun startUp() {
+        scheduled(ZERO, ofMillis(props.fetchIntervalMs))
+                .doOnNext { log("About to fetch some new memes at ${now().format(DATE_FORMATTER)}") }
+                .flatMap { channelService.findAllEnabled() }
+                .flatMap { channel ->
+                    fromIterable(providerServices)
+                            .filter { it.sourceType() == channel.sourceType }
+                            .flatMap {
+                                it.fetchMemesFromChannel(channel).limitRequest(props.fetchCount.toLong())
+                            }
+                            .doOnNext {
+                                it.channelId = channel.id
+                                it.channelName = channel.name
+                            }
+                            .filter {
+                                it?.attachments?.all { att ->
+                                    checkAttachmentAvailability(att.url ?: EMPTY)
+                                } ?: false
+                            }
+                            .onErrorResume { empty() }
+                            .let { memeService.saveMemesIfNotExist(it) }
                 }
-            }
-        }
+                .then()
+                .subscribe()
     }
 }

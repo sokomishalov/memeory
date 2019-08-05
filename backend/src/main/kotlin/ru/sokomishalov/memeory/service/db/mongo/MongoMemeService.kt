@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import reactor.bool.not
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.empty
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
@@ -27,6 +28,7 @@ import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
 import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMapper
 
 @Service
+@ConditionalOnNotUsingCoroutines
 class MongoMemeService(
         private val repository: MemeRepository,
         private val profileService: ProfileService,

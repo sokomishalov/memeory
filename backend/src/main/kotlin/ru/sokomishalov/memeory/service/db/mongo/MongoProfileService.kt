@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
+import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
 import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profileMapper
 
 @Service
+@ConditionalOnNotUsingCoroutines
 class MongoProfileService(
         private val repository: ProfileRepository,
         private val template: ReactiveMongoTemplate
