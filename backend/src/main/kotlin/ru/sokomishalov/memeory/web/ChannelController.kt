@@ -41,12 +41,12 @@ class ChannelController(private val channelService: ChannelService,
     }
 
     @PostMapping("/enable")
-    fun enable(@RequestBody channelIds: List<String>): Mono<Void> {
+    fun enable(@RequestBody channelIds: List<String>): Mono<Unit> {
         return channelService.toggleEnabled(true, *channelIds.toTypedArray())
     }
 
     @PostMapping("/disable")
-    fun disable(@RequestBody channelIds: List<String>): Mono<Void> {
+    fun disable(@RequestBody channelIds: List<String>): Mono<Unit> {
         return channelService.toggleEnabled(false, *channelIds.toTypedArray())
     }
 

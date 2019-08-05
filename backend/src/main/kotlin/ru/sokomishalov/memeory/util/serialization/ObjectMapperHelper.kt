@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 /**
  * @author sokomishalov
@@ -20,8 +20,8 @@ val YAML_OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper(YAMLFactory())
 
 private fun buildComplexObjectMapper(factory: JsonFactory? = null): ObjectMapper =
         ObjectMapper(factory)
+                .registerKotlinModule()
                 .registerModule(JavaTimeModule())
-                .registerModule(KotlinModule())
                 .enable(
                         ACCEPT_SINGLE_VALUE_AS_ARRAY,
                         READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE,

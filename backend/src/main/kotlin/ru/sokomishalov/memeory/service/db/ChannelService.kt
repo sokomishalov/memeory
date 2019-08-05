@@ -16,5 +16,5 @@ interface ChannelService {
 
     fun saveIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO>
 
-    fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Void>
+    fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Unit>
 }

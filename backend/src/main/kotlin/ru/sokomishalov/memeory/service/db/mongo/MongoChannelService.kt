@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromArray
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
+import reactor.core.publisher.ofType
 import reactor.util.function.Tuples.of
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
@@ -28,8 +29,7 @@ class MongoChannelService(private val repository: ChannelRepository,
 ) : ChannelService {
     override fun findAllEnabled(): Flux<ChannelDTO> {
         return repository
-                .findAll()
-                .filter { it.enabled }
+                .findAllByEnabled(true)
                 .map { channelMapper.toDto(it) }
     }
 
@@ -61,11 +61,12 @@ class MongoChannelService(private val repository: ChannelRepository,
                 .map { channelMapper.toDto(it) }
     }
 
-    override fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Void> {
+    override fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Unit> {
         return fromArray(channelIds)
                 .map { query(where(MONGO_ID_FIELD).`in`(*channelIds)) }
                 .map { of(it, update("enabled", enabled)) }
                 .flatMap { template.findAndModify(it.t1, it.t2, Channel::class.java) }
                 .then()
+                .ofType()
     }
 }

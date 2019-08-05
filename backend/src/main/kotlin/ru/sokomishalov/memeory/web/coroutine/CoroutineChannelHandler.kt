@@ -1,7 +1,5 @@
 package ru.sokomishalov.memeory.web.coroutine
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
@@ -12,7 +10,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.awaitBody
 import org.springframework.web.reactive.function.server.bodyAndAwait
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.service.cache.CacheService
+import ru.sokomishalov.memeory.service.cache.coroutine.CoroutineCacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
@@ -30,7 +28,7 @@ import org.springframework.web.reactive.function.server.ServerResponse.ok as ser
 class CoroutineChannelHandler(
         private val channelService: ChannelService,
         private val providerServices: List<ProviderService>,
-        private val cache: CacheService,
+        private val cache: CoroutineCacheService,
         @Qualifier("placeholder")
         private val placeholder: ByteArray
 ) {
@@ -61,15 +59,15 @@ class CoroutineChannelHandler(
         val channelId = request.pathVariable("channelId")
 
         val logoByteArray = cache.getFromCache(
-                cache = CHANNEL_LOGO_CACHE_KEY,
+                cacheName = CHANNEL_LOGO_CACHE_KEY,
                 key = channelId,
-                orElse = GlobalScope.mono {
+                orElse = {
                     val channel = channelService.findById(channelId).awaitStrict()
                     val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 
                     service?.getLogoByChannel(channel)?.awaitOrElse { placeholder }
                 }
-        ).awaitStrict()
+        ) ?: placeholder
 
         return serverResponseOk()
                 .contentType(APPLICATION_OCTET_STREAM)

@@ -22,3 +22,9 @@ suspend inline fun <T> Iterable<T>.coFilter(crossinline predicate: suspend (T) -
     map { async { if (predicate(it)) destination.add(it) } }.forEach { it.await() }
     destination
 }
+
+suspend inline fun <T> Array<T>.coFilter(crossinline predicate: suspend (T) -> Boolean): List<T> = withContext(coroutineContext) {
+    val destination = ArrayList<T>()
+    map { async { if (predicate(it)) destination.add(it) } }.forEach { it.await() }
+    destination
+}
