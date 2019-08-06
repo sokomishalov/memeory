@@ -3,7 +3,6 @@ package ru.sokomishalov.memeory.service.provider.instagram.scrape
 import me.postaddict.instagram.scraper.Instagram
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
@@ -18,7 +17,6 @@ import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 
 
 /**
@@ -26,8 +24,7 @@ import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
  */
 @Service
 @Conditional(InstagramCondition::class)
-class InstagramProviderService(private val instagram: Instagram,
-                               private val webClient: WebClient) : ProviderService {
+class InstagramProviderService(private val instagram: Instagram) : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -53,11 +50,10 @@ class InstagramProviderService(private val instagram: Instagram,
                 }
     }
 
-    override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
         return just(channel)
                 .map { instagram.getAccountByUsername(it.uri) }
                 .map { it.profilePicUrl }
-                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = INSTAGRAM

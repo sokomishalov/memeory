@@ -5,6 +5,7 @@ import org.springframework.boot.web.reactive.error.DefaultErrorAttributes
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.status
 import org.springframework.http.codec.DecoderHttpMessageReader
 import org.springframework.http.codec.HttpMessageReader
 import org.springframework.http.codec.json.Jackson2JsonDecoder
@@ -36,7 +37,7 @@ class ExceptionHandlerController : Loggable {
     @ResponseBody
     fun badRequestException(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
         val attributes = getErrorAttributes(exchange, BAD_REQUEST, e)
-        return ResponseEntity.status(BAD_REQUEST).body(attributes)
+        return status(BAD_REQUEST).body(attributes)
     }
 
     @ExceptionHandler(AccessDeniedException::class, OperationNotSupportedException::class, NoPermissionException::class)
@@ -44,7 +45,7 @@ class ExceptionHandlerController : Loggable {
     @ResponseBody
     fun forbiddenException(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
         val attributes = getErrorAttributes(exchange, FORBIDDEN, e)
-        return ResponseEntity.status(FORBIDDEN).body(attributes)
+        return status(FORBIDDEN).body(attributes)
     }
 
     @ExceptionHandler(AuthenticationException::class)
@@ -52,7 +53,7 @@ class ExceptionHandlerController : Loggable {
     @ResponseBody
     fun unauthorizedException(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
         val attributes = getErrorAttributes(exchange, UNAUTHORIZED, e)
-        return ResponseEntity.status(UNAUTHORIZED).body(attributes)
+        return status(UNAUTHORIZED).body(attributes)
     }
 
 
@@ -61,7 +62,7 @@ class ExceptionHandlerController : Loggable {
     @ResponseBody
     fun handleNotRealized(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
         val attributes = getErrorAttributes(exchange, NOT_IMPLEMENTED, e)
-        return ResponseEntity.status(NOT_IMPLEMENTED).body(attributes)
+        return status(NOT_IMPLEMENTED).body(attributes)
     }
 
     @ExceptionHandler(Exception::class)
@@ -70,7 +71,7 @@ class ExceptionHandlerController : Loggable {
     fun internalServerError(e: Exception, exchange: ServerWebExchange): ResponseEntity<*> {
         logError(e)
         val attributes = getErrorAttributes(exchange, INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера")
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(attributes)
+        return status(INTERNAL_SERVER_ERROR).body(attributes)
     }
 
     private fun getErrorAttributes(exchange: ServerWebExchange, status: HttpStatus, e: Exception): Map<String, Any> {

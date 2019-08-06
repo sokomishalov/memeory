@@ -5,7 +5,6 @@ import org.springframework.social.facebook.api.Facebook
 import org.springframework.social.facebook.api.Post.PostType.PHOTO
 import org.springframework.social.facebook.api.Post.PostType.VIDEO
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
@@ -19,7 +18,6 @@ import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 
@@ -29,9 +27,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  */
 @Service
 @Conditional(FacebookCondition::class, FacebookGraphApiCondition::class)
-class FacebookGraphProviderService(private val facebook: Facebook,
-                                   private val webClient: WebClient
-) : ProviderService {
+class FacebookGraphProviderService(private val facebook: Facebook) : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -56,11 +52,10 @@ class FacebookGraphProviderService(private val facebook: Facebook,
                 }
     }
 
-    override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
         return just(channel)
                 .map { facebook.groupOperations().getGroup(it.uri) }
                 .map { it.icon }
-                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = FACEBOOK

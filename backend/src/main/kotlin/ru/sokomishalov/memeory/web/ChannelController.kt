@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.APPLICATION_OCTET_STREAM
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
@@ -17,6 +18,7 @@ import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
 import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
 
@@ -30,7 +32,9 @@ class ChannelController(private val channelService: ChannelService,
                         @Qualifier("placeholder")
                         private val placeholder: ByteArray,
                         private val providerServices: List<ProviderService>,
-                        private val cache: CacheService) {
+                        private val cache: CacheService,
+                        private val webClient: WebClient
+) {
 
     @GetMapping("/list")
     fun all(): Flux<ChannelDTO> {
@@ -69,7 +73,8 @@ class ChannelController(private val channelService: ChannelService,
                                     fluxFromIterable(providerServices)
                                             .filter { it.sourceType() == c.sourceType }
                                             .next()
-                                            .flatMap { it.getLogoByChannel(c) }
+                                            .flatMap { it.getLogoUrlByChannel(c) }
+                                            .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
                                 }
                 )
                 .defaultIfEmpty(placeholder)

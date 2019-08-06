@@ -10,7 +10,7 @@ interface ProviderService {
 
     fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO>
 
-    fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray>
+    fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String>
 
     fun sourceType(): SourceType
 }

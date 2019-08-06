@@ -5,7 +5,6 @@ import org.jsoup.Jsoup.parse
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
@@ -21,7 +20,6 @@ import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.TWITTER_URL
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
-import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import java.util.*
 import java.util.UUID.randomUUID
 import kotlin.collections.ArrayList
@@ -32,9 +30,7 @@ import kotlin.collections.ArrayList
  */
 @Service
 @Conditional(TwitterCondition::class, TwitterScrapeCondition::class)
-class TwitterScrapeProviderService(
-        private val webClient: WebClient
-) : ProviderService {
+class TwitterScrapeProviderService : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -53,12 +49,11 @@ class TwitterScrapeProviderService(
                 }
     }
 
-    override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
         return just(channel)
                 .map { connect("$TWITTER_URL/${it.uri}").get() }
                 .map { it.body().getElementsByClass("ProfileAvatar-image").first() }
                 .map { it.attr("src") }
-                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = TWITTER

@@ -5,6 +5,7 @@ import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.APPLICATION_OCTET_STREAM
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.awaitBody
@@ -15,10 +16,13 @@ import ru.sokomishalov.memeory.service.cache.coroutine.CoroutineCacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
+import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitOrElse
 import ru.sokomishalov.memeory.util.extensions.awaitResponse
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
+import ru.sokomishalov.memeory.util.io.coGetImageByteArrayMonoByUrl
 import org.springframework.web.reactive.function.server.ServerResponse.ok as serverResponseOk
 
 
@@ -32,7 +36,8 @@ class CoroutineChannelHandler(
         private val providerServices: List<ProviderService>,
         private val cache: CoroutineCacheService,
         @Qualifier("placeholder")
-        private val placeholder: ByteArray
+        private val placeholder: ByteArray,
+        private val webClient: WebClient
 ) {
     suspend fun findAll(request: ServerRequest): ServerResponse {
         return channelService.findAll().awaitResponse()
@@ -67,9 +72,10 @@ class CoroutineChannelHandler(
                     val channel = channelService.findById(channelId).awaitStrict()
                     val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 
-                    service?.getLogoByChannel(channel)?.awaitOrElse { placeholder }
+                    val url = service?.getLogoUrlByChannel(channel)?.await()
+                    coGetImageByteArrayMonoByUrl(url ?: EMPTY, webClient).awaitOrElse { placeholder }
                 }
-        ) ?: placeholder
+        )
 
         return serverResponseOk()
                 .contentType(APPLICATION_OCTET_STREAM)

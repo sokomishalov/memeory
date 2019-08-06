@@ -2,7 +2,6 @@ package ru.sokomishalov.memeory.service.provider.twitter.api
 
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
@@ -16,7 +15,6 @@ import ru.sokomishalov.memeory.enums.SourceType.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.service.provider.twitter.api.TwitterApiAttachmentType.*
-import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import twitter4j.Paging
 import twitter4j.Twitter
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
@@ -29,8 +27,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 @Service
 @Conditional(TwitterCondition::class, TwitterApiCondition::class)
 class TwitterApiProviderService(private val props: MemeoryProperties,
-                                private val twitter: Twitter,
-                                private val webClient: WebClient
+                                private val twitter: Twitter
 ) : ProviderService {
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
         return just(channel)
@@ -58,12 +55,11 @@ class TwitterApiProviderService(private val props: MemeoryProperties,
                 }
     }
 
-    override fun getLogoByChannel(channel: ChannelDTO): Mono<ByteArray> {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
         return just(channel)
                 .map { twitter.lookupUsers(it.uri) }
                 .map { it.first() }
                 .map { it.biggerProfileImageURL }
-                .flatMap { getImageByteArrayMonoByUrl(it, webClient) }
     }
 
     override fun sourceType(): SourceType = TWITTER
