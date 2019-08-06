@@ -3,6 +3,7 @@ package ru.sokomishalov.memeory.condition
 import org.springframework.context.annotation.ConditionContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.core.type.AnnotatedTypeMetadata
+import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.annotation.AnnotationTarget.FUNCTION
 
@@ -12,12 +13,12 @@ import kotlin.annotation.AnnotationTarget.FUNCTION
  */
 
 @Target(CLASS, FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 @Conditional(UsingCoroutinesCondition::class)
 annotation class ConditionalOnUsingCoroutines
 
 @Target(CLASS, FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
+@Retention(RUNTIME)
 @Conditional(NotUsingCoroutinesCondition::class)
 annotation class ConditionalOnNotUsingCoroutines
 

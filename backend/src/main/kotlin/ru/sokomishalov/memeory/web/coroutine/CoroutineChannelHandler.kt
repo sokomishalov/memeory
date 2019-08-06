@@ -19,7 +19,6 @@ import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.awaitOrElse
 import ru.sokomishalov.memeory.util.extensions.awaitResponse
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.util.io.coGetImageByteArrayMonoByUrl
@@ -73,9 +72,9 @@ class CoroutineChannelHandler(
                     val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 
                     val url = service?.getLogoUrlByChannel(channel)?.await()
-                    coGetImageByteArrayMonoByUrl(url ?: EMPTY, webClient).awaitOrElse { placeholder }
+                    coGetImageByteArrayMonoByUrl(url ?: EMPTY, webClient)
                 }
-        )
+        ) ?: placeholder
 
         return serverResponseOk()
                 .contentType(APPLICATION_OCTET_STREAM)

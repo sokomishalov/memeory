@@ -33,3 +33,6 @@ provider:
   twitter:
     enabled: true
     scrape-enabled: true
+  ninegag:
+    enabled: true
+    scrape-enabled: true

@@ -45,3 +45,9 @@
   enabled: true
   sourceType: TWITTER
   uri: russianmemesltd
+
+- id: 9gag:meme
+  name: memes (9gag)
+  enabled: true
+  sourceType: NINEGAG
+  uri: meme

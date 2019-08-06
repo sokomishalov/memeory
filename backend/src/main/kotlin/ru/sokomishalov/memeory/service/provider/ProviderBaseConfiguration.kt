@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramConfigurationProperties
+import ru.sokomishalov.memeory.service.provider.ninegag.NinegagConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.reddit.RedditConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.vk.VkConfigurationProperties
@@ -18,6 +19,7 @@ import ru.sokomishalov.memeory.service.provider.vk.VkConfigurationProperties
         InstagramConfigurationProperties::class,
         RedditConfigurationProperties::class,
         TwitterConfigurationProperties::class,
-        VkConfigurationProperties::class
+        VkConfigurationProperties::class,
+        NinegagConfigurationProperties::class
 )
 class ProviderBaseConfiguration
