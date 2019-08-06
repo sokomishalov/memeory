@@ -6,5 +6,6 @@ enum class SourceType {
     FACEBOOK,
     INSTAGRAM,
     TWITTER,
-    NINEGAG
+    NINEGAG,
+    PINTEREST
 }

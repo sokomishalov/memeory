@@ -38,7 +38,7 @@ import java.util.Date.from as dateFrom
 @Service
 @Conditional(NinegagCondition::class, NinegagScrapeCondition::class)
 @ConditionalOnUsingCoroutines
-class CoroutineNinegagScrapeProviderService : ProviderService, Loggable {
+class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
         val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")

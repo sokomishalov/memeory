@@ -51,3 +51,9 @@
   enabled: true
   sourceType: NINEGAG
   uri: meme
+
+- id: pinterest:celiatoler:pinterest-memes
+  name: some funny memes (pinterest)
+  enabled: true
+  sourceType: PINTEREST
+  uri: celiatoler/pinterest-memes

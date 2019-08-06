@@ -36,3 +36,6 @@ provider:
   ninegag:
     enabled: true
     scrape-enabled: true
+  pinterest:
+    enabled: true
+    scrape-enabled: true
