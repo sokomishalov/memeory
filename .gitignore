@@ -73,6 +73,7 @@ mobile-app/memeory/ios/Flutter/flutter_export_environment.sh
 .packages
 .pub-cache/
 .pub/
+mobile-app/memeory/ios/Flutter/flutter_export_environment.sh
 
 ### Android related ###
 **/android/**/gradle-wrapper.jar
