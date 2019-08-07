@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 /**
  * @author sokomishalov
  */
+
 suspend fun ObjectMapper.coReadTree(content: String): JsonNode = withContext(IO) {
     readTree(content)
 }

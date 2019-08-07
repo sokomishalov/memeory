@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
+import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
@@ -71,7 +72,7 @@ class CoroutineMemesFetchingScheduler(
                                     ?.limitRequest(props.fetchCount.toLong())
                                     .await()
                         } catch (e: Exception) {
-                            emptyList()
+                            emptyList<MemeDTO>()
                         }
 
                         val memesToSave = fetchedMemes

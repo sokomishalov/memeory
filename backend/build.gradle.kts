@@ -1,10 +1,11 @@
+import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version "2.2.0.M4"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("net.linguica.maven-settings") version "0.5"
-    id("com.github.ben-manes.versions") version "0.20.0"
+    id("com.github.ben-manes.versions") version "0.22.0"
     kotlin("jvm") version "1.3.41"
     kotlin("plugin.spring") version "1.3.41"
     kotlin("kapt") version "1.3.41"
@@ -12,9 +13,9 @@ plugins {
 
 group = "ru.sokomishalov"
 version = "0.0.1"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = VERSION_11
 
-val developmentOnly by configurations.creating
+val developmentOnly: Configuration by configurations.creating
 configurations.runtimeClasspath.get().extendsFrom(developmentOnly)
 
 repositories {
@@ -58,12 +59,12 @@ dependencies {
     implementation("io.projectreactor:reactor-tools:1.0.0.M1")
     implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
-    implementation("io.projectreactor.netty:reactor-netty:0.9.0.M1")
+    implementation("io.projectreactor.netty:reactor-netty:0.9.0.M3")
     implementation("io.netty:netty-transport-native-epoll:4.1.37.Final")
 
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")
-    implementation("com.github.ben-manes.caffeine:caffeine:2.7.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:2.8.0")
     implementation("org.jsoup:jsoup:1.12.1")
 
     implementation("com.vk.api:sdk:0.5.12") {
@@ -80,7 +81,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.0.M3")
+    testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.0.M5")
 }
 
 tasks.withType<Test> {
