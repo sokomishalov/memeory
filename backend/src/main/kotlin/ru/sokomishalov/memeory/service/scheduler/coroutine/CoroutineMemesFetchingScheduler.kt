@@ -17,9 +17,9 @@ import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.coFilter
-import ru.sokomishalov.memeory.util.extensions.coForEach
-import ru.sokomishalov.memeory.util.extensions.coMap
+import ru.sokomishalov.memeory.util.extensions.aFilter
+import ru.sokomishalov.memeory.util.extensions.aForEach
+import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.coCheckAttachmentAvailability
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.log.measureTimeAndReturn
@@ -63,7 +63,7 @@ class CoroutineMemesFetchingScheduler(
                 measureTimeAndReturn("Finished to download new memes after:") {
                     val channels = channelService.findAllEnabled().await()
 
-                    channels.coForEach { channel ->
+                    channels.aForEach { channel ->
                         val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 
                         val fetchedMemes = try {
@@ -76,10 +76,10 @@ class CoroutineMemesFetchingScheduler(
                         }
 
                         val memesToSave = fetchedMemes
-                                .coFilter {
+                                .aFilter {
                                     it?.attachments?.all { att -> coCheckAttachmentAvailability(att.url) } ?: false
                                 }
-                                .coMap {
+                                .aMap {
                                     it.apply {
                                         it.channelId = channel.id
                                         it.channelName = channel.name

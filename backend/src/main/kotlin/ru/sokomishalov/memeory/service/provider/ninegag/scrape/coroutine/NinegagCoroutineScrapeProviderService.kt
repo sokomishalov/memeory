@@ -22,7 +22,7 @@ import ru.sokomishalov.memeory.service.provider.ninegag.scrape.NinegagScrapeCond
 import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.NINEGAG_URL
-import ru.sokomishalov.memeory.util.extensions.coMap
+import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.coGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
@@ -49,7 +49,7 @@ class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
                 .split(",")
 
         latestPostsIds
-                .coMap {
+                .aMap {
                     val gagDocument = getWebPage("$NINEGAG_URL/gag/$it")
                     val gagInfoJson = gagDocument.getElementsByAttributeValueContaining("type", "application/ld+json").first().html()
                     val gagInfoMap = OBJECT_MAPPER.readValue<Map<String, String>>(gagInfoJson)

@@ -42,16 +42,16 @@ class CoroutineMongoMemeService(
     override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
         val memesToInsert = memes
                 .await()
-                .coFilter { (repository.existsById(it.id).not()).awaitStrict() }
-                .coMap { memeMapper.toEntity(it) }
+                .aFilter { (repository.existsById(it.id).not()).awaitStrict() }
+                .aMap { memeMapper.toEntity(it) }
 
         val savedMemes = repository
                 .saveAll(memesToInsert)
                 .await()
 
         savedMemes
-                .coMap { memeMapper.toDto(it) }
-                .coForEach { send(it) }
+                .aMap { memeMapper.toDto(it) }
+                .aForEach { send(it) }
     }
 
     override fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
@@ -66,8 +66,8 @@ class CoroutineMongoMemeService(
         }
 
         foundMemes
-                .coMap { memeMapper.toDto(it) }
-                .coForEach { send(it) }
+                .aMap { memeMapper.toDto(it) }
+                .aForEach { send(it) }
     }
 
     @EventListener(ApplicationReadyEvent::class)
@@ -77,7 +77,7 @@ class CoroutineMongoMemeService(
                     Index().on("createdAt", DESC).expire(ofDays(props.memeExpirationDays.toLong())),
                     Index().on("publishedAt", DESC)
             )
-            indexes.coForEach { template.indexOps(Meme::class.java).ensureIndex(it) }
+            indexes.aForEach { template.indexOps(Meme::class.java).ensureIndex(it) }
         }
     }
 }

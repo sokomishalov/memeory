@@ -21,7 +21,7 @@ import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
 import ru.sokomishalov.memeory.service.provider.pinterest.scrape.PinterestScrapeCondition
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.PINTEREST_URL
-import ru.sokomishalov.memeory.util.extensions.coMap
+import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.extensions.coReadTree
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
@@ -47,7 +47,7 @@ class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
         val feedList = infoJsonNode["resourceDataCache"][1]["data"]["board_feed"].asIterable()
 
         feedList
-                .coMap {
+                .aMap {
                     val imageInfo = it["images"]["orig"]
                     MemeDTO(
                             id = "${channel.id}$ID_DELIMITER${it["id"].asText()}",

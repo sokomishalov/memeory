@@ -36,16 +36,16 @@ class CoroutineMongoChannelService(
         repository
                 .findAllByEnabled(true)
                 .await()
-                .coMap { channelMapper.toDto(it) }
-                .coForEach { send(it) }
+                .aMap { channelMapper.toDto(it) }
+                .aForEach { send(it) }
     }
 
     override fun findAll(): Flux<ChannelDTO> = GlobalScope.flux(Unconfined) {
         repository
                 .findAll()
                 .await()
-                .coMap { channelMapper.toDto(it) }
-                .coForEach { send(it) }
+                .aMap { channelMapper.toDto(it) }
+                .aForEach { send(it) }
     }
 
     override fun findById(channelId: String): Mono<ChannelDTO> = GlobalScope.mono(Unconfined) {
@@ -61,14 +61,14 @@ class CoroutineMongoChannelService(
 
     override fun saveIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO> = GlobalScope.flux(Unconfined) {
         val channelsToSave = channels
-                .coFilter { repository.existsById(it.id).not().awaitStrict() }
-                .coMap { channelMapper.toEntity(it) }
+                .aFilter { repository.existsById(it.id).not().awaitStrict() }
+                .aMap { channelMapper.toEntity(it) }
 
         repository
                 .saveAll(channelsToSave)
                 .await()
-                .coMap { channelMapper.toDto(it) }
-                .coForEach { send(it) }
+                .aMap { channelMapper.toDto(it) }
+                .aForEach { send(it) }
     }
 
     override fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Unit> = GlobalScope.mono(Unconfined) {

@@ -29,7 +29,7 @@ class SwaggerConfig {
     fun customImplementation(): Docket =
             Docket(SWAGGER_2)
                     .select()
-                    .apis(basePackage(MemeoryApplication::class.java.packageName))
+                    .apis(basePackage(MemeoryApplication::class.java.`package`.name))
                     .paths(anyPath())
                     .build()
                     .securitySchemes(listOf(securityScheme()))
