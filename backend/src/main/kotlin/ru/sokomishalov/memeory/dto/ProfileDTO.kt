@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.dto
 
-import ru.sokomishalov.memeory.util.VERTICAL_ORIENTATION
+import ru.sokomishalov.memeory.util.consts.VERTICAL_ORIENTATION
 
 
 /**

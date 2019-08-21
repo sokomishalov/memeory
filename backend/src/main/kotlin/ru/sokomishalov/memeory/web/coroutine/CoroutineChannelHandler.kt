@@ -15,8 +15,8 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.cache.coroutine.CoroutineCacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
-import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitResponse
 import ru.sokomishalov.memeory.util.extensions.awaitStrict

@@ -15,7 +15,7 @@ import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.ProfileService
-import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty

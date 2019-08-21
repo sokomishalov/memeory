@@ -18,7 +18,7 @@ import ru.sokomishalov.memeory.entity.mongo.Meme
 import ru.sokomishalov.memeory.repository.MemeRepository
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.db.ProfileService
-import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.log.Loggable
 import java.time.Duration
 import org.springframework.data.domain.PageRequest.of as pageOf

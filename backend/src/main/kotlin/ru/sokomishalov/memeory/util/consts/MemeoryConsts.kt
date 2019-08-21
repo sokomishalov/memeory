@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package ru.sokomishalov.memeory.util
+package ru.sokomishalov.memeory.util.consts
 
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ofPattern as dateTimeFormatterOfPattern

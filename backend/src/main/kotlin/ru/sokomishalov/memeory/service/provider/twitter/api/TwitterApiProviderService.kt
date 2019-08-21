@@ -15,7 +15,7 @@ import ru.sokomishalov.memeory.enums.SourceType.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.service.provider.twitter.api.TwitterApiAttachmentType.*
-import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import twitter4j.Paging
 import twitter4j.Twitter
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT

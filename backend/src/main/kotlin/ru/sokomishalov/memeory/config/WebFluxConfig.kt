@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.reactive.config.WebFluxConfigurer
-import ru.sokomishalov.memeory.util.COROUTINE_PATH_PREFIX
+import ru.sokomishalov.memeory.util.consts.COROUTINE_PATH_PREFIX
 import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
 import org.springframework.security.core.userdetails.User.builder as userBuilder
 

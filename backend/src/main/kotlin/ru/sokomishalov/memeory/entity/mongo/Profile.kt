@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.entity.mongo
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import ru.sokomishalov.memeory.util.VERTICAL_ORIENTATION
+import ru.sokomishalov.memeory.util.consts.VERTICAL_ORIENTATION
 
 @Document
 data class Profile(

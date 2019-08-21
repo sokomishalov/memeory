@@ -15,8 +15,8 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.DATE_FORMATTER
-import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.consts.DATE_FORMATTER
+import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.io.checkAttachmentAvailability
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.serialization.YAML_OBJECT_MAPPER

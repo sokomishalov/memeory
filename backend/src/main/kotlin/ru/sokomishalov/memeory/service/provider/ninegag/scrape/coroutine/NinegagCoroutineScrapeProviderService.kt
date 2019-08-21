@@ -19,9 +19,9 @@ import ru.sokomishalov.memeory.enums.SourceType.NINEGAG
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.ninegag.NinegagCondition
 import ru.sokomishalov.memeory.service.provider.ninegag.scrape.NinegagScrapeCondition
-import ru.sokomishalov.memeory.util.EMPTY
-import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.NINEGAG_URL
+import ru.sokomishalov.memeory.util.consts.EMPTY
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable

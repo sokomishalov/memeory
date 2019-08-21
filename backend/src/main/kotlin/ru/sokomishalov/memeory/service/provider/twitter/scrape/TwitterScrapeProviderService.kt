@@ -17,8 +17,8 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
-import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.TWITTER_URL
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.TWITTER_URL
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
 import java.util.*
 import java.util.UUID.randomUUID

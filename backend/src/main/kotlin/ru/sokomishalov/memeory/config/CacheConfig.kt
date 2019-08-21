@@ -8,7 +8,7 @@ import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
-import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
+import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
 import java.time.Duration.ofDays
 
 

@@ -11,7 +11,7 @@ import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.ProfileService
-import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere

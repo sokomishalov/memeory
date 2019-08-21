@@ -19,8 +19,8 @@ import ru.sokomishalov.memeory.enums.AttachmentType.NONE
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.EMPTY
-import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.EMPTY
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import java.util.*
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT

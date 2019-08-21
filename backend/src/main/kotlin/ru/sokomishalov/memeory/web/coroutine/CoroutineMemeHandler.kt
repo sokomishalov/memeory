@@ -5,7 +5,7 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.service.db.MemeService
-import ru.sokomishalov.memeory.util.MEMEORY_TOKEN_HEADER
+import ru.sokomishalov.memeory.util.consts.MEMEORY_TOKEN_HEADER
 import ru.sokomishalov.memeory.util.extensions.awaitResponse
 import ru.sokomishalov.memeory.util.log.Loggable
 

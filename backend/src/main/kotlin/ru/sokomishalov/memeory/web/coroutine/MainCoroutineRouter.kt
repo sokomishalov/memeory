@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.coRouter
 import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
-import ru.sokomishalov.memeory.util.COROUTINE_PATH_PREFIX
+import ru.sokomishalov.memeory.util.consts.COROUTINE_PATH_PREFIX
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import java.net.URI.create
 

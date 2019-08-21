@@ -18,7 +18,7 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
 import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
-import ru.sokomishalov.memeory.util.MONGO_ID_FIELD
+import ru.sokomishalov.memeory.util.consts.MONGO_ID_FIELD
 import ru.sokomishalov.memeory.util.extensions.*
 import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 

@@ -17,9 +17,9 @@ import ru.sokomishalov.memeory.enums.SourceType.REDDIT
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.reddit.model.About
 import ru.sokomishalov.memeory.service.provider.reddit.model.Listing
-import ru.sokomishalov.memeory.util.EMPTY
-import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.REDDIT_BASE_URl
+import ru.sokomishalov.memeory.util.consts.EMPTY
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URl
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID

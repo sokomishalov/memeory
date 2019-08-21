@@ -19,8 +19,8 @@ import ru.sokomishalov.memeory.enums.SourceType.PINTEREST
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
 import ru.sokomishalov.memeory.service.provider.pinterest.scrape.PinterestScrapeCondition
-import ru.sokomishalov.memeory.util.ID_DELIMITER
-import ru.sokomishalov.memeory.util.PINTEREST_URL
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.extensions.coReadTree
 import ru.sokomishalov.memeory.util.log.Loggable

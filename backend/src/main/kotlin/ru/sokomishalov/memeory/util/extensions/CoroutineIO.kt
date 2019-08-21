@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "RemoveExplicitTypeArguments")
 
 package ru.sokomishalov.memeory.util.extensions
 
@@ -22,11 +22,11 @@ suspend fun ObjectMapper.aReadTree(content: String): JsonNode = withContext(IO) 
 }
 
 suspend inline fun <reified T> ObjectMapper.aReadValue(content: String): T = withContext(IO) {
-    readValue(content)
+    readValue<T>(content)
 }
 
 suspend inline fun <reified T> ObjectMapper.aConvertValue(from: String): T = withContext(IO) {
-    convertValue(from)
+    convertValue<T>(from)
 }
 
 suspend fun FilePart.convertToByteArray(): ByteArray = withContext(IO) {

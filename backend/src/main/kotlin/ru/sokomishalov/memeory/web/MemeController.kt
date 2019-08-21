@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.MemeService
-import ru.sokomishalov.memeory.util.MEMEORY_TOKEN_HEADER
+import ru.sokomishalov.memeory.util.consts.MEMEORY_TOKEN_HEADER
 
 @RestController
 @RequestMapping("/memes")

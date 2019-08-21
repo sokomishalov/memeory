@@ -16,8 +16,8 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.cache.CacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.CHANNEL_LOGO_CACHE_KEY
-import ru.sokomishalov.memeory.util.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
+import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.io.getImageByteArrayMonoByUrl
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
 import reactor.core.publisher.Flux.fromIterable as fluxFromIterable

@@ -8,7 +8,7 @@ import org.springframework.core.io.ByteArrayResource
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple2
-import ru.sokomishalov.memeory.util.EMPTY
+import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.extensions.await
 import java.net.URL
 import reactor.util.function.Tuples.of as tupleOf
