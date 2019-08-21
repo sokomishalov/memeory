@@ -23,7 +23,7 @@ import ru.sokomishalov.memeory.util.EMPTY
 import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.NINEGAG_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.io.coGetImageAspectRatio
+import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
 import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
@@ -61,7 +61,7 @@ class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
                             attachments = listOf(AttachmentDTO(
                                     type = IMAGE,
                                     url = gagInfoMap["image"],
-                                    aspectRatio = coGetImageAspectRatio(gagInfoMap["image"])
+                                    aspectRatio = aGetImageAspectRatio(gagInfoMap["image"])
                             ))
 
                     )

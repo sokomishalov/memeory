@@ -20,7 +20,7 @@ import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.aFilter
 import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.io.coCheckAttachmentAvailability
+import ru.sokomishalov.memeory.util.io.aCheckAttachmentAvailability
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.log.measureTimeAndReturn
 import ru.sokomishalov.memeory.util.serialization.YAML_OBJECT_MAPPER
@@ -77,7 +77,7 @@ class CoroutineMemesFetchingScheduler(
 
                         val memesToSave = fetchedMemes
                                 .aFilter {
-                                    it?.attachments?.all { att -> coCheckAttachmentAvailability(att.url) } ?: false
+                                    it?.attachments?.all { att -> aCheckAttachmentAvailability(att.url) } ?: false
                                 }
                                 .aMap {
                                     it.apply {

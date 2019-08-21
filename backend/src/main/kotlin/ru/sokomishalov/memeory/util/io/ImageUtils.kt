@@ -51,19 +51,19 @@ fun getImageByteArrayMonoByUrl(url: String, webClient: WebClient = WebClient.cre
 }
 
 
-suspend fun coGetImageDimensions(url: String?): Tuple2<Int, Int> = withContext(IO) {
+suspend fun aGetImageDimensions(url: String?): Tuple2<Int, Int> = withContext(IO) {
     getImageDimensions(url)
 }
 
-suspend fun coGetImageAspectRatio(url: String?): Double = withContext(IO) {
+suspend fun aGetImageAspectRatio(url: String?): Double = withContext(IO) {
     getImageAspectRatio(url)
 }
 
-suspend fun coCheckAttachmentAvailability(url: String?) = withContext(IO) {
+suspend fun aCheckAttachmentAvailability(url: String?) = withContext(IO) {
     checkAttachmentAvailability(url)
 }
 
-suspend fun coGetImageByteArrayMonoByUrl(url: String?, webClient: WebClient = WebClient.create()): ByteArray? {
+suspend fun aGetImageByteArrayMonoByUrl(url: String?, webClient: WebClient = WebClient.create()): ByteArray? {
     val response = webClient.get().uri(url ?: EMPTY).exchange().await()
     val resource = response?.bodyToMono(ByteArrayResource::class.java).await()
     return resource?.byteArray

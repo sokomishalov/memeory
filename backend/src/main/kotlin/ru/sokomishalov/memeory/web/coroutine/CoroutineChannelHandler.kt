@@ -20,7 +20,7 @@ import ru.sokomishalov.memeory.util.ID_DELIMITER
 import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitResponse
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
-import ru.sokomishalov.memeory.util.io.coGetImageByteArrayMonoByUrl
+import ru.sokomishalov.memeory.util.io.aGetImageByteArrayMonoByUrl
 import org.springframework.web.reactive.function.server.ServerResponse.ok as serverResponseOk
 
 
@@ -72,7 +72,7 @@ class CoroutineChannelHandler(
 
                     try {
                         val url = service?.getLogoUrlByChannel(channel).await()
-                        coGetImageByteArrayMonoByUrl(url, webClient)
+                        aGetImageByteArrayMonoByUrl(url, webClient)
                     } catch (e: Exception) {
                         null
                     }
