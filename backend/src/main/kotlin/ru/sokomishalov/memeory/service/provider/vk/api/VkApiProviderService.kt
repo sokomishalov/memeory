@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.provider.vk
+package ru.sokomishalov.memeory.service.provider.vk.api
 
 import com.vk.api.sdk.client.VkApiClient
 import com.vk.api.sdk.client.actors.ServiceActor
@@ -19,6 +19,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.NONE
 import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
+import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import java.util.*
@@ -30,8 +31,8 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  * @author sokomishalov
  */
 @Service
-@Conditional(VkCondition::class)
-class VkProviderService(
+@Conditional(VkCondition::class, VkApiCondition::class)
+class VkApiProviderService(
         private var vkApiClient: VkApiClient,
         private val vkServiceActor: ServiceActor,
         private val props: MemeoryProperties

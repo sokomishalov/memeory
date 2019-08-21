@@ -1,8 +1,8 @@
-package ru.sokomishalov.memeory.service.provider.reddit.model
+package ru.sokomishalov.memeory.service.provider.reddit.api.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Resolution {
+class Source {
 
     @JsonProperty("url")
     @get:JsonProperty("url")

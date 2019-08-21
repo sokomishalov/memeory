@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.twitter.scrape
 
 import org.jsoup.Jsoup.connect
-import org.jsoup.Jsoup.parse
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
@@ -20,9 +19,9 @@ import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
+import ru.sokomishalov.memeory.util.scrape.fixCaption
+import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass
 import java.util.*
-import java.util.UUID.randomUUID
-import kotlin.collections.ArrayList
 
 
 /**
@@ -38,13 +37,13 @@ class TwitterScrapeProviderService : ProviderService {
                 .map { it.body().getElementById("stream-items-id") }
                 .map { it.getElementsByClass("stream-item") }
                 .flatMapMany { fromIterable(it) }
-                .map { it.getElementsByClass("tweet").first() }
+                .map { it.getSingleElementByClass("tweet") }
                 .map {
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${getIdByTweet(it)}",
-                            caption = getCaptionByTweet(it),
-                            publishedAt = getPublishedAtByTweet(it),
-                            attachments = getAttachmentsByTweet(it)
+                            id = "${channel.id}$ID_DELIMITER${extractIdFromTweet(it)}",
+                            caption = extractCaptionFromTweet(it),
+                            publishedAt = extractPublishedAtFromTweet(it),
+                            attachments = extractAttachmentsFromTweet(it)
                     )
                 }
     }
@@ -52,65 +51,48 @@ class TwitterScrapeProviderService : ProviderService {
     override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
         return just(channel)
                 .map { connect("$TWITTER_URL/${it.uri}").get() }
-                .map { it.body().getElementsByClass("ProfileAvatar-image").first() }
+                .map { it.body().getSingleElementByClass("ProfileAvatar-image") }
                 .map { it.attr("src") }
     }
 
     override fun sourceType(): SourceType = TWITTER
 
 
-    private fun getIdByTweet(tweet: Element?): String {
+    private fun extractIdFromTweet(tweet: Element): String {
         return tweet
-                ?.getElementsByClass("js-stream-tweet")
-                ?.first()
-                ?.attr("data-tweet-id")
-                ?: randomUUID().toString()
-
+                .getSingleElementByClass("js-stream-tweet")
+                .attr("data-tweet-id")
     }
 
-    private fun getCaptionByTweet(tweet: Element?): String? {
-        val titleDoc = tweet
-                ?.getElementsByClass("tweet-text")
-                ?.first()
-                ?.html()
-                .let { parse(it) }
-
-        val allAnchors = titleDoc.select("a")
-        val twitterAnchors = titleDoc.select("a[href^=/]")
-        val unwantedAnchors = ArrayList<Element>()
-
-        allAnchors.filterNotTo(unwantedAnchors) { twitterAnchors.contains(it) }
-        unwantedAnchors.forEach { it.remove() }
-
-        return titleDoc.text()
+    private fun extractCaptionFromTweet(tweet: Element): String? {
+        return tweet
+                .getSingleElementByClass("tweet-text")
+                .fixCaption()
     }
 
-    private fun getPublishedAtByTweet(tweet: Element?): Date {
+    private fun extractPublishedAtFromTweet(tweet: Element): Date {
         return try {
             tweet
-                    ?.getElementsByClass("js-short-timestamp")
-                    ?.first()
-                    ?.attr("data-time-ms")
-                    ?.toLong()
-                    ?.let { Date(it) }
+                    .getSingleElementByClass("js-short-timestamp")
+                    .attr("data-time-ms")
+                    .toLong()
+                    .let { Date(it) }
         } catch (ex: NumberFormatException) {
             null
         } ?: Date(0)
     }
 
-    private fun getAttachmentsByTweet(tweet: Element?): List<AttachmentDTO> {
+    private fun extractAttachmentsFromTweet(tweet: Element): List<AttachmentDTO> {
         return tweet
-                ?.getElementsByClass("AdaptiveMedia-photoContainer")
-                ?.map { e ->
-                    e
-                            .attr("data-image-url")
-                            .let {
-                                AttachmentDTO(
-                                        url = it,
-                                        type = IMAGE,
-                                        aspectRatio = getImageAspectRatio(it)
-                                )
-                            }
+                .getElementsByClass("AdaptiveMedia-photoContainer")
+                ?.map { element ->
+                    element.attr("data-image-url").let {
+                        AttachmentDTO(
+                                url = it,
+                                type = IMAGE,
+                                aspectRatio = getImageAspectRatio(it)
+                        )
+                    }
                 }
                 ?: emptyList()
     }

@@ -66,14 +66,12 @@ class CoroutineMemesFetchingScheduler(
                     channels.aForEach { channel ->
                         val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 
-                        val fetchedMemes = try {
+                        val fetchedMemes = runCatching {
                             providerService
                                     ?.fetchMemesFromChannel(channel)
                                     ?.limitRequest(props.fetchCount.toLong())
                                     .await()
-                        } catch (e: Exception) {
-                            emptyList<MemeDTO>()
-                        }
+                        }.getOrElse { emptyList<MemeDTO>() }
 
                         val memesToSave = fetchedMemes
                                 .aFilter {

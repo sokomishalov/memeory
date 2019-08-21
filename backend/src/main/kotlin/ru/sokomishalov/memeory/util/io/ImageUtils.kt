@@ -38,7 +38,7 @@ fun getImageDimensions(url: String?): Tuple2<Int, Int> {
 
 fun getImageAspectRatio(url: String?): Double {
     return getImageDimensions(url)
-            .let { t: Tuple2<Int, Int> -> t.t1.toDouble().div(t.t2) }
+            .let { it.t1.toDouble().div(it.t2) }
 }
 
 fun getImageByteArrayMonoByUrl(url: String, webClient: WebClient = WebClient.create()): Mono<ByteArray> {

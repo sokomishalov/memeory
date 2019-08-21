@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureWidget(
       future: isFirstAppVisit(),
-      render: (isFirstApp) => isFirstApp
+      render: (isFirstVisit) => isFirstVisit
           ? UserPreferencesPage()
           : FutureWidget(
               future: getPreferredOrientation(),

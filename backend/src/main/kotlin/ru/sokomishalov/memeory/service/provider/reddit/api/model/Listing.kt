@@ -1,8 +1,8 @@
-package ru.sokomishalov.memeory.service.provider.reddit.model
+package ru.sokomishalov.memeory.service.provider.reddit.api.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Child {
+class Listing {
 
     @JsonProperty("kind")
     @get:JsonProperty("kind")
@@ -11,6 +11,6 @@ class Child {
     @JsonProperty("data")
     @get:JsonProperty("data")
     @set:JsonProperty("data")
-    var data: DataInner? = null
+    var data: ListingData? = null
 
 }

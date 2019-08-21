@@ -61,6 +61,7 @@ yarn-error.log*
 .buildlog/
 .history
 .svn/
+mobile-app/memeory/ios/Flutter/flutter_export_environment.sh
 
 ### Visual Studio Code related ###
 .vscode/

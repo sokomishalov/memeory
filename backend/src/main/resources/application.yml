@@ -18,8 +18,10 @@ memeory:
 provider:
   reddit:
     enabled: true
+    scrape-enabled: false
   vk:
     enabled: true
+    scrape-enabled: true
     app-id: 7024306
     access-token: ceea6953ceea6953ceea6953ecce8147e1cceeaceea695393edbd336b29a7c8ed2d0b91
   facebook:

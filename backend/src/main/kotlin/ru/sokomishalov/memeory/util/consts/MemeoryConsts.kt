@@ -18,6 +18,7 @@ const val REDDIT_BASE_URl = "https://www.reddit.com"
 const val TWITTER_URL = "https://twitter.com"
 const val NINEGAG_URL = "https://9gag.com"
 const val PINTEREST_URL = "https://www.pinterest.com"
+const val VK_URL = "https://vk.com"
 
 const val HORIZONTAL_ORIENTATION = "HORIZONTAL"
 const val VERTICAL_ORIENTATION = "VERTICAL"
