@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.web.coroutine
+package ru.sokomishalov.memeory.web.coroutines
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.io.ByteArrayResource

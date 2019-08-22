@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.web.coroutine
+package ru.sokomishalov.memeory.web.coroutines
 
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest

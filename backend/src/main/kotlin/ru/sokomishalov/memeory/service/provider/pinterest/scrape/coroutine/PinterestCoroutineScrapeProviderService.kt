@@ -22,7 +22,7 @@ import ru.sokomishalov.memeory.service.provider.pinterest.scrape.PinterestScrape
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.coReadTree
+import ru.sokomishalov.memeory.util.extensions.aReadTree
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
 import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
@@ -75,6 +75,6 @@ class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
     private suspend fun parseInitJson(channel: ChannelDTO): JsonNode {
         val webPage = getWebPage("$PINTEREST_URL/${channel.uri}")
         val infoJson = webPage.getElementById("jsInit1").html()
-        return OBJECT_MAPPER.coReadTree(infoJson)
+        return OBJECT_MAPPER.aReadTree(infoJson)
     }
 }
