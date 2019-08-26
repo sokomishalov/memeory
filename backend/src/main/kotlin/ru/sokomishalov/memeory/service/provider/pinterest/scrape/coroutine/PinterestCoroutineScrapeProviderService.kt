@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.service.provider.pinterest.scrape.coroutine
 
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.Dispatchers.Unconfined
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.reactor.flux
 import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Conditional
@@ -38,11 +38,12 @@ import java.util.Date.from as dateFrom
 @Service
 @Conditional(PinterestCondition::class, PinterestScrapeCondition::class)
 @ConditionalOnUsingCoroutines
+@ExperimentalCoroutinesApi
 class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
 
     private val dateTimeFormatter = dateTimeFormatterOfPattern("EEE, d MMM yyyy HH:mm:ss Z", ROOT)
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
         val infoJsonNode = parseInitJson(channel)
         val feedList = infoJsonNode["resourceDataCache"][1]["data"]["board_feed"].asIterable()
 
@@ -63,7 +64,7 @@ class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
                 .forEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = GlobalScope.mono(Unconfined) {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
         val infoJsonNode = parseInitJson(channel)
 
         infoJsonNode["resourceDataCache"][0]["data"]["owner"]["image_medium_url"].asText()

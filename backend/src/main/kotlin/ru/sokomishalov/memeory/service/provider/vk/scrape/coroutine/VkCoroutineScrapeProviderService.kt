@@ -2,7 +2,7 @@
 
 package ru.sokomishalov.memeory.service.provider.vk.scrape.coroutine
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.reactor.flux
 import kotlinx.coroutines.reactor.mono
 import org.jsoup.nodes.Element
@@ -36,8 +36,9 @@ import java.util.*
 
 @Service
 @Conditional(VkCondition::class, VkScrapeCondition::class)
+@ExperimentalCoroutinesApi
 class VkCoroutineScrapeProviderService : ProviderService, Loggable {
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = GlobalScope.flux {
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux {
         val posts = getWebPage("$VK_URL/${channel.uri}")
                 .getElementById("page_wall_posts")
                 .getElementsByClass("post")
@@ -54,7 +55,7 @@ class VkCoroutineScrapeProviderService : ProviderService, Loggable {
         memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = GlobalScope.mono {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono {
         getWebPage("$VK_URL/${channel.uri}")
                 .getSingleElementByClass("page_cover_image")
                 .getSingleElementByClass("img")

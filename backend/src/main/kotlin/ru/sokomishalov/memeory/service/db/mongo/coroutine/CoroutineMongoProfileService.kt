@@ -36,13 +36,13 @@ class CoroutineMongoProfileService(
         private val template: ReactiveMongoTemplate
 ) : ProfileService, Loggable {
 
-    override fun findById(id: String): Mono<ProfileDTO> = GlobalScope.mono(Unconfined) {
+    override fun findById(id: String): Mono<ProfileDTO> = mono(Unconfined) {
         val profile = repository.findById(id).awaitStrict()
         profileMapper.toDto(profile)
     }
 
     @Transactional
-    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> = GlobalScope.mono(Unconfined) {
+    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> = mono(Unconfined) {
         when {
             profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
                 val criteriaList = profile.socialsMap.entries.map {

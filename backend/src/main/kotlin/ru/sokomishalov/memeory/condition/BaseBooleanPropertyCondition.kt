@@ -9,15 +9,10 @@ import java.lang.Boolean.parseBoolean
  * @author sokomishalov
  */
 abstract class BaseBooleanPropertyCondition : Condition {
-
     protected abstract val propertyName: String
 
     override fun matches(conditionContext: ConditionContext, annotatedTypeMetadata: AnnotatedTypeMetadata): Boolean {
-        return try {
-            val property = conditionContext.environment.getProperty(propertyName)
-            parseBoolean(property)
-        } catch (ignored: Exception) {
-            false
-        }
+        return runCatching { parseBoolean(conditionContext.environment.getProperty(propertyName)) }
+                .getOrElse { false }
     }
 }

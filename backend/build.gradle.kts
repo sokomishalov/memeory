@@ -6,9 +6,9 @@ plugins {
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("net.linguica.maven-settings") version "0.5"
     id("com.github.ben-manes.versions") version "0.22.0"
-    kotlin("jvm") version "1.3.41"
-    kotlin("plugin.spring") version "1.3.41"
-    kotlin("kapt") version "1.3.41"
+    kotlin("jvm") version "1.3.50"
+    kotlin("plugin.spring") version "1.3.50"
+    kotlin("kapt") version "1.3.50"
 }
 
 group = "ru.sokomishalov"
@@ -47,8 +47,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")

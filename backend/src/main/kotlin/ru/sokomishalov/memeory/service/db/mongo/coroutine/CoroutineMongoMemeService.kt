@@ -1,6 +1,7 @@
 package ru.sokomishalov.memeory.service.db.mongo.coroutine
 
 import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactor.flux
@@ -32,6 +33,7 @@ import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMappe
 @Service
 @Primary
 @ConditionalOnUsingCoroutines
+@ExperimentalCoroutinesApi
 class CoroutineMongoMemeService(
         private val repository: MemeRepository,
         private val profileService: ProfileService,
@@ -39,7 +41,7 @@ class CoroutineMongoMemeService(
         private val props: MemeoryProperties
 ) : MemeService {
 
-    override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
+    override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> = flux(Unconfined) {
         val memesToInsert = memes
                 .await()
                 .aFilter { (repository.existsById(it.id).not()).awaitStrict() }
@@ -54,7 +56,7 @@ class CoroutineMongoMemeService(
                 .aForEach { send(it) }
     }
 
-    override fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
+    override fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO> = flux(Unconfined) {
         val id = token ?: EMPTY
         val profile = profileService.findById(id).await()
 

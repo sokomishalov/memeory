@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.service.provider.ninegag.scrape.coroutine
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.Unconfined
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.reactor.flux
 import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Conditional
@@ -38,9 +38,10 @@ import java.util.Date.from as dateFrom
 @Service
 @Conditional(NinegagCondition::class, NinegagScrapeCondition::class)
 @ConditionalOnUsingCoroutines
+@ExperimentalCoroutinesApi
 class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = GlobalScope.flux(Unconfined) {
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
         val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")
 
         val latestPostsIds = webPage
@@ -69,7 +70,7 @@ class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
                 .forEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = GlobalScope.mono(Unconfined) {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
         val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")
 
         webPage.head()
