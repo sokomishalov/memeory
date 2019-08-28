@@ -1,11 +1,10 @@
 package ru.sokomishalov.memeory.service.provider.facebook.scrape
 
-import org.jsoup.Jsoup.connect
+import kotlinx.coroutines.Dispatchers.Unconfined
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -18,10 +17,14 @@ import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URl
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URl
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.io.getImageAspectRatio
+import ru.sokomishalov.memeory.util.extensions.aForEach
+import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
+import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
+import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.*
 import java.util.UUID.randomUUID
-import reactor.core.publisher.Mono.just as monoJust
 
 
 /**
@@ -29,27 +32,29 @@ import reactor.core.publisher.Mono.just as monoJust
  */
 @Service
 @Conditional(FacebookCondition::class, FacebookScrapeCondition::class)
-// TODO rewrite
 class FacebookScrapeProviderService : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
-        return monoJust(channel)
-                .map { connect("$FACEBOOK_BASE_URl/${it.uri}/posts").get() }
-                .map { it.getElementsByClass("userContentWrapper") }
-                .flatMapMany { fromIterable(it) }
-                .map {
-                    MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${getIdByUserContentWrapper(it)}",
-                            caption = getCaptionByUserContentWrapper(it),
-                            publishedAt = getPublishedAtByUserContentWrapper(it),
-                            attachments = getAttachmentsByUserContentWrapper(it)
-                    )
-                }
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+        val webPage = getWebPage("$FACEBOOK_BASE_URl/${channel.uri}/posts")
+        val elements = webPage.getElementsByClass("userContentWrapper")
+
+        val memes = elements.aMap {
+            MemeDTO(
+                    id = "${channel.id}$ID_DELIMITER${getIdByUserContentWrapper(it)}",
+                    caption = getCaptionByUserContentWrapper(it),
+                    publishedAt = getPublishedAtByUserContentWrapper(it),
+                    attachments = getAttachmentsByUserContentWrapper(it)
+            )
+        }
+
+        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
-        return monoJust("$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small")
+
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono {
+        "$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small"
     }
+
 
     override fun sourceType(): SourceType = FACEBOOK
 
@@ -82,7 +87,7 @@ class FacebookScrapeProviderService : ProviderService {
                 ?: Date(0)
     }
 
-    private fun getAttachmentsByUserContentWrapper(contentWrapper: Element): List<AttachmentDTO> {
+    private suspend fun getAttachmentsByUserContentWrapper(contentWrapper: Element): List<AttachmentDTO> {
         return contentWrapper
                 .getElementsByClass("scaledImageFitWidth")
                 ?.first()
@@ -91,7 +96,7 @@ class FacebookScrapeProviderService : ProviderService {
                     listOf(AttachmentDTO(
                             url = it,
                             type = IMAGE,
-                            aspectRatio = getImageAspectRatio(it)
+                            aspectRatio = aGetImageAspectRatio(it)
                     ))
                 }
                 ?: emptyList()

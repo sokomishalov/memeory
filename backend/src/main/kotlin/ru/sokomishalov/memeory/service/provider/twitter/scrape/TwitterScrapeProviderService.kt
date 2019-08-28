@@ -1,13 +1,11 @@
 package ru.sokomishalov.memeory.service.provider.twitter.scrape
 
-import org.jsoup.Jsoup.connect
+import kotlinx.coroutines.Dispatchers.Unconfined
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
-import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -18,9 +16,14 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
+import ru.sokomishalov.memeory.util.extensions.aForEach
+import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
 import ru.sokomishalov.memeory.util.scrape.fixCaption
 import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass
+import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.*
 
 
@@ -29,17 +32,21 @@ import java.util.*
  */
 @Service
 @Conditional(TwitterCondition::class, TwitterScrapeCondition::class)
-// TODO rewrite
 class TwitterScrapeProviderService : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
-        return just(channel)
-                .map { connect("$TWITTER_URL/${it.uri}").get() }
-                .map { it.body().getElementById("stream-items-id") }
-                .map { it.getElementsByClass("stream-item") }
-                .flatMapMany { fromIterable(it) }
-                .map { it.getSingleElementByClass("tweet") }
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+        val webPage = getWebPage("$TWITTER_URL/${channel.uri}")
+
+        val posts = webPage
+                .body()
+                .getElementById("stream-items-id")
+                .getElementsByClass("stream-item")
+
+        val memes = posts
                 .map {
+                    it.getSingleElementByClass("tweet")
+                }
+                .aMap {
                     MemeDTO(
                             id = "${channel.id}$ID_DELIMITER${extractIdFromTweet(it)}",
                             caption = extractCaptionFromTweet(it),
@@ -47,14 +54,17 @@ class TwitterScrapeProviderService : ProviderService {
                             attachments = extractAttachmentsFromTweet(it)
                     )
                 }
+
+        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
-        return just(channel)
-                .map { connect("$TWITTER_URL/${it.uri}").get() }
-                .map { it.body().getSingleElementByClass("ProfileAvatar-image") }
-                .map { it.attr("src") }
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
+        getWebPage("$TWITTER_URL/${channel.uri}")
+                .body()
+                .getSingleElementByClass("ProfileAvatar-image")
+                .attr("src")
     }
+
 
     override fun sourceType(): SourceType = TWITTER
 

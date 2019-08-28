@@ -5,12 +5,13 @@ import com.vk.api.sdk.client.actors.ServiceActor
 import com.vk.api.sdk.objects.wall.WallPostFull
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.*
 import com.vk.api.sdk.objects.wall.WallpostAttachmentType.VIDEO
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.withContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Flux.fromIterable
 import reactor.core.publisher.Mono
-import reactor.core.publisher.Mono.just
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -22,6 +23,10 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.extensions.aForEach
+import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
 import java.util.*
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
@@ -38,27 +43,48 @@ class VkApiProviderService(
         private val props: MemeoryProperties
 ) : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {
-        return just(channel)
-                .map {
-                    vkApiClient
-                            .wall()
-                            .get(vkServiceActor)
-                            .domain(it.uri)
-                            .count(props.fetchCount)
-                            .execute()
-                }
-                .map { it.items }
-                .flatMapMany { fromIterable(it) }
-                .map {
-                    MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${it.id}",
-                            caption = it.text,
-                            publishedAt = Date(it.date.toLong().times(1000)),
-                            attachments = getAttachmentsByWallPost(it)
-                    )
-                }
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+        val response = withContext(IO) {
+            vkApiClient
+                    .wall()
+                    .get(vkServiceActor)
+                    .domain(channel.uri)
+                    .count(props.fetchCount)
+                    .execute()
+        }
+
+        val posts = response.items
+
+        val memes = posts.aMap {
+            MemeDTO(
+                    id = "${channel.id}$ID_DELIMITER${it.id}",
+                    caption = it.text,
+                    publishedAt = Date(it.date.toLong().times(1000)),
+                    attachments = getAttachmentsByWallPost(it)
+            )
+        }
+
+        memes.aForEach { send(it) }
+
     }
+
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
+        val response = withContext(IO) {
+            vkApiClient
+                    .wall()
+                    .getExtended(vkServiceActor)
+                    .domain(channel.uri)
+                    .count(1)
+                    .execute()
+        }
+
+        val groupFull = response.groups.firstOrNull()
+
+        groupFull?.photo100 ?: groupFull?.photo50 ?: groupFull?.photo200 ?: EMPTY
+    }
+
+    override fun sourceType(): SourceType = VK
+
 
     private fun getAttachmentsByWallPost(post: WallPostFull?): List<AttachmentDTO> {
         return post
@@ -85,22 +111,4 @@ class VkApiProviderService(
                 }
                 ?: emptyList()
     }
-
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> {
-        return just(channel)
-                .map {
-                    vkApiClient
-                            .wall()
-                            .getExtended(vkServiceActor)
-                            .domain(it.uri)
-                            .count(1)
-                            .execute()
-                }
-                .map { it.groups }
-                .flatMapMany { fromIterable(it) }
-                .map { it?.photo100 ?: it.photo50 ?: it?.photo200 ?: EMPTY }
-                .next()
-    }
-
-    override fun sourceType(): SourceType = VK
 }
