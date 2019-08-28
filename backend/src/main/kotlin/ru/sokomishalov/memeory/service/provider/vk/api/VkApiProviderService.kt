@@ -63,9 +63,10 @@ class VkApiProviderService(
     private fun getAttachmentsByWallPost(post: WallPostFull?): List<AttachmentDTO> {
         return post
                 ?.attachments
+                ?.filter { it.type in listOf(PHOTO, POSTED_PHOTO, PHOTOS_LIST, VIDEO) }
                 ?.map { attachment ->
                     AttachmentDTO(
-                            url = attachment?.photo?.let { p ->
+                            url = attachment.photo?.let { p ->
                                 p.photo807 ?: p.photo604 ?: p.photo1280 ?: p.photo130
                             },
                             type = attachment.type.let { t ->
@@ -77,7 +78,7 @@ class VkApiProviderService(
                                     else -> NONE
                                 }
                             },
-                            aspectRatio = attachment?.photo?.run {
+                            aspectRatio = attachment.photo?.run {
                                 width.toDouble().div(height.toDouble())
                             }
                     )

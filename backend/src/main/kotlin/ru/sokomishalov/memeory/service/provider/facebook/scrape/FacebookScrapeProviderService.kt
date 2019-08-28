@@ -53,18 +53,18 @@ class FacebookScrapeProviderService : ProviderService {
     override fun sourceType(): SourceType = FACEBOOK
 
 
-    private fun getIdByUserContentWrapper(contentWrapper: Element?): String {
+    private fun getIdByUserContentWrapper(contentWrapper: Element): String {
         return contentWrapper
-                ?.getElementsByAttributeValueContaining("id", "feed_subtitle")
+                .getElementsByAttributeValueContaining("id", "feed_subtitle")
                 ?.first()
                 ?.attr("id")
                 ?: randomUUID().toString()
     }
 
 
-    private fun getCaptionByUserContentWrapper(contentWrapper: Element?): String? {
+    private fun getCaptionByUserContentWrapper(contentWrapper: Element): String? {
         return contentWrapper
-                ?.getElementsByClass("userContent")
+                .getElementsByClass("userContent")
                 ?.first()
                 ?.getElementsByTag("p")
                 ?.first()
@@ -72,18 +72,18 @@ class FacebookScrapeProviderService : ProviderService {
                 ?.toString()
     }
 
-    private fun getPublishedAtByUserContentWrapper(contentWrapper: Element?): Date {
+    private fun getPublishedAtByUserContentWrapper(contentWrapper: Element): Date {
         return contentWrapper
-                ?.getElementsByAttribute("data-utime")
+                .getElementsByAttribute("data-utime")
                 ?.first()
                 ?.attr("data-utime")
                 ?.run { Date(this.toLong().times(1000)) }
                 ?: Date(0)
     }
 
-    private fun getAttachmentsByUserContentWrapper(contentWrapper: Element?): List<AttachmentDTO> {
+    private fun getAttachmentsByUserContentWrapper(contentWrapper: Element): List<AttachmentDTO> {
         return contentWrapper
-                ?.getElementsByClass("scaledImageFitWidth")
+                .getElementsByClass("scaledImageFitWidth")
                 ?.first()
                 ?.attr("src")
                 ?.let {

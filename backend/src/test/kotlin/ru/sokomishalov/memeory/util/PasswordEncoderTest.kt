@@ -4,14 +4,14 @@ import junit.framework.Assert.assertTrue
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
-import ru.sokomishalov.memeory.AbstractSpringMemeoryTest
+import ru.sokomishalov.memeory.AbstractSpringTest
 
 
 /**
  * @author sokomishalov
  */
 
-class PasswordEncoderTest : AbstractSpringMemeoryTest() {
+class PasswordEncoderTest : AbstractSpringTest() {
 
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder

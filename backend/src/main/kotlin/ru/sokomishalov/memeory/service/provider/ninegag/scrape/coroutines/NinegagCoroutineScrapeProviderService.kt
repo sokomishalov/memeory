@@ -1,10 +1,8 @@
-package ru.sokomishalov.memeory.service.provider.ninegag.scrape.coroutine
+package ru.sokomishalov.memeory.service.provider.ninegag.scrape.coroutines
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.reactor.flux
-import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -23,6 +21,8 @@ import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage

@@ -3,13 +3,12 @@
 package ru.sokomishalov.memeory.service.provider.vk.scrape.coroutine
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.reactor.flux
-import kotlinx.coroutines.reactor.mono
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -24,6 +23,8 @@ import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
 import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.fixCaption
@@ -36,6 +37,7 @@ import java.util.*
 
 @Service
 @Conditional(VkCondition::class, VkScrapeCondition::class)
+@ConditionalOnUsingCoroutines
 @ExperimentalCoroutinesApi
 class VkCoroutineScrapeProviderService : ProviderService, Loggable {
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux {

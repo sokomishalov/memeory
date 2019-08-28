@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ru.sokomishalov.memeory.util.serialization
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
@@ -7,6 +9,7 @@ import com.fasterxml.jackson.databind.MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUM
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
+import com.fasterxml.jackson.dataformat.xml.XmlFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -17,6 +20,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 val OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper()
 
 val YAML_OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper(YAMLFactory())
+
+val XML_OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper(XmlFactory())
 
 private fun buildComplexObjectMapper(factory: JsonFactory? = null): ObjectMapper =
         ObjectMapper(factory)

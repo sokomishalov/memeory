@@ -1,8 +1,6 @@
 package ru.sokomishalov.memeory.service.db.mongo.coroutine
 
 import kotlinx.coroutines.Dispatchers.Unconfined
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -19,6 +17,7 @@ import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
+import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.log.Loggable
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere

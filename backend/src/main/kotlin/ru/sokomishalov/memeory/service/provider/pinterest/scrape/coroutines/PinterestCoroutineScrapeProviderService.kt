@@ -1,10 +1,7 @@
-package ru.sokomishalov.memeory.service.provider.pinterest.scrape.coroutine
+package ru.sokomishalov.memeory.service.provider.pinterest.scrape.coroutines
 
 import com.fasterxml.jackson.databind.JsonNode
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.reactor.flux
-import kotlinx.coroutines.reactor.mono
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -23,6 +20,8 @@ import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.extensions.aReadTree
+import ru.sokomishalov.memeory.util.extensions.flux
+import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
 import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
@@ -43,7 +42,7 @@ class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
 
     private val dateTimeFormatter = dateTimeFormatterOfPattern("EEE, d MMM yyyy HH:mm:ss Z", ROOT)
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux {
         val infoJsonNode = parseInitJson(channel)
         val feedList = infoJsonNode["resourceDataCache"][1]["data"]["board_feed"].asIterable()
 
@@ -64,7 +63,7 @@ class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
                 .forEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
+    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono {
         val infoJsonNode = parseInitJson(channel)
 
         infoJsonNode["resourceDataCache"][0]["data"]["owner"]["image_medium_url"].asText()

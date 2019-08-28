@@ -40,6 +40,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.9")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
@@ -47,9 +48,12 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.2.2")
     implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
+    implementation("io.kotlintest:kotlintest-extensions-spring:3.4.0")
+
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")

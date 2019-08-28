@@ -10,12 +10,6 @@
   sourceType: REDDIT
   uri: videos
 
-- id: reddit:videos
-  name: videos (Reddit)
-  enabled: false
-  sourceType: REDDIT
-  uri: videos
-
 - id: vk:vgik
   name: ВГИК (VK)
   enabled: true

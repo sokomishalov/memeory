@@ -2,13 +2,13 @@ package ru.sokomishalov.memeory.util
 
 import org.junit.Assert.*
 import org.junit.Test
-import ru.sokomishalov.memeory.AbstractMemeoryTest
+import ru.sokomishalov.memeory.AbstractTest
 import ru.sokomishalov.memeory.util.io.checkAttachmentAvailability
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
 import ru.sokomishalov.memeory.util.io.getImageDimensions
 import kotlin.math.abs
 
-class ImageUtilsTest : AbstractMemeoryTest() {
+class ImageUtilsTest : AbstractTest() {
 
     private val imageWidth = 200
     private val imageHeight = 300
