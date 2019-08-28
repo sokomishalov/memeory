@@ -27,6 +27,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  */
 @Service
 @Conditional(TwitterCondition::class, TwitterApiCondition::class)
+// TODO rewrite
 class TwitterApiProviderService(private val props: MemeoryProperties,
                                 private val twitter: Twitter
 ) : ProviderService {

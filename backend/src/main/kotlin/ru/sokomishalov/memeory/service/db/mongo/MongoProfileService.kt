@@ -1,73 +1,74 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
+import kotlinx.coroutines.Dispatchers.Unconfined
+import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
-import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.ProfileService
 import ru.sokomishalov.memeory.util.consts.EMPTY
+import ru.sokomishalov.memeory.util.extensions.await
+import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
+import ru.sokomishalov.memeory.util.extensions.mono
+import ru.sokomishalov.memeory.util.log.Loggable
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
-import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
-import reactor.core.publisher.Mono.just as monoJust
-import reactor.core.publisher.Mono.justOrEmpty as monoJustOrEmpty
 import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profileMapper
 
+
+/**
+ * @author sokomishalov
+ */
 @Service
-@ConditionalOnNotUsingCoroutines
+@Primary
 class MongoProfileService(
         private val repository: ProfileRepository,
         private val template: ReactiveMongoTemplate
-) : ProfileService {
+) : ProfileService, Loggable {
 
-    override fun findById(id: String): Mono<ProfileDTO> {
-        return monoJustOrEmpty(id)
-                .flatMap { repository.findById(it) }
-                .map { profileMapper.toDto(it) }
+    override fun findById(id: String): Mono<ProfileDTO> = mono(Unconfined) {
+        val profile = repository.findById(id).awaitStrict()
+        profileMapper.toDto(profile)
     }
 
     @Transactional
-    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> {
-        return monoJust(profile)
-                .flatMap { p ->
-                    when {
-                        p.id.isNullOrBlank() && p.socialsMap.isNotNullOrEmpty() ->
-                            fluxFromIterable(p.socialsMap.entries)
-                                    .map {
-                                        criteriaWhere("socialsMap.${it.key}")
-                                                .exists(true)
-                                                .and("socialsMap.${it.key}.id")
-                                                .`is`(it?.value?.getOrDefault("id", EMPTY))
-                                    }
-                                    .collectList()
-                                    .map { Criteria().orOperator(*it.toTypedArray()) }
-                                    .map { Query(it) }
-                                    .flatMapMany { template.find(it, Profile::class.java) }
-                                    .map { profileMapper.toDto(it) }
-                                    .next()
-                                    .switchIfEmpty(saveProfile(p))
-
-                        else ->
-                            saveProfile(p)
-                    }
+    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> = mono(Unconfined) {
+        when {
+            profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
+                val criteriaList = profile.socialsMap.entries.map {
+                    criteriaWhere("socialsMap.${it.key}")
+                            .exists(true)
+                            .and("socialsMap.${it.key}.id")
+                            .`is`(it.value.getOrDefault("id", EMPTY))
                 }
-                .onErrorResume { monoJustOrEmpty(profile) }
+
+                val query = Query(Criteria().orOperator(*criteriaList.toTypedArray()))
+
+                val profiles = template.find(query, Profile::class.java).await()
+
+                when {
+                    profiles.isNullOrEmpty() -> saveProfile(profile)
+                    else -> profileMapper.toDto(profiles.first())
+                }
+            }
+
+            else -> saveProfile(profile)
+        }
     }
 
-    private fun saveProfile(profile: ProfileDTO): Mono<ProfileDTO> {
-        return monoJust(profile)
-                .doOnNext {
-                    if (it.id.isNullOrBlank()) it.id = randomUUID().toString()
-                }
-                .map { profileMapper.toEntity(it) }
-                .flatMap { repository.save(it) }
-                .map { profileMapper.toDto(it) }
+    suspend fun saveProfile(profile: ProfileDTO): ProfileDTO {
+        if (profile.id.isNullOrBlank()) {
+            profile.id = randomUUID().toString()
+        }
+        val toSave = profileMapper.toEntity(profile)
+        val savedProfile = repository.save(toSave).awaitStrict()
+        return profileMapper.toDto(savedProfile)
     }
 }

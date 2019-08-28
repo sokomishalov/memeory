@@ -1,20 +1,18 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package ru.sokomishalov.memeory.service.cache.coroutine
+package ru.sokomishalov.memeory.service.cache
 
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
-import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 
 
 /**
  * @author sokomishalov
  */
 @Service
-@ConditionalOnUsingCoroutines
-class CoroutineCacheManagerService(
+class CacheManagerService(
         private val cacheManager: CacheManager
-) : CoroutineCacheService {
+) : CacheService {
 
     override suspend fun <T> getFromCache(cacheName: String, key: String, orElse: suspend () -> T): T {
         val cache = cacheManager.getCache(cacheName)

@@ -1,20 +1,22 @@
 package ru.sokomishalov.memeory.web
 
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.web.reactive.function.server.router
-import ru.sokomishalov.memeory.condition.ConditionalOnNotUsingCoroutines
-import java.net.URI.create
+import kotlinx.coroutines.runBlocking
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.ServerResponse.permanentRedirect
+import ru.sokomishalov.memeory.util.extensions.awaitStrict
+import springfox.documentation.annotations.ApiIgnore
+import java.net.URI.create as uriCreate
 
 /**
  * @author sokomishalov
  */
-@Configuration
+@RestController
+@ApiIgnore
 class SwaggerIndexController {
 
-    @Bean
-    @ConditionalOnNotUsingCoroutines
-    fun route() = router {
-        GET("/") { permanentRedirect(create("/swagger-ui.html")).build() }
-    }
+    @RequestMapping("/")
+    fun redirect(): ServerResponse = runBlocking { permanentRedirect(uriCreate("/swagger-ui.html")).build().awaitStrict() }
+
 }

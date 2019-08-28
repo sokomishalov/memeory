@@ -29,6 +29,7 @@ import java.util.*
  */
 @Service
 @Conditional(TwitterCondition::class, TwitterScrapeCondition::class)
+// TODO rewrite
 class TwitterScrapeProviderService : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {

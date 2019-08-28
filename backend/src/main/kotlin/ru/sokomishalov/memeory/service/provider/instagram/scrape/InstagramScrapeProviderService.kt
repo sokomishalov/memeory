@@ -24,6 +24,7 @@ import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
  */
 @Service
 @Conditional(InstagramCondition::class, InstagramScrapeCondition::class)
+// TODO rewrite
 class InstagramScrapeProviderService(private val instagram: Instagram) : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {

@@ -27,6 +27,7 @@ import java.util.UUID.randomUUID
 
 @Service
 @Conditional(RedditCondition::class)
+// TODO rewrite
 class RedditProviderService(private val globalProps: MemeoryProperties,
                             private val webClient: WebClient
 ) : ProviderService {

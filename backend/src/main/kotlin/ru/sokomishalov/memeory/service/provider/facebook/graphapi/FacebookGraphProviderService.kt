@@ -27,6 +27,7 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
  */
 @Service
 @Conditional(FacebookCondition::class, FacebookGraphApiCondition::class)
+// TODO rewrite
 class FacebookGraphProviderService(private val facebook: Facebook) : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {

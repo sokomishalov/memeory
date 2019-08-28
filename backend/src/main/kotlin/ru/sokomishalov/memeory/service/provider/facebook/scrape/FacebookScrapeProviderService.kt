@@ -29,6 +29,7 @@ import reactor.core.publisher.Mono.just as monoJust
  */
 @Service
 @Conditional(FacebookCondition::class, FacebookScrapeCondition::class)
+// TODO rewrite
 class FacebookScrapeProviderService : ProviderService {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> {

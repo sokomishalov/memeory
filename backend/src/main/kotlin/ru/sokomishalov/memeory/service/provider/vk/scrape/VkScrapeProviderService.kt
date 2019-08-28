@@ -1,14 +1,12 @@
 @file:Suppress("RemoveExplicitTypeArguments")
 
-package ru.sokomishalov.memeory.service.provider.vk.scrape.coroutine
+package ru.sokomishalov.memeory.service.provider.vk.scrape
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -18,7 +16,6 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
-import ru.sokomishalov.memeory.service.provider.vk.scrape.VkScrapeCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
 import ru.sokomishalov.memeory.util.extensions.aForEach
@@ -37,9 +34,7 @@ import java.util.*
 
 @Service
 @Conditional(VkCondition::class, VkScrapeCondition::class)
-@ConditionalOnUsingCoroutines
-@ExperimentalCoroutinesApi
-class VkCoroutineScrapeProviderService : ProviderService, Loggable {
+class VkScrapeProviderService : ProviderService, Loggable {
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux {
         val posts = getWebPage("$VK_URL/${channel.uri}")
                 .getElementById("page_wall_posts")

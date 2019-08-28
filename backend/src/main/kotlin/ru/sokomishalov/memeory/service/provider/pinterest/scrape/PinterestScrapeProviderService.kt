@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.provider.pinterest.scrape.coroutines
+package ru.sokomishalov.memeory.service.provider.pinterest.scrape
 
 import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -15,7 +14,6 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.PINTEREST
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
-import ru.sokomishalov.memeory.service.provider.pinterest.scrape.PinterestScrapeCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
@@ -36,9 +34,8 @@ import java.util.Date.from as dateFrom
  */
 @Service
 @Conditional(PinterestCondition::class, PinterestScrapeCondition::class)
-@ConditionalOnUsingCoroutines
 @ExperimentalCoroutinesApi
-class PinterestCoroutineScrapeProviderService : ProviderService, Loggable {
+class PinterestScrapeProviderService : ProviderService, Loggable {
 
     private val dateTimeFormatter = dateTimeFormatterOfPattern("EEE, d MMM yyyy HH:mm:ss Z", ROOT)
 

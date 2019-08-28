@@ -13,7 +13,6 @@ memeory:
   fetch-interval-ms: 600000
   fetch-count: 100
   meme-expiration-days: 30
-  enable-coroutines: true
 
 provider:
   reddit:

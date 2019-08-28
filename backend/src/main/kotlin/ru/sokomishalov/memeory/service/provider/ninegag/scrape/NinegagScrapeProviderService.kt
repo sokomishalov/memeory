@@ -1,13 +1,11 @@
-package ru.sokomishalov.memeory.service.provider.ninegag.scrape.coroutines
+package ru.sokomishalov.memeory.service.provider.ninegag.scrape
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.Unconfined
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import ru.sokomishalov.memeory.condition.ConditionalOnUsingCoroutines
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -16,7 +14,6 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.NINEGAG
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.ninegag.NinegagCondition
-import ru.sokomishalov.memeory.service.provider.ninegag.scrape.NinegagScrapeCondition
 import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
@@ -37,9 +34,7 @@ import java.util.Date.from as dateFrom
  */
 @Service
 @Conditional(NinegagCondition::class, NinegagScrapeCondition::class)
-@ConditionalOnUsingCoroutines
-@ExperimentalCoroutinesApi
-class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
+class NinegagScrapeProviderService : ProviderService, Loggable {
 
     override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
         val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")
@@ -71,9 +66,8 @@ class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
     }
 
     override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
-        val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")
-
-        webPage.head()
+        getWebPage("$NINEGAG_URL/${channel.uri}")
+                .head()
                 .getElementsByAttributeValueContaining("rel", "image_src")
                 ?.first()
                 ?.attr("href")
@@ -87,7 +81,5 @@ class NinegagCoroutineScrapeProviderService : ProviderService, Loggable {
         return dateFrom(zonedDateTimeParse(gagInfoMap["datePublished"]).toInstant())
     }
 
-    private fun fixCaption(caption: String?): String {
-        return caption?.replace(" - 9GAG", "") ?: EMPTY
-    }
+    private fun fixCaption(caption: String?): String = caption?.replace(" - 9GAG", EMPTY) ?: EMPTY
 }
