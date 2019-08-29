@@ -5,8 +5,6 @@ package ru.sokomishalov.memeory.service.provider.vk.scrape
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -18,10 +16,7 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
-import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.fixCaption
@@ -35,12 +30,12 @@ import java.util.*
 @Service
 @Conditional(VkCondition::class, VkScrapeCondition::class)
 class VkScrapeProviderService : ProviderService, Loggable {
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val posts = getWebPage("$VK_URL/${channel.uri}")
                 .getElementById("page_wall_posts")
                 .getElementsByClass("post")
 
-        val memes = posts.aMap {
+        return posts.aMap {
             MemeDTO(
                     id = "${channel.id}$ID_DELIMITER${extractId(it)}",
                     caption = extractCaption(it),
@@ -48,12 +43,10 @@ class VkScrapeProviderService : ProviderService, Loggable {
                     attachments = extractAttachments(it)
             )
         }
-
-        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono {
-        getWebPage("$VK_URL/${channel.uri}")
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+        return getWebPage("$VK_URL/${channel.uri}")
                 .getSingleElementByClass("page_cover_image")
                 .getSingleElementByClass("img")
                 .attr("src")

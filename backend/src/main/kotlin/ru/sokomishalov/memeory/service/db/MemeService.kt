@@ -1,11 +1,10 @@
 package ru.sokomishalov.memeory.service.db
 
-import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.dto.MemeDTO
 
 interface MemeService {
 
-    fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO>
+    suspend fun saveMemesIfNotExist(memes: List<MemeDTO>): List<MemeDTO>
 
-    fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO>
+    suspend fun pageOfMemes(page: Int, count: Int, token: String?): List<MemeDTO>
 }

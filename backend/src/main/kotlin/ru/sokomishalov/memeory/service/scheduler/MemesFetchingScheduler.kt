@@ -1,8 +1,10 @@
 package ru.sokomishalov.memeory.service.scheduler
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -10,7 +12,6 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
@@ -18,7 +19,6 @@ import ru.sokomishalov.memeory.util.consts.DATE_FORMATTER
 import ru.sokomishalov.memeory.util.extensions.aFilter
 import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.io.aCheckAttachmentAvailability
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.log.measureTimeAndReturn
@@ -27,7 +27,6 @@ import java.time.LocalDateTime.now
 import java.util.*
 import javax.annotation.PostConstruct
 import kotlin.concurrent.schedule
-import reactor.core.publisher.Flux.fromIterable as fluxFromIterable
 
 
 /**
@@ -46,8 +45,10 @@ class MemesFetchingScheduler(
     @PostConstruct
     fun init() {
         GlobalScope.launch {
-            val channelDTOs = YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream)
-            channelService.saveIfNotExist(*channelDTOs).await()
+            val channelDTOs = withContext(IO) {
+                YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream)
+            }
+            channelService.saveIfNotExist(*channelDTOs)
         }
     }
 
@@ -59,30 +60,26 @@ class MemesFetchingScheduler(
 
             GlobalScope.launch {
                 measureTimeAndReturn("Finished to download new memes after:") {
-                    val channels = channelService.findAllEnabled().await()
+                    val channels = channelService.findAllEnabled()
 
                     channels.aForEach { channel ->
                         val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 
                         val fetchedMemes = runCatching {
-                            providerService
-                                    ?.fetchMemesFromChannel(channel)
-                                    ?.limitRequest(props.fetchCount.toLong())
-                                    .await()
-                        }.getOrElse { emptyList<MemeDTO>() }
+                            providerService?.fetchMemesFromChannel(channel) ?: emptyList()
+                        }.getOrElse { emptyList() }
 
                         val memesToSave = fetchedMemes
                                 .aFilter {
-                                    it?.attachments?.all { att -> aCheckAttachmentAvailability(att.url) } ?: false
-                                }
-                                .aMap {
+                                    it.attachments.all { att -> aCheckAttachmentAvailability(att.url) }
+                                }.aMap {
                                     it.apply {
                                         it.channelId = channel.id
                                         it.channelName = channel.name
                                     }
                                 }
 
-                        memeService.saveMemesIfNotExist(fluxFromIterable(memesToSave)).then().await()
+                        memeService.saveMemesIfNotExist(memesToSave)
                     }
                 }
             }

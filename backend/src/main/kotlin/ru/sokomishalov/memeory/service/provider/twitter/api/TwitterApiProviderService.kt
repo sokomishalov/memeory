@@ -1,12 +1,9 @@
 package ru.sokomishalov.memeory.service.provider.twitter.api
 
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.withContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -17,10 +14,7 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.service.provider.twitter.api.TwitterApiAttachmentType.*
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 import twitter4j.Paging
 import twitter4j.Twitter
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
@@ -36,12 +30,12 @@ class TwitterApiProviderService(private val props: MemeoryProperties,
                                 private val twitter: Twitter
 ) : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val userTimeLine = withContext(IO) {
             twitter.getUserTimeline(channel.uri, Paging(1, props.fetchCount))
         }
 
-        val memes = userTimeLine.aMap {
+        return userTimeLine.aMap {
             MemeDTO(
                     id = "${channel.id}$ID_DELIMITER${it.id}",
                     caption = it.text,
@@ -61,15 +55,13 @@ class TwitterApiProviderService(private val props: MemeoryProperties,
 
             )
         }
-
-        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
         val users = withContext(IO) {
             twitter.lookupUsers(channel.uri)
         }
-        users.first().biggerProfileImageURL
+        return users.first().biggerProfileImageURL
     }
 
 

@@ -1,13 +1,10 @@
 package ru.sokomishalov.memeory.service.provider.instagram.scrape
 
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.withContext
 import me.postaddict.instagram.scraper.Instagram
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -18,10 +15,7 @@ import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 
 
 /**
@@ -31,12 +25,12 @@ import ru.sokomishalov.memeory.util.extensions.mono
 @Conditional(InstagramCondition::class, InstagramScrapeCondition::class)
 class InstagramScrapeProviderService(private val instagram: Instagram) : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val posts = withContext(IO) {
             instagram.getMedias(channel.uri, 1).nodes
         }
 
-        val memes = posts.aMap {
+        return posts.aMap {
             MemeDTO(
                     id = "${channel.id}$ID_DELIMITER${it.id}",
                     caption = it.caption,
@@ -54,11 +48,9 @@ class InstagramScrapeProviderService(private val instagram: Instagram) : Provide
 
             )
         }
-
-        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(IO) {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String = withContext(IO) {
         instagram.getAccountByUsername(channel.uri).profilePicUrl
     }
 

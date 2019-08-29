@@ -1,12 +1,11 @@
 package ru.sokomishalov.memeory.service.db
 
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.ProfileDTO
 
 interface ProfileService {
 
-    fun findById(id: String): Mono<ProfileDTO>
+    suspend fun findById(id: String): ProfileDTO?
 
-    fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO>
+    suspend fun saveIfNecessary(profile: ProfileDTO): ProfileDTO
 
 }

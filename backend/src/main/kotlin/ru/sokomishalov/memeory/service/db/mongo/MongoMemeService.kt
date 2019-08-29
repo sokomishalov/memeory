@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
 import reactor.bool.not
-import reactor.core.publisher.Flux
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
@@ -38,24 +37,19 @@ class MongoMemeService(
         private val props: MemeoryProperties
 ) : MemeService {
 
-    override fun saveMemesIfNotExist(memes: Flux<MemeDTO>): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun saveMemesIfNotExist(memes: List<MemeDTO>): List<MemeDTO> {
         val memesToInsert = memes
-                .await()
                 .aFilter { (!repository.existsById(it.id)).awaitStrict() }
                 .aMap { memeMapper.toEntity(it) }
 
-        val savedMemes = repository
-                .saveAll(memesToInsert)
-                .await()
+        val savedMemes = repository.saveAll(memesToInsert).await()
 
-        savedMemes
-                .aMap { memeMapper.toDto(it) }
-                .aForEach { send(it) }
+        return savedMemes.aMap { memeMapper.toDto(it) }
     }
 
-    override fun pageOfMemes(page: Int, count: Int, token: String?): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun pageOfMemes(page: Int, count: Int, token: String?): List<MemeDTO> {
         val id = token ?: EMPTY
-        val profile = profileService.findById(id).await()
+        val profile = profileService.findById(id)
 
         val pageRequest = pageOf(page, count, sortBy(Order(DESC, "publishedAt", NULLS_LAST)))
 
@@ -64,9 +58,7 @@ class MongoMemeService(
             else -> repository.findAllByChannelIdIn(profile.channels ?: emptyList(), pageRequest).await()
         }
 
-        foundMemes
-                .aMap { memeMapper.toDto(it) }
-                .aForEach { send(it) }
+        return foundMemes.aMap { memeMapper.toDto(it) }
     }
 
     @EventListener(ApplicationReadyEvent::class)

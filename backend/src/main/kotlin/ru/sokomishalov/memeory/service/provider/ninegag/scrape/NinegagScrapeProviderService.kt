@@ -1,11 +1,8 @@
 package ru.sokomishalov.memeory.service.provider.ninegag.scrape
 
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.Dispatchers.Unconfined
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -18,8 +15,6 @@ import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
@@ -36,7 +31,7 @@ import java.util.Date.from as dateFrom
 @Conditional(NinegagCondition::class, NinegagScrapeCondition::class)
 class NinegagScrapeProviderService : ProviderService, Loggable {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val webPage = getWebPage("$NINEGAG_URL/${channel.uri}")
 
         val latestPostsIds = webPage
@@ -44,7 +39,7 @@ class NinegagScrapeProviderService : ProviderService, Loggable {
                 .text()
                 .split(",")
 
-        latestPostsIds
+        return latestPostsIds
                 .aMap {
                     val gagDocument = getWebPage("$NINEGAG_URL/gag/$it")
                     val gagInfoJson = gagDocument.getElementsByAttributeValueContaining("type", "application/ld+json").first().html()
@@ -62,11 +57,10 @@ class NinegagScrapeProviderService : ProviderService, Loggable {
 
                     )
                 }
-                .forEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
-        getWebPage("$NINEGAG_URL/${channel.uri}")
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+        return getWebPage("$NINEGAG_URL/${channel.uri}")
                 .head()
                 .getElementsByAttributeValueContaining("rel", "image_src")
                 ?.first()

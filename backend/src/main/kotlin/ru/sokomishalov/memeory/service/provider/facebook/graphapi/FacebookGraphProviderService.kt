@@ -1,15 +1,12 @@
 package ru.sokomishalov.memeory.service.provider.facebook.graphapi
 
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.withContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.social.facebook.api.Facebook
 import org.springframework.social.facebook.api.Post.PostType.PHOTO
 import org.springframework.social.facebook.api.Post.PostType.VIDEO
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -19,10 +16,7 @@ import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 
@@ -34,12 +28,12 @@ import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 @Conditional(FacebookCondition::class, FacebookGraphApiCondition::class)
 class FacebookGraphProviderService(private val facebook: Facebook) : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val feed = withContext(IO) {
             facebook.feedOperations().getFeed(channel.uri)
         }
 
-        val memes = feed.aMap {
+        return feed.aMap {
             MemeDTO(
                     id = "${channel.id}$ID_DELIMITER${it.id}",
                     caption = it.caption,
@@ -56,14 +50,10 @@ class FacebookGraphProviderService(private val facebook: Facebook) : ProviderSer
                     )
             )
         }
-
-        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
-        withContext(IO) {
-            facebook.groupOperations().getGroup(channel.uri).icon
-        }
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String = withContext(IO) {
+        facebook.groupOperations().getGroup(channel.uri).icon
     }
 
 

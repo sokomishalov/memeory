@@ -12,9 +12,6 @@ import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.awaitStrict
-import ru.sokomishalov.memeory.util.extensions.unit
 import ru.sokomishalov.memeory.util.io.aGetImageByteArrayMonoByUrl
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
 
@@ -33,32 +30,32 @@ class ChannelController(private val channelService: ChannelService,
 
     @GetMapping("/list")
     suspend fun all(): List<ChannelDTO> =
-            channelService.findAll().await()
+            channelService.findAll()
 
     @GetMapping("/list/enabled")
     suspend fun enabled(): List<ChannelDTO> =
-            channelService.findAllEnabled().await()
+            channelService.findAllEnabled()
 
     @PostMapping("/enable")
     suspend fun enable(@RequestBody channelIds: List<String>) =
-            channelService.toggleEnabled(true, *channelIds.toTypedArray()).await().unit()
+            channelService.toggleEnabled(true, *channelIds.toTypedArray())
 
     @PostMapping("/disable")
     suspend fun disable(@RequestBody channelIds: List<String>) =
-            channelService.toggleEnabled(false, *channelIds.toTypedArray()).await().unit()
+            channelService.toggleEnabled(false, *channelIds.toTypedArray())
 
     @PostMapping("/add")
     suspend fun add(@RequestBody account: ChannelDTO): ChannelDTO? =
-            channelService.saveOne(account).await()
+            channelService.saveOne(account)
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
         val logoByteArray = cache.getFromCache(CHANNEL_LOGO_CACHE_KEY, channelId) {
-            val channel = channelService.findById(channelId).awaitStrict()
+            val channel = channelService.findById(channelId)
             val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 
             runCatching {
-                val url = service?.getLogoUrlByChannel(channel).await()
+                val url = service?.getLogoUrlByChannel(channel)
                 aGetImageByteArrayMonoByUrl(url, webClient)
             }.getOrNull()
         } ?: placeholder

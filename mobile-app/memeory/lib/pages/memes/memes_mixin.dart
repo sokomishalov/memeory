@@ -101,7 +101,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Text(
-        item["caption"],
+        item["caption"] ?? EMPTY,
         softWrap: true,
         style: TextStyle(fontSize: 16),
       ),

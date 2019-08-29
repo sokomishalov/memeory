@@ -1,13 +1,11 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
-import kotlinx.coroutines.Dispatchers.Unconfined
 import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.entity.mongo.Profile
 import ru.sokomishalov.memeory.repository.ProfileRepository
@@ -16,7 +14,6 @@ import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.extensions.await
 import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.util.extensions.isNotNullOrEmpty
-import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.log.Loggable
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
@@ -33,14 +30,14 @@ class MongoProfileService(
         private val template: ReactiveMongoTemplate
 ) : ProfileService, Loggable {
 
-    override fun findById(id: String): Mono<ProfileDTO> = mono(Unconfined) {
-        val profile = repository.findById(id).awaitStrict()
-        profileMapper.toDto(profile)
+    override suspend fun findById(id: String): ProfileDTO? {
+        val profile = repository.findById(id).await()
+        return profile?.let { profileMapper.toDto(it) }
     }
 
     @Transactional
-    override fun saveIfNecessary(profile: ProfileDTO): Mono<ProfileDTO> = mono(Unconfined) {
-        when {
+    override suspend fun saveIfNecessary(profile: ProfileDTO): ProfileDTO {
+        return when {
             profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
                 val criteriaList = profile.socialsMap.entries.map {
                     criteriaWhere("socialsMap.${it.key}")

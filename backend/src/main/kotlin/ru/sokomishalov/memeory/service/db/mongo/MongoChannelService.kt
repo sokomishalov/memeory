@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.service.db.mongo
 
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
@@ -9,14 +8,15 @@ import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.stereotype.Service
 import reactor.bool.not
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
 import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.util.consts.MONGO_ID_FIELD
-import ru.sokomishalov.memeory.util.extensions.*
+import ru.sokomishalov.memeory.util.extensions.aFilter
+import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.await
+import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 
 /**
@@ -29,48 +29,41 @@ class MongoChannelService(
         private val repository: ChannelRepository,
         private val template: ReactiveMongoTemplate
 ) : ChannelService {
-    override fun findAllEnabled(): Flux<ChannelDTO> = flux(Unconfined) {
-        repository
-                .findAllByEnabled(true)
-                .await()
-                .aMap { channelMapper.toDto(it) }
-                .aForEach { send(it) }
+    override suspend fun findAllEnabled(): List<ChannelDTO> {
+        val channels = repository.findAllByEnabled(true).await()
+        return channels.aMap { channelMapper.toDto(it) }
+
     }
 
-    override fun findAll(): Flux<ChannelDTO> = flux(Unconfined) {
-        repository
-                .findAll()
-                .await()
-                .aMap { channelMapper.toDto(it) }
-                .aForEach { send(it) }
+    override suspend fun findAll(): List<ChannelDTO> {
+        val channels = repository.findAll().await()
+        return channels.aMap { channelMapper.toDto(it) }
     }
 
-    override fun findById(channelId: String): Mono<ChannelDTO> = mono(Unconfined) {
+    override suspend fun findById(channelId: String): ChannelDTO {
         val channel = repository.findById(channelId).awaitStrict()
-        channelMapper.toDto(channel)
+        return channelMapper.toDto(channel)
     }
 
-    override fun saveOne(channel: ChannelDTO): Mono<ChannelDTO> = mono(Unconfined) {
+    override suspend fun saveOne(channel: ChannelDTO): ChannelDTO {
         val channelsToSave = channelMapper.toEntity(channel)
         val savedChannel = repository.save(channelsToSave).awaitStrict()
-        channelMapper.toDto(savedChannel)
+        return channelMapper.toDto(savedChannel)
     }
 
-    override fun saveIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO> = flux(Unconfined) {
+    override suspend fun saveIfNotExist(vararg channels: ChannelDTO): List<ChannelDTO> {
         val channelsToSave = channels
                 .aFilter { repository.existsById(it.id).not().awaitStrict() }
                 .aMap { channelMapper.toEntity(it) }
 
-        repository
-                .saveAll(channelsToSave)
-                .await()
-                .aMap { channelMapper.toDto(it) }
-                .aForEach { send(it) }
+        val savedChannels = repository.saveAll(channelsToSave).await()
+
+        return savedChannels.aMap { channelMapper.toDto(it) }
     }
 
-    override fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Unit> = mono(Unconfined) {
+    override suspend fun toggleEnabled(enabled: Boolean, vararg channelIds: String) {
         val query = query(where(MONGO_ID_FIELD).`in`(*channelIds))
         val update = update("enabled", enabled)
-        template.findAndModify(query, update, Channel::class.java).awaitUnit()
+        template.findAndModify(query, update, Channel::class.java).await()
     }
 }

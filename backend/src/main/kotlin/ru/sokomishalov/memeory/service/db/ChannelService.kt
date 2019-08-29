@@ -1,20 +1,18 @@
 package ru.sokomishalov.memeory.service.db
 
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.ChannelDTO
 
 interface ChannelService {
 
-    fun findAllEnabled(): Flux<ChannelDTO>
+    suspend fun findAllEnabled(): List<ChannelDTO>
 
-    fun findAll(): Flux<ChannelDTO>
+    suspend fun findAll(): List<ChannelDTO>
 
-    fun findById(channelId: String): Mono<ChannelDTO>
+    suspend fun findById(channelId: String): ChannelDTO
 
-    fun saveOne(channel: ChannelDTO): Mono<ChannelDTO>
+    suspend fun saveOne(channel: ChannelDTO): ChannelDTO
 
-    fun saveIfNotExist(vararg channels: ChannelDTO): Flux<ChannelDTO>
+    suspend fun saveIfNotExist(vararg channels: ChannelDTO): List<ChannelDTO>
 
-    fun toggleEnabled(enabled: Boolean, vararg channelIds: String): Mono<Unit>
+    suspend fun toggleEnabled(enabled: Boolean, vararg channelIds: String)
 }

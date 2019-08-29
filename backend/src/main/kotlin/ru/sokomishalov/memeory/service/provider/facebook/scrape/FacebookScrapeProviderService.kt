@@ -1,11 +1,8 @@
 package ru.sokomishalov.memeory.service.provider.facebook.scrape
 
-import kotlinx.coroutines.Dispatchers.Unconfined
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -17,10 +14,7 @@ import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URl
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URl
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aForEach
 import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.flux
-import ru.sokomishalov.memeory.util.extensions.mono
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
 import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.*
@@ -34,11 +28,11 @@ import java.util.UUID.randomUUID
 @Conditional(FacebookCondition::class, FacebookScrapeCondition::class)
 class FacebookScrapeProviderService : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val webPage = getWebPage("$FACEBOOK_BASE_URl/${channel.uri}/posts")
         val elements = webPage.getElementsByClass("userContentWrapper")
 
-        val memes = elements.aMap {
+        return elements.aMap {
             MemeDTO(
                     id = "${channel.id}$ID_DELIMITER${getIdByUserContentWrapper(it)}",
                     caption = getCaptionByUserContentWrapper(it),
@@ -46,13 +40,11 @@ class FacebookScrapeProviderService : ProviderService {
                     attachments = getAttachmentsByUserContentWrapper(it)
             )
         }
-
-        memes.aForEach { send(it) }
     }
 
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono {
-        "$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small"
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+        return "$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small"
     }
 
 

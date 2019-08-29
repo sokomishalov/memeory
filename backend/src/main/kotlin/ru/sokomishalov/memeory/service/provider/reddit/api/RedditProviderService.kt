@@ -1,12 +1,9 @@
 package ru.sokomishalov.memeory.service.provider.reddit.api
 
-import kotlinx.coroutines.Dispatchers.Unconfined
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -21,7 +18,8 @@ import ru.sokomishalov.memeory.service.provider.reddit.api.model.Listing
 import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URl
-import ru.sokomishalov.memeory.util.extensions.*
+import ru.sokomishalov.memeory.util.extensions.aMap
+import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import java.lang.System.currentTimeMillis
 import java.util.*
 import java.util.UUID.randomUUID
@@ -32,7 +30,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                             private val webClient: WebClient
 ) : ProviderService {
 
-    override fun fetchMemesFromChannel(channel: ChannelDTO): Flux<MemeDTO> = flux(Unconfined) {
+    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val posts = webClient
                 .get()
                 .uri("$REDDIT_BASE_URl/r/${channel.uri}/hot.json?limit=${globalProps.fetchCount}")
@@ -43,7 +41,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 ?.children
                 ?: emptyList()
 
-        val memes = posts
+        return posts
                 .map { it.data }
                 .aMap {
                     MemeDTO(
@@ -63,11 +61,9 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                             ))
                     )
                 }
-
-        memes.aForEach { send(it) }
     }
 
-    override fun getLogoUrlByChannel(channel: ChannelDTO): Mono<String> = mono(Unconfined) {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
         val aboutData = webClient
                 .get()
                 .uri("$REDDIT_BASE_URl/r/${channel.uri}/about.json")
@@ -76,7 +72,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 .awaitBody<About>()
                 .data
 
-        aboutData?.communityIcon?.ifBlank { aboutData.iconImg } ?: EMPTY
+        return aboutData?.communityIcon?.ifBlank { aboutData.iconImg } ?: EMPTY
     }
 
     override fun sourceType(): SourceType = REDDIT
