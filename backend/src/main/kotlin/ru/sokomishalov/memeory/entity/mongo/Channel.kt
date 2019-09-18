@@ -2,8 +2,8 @@ package ru.sokomishalov.memeory.entity.mongo
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.util.consts.EMPTY
 
 
 /**

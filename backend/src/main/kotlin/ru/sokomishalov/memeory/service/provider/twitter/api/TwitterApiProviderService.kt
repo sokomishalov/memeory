@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
+import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -14,7 +15,6 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.service.provider.twitter.api.TwitterApiAttachmentType.*
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aMap
 import twitter4j.Paging
 import twitter4j.Twitter
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT

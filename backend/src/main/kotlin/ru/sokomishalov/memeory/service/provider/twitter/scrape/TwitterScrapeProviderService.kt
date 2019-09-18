@@ -3,6 +3,7 @@ package ru.sokomishalov.memeory.service.provider.twitter.scrape
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
+import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -13,7 +14,6 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
-import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.getImageAspectRatio
 import ru.sokomishalov.memeory.util.scrape.fixCaption
 import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass

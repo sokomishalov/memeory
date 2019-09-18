@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.dto
 
+import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.util.consts.EMPTY
 
 
 /**

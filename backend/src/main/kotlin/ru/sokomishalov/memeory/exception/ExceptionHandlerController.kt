@@ -19,7 +19,7 @@ import org.springframework.web.bind.support.WebExchangeBindException
 import org.springframework.web.reactive.function.server.ServerRequest.create
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
-import ru.sokomishalov.memeory.util.log.Loggable
+import ru.sokomishalov.commons.core.log.Loggable
 import java.time.format.DateTimeParseException
 import javax.naming.AuthenticationException
 import javax.naming.NoPermissionException

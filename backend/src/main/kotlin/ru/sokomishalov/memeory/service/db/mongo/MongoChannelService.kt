@@ -7,16 +7,15 @@ import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.stereotype.Service
-import reactor.bool.not
+import ru.sokomishalov.commons.core.collections.aFilter
+import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.reactor.await
+import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.entity.mongo.Channel
 import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.util.consts.MONGO_ID_FIELD
-import ru.sokomishalov.memeory.util.extensions.aFilter
-import ru.sokomishalov.memeory.util.extensions.aMap
-import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.extensions.awaitStrict
 import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 
 /**
@@ -53,7 +52,8 @@ class MongoChannelService(
 
     override suspend fun saveIfNotExist(vararg channels: ChannelDTO): List<ChannelDTO> {
         val channelsToSave = channels
-                .aFilter { repository.existsById(it.id).not().awaitStrict() }
+                .toList()
+                .aFilter { repository.existsById(it.id).awaitStrict().not() }
                 .aMap { channelMapper.toEntity(it) }
 
         val savedChannels = repository.saveAll(channelsToSave).await()

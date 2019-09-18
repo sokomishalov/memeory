@@ -2,10 +2,8 @@ import org.gradle.api.JavaVersion.VERSION_11
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.2.0.M4"
+    id("org.springframework.boot") version "2.2.0.M6"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
-    id("net.linguica.maven-settings") version "0.5"
-    id("com.github.ben-manes.versions") version "0.22.0"
     kotlin("jvm") version "1.3.50"
     kotlin("plugin.spring") version "1.3.50"
     kotlin("kapt") version "1.3.50"
@@ -24,6 +22,7 @@ repositories {
     maven { url = uri("http://repo.spring.io/snapshot") }
     maven { url = uri("http://repo.spring.io/milestone") }
     maven { url = uri("http://oss.jfrog.org/artifactory/oss-snapshot-local") }
+    maven { url = uri("http://jitpack.io") }
 }
 
 sourceSets["main"].java.srcDir(file("build/generated/source/kapt/main"))
@@ -36,24 +35,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
+    implementation("com.github.sokomishalov.commons:commons-spring:1.0.1")
 
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.9")
-    implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
     implementation("javax.xml.bind:jaxb-api:2.2.11")
-
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-io-jvm:0.1.13")
-    implementation("io.kotlintest:kotlintest-extensions-spring:3.4.0")
-
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
@@ -64,7 +51,7 @@ dependencies {
     implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
     implementation("io.projectreactor.netty:reactor-netty:0.9.0.M3")
-    implementation("io.netty:netty-transport-native-epoll:4.1.37.Final")
+    implementation("io.netty:netty-transport-native-epoll:4.1.41.Final")
 
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("com.google.guava:guava:28.0-jre")

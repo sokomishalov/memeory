@@ -13,15 +13,18 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
-import reactor.bool.not
+import ru.sokomishalov.commons.core.collections.aFilter
+import ru.sokomishalov.commons.core.collections.aForEach
+import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.consts.EMPTY
+import ru.sokomishalov.commons.core.reactor.await
+import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
 import ru.sokomishalov.memeory.repository.MemeRepository
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.db.ProfileService
-import ru.sokomishalov.memeory.util.consts.EMPTY
-import ru.sokomishalov.memeory.util.extensions.*
 import java.time.Duration.ofDays
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy
@@ -39,7 +42,7 @@ class MongoMemeService(
 
     override suspend fun saveMemesIfNotExist(memes: List<MemeDTO>): List<MemeDTO> {
         val memesToInsert = memes
-                .aFilter { (!repository.existsById(it.id)).awaitStrict() }
+                .aFilter { (repository.existsById(it.id)).awaitStrict().not() }
                 .aMap { memeMapper.toEntity(it) }
 
         val savedMemes = repository.saveAll(memesToInsert).await()

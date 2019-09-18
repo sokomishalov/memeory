@@ -3,6 +3,10 @@ package ru.sokomishalov.memeory.service.provider.ninegag.scrape
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
+import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.consts.EMPTY
+import ru.sokomishalov.commons.core.log.Loggable
+import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -11,14 +15,10 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.NINEGAG
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.ninegag.NinegagCondition
-import ru.sokomishalov.memeory.util.consts.EMPTY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
-import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
-import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.getWebPage
-import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
 import java.util.*
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
 import java.util.Date.from as dateFrom

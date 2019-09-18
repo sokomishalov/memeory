@@ -5,6 +5,8 @@ package ru.sokomishalov.memeory.service.provider.vk.scrape
 import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
+import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -16,9 +18,7 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
-import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
-import ru.sokomishalov.memeory.util.log.Loggable
 import ru.sokomishalov.memeory.util.scrape.fixCaption
 import ru.sokomishalov.memeory.util.scrape.getImageBackgroundUrl
 import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass

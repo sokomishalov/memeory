@@ -7,6 +7,7 @@ import org.springframework.social.facebook.api.Facebook
 import org.springframework.social.facebook.api.Post.PostType.PHOTO
 import org.springframework.social.facebook.api.Post.PostType.VIDEO
 import org.springframework.stereotype.Service
+import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -16,7 +17,6 @@ import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.extensions.aMap
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
 

@@ -9,9 +9,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClient.create
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple2
-import ru.sokomishalov.memeory.util.consts.EMPTY
-import ru.sokomishalov.memeory.util.extensions.await
-import ru.sokomishalov.memeory.util.restclient.REACTIVE_WEB_CLIENT
+import ru.sokomishalov.commons.core.consts.EMPTY
+import ru.sokomishalov.commons.core.reactor.await
+import ru.sokomishalov.commons.spring.webclient.REACTIVE_WEB_CLIENT
 import java.net.URL
 import reactor.util.function.Tuples.of as tupleOf
 import javax.imageio.ImageIO.read as readImage

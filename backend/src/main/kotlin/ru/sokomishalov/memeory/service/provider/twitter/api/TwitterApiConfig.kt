@@ -3,8 +3,8 @@ package ru.sokomishalov.memeory.service.provider.twitter.api
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Conditional
 import org.springframework.context.annotation.Configuration
+import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
-import ru.sokomishalov.memeory.util.consts.EMPTY
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder

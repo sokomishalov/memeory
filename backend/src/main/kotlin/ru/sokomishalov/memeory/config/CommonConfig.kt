@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Primary
 import org.springframework.core.io.Resource
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
-import ru.sokomishalov.memeory.util.restclient.REACTIVE_WEB_CLIENT
-import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
+import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
+import ru.sokomishalov.commons.spring.webclient.REACTIVE_WEB_CLIENT
 
 /**
  * @author sokomishalov

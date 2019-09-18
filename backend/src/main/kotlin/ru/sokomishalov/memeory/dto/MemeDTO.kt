@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.dto
 
-import ru.sokomishalov.memeory.util.consts.EMPTY
+import ru.sokomishalov.commons.core.consts.EMPTY
 import java.util.*
 
 data class MemeDTO(

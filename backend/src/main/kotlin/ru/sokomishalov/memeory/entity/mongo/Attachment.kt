@@ -1,8 +1,8 @@
 package ru.sokomishalov.memeory.entity.mongo
 
+import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.enums.AttachmentType
 import ru.sokomishalov.memeory.enums.AttachmentType.NONE
-import ru.sokomishalov.memeory.util.consts.EMPTY
 
 data class Attachment(
         var url: String? = EMPTY,
