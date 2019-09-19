@@ -6,8 +6,8 @@ import org.springframework.http.MediaType.IMAGE_PNG
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.client.WebClient
+import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.service.cache.CacheService
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
@@ -50,7 +50,7 @@ class ChannelController(private val channelService: ChannelService,
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
-        val logoByteArray = cache.getFromCache(CHANNEL_LOGO_CACHE_KEY, channelId) {
+        val logoByteArray = cache.get(CHANNEL_LOGO_CACHE_KEY, channelId) {
             val channel = channelService.findById(channelId)
             val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 

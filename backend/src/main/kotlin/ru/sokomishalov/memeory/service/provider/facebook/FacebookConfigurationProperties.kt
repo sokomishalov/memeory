@@ -7,7 +7,4 @@ import ru.sokomishalov.memeory.service.provider.ProviderBaseConfigurationPropert
  * @author sokomishalov
  */
 @ConfigurationProperties(prefix = "provider.facebook")
-class FacebookConfigurationProperties : ProviderBaseConfigurationProperties() {
-    lateinit var appId: String
-    lateinit var secret: String
-}
+class FacebookConfigurationProperties : ProviderBaseConfigurationProperties()

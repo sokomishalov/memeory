@@ -35,8 +35,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.social:spring-social-facebook:2.0.3.RELEASE")
-    implementation("com.github.sokomishalov.commons:commons-spring:1.0.1")
-
+    implementation("com.github.sokomishalov.commons:commons-spring:1.0.5")
 
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
@@ -46,16 +45,11 @@ dependencies {
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
 
-    implementation("io.projectreactor:reactor-core:3.3.0.M1")
     implementation("io.projectreactor:reactor-tools:1.0.0.M1")
     implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
     implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
-    implementation("io.projectreactor.netty:reactor-netty:0.9.0.M3")
     implementation("io.netty:netty-transport-native-epoll:4.1.41.Final")
 
-    implementation("org.apache.commons:commons-lang3:3.9")
-    implementation("com.google.guava:guava:28.0-jre")
-    implementation("com.github.ben-manes.caffeine:caffeine:2.8.0")
     implementation("org.jsoup:jsoup:1.12.1")
 
     implementation("com.vk.api:sdk:0.5.12") {
