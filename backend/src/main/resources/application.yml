@@ -36,3 +36,28 @@ provider:
   pinterest:
     enabled: true
     scrape-enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: *
+  health:
+    mongo:
+      enabled: true
+  endpoint:
+    beans:
+      enabled: true
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    env:
+      enabled: true
+  info:
+    git:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
