@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.condition
+package ru.sokomishalov.memeory.autoconfigure.condition
 
 import org.springframework.context.annotation.Condition
 import org.springframework.context.annotation.ConditionContext

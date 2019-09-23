@@ -19,7 +19,7 @@ import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
-import ru.sokomishalov.memeory.config.MemeoryProperties
+import ru.sokomishalov.memeory.autoconfigure.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.entity.mongo.Meme
 import ru.sokomishalov.memeory.repository.MemeRepository

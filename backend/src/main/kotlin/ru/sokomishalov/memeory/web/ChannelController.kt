@@ -5,7 +5,6 @@ import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.IMAGE_PNG
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.reactive.function.client.WebClient
 import ru.sokomishalov.commons.core.images.getImageByteArray
 import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -23,7 +22,6 @@ import org.springframework.http.ResponseEntity.ok as responseEntityOk
 class ChannelController(private val channelService: ChannelService,
                         private val providerServices: List<ProviderService>,
                         private val cache: CacheService,
-                        private val webClient: WebClient,
                         @Qualifier("placeholder")
                         private val placeholder: ByteArray
 ) {

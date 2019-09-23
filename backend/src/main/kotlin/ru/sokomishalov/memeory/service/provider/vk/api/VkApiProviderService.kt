@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
-import ru.sokomishalov.memeory.config.MemeoryProperties
+import ru.sokomishalov.memeory.autoconfigure.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO

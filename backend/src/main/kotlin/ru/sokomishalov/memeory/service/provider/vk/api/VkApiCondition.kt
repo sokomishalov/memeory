@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.service.provider.vk.api
 
 import org.springframework.context.annotation.ConditionContext
 import org.springframework.core.type.AnnotatedTypeMetadata
-import ru.sokomishalov.memeory.condition.BaseBooleanPropertyCondition
+import ru.sokomishalov.memeory.autoconfigure.condition.BaseBooleanPropertyCondition
 
 
 /**

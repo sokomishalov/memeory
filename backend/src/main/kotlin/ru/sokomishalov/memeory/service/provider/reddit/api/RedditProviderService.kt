@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.reactor.awaitStrict
-import ru.sokomishalov.memeory.config.MemeoryProperties
+import ru.sokomishalov.memeory.autoconfigure.props.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
