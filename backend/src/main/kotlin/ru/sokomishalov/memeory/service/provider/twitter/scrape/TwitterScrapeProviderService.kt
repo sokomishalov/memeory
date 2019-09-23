@@ -4,6 +4,10 @@ import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.html.fixText
+import ru.sokomishalov.commons.core.html.getSingleElementByClass
+import ru.sokomishalov.commons.core.html.getWebPage
+import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -14,10 +18,6 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
-import ru.sokomishalov.memeory.util.io.getImageAspectRatio
-import ru.sokomishalov.memeory.util.scrape.fixCaption
-import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass
-import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.*
 
 
@@ -67,10 +67,10 @@ class TwitterScrapeProviderService : ProviderService {
                 .attr("data-tweet-id")
     }
 
-    private fun extractCaptionFromTweet(tweet: Element): String? {
+    private suspend fun extractCaptionFromTweet(tweet: Element): String? {
         return tweet
                 .getSingleElementByClass("tweet-text")
-                .fixCaption()
+                .fixText()
     }
 
     private fun extractPublishedAtFromTweet(tweet: Element): Date {
@@ -85,7 +85,7 @@ class TwitterScrapeProviderService : ProviderService {
         } ?: Date(0)
     }
 
-    private fun extractAttachmentsFromTweet(tweet: Element): List<AttachmentDTO> {
+    private suspend fun extractAttachmentsFromTweet(tweet: Element): List<AttachmentDTO> {
         return tweet
                 .getElementsByClass("AdaptiveMedia-photoContainer")
                 ?.map { element ->

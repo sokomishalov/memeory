@@ -6,13 +6,13 @@ import org.springframework.http.MediaType.IMAGE_PNG
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.client.WebClient
+import ru.sokomishalov.commons.core.images.getImageByteArray
 import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.io.aGetImageByteArrayMonoByUrl
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
 
 /**
@@ -54,11 +54,9 @@ class ChannelController(private val channelService: ChannelService,
             val channel = channelService.findById(channelId)
             val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
 
-            runCatching {
-                val url = service?.getLogoUrlByChannel(channel)
-                aGetImageByteArrayMonoByUrl(url, webClient)
-            }.getOrNull()
-        } ?: placeholder
+            val url = service?.getLogoUrlByChannel(channel)
+            getImageByteArray(url, orElse = placeholder)
+        }
 
         return responseEntityOk()
                 .contentType(IMAGE_PNG)

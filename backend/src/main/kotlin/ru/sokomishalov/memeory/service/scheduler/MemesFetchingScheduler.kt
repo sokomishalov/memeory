@@ -14,6 +14,7 @@ import ru.sokomishalov.commons.core.collections.aFilter
 import ru.sokomishalov.commons.core.collections.aForEach
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.DEFAULT_DATE_FORMATTER
+import ru.sokomishalov.commons.core.images.checkImageUrl
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
 import ru.sokomishalov.memeory.config.MemeoryProperties
@@ -21,7 +22,6 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.util.io.aCheckAttachmentAvailability
 import java.time.LocalDateTime.now
 import java.util.*
 import javax.annotation.PostConstruct
@@ -69,7 +69,7 @@ class MemesFetchingScheduler(
 
                     val memesToSave = fetchedMemes
                             .aFilter {
-                                it.attachments.all { att -> aCheckAttachmentAvailability(att.url) }
+                                it.attachments.all { att -> checkImageUrl(att.url) }
                             }.aMap {
                                 it.apply {
                                     it.channelId = channel.id

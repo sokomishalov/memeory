@@ -4,11 +4,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import ru.sokomishalov.commons.core.log.Loggable
+import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.AbstractSpringTest
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.NONE
-import ru.sokomishalov.memeory.util.log.Loggable
-import ru.sokomishalov.memeory.util.serialization.OBJECT_MAPPER
 
 
 /**

@@ -31,10 +31,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    implementation("com.github.sokomishalov.commons:commons-spring:1.0.5")
+    implementation("com.github.sokomishalov.commons:commons-spring:1.0.15")
 
     implementation("org.mapstruct:mapstruct:1.3.0.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
@@ -44,9 +43,6 @@ dependencies {
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
 
-    implementation("io.projectreactor:reactor-tools:1.0.0.M1")
-    implementation("io.projectreactor:reactor-kotlin-extensions:1.0.0.M2")
-    implementation("io.projectreactor.addons:reactor-extra:3.3.0.M1")
     implementation("io.netty:netty-transport-native-epoll:4.1.41.Final")
 
     implementation("org.jsoup:jsoup:1.12.1")
@@ -56,7 +52,6 @@ dependencies {
         exclude(group = "org.asynchttpclient")
     }
     implementation("com.github.igor-suhorukov:instagramscraper:2.2")
-    implementation("org.twitter4j:twitter4j-core:4.0.7")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -64,8 +59,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("io.projectreactor:reactor-test")
-    testImplementation("io.projectreactor.tools:blockhound-junit-platform:1.0.0.M5")
 }
 
 tasks.withType<Test> {

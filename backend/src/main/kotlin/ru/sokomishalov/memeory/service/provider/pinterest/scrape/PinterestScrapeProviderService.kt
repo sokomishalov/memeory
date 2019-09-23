@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.html.getWebPage
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.commons.core.serialization.aReadTree
@@ -18,7 +19,6 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
-import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.Locale.ROOT
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
 import java.time.format.DateTimeFormatter.ofPattern as dateTimeFormatterOfPattern

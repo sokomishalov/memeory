@@ -4,6 +4,8 @@ import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.html.getWebPage
+import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
@@ -15,8 +17,6 @@ import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URl
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URl
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
-import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -88,7 +88,7 @@ class FacebookScrapeProviderService : ProviderService {
                     listOf(AttachmentDTO(
                             url = it,
                             type = IMAGE,
-                            aspectRatio = aGetImageAspectRatio(it)
+                            aspectRatio = getImageAspectRatio(it)
                     ))
                 }
                 ?: emptyList()

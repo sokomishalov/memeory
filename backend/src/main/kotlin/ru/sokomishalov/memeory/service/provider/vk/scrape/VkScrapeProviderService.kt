@@ -6,6 +6,11 @@ import org.jsoup.nodes.Element
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.html.fixText
+import ru.sokomishalov.commons.core.html.getImageBackgroundUrl
+import ru.sokomishalov.commons.core.html.getSingleElementByClass
+import ru.sokomishalov.commons.core.html.getWebPage
+import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -18,11 +23,6 @@ import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
-import ru.sokomishalov.memeory.util.io.aGetImageAspectRatio
-import ru.sokomishalov.memeory.util.scrape.fixCaption
-import ru.sokomishalov.memeory.util.scrape.getImageBackgroundUrl
-import ru.sokomishalov.memeory.util.scrape.getSingleElementByClass
-import ru.sokomishalov.memeory.util.scrape.getWebPage
 import java.lang.System.currentTimeMillis
 import java.util.*
 
@@ -61,11 +61,11 @@ class VkScrapeProviderService : ProviderService, Loggable {
                 .substringAfter("_")
     }
 
-    private fun extractCaption(element: Element): String? {
+    private suspend fun extractCaption(element: Element): String? {
         return element
                 .getElementsByClass("wall_post_text")
                 ?.firstOrNull()
-                ?.fixCaption()
+                ?.fixText()
     }
 
     private fun extractDate(element: Element): Date {
@@ -90,7 +90,7 @@ class VkScrapeProviderService : ProviderService, Loggable {
                 .aMap {
                     val isVideo = it.attr("data-video").isNotBlank()
                     val imageUrl = runCatching { it.getImageBackgroundUrl() }.getOrNull()
-                    val aspectRatio = imageUrl?.let { url -> aGetImageAspectRatio(url) }
+                    val aspectRatio = imageUrl?.let { url -> getImageAspectRatio(url) }
 
                     AttachmentDTO(
                             url = when {
