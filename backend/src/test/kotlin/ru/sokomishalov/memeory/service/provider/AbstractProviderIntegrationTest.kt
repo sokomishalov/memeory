@@ -4,11 +4,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.AbstractSpringTest
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.NONE
+import ru.sokomishalov.memeory.service.scheduler.MemesFetchingScheduler
 
 
 /**
@@ -17,6 +19,10 @@ import ru.sokomishalov.memeory.enums.AttachmentType.NONE
 abstract class AbstractProviderIntegrationTest : AbstractSpringTest(), Loggable {
 
     protected abstract val channel: ChannelDTO
+
+    @MockBean
+    @Suppress("unused")
+    lateinit var scheduler: MemesFetchingScheduler
 
     @Autowired
     lateinit var providers: List<ProviderService>

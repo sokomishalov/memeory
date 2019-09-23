@@ -1,11 +1,11 @@
 package ru.sokomishalov.memeory.service.provider.reddit.api
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.collections.aMap
-import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.config.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
@@ -16,13 +16,10 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.REDDIT
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.reddit.RedditCondition
-import ru.sokomishalov.memeory.service.provider.reddit.api.model.About
-import ru.sokomishalov.memeory.service.provider.reddit.api.model.Listing
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
-import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URl
+import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URL
 import java.lang.System.currentTimeMillis
 import java.util.*
-import java.util.UUID.randomUUID
 
 @Service
 @Conditional(RedditCondition::class)
@@ -31,32 +28,31 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
 ) : ProviderService {
 
     override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
-        val posts = webClient
+        val response = webClient
                 .get()
-                .uri("$REDDIT_BASE_URl/r/${channel.uri}/hot.json?limit=${globalProps.fetchCount}")
+                .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${globalProps.fetchCount}")
                 .exchange()
                 .awaitStrict()
-                .awaitBody<Listing>()
-                .data
-                ?.children
-                ?: emptyList()
+                .awaitBody<JsonNode>()
+
+        val posts = response["data"]["children"].elementsToList()
 
         return posts
-                .map { it.data }
+                .mapNotNull { it["data"] }
                 .aMap {
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${it?.id ?: randomUUID()}",
-                            caption = it?.title,
-                            publishedAt = Date(it?.createdUtc?.toLong()?.times(1000) ?: currentTimeMillis()),
+                            id = "${channel.id}$ID_DELIMITER${it.getValue("id")}",
+                            caption = it.getValue("title"),
+                            publishedAt = Date(it.getValue("createdUtc")?.toLong()?.times(1000) ?: currentTimeMillis()),
                             attachments = listOf(AttachmentDTO(
-                                    url = it?.url,
+                                    url = it.getValue("url"),
                                     type = when {
-                                        it?.media != null -> VIDEO
-                                        it?.url != null -> IMAGE
+                                        it.getValue("media") != null -> VIDEO
+                                        it.getValue("url") != null -> IMAGE
                                         else -> NONE
                                     },
-                                    aspectRatio = it?.preview?.images?.get(0)?.source?.run {
-                                        width?.toDouble()?.div(height?.toDouble() ?: 1.0)
+                                    aspectRatio = it["preview"]["images"].elementsToList().firstOrNull()?.get("source")?.run {
+                                        getValue("width")?.toDouble()?.div(getValue("height")?.toDouble() ?: 1.0)
                                     }
                             ))
                     )
@@ -64,16 +60,26 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
     }
 
     override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
-        val aboutData = webClient
+        val response = webClient
                 .get()
-                .uri("$REDDIT_BASE_URl/r/${channel.uri}/about.json")
+                .uri("$REDDIT_BASE_URL/r/${channel.uri}/about.json")
                 .exchange()
                 .awaitStrict()
-                .awaitBody<About>()
-                .data
+                .awaitBody<JsonNode>()
 
-        return aboutData?.communityIcon?.ifBlank { aboutData.iconImg } ?: EMPTY
+        val communityIcon = response.getValue("communityIcon")
+        val imgIcon = response.getValue("iconImg")
+
+        return communityIcon?.ifBlank { imgIcon }.orEmpty()
     }
 
     override fun sourceType(): SourceType = REDDIT
+
+    private fun JsonNode?.getValue(field: String): String? {
+        return this?.get(field)?.asText()?.ifBlank { null }
+    }
+
+    private fun JsonNode?.elementsToList(): List<JsonNode> {
+        return this?.elements()?.asSequence()?.toList() ?: emptyList()
+    }
 }

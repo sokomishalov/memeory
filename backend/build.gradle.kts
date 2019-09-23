@@ -45,8 +45,6 @@ dependencies {
 
     implementation("io.netty:netty-transport-native-epoll:4.1.41.Final")
 
-    implementation("org.jsoup:jsoup:1.12.1")
-
     implementation("com.vk.api:sdk:0.5.12") {
         exclude(group = "org.apache.logging.log4j")
         exclude(group = "org.asynchttpclient")

@@ -14,8 +14,8 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
-import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URl
-import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URl
+import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URL
+import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URL
 import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import java.util.*
 import java.util.UUID.randomUUID
@@ -29,7 +29,7 @@ import java.util.UUID.randomUUID
 class FacebookScrapeProviderService : ProviderService {
 
     override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
-        val webPage = getWebPage("$FACEBOOK_BASE_URl/${channel.uri}/posts")
+        val webPage = getWebPage("$FACEBOOK_BASE_URL/${channel.uri}/posts")
         val elements = webPage.getElementsByClass("userContentWrapper")
 
         return elements.aMap {
@@ -44,7 +44,7 @@ class FacebookScrapeProviderService : ProviderService {
 
 
     override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
-        return "$FACEBOOK_GRAPH_BASE_URl/${channel.uri}/picture?type=small"
+        return "$FACEBOOK_GRAPH_BASE_URL/${channel.uri}/picture?type=small"
     }
 
 
