@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import ru.sokomishalov.commons.core.collections.isNotNullOrEmpty
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.log.Loggable
-import ru.sokomishalov.commons.core.maps.isNotNullOrEmpty
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ProfileDTO

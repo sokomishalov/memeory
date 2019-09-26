@@ -38,10 +38,6 @@ provider:
     scrape-enabled: true
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: *
   health:
     mongo:
       enabled: true
@@ -61,3 +57,7 @@ management:
     export:
       prometheus:
         enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
