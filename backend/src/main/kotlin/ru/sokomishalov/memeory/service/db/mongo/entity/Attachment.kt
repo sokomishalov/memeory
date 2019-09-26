@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.entity.mongo
+package ru.sokomishalov.memeory.service.db.mongo.entity
 
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.enums.AttachmentType

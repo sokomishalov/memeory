@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package ru.sokomishalov.memeory.autoconfigure.props
+package ru.sokomishalov.memeory.autoconfigure
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

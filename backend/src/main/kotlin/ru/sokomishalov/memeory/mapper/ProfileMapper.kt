@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.mapper
 
 import org.mapstruct.Mapper
 import ru.sokomishalov.memeory.dto.ProfileDTO
-import ru.sokomishalov.memeory.entity.mongo.Profile
+import ru.sokomishalov.memeory.service.db.mongo.entity.Profile
 import org.mapstruct.factory.Mappers.getMapper as generateMapper
 
 

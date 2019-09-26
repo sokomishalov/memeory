@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.reddit
 
-import ru.sokomishalov.memeory.autoconfigure.condition.BaseBooleanPropertyCondition
+import ru.sokomishalov.memeory.autoconfigure.BaseBooleanPropertyCondition
 
 
 /**

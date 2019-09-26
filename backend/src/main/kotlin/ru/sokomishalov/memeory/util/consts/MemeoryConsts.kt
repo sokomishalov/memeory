@@ -15,8 +15,5 @@ const val NINEGAG_URL = "https://9gag.com"
 const val PINTEREST_URL = "https://www.pinterest.com"
 const val VK_URL = "https://vk.com"
 
-const val HORIZONTAL_ORIENTATION = "HORIZONTAL"
-const val VERTICAL_ORIENTATION = "VERTICAL"
-
 // Keys
 const val CHANNEL_LOGO_CACHE_KEY = "CHANNEL_LOGO"

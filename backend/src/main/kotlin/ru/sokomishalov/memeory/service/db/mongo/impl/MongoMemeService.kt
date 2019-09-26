@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.db.mongo
+package ru.sokomishalov.memeory.service.db.mongo.impl
 
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,12 +19,12 @@ import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
-import ru.sokomishalov.memeory.autoconfigure.props.MemeoryProperties
+import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
-import ru.sokomishalov.memeory.entity.mongo.Meme
-import ru.sokomishalov.memeory.repository.MemeRepository
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.db.ProfileService
+import ru.sokomishalov.memeory.service.db.mongo.entity.Meme
+import ru.sokomishalov.memeory.service.db.mongo.repository.MemeRepository
 import java.time.Duration.ofDays
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy

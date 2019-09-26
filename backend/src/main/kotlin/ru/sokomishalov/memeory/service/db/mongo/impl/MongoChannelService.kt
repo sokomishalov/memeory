@@ -1,6 +1,5 @@
-package ru.sokomishalov.memeory.service.db.mongo
+package ru.sokomishalov.memeory.service.db.mongo.impl
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria.where
@@ -12,9 +11,9 @@ import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.entity.mongo.Channel
-import ru.sokomishalov.memeory.repository.ChannelRepository
 import ru.sokomishalov.memeory.service.db.ChannelService
+import ru.sokomishalov.memeory.service.db.mongo.entity.Channel
+import ru.sokomishalov.memeory.service.db.mongo.repository.ChannelRepository
 import ru.sokomishalov.memeory.util.consts.MONGO_ID_FIELD
 import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 
@@ -23,7 +22,6 @@ import ru.sokomishalov.memeory.mapper.ChannelMapper.Companion.INSTANCE as channe
  */
 @Service
 @Primary
-@ExperimentalCoroutinesApi
 class MongoChannelService(
         private val repository: ChannelRepository,
         private val template: ReactiveMongoTemplate
@@ -31,7 +29,6 @@ class MongoChannelService(
     override suspend fun findAllEnabled(): List<ChannelDTO> {
         val channels = repository.findAllByEnabled(true).await()
         return channels.aMap { channelMapper.toDto(it) }
-
     }
 
     override suspend fun findAll(): List<ChannelDTO> {

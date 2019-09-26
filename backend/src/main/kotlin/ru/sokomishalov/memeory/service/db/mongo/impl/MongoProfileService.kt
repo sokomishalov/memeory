@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.service.db.mongo
+package ru.sokomishalov.memeory.service.db.mongo.impl
 
 import org.springframework.context.annotation.Primary
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
@@ -12,9 +12,9 @@ import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ProfileDTO
-import ru.sokomishalov.memeory.entity.mongo.Profile
-import ru.sokomishalov.memeory.repository.ProfileRepository
 import ru.sokomishalov.memeory.service.db.ProfileService
+import ru.sokomishalov.memeory.service.db.mongo.entity.Profile
+import ru.sokomishalov.memeory.service.db.mongo.repository.ProfileRepository
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
 import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profileMapper

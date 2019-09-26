@@ -17,7 +17,7 @@ import ru.sokomishalov.commons.core.consts.DEFAULT_DATE_FORMATTER
 import ru.sokomishalov.commons.core.images.checkImageUrl
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
-import ru.sokomishalov.memeory.autoconfigure.props.MemeoryProperties
+import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService

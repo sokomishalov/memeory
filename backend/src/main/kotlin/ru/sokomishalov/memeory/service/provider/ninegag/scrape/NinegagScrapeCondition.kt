@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.service.provider.ninegag.scrape
 
-import ru.sokomishalov.memeory.autoconfigure.condition.BaseBooleanPropertyCondition
+import ru.sokomishalov.memeory.autoconfigure.BaseBooleanPropertyCondition
 
 
 /**
