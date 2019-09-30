@@ -1,7 +1,3 @@
-rootProject.name = "memeory"
-
-include("backend")
-
 pluginManagement {
     repositories {
         maven { url = uri("http://repo.spring.io/snapshot") }
@@ -9,7 +5,6 @@ pluginManagement {
         maven { url = uri("http://repo.spring.io/plugins-release") }
         gradlePluginPortal()
     }
-
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "org.springframework.boot") {
@@ -18,3 +13,4 @@ pluginManagement {
         }
     }
 }
+rootProject.name = "memeory"
