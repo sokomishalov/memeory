@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package ru.sokomishalov.memeory.config
 
 import org.springframework.context.annotation.Bean
@@ -10,10 +12,8 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
  * @author sokomishalov
  */
 @EnableReactiveMongoRepositories
-@Suppress("unused")
 class MongoConfig {
 
     @Bean
     fun transactionManager(dbFactory: MongoDbFactory): MongoTransactionManager = MongoTransactionManager(dbFactory)
-
 }

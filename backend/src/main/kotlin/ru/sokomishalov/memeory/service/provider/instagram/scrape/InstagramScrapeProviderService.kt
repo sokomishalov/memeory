@@ -15,7 +15,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 
 
 /**
@@ -32,7 +32,7 @@ class InstagramScrapeProviderService(private val instagram: Instagram) : Provide
 
         return posts.aMap {
             MemeDTO(
-                    id = "${channel.id}$ID_DELIMITER${it.id}",
+                    id = "${channel.id}$DELIMITER${it.id}",
                     caption = it.caption,
                     publishedAt = it.created,
                     attachments = listOf(

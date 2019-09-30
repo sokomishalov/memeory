@@ -10,9 +10,9 @@ spring:
     allow-bean-definition-overriding: true
 
 memeory:
-  fetch-interval-ms: 600000
-  fetch-count: 100
-  meme-expiration-days: 30
+  fetch-max-count: 100
+  fetch-interval: 5m
+  meme-life-time: 10d
 
 provider:
   reddit:

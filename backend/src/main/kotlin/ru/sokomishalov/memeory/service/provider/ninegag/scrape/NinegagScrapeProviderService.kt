@@ -17,7 +17,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.NINEGAG
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.ninegag.NinegagCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.NINEGAG_URL
 import java.util.*
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
@@ -46,7 +46,7 @@ class NinegagScrapeProviderService : ProviderService, Loggable {
                     val gagInfoMap = OBJECT_MAPPER.readValue<Map<String, String>>(gagInfoJson)
 
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER$it",
+                            id = "${channel.id}$DELIMITER$it",
                             caption = fixCaption(gagInfoMap["headline"]),
                             publishedAt = parsePublishedDate(gagInfoMap),
                             attachments = listOf(AttachmentDTO(

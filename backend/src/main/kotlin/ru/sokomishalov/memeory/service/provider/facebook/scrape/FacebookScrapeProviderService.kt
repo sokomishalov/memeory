@@ -14,9 +14,9 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URL
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URL
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
 import java.util.*
 import java.util.UUID.randomUUID
 
@@ -34,7 +34,7 @@ class FacebookScrapeProviderService : ProviderService {
 
         return elements.aMap {
             MemeDTO(
-                    id = "${channel.id}$ID_DELIMITER${getIdByUserContentWrapper(it)}",
+                    id = "${channel.id}$DELIMITER${getIdByUserContentWrapper(it)}",
                     caption = getCaptionByUserContentWrapper(it),
                     publishedAt = getPublishedAtByUserContentWrapper(it),
                     attachments = getAttachmentsByUserContentWrapper(it)

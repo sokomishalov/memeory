@@ -16,7 +16,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.REDDIT
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.reddit.RedditCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URL
 import java.lang.System.currentTimeMillis
 import java.util.*
@@ -30,7 +30,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
     override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val response = webClient
                 .get()
-                .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${globalProps.fetchCount}")
+                .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${globalProps.fetchMaxCount}")
                 .exchange()
                 .awaitStrict()
                 .awaitBody<JsonNode>()
@@ -41,7 +41,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 .mapNotNull { it["data"] }
                 .aMap {
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${it.getValue("id")}",
+                            id = "${channel.id}$DELIMITER${it.getValue("id")}",
                             caption = it.getValue("title"),
                             publishedAt = Date(it.getValue("createdUtc")?.toLong()?.times(1000) ?: currentTimeMillis()),
                             attachments = listOf(AttachmentDTO(

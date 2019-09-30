@@ -11,7 +11,7 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
 
 /**
@@ -59,7 +59,7 @@ class ChannelController(private val channelService: ChannelService,
         return responseEntityOk()
                 .contentType(IMAGE_PNG)
                 .contentLength(logoByteArray.size.toLong())
-                .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${ID_DELIMITER}logo.png")
+                .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${DELIMITER}logo.png")
                 .body(logoByteArray)
     }
 }

@@ -17,6 +17,8 @@ import ru.sokomishalov.commons.core.consts.DEFAULT_DATE_FORMATTER
 import ru.sokomishalov.commons.core.images.checkImageUrl
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
+import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
+import ru.sokomishalov.commons.spring.locks.cluster.withClusterLock
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
@@ -24,9 +26,9 @@ import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import java.time.LocalDateTime.now
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 import javax.annotation.PostConstruct
 import kotlin.concurrent.schedule
-
 
 /**
  * @author sokomishalov
@@ -37,6 +39,7 @@ class MemesFetchingScheduler(
         private val props: MemeoryProperties,
         private val providerServices: List<ProviderService>,
         private val memeService: MemeService,
+        private val lockProvider: LockProvider,
         @Value("classpath:channels.yml")
         private val resource: Resource
 ) : Loggable {
@@ -51,34 +54,42 @@ class MemesFetchingScheduler(
         }
     }
 
-    // FIXME make clusterable
     @EventListener(ApplicationReadyEvent::class)
     fun startUpCoroutine() {
-        Timer(true).schedule(delay = 0, period = props.fetchIntervalMs) {
+        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
             log("About to fetch some new memes at ${now().format(DEFAULT_DATE_FORMATTER)}")
 
             GlobalScope.launch {
+                val totalFetched = AtomicInteger(0)
                 val channels = channelService.findAllEnabled()
 
                 channels.aForEach { channel ->
-                    val providerService = providerServices.find { it.sourceType() == channel.sourceType }
+                    lockProvider.withClusterLock(
+                            lockName = channel.id,
+                            lockAtLeastFor = props.fetchInterval
+                    ) {
+                        val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 
-                    val fetchedMemes = runCatching {
-                        providerService?.fetchMemesFromChannel(channel) ?: emptyList()
-                    }.getOrElse { emptyList() }
+                        val fetchedMemes = runCatching {
+                            providerService?.fetchMemesFromChannel(channel) ?: emptyList()
+                        }.getOrElse { emptyList() }
 
-                    val memesToSave = fetchedMemes
-                            .aFilter {
-                                it.attachments.all { att -> checkImageUrl(att.url) }
-                            }.aMap {
-                                it.apply {
-                                    it.channelId = channel.id
-                                    it.channelName = channel.name
+                        totalFetched.addAndGet(fetchedMemes.size)
+
+                        val memesToSave = fetchedMemes
+                                .aFilter {
+                                    it.attachments.all { att -> checkImageUrl(att.url) }
+                                }.aMap {
+                                    it.apply {
+                                        it.channelId = channel.id
+                                        it.channelName = channel.name
+                                    }
                                 }
-                            }
 
-                    memeService.saveMemesIfNotExist(memesToSave)
+                        memeService.saveMemesIfNotExist(memesToSave)
+                    }
                 }
+                log("Finished fetching memes at ${now().format(DEFAULT_DATE_FORMATTER)}, total fetched: $totalFetched")
             }
         }
     }

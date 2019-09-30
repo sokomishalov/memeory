@@ -17,7 +17,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.PINTEREST
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import java.util.Locale.ROOT
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
@@ -43,7 +43,7 @@ class PinterestScrapeProviderService : ProviderService, Loggable {
                 .aMap {
                     val imageInfo = it["images"]["orig"]
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${it["id"].asText()}",
+                            id = "${channel.id}$DELIMITER${it["id"].asText()}",
                             caption = it["description"]?.asText(),
                             publishedAt = dateFrom(zonedDateTimeParse(it["created_at"]?.asText(), dateTimeFormatter).toInstant()),
                             attachments = listOf(AttachmentDTO(

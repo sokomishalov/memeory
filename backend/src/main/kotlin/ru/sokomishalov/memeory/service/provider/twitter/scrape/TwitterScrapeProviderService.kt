@@ -16,7 +16,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
 import java.util.*
 
@@ -42,7 +42,7 @@ class TwitterScrapeProviderService : ProviderService {
                 }
                 .aMap {
                     MemeDTO(
-                            id = "${channel.id}$ID_DELIMITER${extractIdFromTweet(it)}",
+                            id = "${channel.id}$DELIMITER${extractIdFromTweet(it)}",
                             caption = extractCaptionFromTweet(it),
                             publishedAt = extractPublishedAtFromTweet(it),
                             attachments = extractAttachmentsFromTweet(it)

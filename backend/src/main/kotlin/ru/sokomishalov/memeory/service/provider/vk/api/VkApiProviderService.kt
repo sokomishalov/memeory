@@ -20,7 +20,7 @@ import ru.sokomishalov.memeory.enums.SourceType
 import ru.sokomishalov.memeory.enums.SourceType.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.service.provider.vk.VkCondition
-import ru.sokomishalov.memeory.util.consts.ID_DELIMITER
+import ru.sokomishalov.memeory.util.consts.DELIMITER
 import java.util.*
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE as IMAGE_ATTACHMENT
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO as VIDEO_ATTACHMENT
@@ -43,7 +43,7 @@ class VkApiProviderService(
                     .wall()
                     .get(vkServiceActor)
                     .domain(channel.uri)
-                    .count(props.fetchCount)
+                    .count(props.fetchMaxCount)
                     .execute()
         }
 
@@ -51,7 +51,7 @@ class VkApiProviderService(
 
         return posts.aMap {
             MemeDTO(
-                    id = "${channel.id}$ID_DELIMITER${it.id}",
+                    id = "${channel.id}$DELIMITER${it.id}",
                     caption = it.text,
                     publishedAt = Date(it.date.toLong().times(1000)),
                     attachments = getAttachmentsByWallPost(it)

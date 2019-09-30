@@ -25,7 +25,6 @@ import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.db.ProfileService
 import ru.sokomishalov.memeory.service.db.mongo.entity.Meme
 import ru.sokomishalov.memeory.service.db.mongo.repository.MemeRepository
-import java.time.Duration.ofDays
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy
 import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMapper
@@ -68,7 +67,7 @@ class MongoMemeService(
     fun startUp() {
         GlobalScope.launch(Unconfined) {
             val indexes = listOf(
-                    Index().on("createdAt", DESC).expire(ofDays(props.memeExpirationDays.toLong())),
+                    Index().on("createdAt", DESC).expire(props.memeLifeTime),
                     Index().on("publishedAt", DESC)
             )
             indexes.aForEach { template.indexOps(Meme::class.java).ensureIndex(it) }

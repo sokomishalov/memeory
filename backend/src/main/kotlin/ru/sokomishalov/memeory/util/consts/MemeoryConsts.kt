@@ -1,9 +1,9 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "SpellCheckingInspection")
 
 package ru.sokomishalov.memeory.util.consts
 
 // Strings
-const val ID_DELIMITER: String = ":"
+const val DELIMITER: String = ":"
 const val MONGO_ID_FIELD: String = "_id"
 const val MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN"
 
