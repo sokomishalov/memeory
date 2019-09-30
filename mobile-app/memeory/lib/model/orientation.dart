@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum MemesOrientation {
   VERTICAL,
   HORIZONTAL,
@@ -5,6 +7,7 @@ enum MemesOrientation {
 
 MemesOrientation orientationFromString(String str) {
   return MemesOrientation.values.firstWhere(
-      (e) => e.toString() == 'MemesOrientation.$str',
-      orElse: () => MemesOrientation.VERTICAL);
+    (e) => describeEnum(e) == str,
+    orElse: () => MemesOrientation.VERTICAL,
+  );
 }

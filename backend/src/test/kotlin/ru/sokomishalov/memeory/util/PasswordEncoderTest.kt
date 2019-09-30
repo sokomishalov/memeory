@@ -18,7 +18,7 @@ class PasswordEncoderTest : AbstractSpringTest() {
 
     @Test
     fun generatePassword() {
-        val password = "admin";
+        val password = "admin"
         val encodedPassword = passwordEncoder.encode(password)
 
         println("Encoded password: $encodedPassword")

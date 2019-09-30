@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.service.db.mongo.impl
 
-import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -65,7 +64,7 @@ class MongoMemeService(
 
     @EventListener(ApplicationReadyEvent::class)
     fun startUp() {
-        GlobalScope.launch(Unconfined) {
+        GlobalScope.launch {
             val indexes = listOf(
                     Index().on("createdAt", DESC).expire(props.memeLifeTime),
                     Index().on("publishedAt", DESC)

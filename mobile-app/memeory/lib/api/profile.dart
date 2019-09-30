@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
@@ -16,7 +17,7 @@ Future<dynamic> saveProfile() async {
   final body = json.encode({
     "id": await getToken(),
     "socialsMap": await getProfilesMap(),
-    "selectedOrientation": (await getPreferredOrientation()).toString(),
+    "selectedOrientation": describeEnum(await getPreferredOrientation()),
     "watchAllChannels": await getWatchAll(),
     "channels": await getSelectedChannels()
   });
@@ -32,11 +33,7 @@ Future<dynamic> saveProfile() async {
     savedUser["id"],
   );
   await setPreferredOrientation(
-    orientationFromString(
-      savedUser["selectedOrientation"]
-          .toString()
-          .replaceAll("MemesOrientation.", ""),
-    ),
+    orientationFromString(savedUser["selectedOrientation"].toString()),
   );
   await setWatchAll(
     savedUser["watchAllChannels"],

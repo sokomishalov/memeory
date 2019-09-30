@@ -175,6 +175,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
         Widget widget;
         switch (mode) {
           case LoadStatus.idle:
+          case LoadStatus.canLoading:
           case LoadStatus.loading:
             widget = Text(LOADING_MEMES);
             break;
