@@ -1,5 +1,6 @@
 # Memeory
-[![Apache License 2](https://img.shields.io/badge/license-ASF2-purple.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Apache License 2](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![codebeat badge](https://codebeat.co/badges/1232b163-6bdf-4f75-951f-9252af33cdaf)](https://codebeat.co/projects/github-com-sokomishalov-memeory-master)
 
 This repository contains:
  - [backend](./backend) (Kotlin + Spring boot) 
