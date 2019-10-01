@@ -12,4 +12,5 @@ class MemeoryProperties {
     var fetchMaxCount: Int = 100
     var fetchInterval: Duration = ofMinutes(5)
     var memeLifeTime: Duration = ofDays(10)
+    var admins: List<AdminUser> = emptyList()
 }
