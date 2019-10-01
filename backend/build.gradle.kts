@@ -9,6 +9,11 @@ plugins {
     kotlin("kapt") version "1.3.50"
 }
 
+apply {
+    plugin("kotlin")
+    plugin<IdeaPlugin>()
+}
+
 group = "ru.sokomishalov"
 version = "0.0.1"
 java.sourceCompatibility = VERSION_11

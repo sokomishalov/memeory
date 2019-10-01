@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.collections.aMap
+import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
@@ -76,7 +77,11 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
     override fun sourceType(): SourceType = REDDIT
 
     private fun JsonNode?.getValue(field: String): String? {
-        return this?.get(field)?.asText()?.ifBlank { null }
+        return this
+                ?.get(field)
+                ?.asText()
+                ?.replace("null", EMPTY)
+                ?.ifBlank { null }
     }
 
     private fun JsonNode?.elementsToList(): List<JsonNode> {
