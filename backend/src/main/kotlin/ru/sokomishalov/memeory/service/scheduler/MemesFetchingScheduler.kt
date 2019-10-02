@@ -12,7 +12,6 @@ import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aFilter
 import ru.sokomishalov.commons.core.collections.aForEach
-import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.DEFAULT_DATE_FORMATTER
 import ru.sokomishalov.commons.core.images.checkImageUrl
 import ru.sokomishalov.commons.core.log.Loggable
@@ -55,7 +54,7 @@ class MemesFetchingScheduler(
     }
 
     @EventListener(ApplicationReadyEvent::class)
-    fun startUpCoroutine() {
+    fun fetchMemes() {
         Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
             log("About to fetch some new memes at ${now().format(DEFAULT_DATE_FORMATTER)}")
 
@@ -78,8 +77,12 @@ class MemesFetchingScheduler(
 
                         val memesToSave = fetchedMemes
                                 .aFilter {
-                                    it.attachments.all { att -> checkImageUrl(att.url) }
-                                }.aMap {
+                                    when {
+                                        props.checkUrls -> it.attachments.all { att -> checkImageUrl(att.url) }
+                                        else -> true
+                                    }
+                                }
+                                .map {
                                     it.apply {
                                         it.channelId = channel.id
                                         it.channelName = channel.name

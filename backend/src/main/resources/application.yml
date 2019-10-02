@@ -11,7 +11,7 @@ spring:
 
 memeory:
   fetch-max-count: 100
-  fetch-interval: 5m
+  fetch-interval: 20m
   meme-life-time: 10d
 
 provider:

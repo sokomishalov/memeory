@@ -1,10 +1,5 @@
-body {
-    text-align: center;
-}
-
-.App-header {
-    background-color: #000;
-    height: 160px;
-    padding: 20px;
-    color: white;
+.memeory {
+    min-height: 95vh;
+    height: 100%;
+    background-color: rgba(26, 26, 27, 1);
 }

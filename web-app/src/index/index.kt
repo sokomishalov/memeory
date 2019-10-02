@@ -8,8 +8,5 @@ import kotlin.browser.document
 
 fun main() {
     requireAll(require.context("src", true, js("/\\.css$/")))
-
-    render(document.getElementById("root")) {
-        app()
-    }
+    render(document.getElementById("root")) { app() }
 }

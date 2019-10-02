@@ -1,0 +1,12 @@
+.header {
+    background-color: #000;
+    height: 5vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-text {
+
+}
