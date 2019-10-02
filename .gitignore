@@ -123,6 +123,8 @@ application-secret.yml
 !.idea/dictionaries/mikhael.xml
 !.idea/modules/root.iml
 !.idea/modules/backend.iml
+!.idea/modules/backend.main.iml
+!.idea/modules/backend.test.iml
 !.idea/modules/web-app.iml
 !.idea/modules/mobile-app.iml
 !.idea/modules.xml
