@@ -18,15 +18,20 @@ class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(prop
 
     override fun RBuilder.render() {
         div("meme-container") {
-            div("meme-container-channel") {
-                +props.meme.channelName.orEmpty()
+            div("meme-container-header") {
+                div("meme-container-header-logo") {
+
+                }
+                div("meme-container-header-channel") {
+                    +props.meme.channelName.orEmpty()
+                    +props.meme.publishedAt.toString()
+                }
+
             }
 
             div("meme-container-caption") {
                 +props.meme.caption.orEmpty()
             }
-
-
         }
     }
 }

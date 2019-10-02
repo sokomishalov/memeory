@@ -1,0 +1,12 @@
+.meme-container {
+    margin: 0 25vw;
+    text-align: left;
+    background-color: rgba(26, 26, 27, 1);
+    color: white;
+
+    &-header {
+        display: flex;
+        align-items: center;
+        height: 20px;
+    }
+}
