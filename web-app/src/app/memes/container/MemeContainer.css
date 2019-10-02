@@ -1,0 +1,12 @@
+.meme-container {
+    margin: 0 25vw;
+    text-align: left;
+}
+
+.meme-container-channel {
+    color: purple;
+}
+
+.meme-container-caption {
+    color: yellow;
+}

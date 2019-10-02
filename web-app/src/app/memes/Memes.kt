@@ -4,6 +4,7 @@ package app.memes
  * @author sokomishalov
  */
 import api.loadMemes
+import app.memes.container.memeContainer
 import dto.Meme
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -36,13 +37,7 @@ class Memes : RComponent<RProps, Memes.State>() {
 
     override fun RBuilder.render() {
         div("memes") {
-            div("memes-caption") {
-                state.memes.map {
-                    div {
-                        +"${it.caption}"
-                    }
-                }
-            }
+            state.memes.map { memeContainer(it) }
         }
     }
 }
