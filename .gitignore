@@ -118,3 +118,12 @@ local.properties
 
 ### Spring ###
 application-secret.yml
+
+### Exceptions
+!.idea/dictionaries/mikhael.xml
+!.idea/modules/root.iml
+!.idea/modules/backend.iml
+!.idea/modules/web-app.iml
+!.idea/modules/mobile-app.iml
+!.idea/modules.xml
+!.idea/libraries/[Kk]otlin*
