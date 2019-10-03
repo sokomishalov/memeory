@@ -3,8 +3,8 @@
     background-color: rgba(26, 26, 27, 1);
     min-width: 300px;
     color: white;
-    margin: 0 25vw 50px;
-    border-radius: 20px;
+    margin: 0 25vw 20px;
+    border-radius: 10px;
 
     &-header {
         display: flex;
@@ -13,7 +13,11 @@
         padding: 10px;
 
         &-channel {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 10px;
+            height: 30px;
 
             &-name {
                 font-size: 12px;
@@ -21,8 +25,8 @@
 
             &-ago {
                 font-size: 10px;
+                color: grey;
             }
-
         }
     }
 

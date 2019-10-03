@@ -11,7 +11,9 @@ import react.RProps
 import react.RState
 import react.dom.div
 import styled.css
+import styled.styledDiv
 import styled.styledImg
+import util.http.buildLogoUrl
 import util.time.timeAgo
 
 class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(props) {
@@ -23,8 +25,16 @@ class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(prop
     override fun RBuilder.render() {
         div("meme") {
             div("meme-header") {
-                div("meme-header-logo") {
-
+                styledDiv {
+                    css {
+                        width = 30.px
+                        height = 30.px
+                        borderRadius = 5.px
+                        background = "url(${buildLogoUrl(props.meme.channelId.orEmpty())})"
+                        backgroundPosition = "center"
+                        backgroundSize = "contain"
+                        objectFit = ObjectFit.contain
+                    }
                 }
                 div("meme-header-channel") {
                     div("meme-header-channel-name") {
@@ -50,6 +60,8 @@ class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(prop
                                     objectFit = ObjectFit.contain
                                     width = 100.pct
                                     height = 100.pct
+                                    borderBottomLeftRadius = 10.px
+                                    borderBottomRightRadius = 10.px
                                 }
                             }
                         }

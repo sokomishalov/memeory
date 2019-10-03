@@ -33,5 +33,5 @@ suspend fun <T> request(
 }
 
 fun buildLogoUrl(channelId: String): String {
-    return "${EnvHolder.backendUrl}/channels/${channelId}"
+    return "${EnvHolder.backendUrl}/channels/logo/${channelId}"
 }
