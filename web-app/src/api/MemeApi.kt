@@ -10,4 +10,4 @@ import util.http.request
 suspend fun loadMemes(
         pageNumber: Int = 0,
         pageSize: Int = 100
-): List<Meme> = request<Array<Meme>>("/memes/page/$pageNumber/$pageSize").toList()
+): Array<Meme> = request("/memes/page/$pageNumber/$pageSize")

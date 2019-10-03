@@ -1,3 +1,5 @@
+@file:Suppress("ArrayInDataClass")
+
 package dto
 
 import kotlin.js.Date
@@ -8,5 +10,5 @@ data class Meme(
         var channelName: String? = null,
         var caption: String? = null,
         var publishedAt: Date = Date(),
-        var attachments: List<Attachment> = emptyList()
+        var attachments: Array<Attachment> = emptyArray()
 )

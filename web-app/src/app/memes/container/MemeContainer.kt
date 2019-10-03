@@ -4,11 +4,15 @@ package app.memes.container
  * @author sokomishalov
  */
 import dto.Meme
+import kotlinx.css.*
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.div
+import styled.css
+import styled.styledImg
+import util.time.timeAgo
 
 class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(props) {
 
@@ -17,20 +21,42 @@ class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(prop
     ) : RProps
 
     override fun RBuilder.render() {
-        div("meme-container") {
-            div("meme-container-header") {
-                div("meme-container-header-logo") {
+        div("meme") {
+            div("meme-header") {
+                div("meme-header-logo") {
 
                 }
-                div("meme-container-header-channel") {
-                    +props.meme.channelName.orEmpty()
-                    +props.meme.publishedAt.toString()
+                div("meme-header-channel") {
+                    div("meme-header-channel-name") {
+                        +props.meme.channelName.orEmpty()
+                    }
+                    div("meme-header-channel-ago") {
+                        +timeAgo(props.meme.publishedAt)
+                    }
                 }
 
             }
 
-            div("meme-container-caption") {
+            div("meme-caption") {
                 +props.meme.caption.orEmpty()
+            }
+
+            props.meme.attachments.map {
+                div("meme-attachment") {
+                    when (it.type) {
+                        "IMAGE" -> {
+                            styledImg(src = it.url) {
+                                css {
+                                    objectFit = ObjectFit.contain
+                                    width = 100.pct
+                                    height = 100.pct
+                                }
+                            }
+                        }
+                        "VIDEO" -> div { +"video" }
+                        "NONE" -> div { +"none" }
+                    }
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package ru.sokomishalov.memeory.web
 
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.http.HttpHeaders.ACCESS_CONTROL_MAX_AGE
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.IMAGE_PNG
 import org.springframework.http.ResponseEntity
@@ -60,6 +61,7 @@ class ChannelController(private val channelService: ChannelService,
                 .contentType(IMAGE_PNG)
                 .contentLength(logoByteArray.size.toLong())
                 .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${DELIMITER}logo.png")
+                .header(ACCESS_CONTROL_MAX_AGE, "31536000", "public")
                 .body(logoByteArray)
     }
 }

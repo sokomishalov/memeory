@@ -15,12 +15,12 @@ class Memes : RComponent<RProps, Memes.State>() {
 
     class State(
             var page: Int,
-            var memes: List<Meme>
+            var memes: Array<Meme>
     ) : RState
 
     override fun State.init() {
         page = 0
-        memes = emptyList()
+        memes = emptyArray()
     }
 
     override fun componentDidMount() {

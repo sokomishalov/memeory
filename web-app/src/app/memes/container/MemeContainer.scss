@@ -1,12 +1,37 @@
-.meme-container {
-    margin: 0 25vw;
+.meme {
     text-align: left;
     background-color: rgba(26, 26, 27, 1);
+    min-width: 300px;
     color: white;
+    margin: 0 25vw 50px;
+    border-radius: 20px;
 
     &-header {
         display: flex;
         align-items: center;
-        height: 20px;
+        justify-content: flex-start;
+        padding: 10px;
+
+        &-channel {
+            display: block;
+
+            &-name {
+                font-size: 12px;
+            }
+
+            &-ago {
+                font-size: 10px;
+            }
+
+        }
+    }
+
+    &-caption {
+        padding: 0 10px 10px;
+        margin-top: 10px;
+    }
+
+    &-attachment {
+        color: white;
     }
 }

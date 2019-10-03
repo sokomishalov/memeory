@@ -1,9 +1,7 @@
 package dto
 
-import dto.AttachmentType.NONE
-
 data class Attachment(
-        var url: String? = "",
-        var type: AttachmentType? = NONE,
+        var url: String,
+        var type: String = "NONE",
         var aspectRatio: Double? = null
 )

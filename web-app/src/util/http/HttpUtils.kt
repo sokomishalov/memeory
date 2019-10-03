@@ -31,3 +31,7 @@ suspend fun <T> request(
         else -> throw raiseError(res)
     }
 }
+
+fun buildLogoUrl(channelId: String): String {
+    return "${EnvHolder.backendUrl}/channels/${channelId}"
+}
