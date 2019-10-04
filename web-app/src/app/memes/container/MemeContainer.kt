@@ -3,6 +3,7 @@ package app.memes.container
 /**
  * @author sokomishalov
  */
+import app.common.flexDiv
 import dto.Meme
 import kotlinx.css.*
 import react.RBuilder
@@ -25,26 +26,27 @@ class MemeContainer(props: Props) : RComponent<MemeContainer.Props, RState>(prop
     override fun RBuilder.render() {
         div("meme") {
             div("meme-header") {
-                styledDiv {
-                    css {
-                        width = 30.px
-                        height = 30.px
-                        borderRadius = 5.px
-                        background = "url(${buildLogoUrl(props.meme.channelId.orEmpty())})"
-                        backgroundPosition = "center"
-                        backgroundSize = "contain"
-                        objectFit = ObjectFit.contain
+                flexDiv {
+                    styledDiv {
+                        css {
+                            width = 30.px
+                            height = 30.px
+                            borderRadius = 5.px
+                            background = "url(${buildLogoUrl(props.meme.channelId.orEmpty())})"
+                            backgroundPosition = "center"
+                            backgroundSize = "contain"
+                            objectFit = ObjectFit.contain
+                        }
+                    }
+                    div("meme-header-channel") {
+                        div("meme-header-channel-name") {
+                            +props.meme.channelName.orEmpty()
+                        }
+                        div("meme-header-channel-ago") {
+                            +timeAgo(props.meme.publishedAt)
+                        }
                     }
                 }
-                div("meme-header-channel") {
-                    div("meme-header-channel-name") {
-                        +props.meme.channelName.orEmpty()
-                    }
-                    div("meme-header-channel-ago") {
-                        +timeAgo(props.meme.publishedAt)
-                    }
-                }
-
             }
 
             div("meme-caption") {
