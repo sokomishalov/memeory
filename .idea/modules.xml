@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile-app.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/root.iml" filepath="$PROJECT_DIR$/.idea/modules/root.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/web-app.iml" filepath="$PROJECT_DIR$/.idea/modules/web-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/memeory.iml" filepath="$PROJECT_DIR$/.idea/memeory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/memeory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/memeory.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/memeory.test.iml" filepath="$PROJECT_DIR$/.idea/modules/memeory.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ru.sokomishalov.memeory.iml" filepath="$PROJECT_DIR$/.idea/modules/ru.sokomishalov.memeory.iml" />
     </modules>
   </component>
 </project>

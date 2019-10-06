@@ -1,0 +1,148 @@
+@for $i from 0 through 300 {
+    .m-#{$i} {
+        margin: #{$i}px;
+    }
+    .mt-#{$i} {
+        margin-top: #{$i}px;
+    }
+    .mb-#{$i} {
+        margin-bottom: #{$i}px;
+    }
+    .ml-#{$i} {
+        margin-left: #{$i}px;
+    }
+    .mr-#{$i} {
+        margin-right: #{$i}px;
+    }
+
+    .p-#{$i} {
+        padding: #{$i}px;
+    }
+    .pt-#{$i} {
+        padding-top: #{$i}px;
+    }
+    .pb-#{$i} {
+        padding-bottom: #{$i}px;
+    }
+    .pl-#{$i} {
+        padding-left: #{$i}px;
+    }
+    .pr-#{$i} {
+        padding-right: #{$i}px;
+    }
+}
+
+@for $i from 0 through 500 {
+    .w-#{$i} {
+        width: #{$i}px;
+    }
+    .h-#{$i} {
+        height: #{$i}px;
+    }
+    .max-w-#{$i} {
+        max-width: #{$i}px;
+    }
+    .max-h-#{$i} {
+        max-height: #{$i}px;
+    }
+    .min-w-#{$i} {
+        min-width: #{$i}px;
+    }
+    .min-h-#{$i} {
+        min-height: #{$i}px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .fs-#{$i} {
+        font-size: #{$i}px;
+    }
+}
+
+$colors: black red green blue pink magenta red orange yellow gold cyan lime green blue purple white;
+
+@each $c in $colors {
+    .color-#{$c} {
+        color: $c;
+    }
+    .bg-#{$c} {
+        background-color: $c;
+    }
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-centered-x {
+    display: flex;
+    align-items: center;
+}
+
+.flex-centered-y {
+    display: flex;
+    justify-content: center;
+}
+
+.flex-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.invisible {
+    display: none !important;
+}
+
+.block {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.semibold {
+    font-weight: 500;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
