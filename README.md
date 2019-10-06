@@ -1,5 +1,5 @@
 # Memeory
-[![Apache License 2](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![MIT license](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![codebeat badge](https://codebeat.co/badges/1232b163-6bdf-4f75-951f-9252af33cdaf)](https://codebeat.co/projects/github-com-sokomishalov-memeory-master)
 
 This repository contains:
@@ -27,7 +27,7 @@ MongoDB is current storage of all information so far.
 
 ### Mobile app
 
-Mobile app allows to:
+Mobile app so far allows to:
  - authorize with either google or facebook for sharing user 
  customizations between devices
  - switch between light and dark themes
@@ -37,5 +37,5 @@ Mobile app allows to:
 
 ### Web app
 
-Web app allows to:
+Web app so far allows to:
  - laugh out loud every day :)

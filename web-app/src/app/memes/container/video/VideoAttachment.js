@@ -1,7 +1,6 @@
 import React from 'react';
+import ReactPlayer from 'react-player'
 
 export const VideoAttachment = ({attachment}) => (
-    <div>
-        {attachment["url"]}
-    </div>
+    <ReactPlayer url={attachment["url"]}/>
 );
