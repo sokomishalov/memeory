@@ -4,7 +4,8 @@
 
 This repository contains:
  - [backend](./backend) (Kotlin + Spring boot) 
- - [mobile application](./mobile-app) (Flutter) 
+ - [mobile application](./mobile-app) (Flutter)
+ - [web application](./web-app) (React JS) 
 
 This is just another pet project. There is no rocket science inside.
 
@@ -32,4 +33,9 @@ Mobile app allows to:
  - switch between light and dark themes
  - choose memes' scrolling axis
  - choose channels
+ - laugh out loud every day :)
+
+### Web app
+
+Web app allows to:
  - laugh out loud every day :)
