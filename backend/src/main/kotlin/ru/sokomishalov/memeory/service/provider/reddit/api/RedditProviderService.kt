@@ -44,7 +44,8 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                     MemeDTO(
                             id = "${channel.id}$DELIMITER${it.getValue("id")}",
                             caption = it.getValue("title"),
-                            publishedAt = Date(it.getValue("createdUtc")?.toLong()?.times(1000) ?: currentTimeMillis()),
+                            publishedAt = Date(it.getValue("created_utc")?.toBigDecimal()?.longValueExact()?.times(1000)
+                                    ?: currentTimeMillis()),
                             attachments = listOf(AttachmentDTO(
                                     url = it.getValue("url"),
                                     type = when {
@@ -68,8 +69,8 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 .awaitStrict()
                 .awaitBody<JsonNode>()
 
-        val communityIcon = response.getValue("communityIcon")
-        val imgIcon = response.getValue("iconImg")
+        val communityIcon = response["data"].getValue("community_icon")
+        val imgIcon = response["data"].getValue("icon_img")
 
         return communityIcon?.ifBlank { imgIcon }.orEmpty()
     }

@@ -48,7 +48,8 @@ class VkScrapeProviderService : ProviderService, Loggable {
     override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
         return getWebPage("$VK_URL/${channel.uri}")
                 .getSingleElementByClass("page_cover_image")
-                .getSingleElementByClass("img")
+                .getElementsByTag("img")
+                .first()
                 .attr("src")
     }
 
