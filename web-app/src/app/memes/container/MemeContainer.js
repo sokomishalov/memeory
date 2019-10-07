@@ -5,8 +5,20 @@ import {ImageAttachment} from "./image/ImageAttachment";
 import {timeAgo} from "../../../util/time/time";
 import {ChannelLogo} from "../../common/logo/ChannelLogo";
 import _ from "lodash"
+import {Carousel} from "antd";
 
 export const MemeContainer = ({meme}) => {
+
+    const renderAttachments = (attachments) => {
+        const size = _.size(attachments);
+        if (size > 1) {
+            return <Carousel autoplay>{_.map(attachments, renderAttachment)}</Carousel>
+        } else if (size === 1) {
+            return renderAttachment(_.head(attachments))
+        } else {
+            return <div/>
+        }
+    };
 
     const renderAttachment = (a) => {
         switch (a["type"]) {
@@ -41,11 +53,7 @@ export const MemeContainer = ({meme}) => {
                 {meme["caption"]}
             </div>
 
-            {_.map(meme["attachments"], (a) =>
-                <div key={a["url"]} className="meme-attachment">
-                    {renderAttachment(a)}
-                </div>
-            )}
+            {renderAttachments(meme["attachments"])}
         </div>
     );
 };

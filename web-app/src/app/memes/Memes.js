@@ -7,10 +7,10 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 export const Memes = () => {
     const [memes, setMemes] = useState([]);
-    const [hasMore, setHasMore] = useState([true]);
+    const [hasMore, setHasMore] = useState(true);
 
     const loadMore = async (page) => {
-        const newMemes = await getMemesPage(page, 5);
+        const newMemes = await getMemesPage(page);
         if (!_.isEmpty(newMemes)) {
             setMemes(_.concat(memes, newMemes));
         } else {

@@ -1,0 +1,9 @@
+@import "~antd/dist/antd.css";
+
+.ant-carousel .slick-dots li {
+    background: aqua !important;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+    background: aqua !important;
+}
