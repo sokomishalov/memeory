@@ -1,29 +1,32 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import "./Memes.css"
 import {getMemesPage} from "../../api/memes";
 import {MemeContainer} from "./container/MemeContainer";
 import _ from "lodash";
+import InfiniteScroll from 'react-infinite-scroller';
 
 export const Memes = () => {
-    const [page, setPage] = useState(0);
     const [memes, setMemes] = useState([]);
+    const [hasMore, setHasMore] = useState([true]);
 
-    useEffect(() => {
-        loadMore()
-    }, [page]);
+    const loadMore = async (page) => {
+        const newMemes = await getMemesPage(page, 5);
+        if (!_.isEmpty(newMemes)) {
+            setMemes(_.concat(memes, newMemes));
+        } else {
+            setHasMore(false)
+        }
 
-    const loadMore = async () => {
-        const newMemes = await getMemesPage(page);
-        setMemes([...newMemes, ...memes]);
-    };
-
-    const nextPage = () => {
-        setPage(page + 1);
     };
 
     return (
         <div className="memes">
-            {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
+            <InfiniteScroll pageStart={0}
+                            loadMore={loadMore}
+                            hasMore={hasMore}
+                            loader={<div className="loader" key={0}>Подождите, мемы грузятся</div>}>
+                {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
+            </InfiniteScroll>
         </div>
     );
 };
