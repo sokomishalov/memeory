@@ -123,3 +123,4 @@ application-secret.yml
 
 ### Exceptions
 !.idea/dictionaries/mikhael.xml
+!web-app/public/fonts/font.css
