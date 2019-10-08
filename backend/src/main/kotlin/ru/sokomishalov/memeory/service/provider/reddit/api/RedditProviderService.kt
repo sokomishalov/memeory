@@ -49,7 +49,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                             attachments = listOf(AttachmentDTO(
                                     url = it.getValue("url"),
                                     type = when {
-                                        it.getValue("media") != null -> VIDEO
+                                        it["media"].isEmpty.not() -> VIDEO
                                         it.getValue("url") != null -> IMAGE
                                         else -> NONE
                                     },

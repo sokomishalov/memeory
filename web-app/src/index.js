@@ -4,6 +4,7 @@ import './app/common/styles/index.css';
 import './app/common/styles/boilerplates.css'
 import './app/common/styles/antd.css';
 import './app/common/styles/antd-mobile.css';
+import 'react-aspect-ratio/aspect-ratio.css'
 import * as sw from './app/sw/sw';
 import {App} from "./app/App";
 

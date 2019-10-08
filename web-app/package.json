@@ -11,6 +11,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "react": "^16.10.2",
+    "react-aspect-ratio": "~1.0.41",
     "react-device-detect": "^1.9.10",
     "react-dom": "^16.10.2",
     "react-hooks-async": "^3.4.2",

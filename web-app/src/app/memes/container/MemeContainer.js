@@ -6,6 +6,8 @@ import {timeAgo} from "../../../util/time/time";
 import {ChannelLogo} from "../../common/logo/ChannelLogo";
 import _ from "lodash"
 import {Carousel} from "antd";
+import {AspectRatio} from "react-aspect-ratio";
+import {MEME_BORDER_RADIUS} from "../../../util/consts/consts";
 
 export const MemeContainer = ({meme}) => {
 
@@ -32,8 +34,14 @@ export const MemeContainer = ({meme}) => {
         }
     };
 
+    // noinspection JSCheckFunctionSignatures
+    const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0);
+
     return (
-        <div className="meme">
+        <div className="meme"
+             style={{
+                 borderRadius: MEME_BORDER_RADIUS
+             }}>
             <div className="meme-header">
 
                 <div className="flex">
@@ -53,7 +61,14 @@ export const MemeContainer = ({meme}) => {
                 {meme["caption"]}
             </div>
 
-            {renderAttachments(meme["attachments"])}
+            <AspectRatio ratio={attachmentsAspectRatio}
+                         style={{
+                             borderBottomRightRadius: MEME_BORDER_RADIUS,
+                             borderBottomLeftRadius: MEME_BORDER_RADIUS,
+                             overflow: "hidden"
+                         }}>
+                {renderAttachments(meme["attachments"])}
+            </AspectRatio>
         </div>
     );
 };

@@ -2,14 +2,12 @@ import React from 'react';
 
 export const ImageAttachment = ({attachment}) => (
     <img src={attachment["url"]}
-         height={100}
-         width={100 * attachment["aspectRatio"]}
+         width={400}
+         height={400}
          style={{
              objectFit: "contain",
              width: "100%",
-             height: "auto",
-             borderBottomRightRadius: 10,
-             borderBottomLeftRadius: 10
+             height: "100%"
          }}
          alt="-1"/>
 );
