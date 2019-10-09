@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./LoginModal.css"
 import {Button, Modal} from 'antd';
 import "firebase/auth";
@@ -31,6 +31,13 @@ const LoginModal = ({trigger, user, signInWithGoogle, signInWithFacebook}) => {
     const openModal = () => setVisible(true)
     const closeModal = () => setVisible(false)
 
+    useEffect(() => {
+        if (isLoggedIn()) {
+            // noinspection JSIgnoredPromiseFromCall
+            saveProfile()
+        }
+    }, [user]);
+
     _.forEach(_.get(user, "providerData", []), (p) => {
         switch (p["providerId"]) {
             case GOOGLE_PROVIDER:
@@ -46,10 +53,6 @@ const LoginModal = ({trigger, user, signInWithGoogle, signInWithFacebook}) => {
                 break;
         }
     })
-
-    if (isLoggedIn()) {
-        saveProfile()
-    }
 
     return (
         <div>
