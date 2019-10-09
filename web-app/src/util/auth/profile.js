@@ -18,7 +18,7 @@ export const getUserDisplayName = (orElse = "") => {
     return _.defaultTo(_.head(names), orElse)
 }
 
-export const getAccountDisplayName = (key, orElse = "") => _.get(getAccount(key), "name", orElse)
+export const getAccountDisplayName = (key, orElse = "") => _.get(getAccount(key), "displayName", orElse)
 
 export const getSocialsMap = () => {
     let result = {};

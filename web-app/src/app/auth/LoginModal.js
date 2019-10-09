@@ -33,20 +33,11 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
 
     _.forEach(_.get(user, "providerData", []), (p) => {
         const providerId = p["providerId"]
-        if (_.eq(providerId, GOOGLE_PROVIDER)) {
-            setAccount(providerId, {
-                "id": p.uid,
-                "name": p.displayName,
-                "email": p.email,
-                "photo": p.photoURL,
-            })
-        } else if (_.eq(providerId, FACEBOOK_PROVIDER)) {
-            setAccount(providerId, p)
-        }
+        setAccount(providerId, p)
     })
 
     useEffect(() => {
-        if (isLoggedIn() && !_.isEmpty(error)) {
+        if (isLoggedIn()) {
             // noinspection JSIgnoredPromiseFromCall
             saveProfile()
         } else {
