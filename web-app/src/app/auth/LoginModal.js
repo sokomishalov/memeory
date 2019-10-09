@@ -24,19 +24,12 @@ const Firebase = {
     }
 };
 
-const LoginModal = ({trigger, user, signInWithGoogle, signInWithFacebook}) => {
+const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
 
     const [visible, setVisible] = useState(false);
 
     const openModal = () => setVisible(true)
     const closeModal = () => setVisible(false)
-
-    useEffect(() => {
-        if (isLoggedIn()) {
-            // noinspection JSIgnoredPromiseFromCall
-            saveProfile()
-        }
-    }, [user]);
 
     _.forEach(_.get(user, "providerData", []), (p) => {
         switch (p["providerId"]) {
@@ -53,6 +46,13 @@ const LoginModal = ({trigger, user, signInWithGoogle, signInWithFacebook}) => {
                 break;
         }
     })
+
+    useEffect(() => {
+        if (isLoggedIn() && !_.isEmpty(error)) {
+            // noinspection JSIgnoredPromiseFromCall
+            saveProfile()
+        }
+    }, [user]);
 
     return (
         <div>
