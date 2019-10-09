@@ -32,18 +32,16 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
     const closeModal = () => setVisible(false)
 
     _.forEach(_.get(user, "providerData", []), (p) => {
-        switch (p["providerId"]) {
-            case GOOGLE_PROVIDER:
-                setAccount(GOOGLE_PROVIDER, {
-                    "id": p.uid,
-                    "name": p.displayName,
-                    "email": p.email,
-                    "photo": p.photoURL,
-                })
-                break;
-            case FACEBOOK_PROVIDER:
-                setAccount(FACEBOOK_PROVIDER, p)
-                break;
+        const providerId = p["providerId"]
+        if (_.eq(providerId, GOOGLE_PROVIDER)) {
+            setAccount(providerId, {
+                "id": p.uid,
+                "name": p.displayName,
+                "email": p.email,
+                "photo": p.photoURL,
+            })
+        } else if (_.eq(providerId, FACEBOOK_PROVIDER)) {
+            setAccount(providerId, p)
         }
     })
 
@@ -51,8 +49,10 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
         if (isLoggedIn() && !_.isEmpty(error)) {
             // noinspection JSIgnoredPromiseFromCall
             saveProfile()
+        } else {
+            console.log(error)
         }
-    }, [user]);
+    }, [user, error]);
 
     return (
         <div>
