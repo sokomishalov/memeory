@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,18 +6,14 @@ import 'package:gradient_text/gradient_text.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/components/message/messages.dart';
+import 'package:memeory/model/user.dart';
 import 'package:memeory/strings/ru.dart';
 import 'package:memeory/util/consts.dart';
-import 'package:memeory/util/http.dart';
 import 'package:pedantic/pedantic.dart';
 
-final _googleSignIn = GoogleSignIn(
-  scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
-);
-
-final _facebookSignIn = FacebookLogin();
-const facebookBaseUrl =
-    'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email';
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FacebookLogin _facebookSignIn = FacebookLogin();
 
 class SocialPreferences extends StatefulWidget {
   @override
@@ -26,8 +21,8 @@ class SocialPreferences extends StatefulWidget {
 }
 
 class _SocialPreferencesState extends State<SocialPreferences> {
-  Map<String, dynamic> _googleProfile;
-  Map<String, dynamic> _facebookProfile;
+  ProviderAuth _googleProfile;
+  ProviderAuth _facebookProfile;
 
   @override
   void initState() {
@@ -44,11 +39,12 @@ class _SocialPreferencesState extends State<SocialPreferences> {
           Container(
             child: RaisedButton(
               color: Colors.white,
-              onPressed: () async => await _googleAuth(context),
+              onPressed: () async =>
+                  await _providerSignIn(GOOGLE_PROVIDER, context),
               child: GradientText(
-                _googleProfile == null
+                _googleProfile?.displayName == null
                     ? AUTH_GOOGLE
-                    : _googleProfile["name"] ?? EMPTY,
+                    : _googleProfile.displayName,
                 gradient: LinearGradient(colors: [
                   Color.fromRGBO(234, 67, 53, 1),
                   Color.fromRGBO(251, 188, 5, 1),
@@ -63,11 +59,12 @@ class _SocialPreferencesState extends State<SocialPreferences> {
             padding: EdgeInsets.only(top: 15),
             child: RaisedButton(
               color: Color.fromRGBO(66, 103, 178, 1),
-              onPressed: () async => await _facebookAuth(context),
+              onPressed: () async =>
+                  await _providerSignIn(FACEBOOK_PROVIDER, context),
               child: Text(
-                _facebookProfile == null
+                _facebookProfile?.displayName == null
                     ? AUTH_FACEBOOK
-                    : _facebookProfile["name"] ?? EMPTY,
+                    : _facebookProfile.displayName,
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -80,8 +77,8 @@ class _SocialPreferencesState extends State<SocialPreferences> {
   }
 
   _refreshProfiles() async {
-    var googleProfile = await getGoogleProfile();
-    var facebookProfile = await getFacebookProfile();
+    var googleProfile = await getSocialsAccount(GOOGLE_PROVIDER);
+    var facebookProfile = await getSocialsAccount(FACEBOOK_PROVIDER);
 
     setState(() {
       _facebookProfile = facebookProfile;
@@ -89,57 +86,45 @@ class _SocialPreferencesState extends State<SocialPreferences> {
     });
   }
 
-  _googleAuth(context) async {
+  _providerSignIn(String provider, BuildContext context) async {
     try {
-      var signIn = await _googleSignIn.signIn();
+      AuthCredential credential = await getAuthCredential(provider);
 
-      if (signIn == null) throw new FlutterError(EMPTY);
+      final FirebaseUser profile = (await _auth.signInWithCredential(credential)).user;
 
-      var profile = {
-        "id": signIn?.id,
-        "name": signIn?.displayName,
-        "email": signIn?.email,
-        "photo": signIn?.photoUrl,
-      };
-      await setGoogleProfile(profile);
+      if (profile == null) throw new FlutterError(EMPTY);
 
+      var providerAuth = ProviderAuth.fromFirebaseUser(profile);
+      await setSocialsAccount(provider, providerAuth);
       await saveProfile();
-
       await _refreshProfiles();
 
-      successToast("$WELCOME, ${signIn?.email}", context);
+      successToast("$WELCOME, ${providerAuth.displayName}", context);
     } catch (e) {
       debugPrint(e.toString());
-      errorToast(UNSUCCESSFUL_AUTH_GOOGLE, context);
+      errorToast(UNSUCCESSFUL_AUTH, context);
     }
   }
 
-  _facebookAuth(context) async {
-    final result = await _facebookSignIn.logInWithReadPermissions(
-      ['email'],
-    );
+  Future<AuthCredential> getAuthCredential(String provider) async {
+    if (provider == GOOGLE_PROVIDER) {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final profileResponse = await http.get(
-          '$facebookBaseUrl&access_token=$token',
+      return GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+    } else if (provider == FACEBOOK_PROVIDER) {
+      final result = await _facebookSignIn.logIn(['email']);
+
+      if (result.status == FacebookLoginStatus.loggedIn) {
+        return FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token,
         );
-        final profile = json.decode(profileResponse.body);
-        await setFacebookProfile(profile);
-
-        await saveProfile();
-
-        await _refreshProfiles();
-
-        successToast("$WELCOME, $profile", context);
-
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-      case FacebookLoginStatus.error:
-        debugPrint(result.toString());
-        errorToast(UNSUCCESSFUL_AUTH_FACEBOOK, context);
-        break;
+      }
     }
+    return null;
   }
 }

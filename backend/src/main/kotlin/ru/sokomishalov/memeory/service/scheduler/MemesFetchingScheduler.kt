@@ -65,7 +65,7 @@ class MemesFetchingScheduler(
                 channels.aForEach { channel ->
                     lockProvider.withClusterLock(
                             lockName = channel.id,
-                            lockAtLeastFor = props.fetchInterval
+                            lockAtLeastFor = props.fetchInterval.minusMinutes(1)
                     ) {
                         val providerService = providerServices.find { it.sourceType() == channel.sourceType }
 

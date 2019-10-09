@@ -1,5 +1,7 @@
 // Keys
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 const MEMES_COUNT_ON_THE_PAGE = 50;
 const MEMES_HORIZONTAL_LOAD_FACTOR = 0.75;
 
@@ -17,11 +19,9 @@ const SELECTED_CHANNELS_KEY = "CHANNELS";
 const WATCH_ALL_CHANNELS_KEY = "WATCH_ALL";
 const SELECTED_ORIENTATION_KEY = "ORIENTATION";
 const SOCIALS_PREFIX = "SOCIAL_PROFILE";
-const GOOGLE_PROFILE_KEY = "GOOGLE_PROFILE";
-const FACEBOOK_PROFILE_KEY = "FACEBOOK_PROFILE";
 
-const GOOGLE_PROVIDER = "google.com";
-const FACEBOOK_PROVIDER = "facebook.com";
+const GOOGLE_PROVIDER = GoogleAuthProvider.providerId;
+const FACEBOOK_PROVIDER = FacebookAuthProvider.providerId;
 
 // Asset names
 const LOGO_ASSET = "assets/logo/logo.png";

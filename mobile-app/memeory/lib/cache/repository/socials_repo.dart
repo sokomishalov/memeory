@@ -1,49 +1,40 @@
 import 'dart:convert';
 
+import 'package:memeory/model/user.dart';
 import 'package:memeory/util/consts.dart';
 
 import '../storage.dart';
 
+Future<bool> isAuthorized() async {
+  return (await getProfilesMap()).isNotEmpty;
+}
+
 Future<Map> getProfilesMap() async {
   var resultMap = {};
-
-  var google = await getGoogleProfile();
-  if (google != null) {
-    resultMap[GOOGLE_PROVIDER] = google;
-  }
-
-  var facebook = await getFacebookProfile();
-  if (facebook != null) {
-    resultMap[FACEBOOK_PROVIDER] = facebook;
-  }
-
+  [GOOGLE_PROVIDER, FACEBOOK_PROVIDER].forEach((p) async {
+    var account = await getSocialsAccount(p);
+    if (account.displayName != null) {
+      resultMap[p] = account;
+    }
+  });
   return resultMap;
 }
 
-Future<bool> isAuthorized() async {
-  var profile = await getGoogleProfile() ?? await getFacebookProfile();
-  return profile != null;
-}
-
-Future<dynamic> getGoogleProfile() async {
-  var profile = await get(GOOGLE_PROFILE_KEY);
-  return profile != null ? json.decode(profile) : null;
-}
-
-Future<dynamic> getFacebookProfile() async {
-  var profile = await get(FACEBOOK_PROFILE_KEY);
-  return profile != null ? json.decode(profile) : null;
-}
-
 putProfilesMap(socialsMap) async {
-  await setGoogleProfile(socialsMap[GOOGLE_PROVIDER]);
-  await setFacebookProfile(socialsMap[FACEBOOK_PROVIDER]);
+  [GOOGLE_PROVIDER, FACEBOOK_PROVIDER].forEach((p) async {
+    var map = socialsMap[p] ?? {};
+    if (map.isNotEmpty) {
+      await setSocialsAccount(p, ProviderAuth.fromJson(map));
+    }
+  });
 }
 
-setGoogleProfile(profile) async {
-  await put(GOOGLE_PROFILE_KEY, json.encode(profile));
+Future<ProviderAuth> getSocialsAccount(String provider) async {
+  var profile = await get(provider);
+  var decodedProfile = profile != null ? json.decode(profile) : {};
+  return ProviderAuth.fromJson(decodedProfile);
 }
 
-setFacebookProfile(profile) async {
-  await put(FACEBOOK_PROFILE_KEY, json.encode(profile));
+setSocialsAccount(String provider, ProviderAuth profile) async {
+  await put(provider, json.encode(profile.toJson()));
 }

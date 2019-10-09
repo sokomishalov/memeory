@@ -1,14 +1,14 @@
 package ru.sokomishalov.memeory.mapper
 
 import org.mapstruct.Mapper
+import org.mapstruct.factory.Mappers.getMapper
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.mongo.entity.Channel
-import org.mapstruct.factory.Mappers.getMapper as generateMapper
 
 @Mapper
 interface ChannelMapper {
     companion object {
-        val INSTANCE: ChannelMapper = generateMapper(ChannelMapper::class.java)
+        val INSTANCE: ChannelMapper = getMapper(ChannelMapper::class.java)
     }
 
     fun toEntity(dto: ChannelDTO): Channel

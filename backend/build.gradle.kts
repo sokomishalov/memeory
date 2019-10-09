@@ -11,6 +11,7 @@ plugins {
 
 apply {
     plugin("kotlin")
+    plugin<JavaPlugin>()
     plugin<IdeaPlugin>()
 }
 
@@ -41,8 +42,8 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
     implementation("com.github.sokomishalov.commons:commons-spring:1.0.21")
 
-    implementation("org.mapstruct:mapstruct:1.3.0.Final")
-    kapt("org.mapstruct:mapstruct-processor:1.3.0.Final")
+    compile("org.mapstruct:mapstruct:1.3.1.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.3.1.Final")
     implementation("javax.xml.bind:jaxb-api:2.2.11")
 
     implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
