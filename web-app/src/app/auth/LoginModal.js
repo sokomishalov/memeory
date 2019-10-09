@@ -1,46 +1,80 @@
 import React, {useState} from "react";
-import {Modal} from 'antd';
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
-import {FACEBOOK_APP_ID} from "../../util/env/env";
+import "./LoginModal.css"
+import {Button, Modal} from 'antd';
+import "firebase/auth";
+import * as firebase from "firebase/app";
+import _ from "lodash";
+import withFirebaseAuth from "react-with-firebase-auth";
+import {
+    FACEBOOK_PROVIDER,
+    getAccountDisplayName,
+    GOOGLE_PROVIDER,
+    isLoggedIn,
+    setAccount
+} from "../../util/auth/profile";
+import {saveProfile} from "../../api/profile";
+import {FIREBASE_CONFIG} from "../../util/auth/firebase";
 
-export const LoginModal = ({button}) => {
+const Firebase = {
+    firebaseAppAuth: firebase.initializeApp(FIREBASE_CONFIG).auth(),
+    providers: {
+        googleProvider: new firebase.auth.GoogleAuthProvider(),
+        facebookProvider: new firebase.auth.FacebookAuthProvider(),
+        emailProvider: new firebase.auth.EmailAuthProvider()
+    }
+};
+
+const LoginModal = ({trigger, user, signInWithGoogle, signInWithFacebook}) => {
 
     const [visible, setVisible] = useState(false);
 
-    const openModal = () => setVisible(true);
-    const closeModal = () => setVisible(false);
+    const openModal = () => setVisible(true)
+    const closeModal = () => setVisible(false)
 
-    const responseGoogle = (response) => console.log(response);
-    const responseFacebook = (response) => console.log(response);
+    _.forEach(_.get(user, "providerData", []), (p) => {
+        switch (p["providerId"]) {
+            case GOOGLE_PROVIDER:
+                setAccount(GOOGLE_PROVIDER, {
+                    "id": p.uid,
+                    "name": p.displayName,
+                    "email": p.email,
+                    "photo": p.photoURL,
+                })
+                break;
+            case FACEBOOK_PROVIDER:
+                setAccount(FACEBOOK_PROVIDER, p)
+                break;
+        }
+    })
+
+    if (isLoggedIn()) {
+        saveProfile()
+    }
 
     return (
         <div>
             <div onClick={openModal}>
-                {button}
+                {trigger}
             </div>
             <Modal title="Авторизация через соц. сети"
                    visible={visible}
                    onCancel={closeModal}
                    footer={null}>
-
-                <div>
-                    <GoogleLogin clientId="142446820744-2ev2p083grumiv089k4dk6ai6q5d7h41.apps.googleusercontent.com"
-                                 buttonText="Авторизуйтесь через Google"
-                                 theme="dark"
-                                 scope="https://www.googleapis.com/auth/userinfo.profile"
-                                 onSuccess={responseGoogle}
-                                 onFailure={responseGoogle}
-                    />
-                </div>
-                <div className="mt-20">
-                    <FacebookLogin appId={FACEBOOK_APP_ID}
-                                   textButton="Авторизуйтесь через Facebook"
-                                   size="small"
-                                   fields="name,first_name,last_name,email"
-                                   callback={responseFacebook}/>
+                <div className="sign-in">
+                    <Button className="sign-in-google" onClick={signInWithGoogle}>
+                        <span>
+                            {getAccountDisplayName(GOOGLE_PROVIDER, "Авторизуйтесь через Google")}
+                        </span>
+                    </Button>
+                    <Button className="sign-in-facebook" onClick={signInWithFacebook}>
+                        <span>
+                            {getAccountDisplayName(FACEBOOK_PROVIDER, "Авторизуйтесь через Facebook")}
+                        </span>
+                    </Button>
                 </div>
             </Modal>
         </div>
     );
 };
+
+export default withFirebaseAuth(Firebase)(LoginModal);

@@ -9,12 +9,12 @@ Future<Map> getProfilesMap() async {
 
   var google = await getGoogleProfile();
   if (google != null) {
-    resultMap[GOOGLE] = google;
+    resultMap[GOOGLE_PROVIDER] = google;
   }
 
   var facebook = await getFacebookProfile();
   if (facebook != null) {
-    resultMap[FACEBOOK] = facebook;
+    resultMap[FACEBOOK_PROVIDER] = facebook;
   }
 
   return resultMap;
@@ -36,8 +36,8 @@ Future<dynamic> getFacebookProfile() async {
 }
 
 putProfilesMap(socialsMap) async {
-  await setGoogleProfile(socialsMap[GOOGLE]);
-  await setFacebookProfile(socialsMap[FACEBOOK]);
+  await setGoogleProfile(socialsMap[GOOGLE_PROVIDER]);
+  await setFacebookProfile(socialsMap[FACEBOOK_PROVIDER]);
 }
 
 setGoogleProfile(profile) async {

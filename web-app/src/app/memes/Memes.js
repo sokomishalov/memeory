@@ -11,13 +11,12 @@ export const Memes = () => {
     const [hasMore, setHasMore] = useState(true);
 
     const loadMore = async (page) => {
-        const newMemes = await getMemesPage(page);
+        const newMemes = await getMemesPage(page - 1);
         if (!_.isEmpty(newMemes)) {
             setMemes(_.concat(memes, newMemes));
         } else {
             setHasMore(false)
         }
-
     };
 
     return (

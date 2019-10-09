@@ -20,8 +20,8 @@ const SOCIALS_PREFIX = "SOCIAL_PROFILE";
 const GOOGLE_PROFILE_KEY = "GOOGLE_PROFILE";
 const FACEBOOK_PROFILE_KEY = "FACEBOOK_PROFILE";
 
-const GOOGLE = "GOOGLE";
-const FACEBOOK = "FACEBOOK";
+const GOOGLE_PROVIDER = "google.com";
+const FACEBOOK_PROVIDER = "facebook.com";
 
 // Asset names
 const LOGO_ASSET = "assets/logo/logo.png";

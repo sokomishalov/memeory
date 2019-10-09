@@ -2,18 +2,21 @@
 
 package ru.sokomishalov.memeory.config
 
-import org.springframework.context.annotation.Bean
-import org.springframework.data.mongodb.MongoDbFactory
-import org.springframework.data.mongodb.MongoTransactionManager
+import org.springframework.context.annotation.Configuration
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
+import javax.annotation.PostConstruct
 
 
 /**
  * @author sokomishalov
  */
-@EnableReactiveMongoRepositories
-class MongoConfig {
+@Configuration
+@EnableReactiveMongoRepositories("ru.sokomishalov.memeory.service.db.mongo.repository")
+class MongoConfig(
+        private val mongoConverter: MappingMongoConverter
+) {
 
-    @Bean
-    fun transactionManager(dbFactory: MongoDbFactory): MongoTransactionManager = MongoTransactionManager(dbFactory)
+    @PostConstruct
+    fun customizeConversion() = mongoConverter.setMapKeyDotReplacement("_")
 }
