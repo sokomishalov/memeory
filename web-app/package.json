@@ -39,7 +39,7 @@
   "scripts": {
     "start": "npm-run-all -p watch-css start-js",
     "start-js": "react-app-rewired start",
-    "build-less": "lessc --js src/app/common/styles/antd.less src/app/common/styles/antd.css && lessc --js src/app/common/styles/antd-mobile.less src/app/common/styles/antd-mobile.css",
+    "build-less": "lessc --js src/app/common/styles/antd.less src/app/common/styles/antd.css",
     "watch-css": "npm run build-less && node-sass-chokidar src/ -o src/ --watch --recursive",
     "build-css": "npm run build-less && node-sass-chokidar src/ -o src/",
     "build": "npm run build-css && react-app-rewired build",
