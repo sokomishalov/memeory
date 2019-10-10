@@ -15,6 +15,7 @@ import ru.sokomishalov.memeory.dto.ProfileDTO
 import ru.sokomishalov.memeory.service.db.ProfileService
 import ru.sokomishalov.memeory.service.db.mongo.entity.Profile
 import ru.sokomishalov.memeory.service.db.mongo.repository.ProfileRepository
+import ru.sokomishalov.memeory.util.consts.MONGO_KEY_DOT_REPLACEMENT
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
 import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profileMapper
@@ -40,10 +41,11 @@ class MongoProfileService(
         return when {
             profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
                 val criteriaList = profile.socialsMap.entries.map {
-                    criteriaWhere("socialsMap.${it.key}")
+                    val key = it.key.replace(".", MONGO_KEY_DOT_REPLACEMENT)
+                    criteriaWhere("socialsMap.$key")
                             .exists(true)
-                            .and("socialsMap.${it.key}.id")
-                            .`is`(it.value.getOrDefault("id", EMPTY))
+                            .and("socialsMap.$key.email")
+                            .`is`(it.value.getOrDefault("email", EMPTY))
                 }
 
                 val query = Query(Criteria().orOperator(*criteriaList.toTypedArray()))

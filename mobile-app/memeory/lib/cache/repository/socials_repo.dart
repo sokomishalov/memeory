@@ -31,7 +31,7 @@ putProfilesMap(socialsMap) async {
 
 Future<ProviderAuth> getSocialsAccount(String provider) async {
   var profile = await get(provider);
-  var decodedProfile = profile != null ? json.decode(profile) : {};
+  var decodedProfile = profile != null ? json.decode(profile) : <String, dynamic>{};
   return ProviderAuth.fromJson(decodedProfile);
 }
 

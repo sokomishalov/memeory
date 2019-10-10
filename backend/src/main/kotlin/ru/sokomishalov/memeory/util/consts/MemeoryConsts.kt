@@ -5,6 +5,7 @@ package ru.sokomishalov.memeory.util.consts
 // Strings
 const val DELIMITER: String = ":"
 const val MONGO_ID_FIELD: String = "_id"
+const val MONGO_KEY_DOT_REPLACEMENT: String = "_"
 const val MEMEORY_TOKEN_HEADER = "MEMEORY_TOKEN"
 
 const val FACEBOOK_BASE_URL = "https://www.facebook.com"

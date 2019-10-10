@@ -1,5 +1,5 @@
 export const FIREBASE_CONFIG = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    apiKey: "AIzaSyAvOGnITx1zUD2MMRXfcE0Upkh1bvkAP8A",
     authDomain: "memeory-aed31.firebaseapp.com",
     databaseURL: "https://memeory-aed31.firebaseio.com",
     projectId: "memeory-aed31",
