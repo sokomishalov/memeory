@@ -1,7 +1,9 @@
-const {override: customizeCRA, fixBabelImports} = require('customize-cra');
+const {override: customizeCRA, fixBabelImports, disableEsLint} = require('customize-cra');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 module.exports = function override(config) {
+    disableEsLint()
+
     config.module.rules.push({
         loader: 'webpack-ant-icon-loader',
         enforce: 'pre',
