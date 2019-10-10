@@ -14,6 +14,7 @@ import {
 } from "../../util/auth/profile";
 import {saveProfile} from "../../api/profile";
 import {FIREBASE_CONFIG} from "../../util/auth/firebase";
+import {unAwait} from "../../util/http/axios";
 
 const Firebase = {
     firebaseAppAuth: firebase.initializeApp(FIREBASE_CONFIG).auth(),
@@ -38,10 +39,7 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
 
     useEffect(() => {
         if (isLoggedIn()) {
-            // noinspection JSIgnoredPromiseFromCall
-            saveProfile()
-        } else {
-            console.log(error)
+            unAwait(saveProfile())
         }
     }, [user, error]);
 
