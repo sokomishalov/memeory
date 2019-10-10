@@ -3,10 +3,11 @@ import "./Header.css"
 import {Button, Dropdown, Icon, Menu} from "antd"
 import {MemeoryLogo} from "../common/logo/MemeoryLogo"
 import {getUserDisplayName, isLoggedIn} from "../../util/auth/profile"
-import LoginModal from "../auth/LoginModal";
-import {warnToast} from "../common/toast/toast";
+import LoginModal from "../auth/LoginModal"
+import {withRouter} from "react-router";
+import {ROUTE} from "../../util/router/router";
 
-export const Header = () => {
+const Header = ({history}) => {
     return (
         <div>
             <div className="header">
@@ -33,7 +34,7 @@ export const Header = () => {
                         </Menu.Item>
                         {
                             isLoggedIn() &&
-                            <Menu.Item key="2" onClick={() => warnToast("Not realized yet")}>
+                            <Menu.Item key="2" onClick={() => history.push(ROUTE.CHANNELS)}>
                                 <Icon type="appstore" className="mr-10"/>
                                 Каналы
                             </Menu.Item>
@@ -51,5 +52,7 @@ export const Header = () => {
                 </Dropdown>
             </div>
         </div>
-    );
-};
+    )
+}
+
+export default withRouter(Header)

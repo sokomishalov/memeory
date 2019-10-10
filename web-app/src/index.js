@@ -8,9 +8,18 @@ import 'react-aspect-ratio/aspect-ratio.css'
 import * as sw from './app/sw/sw';
 import {App} from "./app/App";
 import moment from "moment";
+import {createBrowserHistory} from "history";
+import {Router} from "react-router";
 
 moment.locale("ru")
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+export const history = createBrowserHistory();
+
+ReactDOM.render(
+    <Router history={history}>
+        <App/>
+    </Router>,
+    document.getElementById('root')
+);
 
 sw.register();

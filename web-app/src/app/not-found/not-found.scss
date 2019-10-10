@@ -1,0 +1,28 @@
+.not-found {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    // mobile
+    @media only screen and (max-width: 420px) {
+        transform: translate(-50%, -60%);
+    }
+
+    // desktop
+    @media only screen and (min-width: 420px) {
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+
+        .content {
+            margin-left: 30px;
+        }
+    }
+
+    .image {
+        width: 320px;
+        height: 289px;
+        background: url("../../images/404.png") no-repeat center;
+        background-size: cover;
+    }
+}

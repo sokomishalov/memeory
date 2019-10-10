@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState} from 'react'
 import "./Memes.css"
-import {getMemesPage} from "../../api/memes";
-import {MemeContainer} from "./container/MemeContainer";
-import _ from "lodash";
-import InfiniteScroll from 'react-infinite-scroller';
-import {BackTop} from "antd";
-import Loader from "../common/loader/loader";
+import {getMemesPage} from "../../api/memes"
+import MemeContainer from "./container/MemeContainer"
+import _ from "lodash"
+import InfiniteScroll from 'react-infinite-scroller'
+import {BackTop} from "antd"
+import Loader from "../common/loader/loader"
 
-export const Memes = () => {
-    const [loading, setLoading] = useState(false);
-    const [memes, setMemes] = useState([]);
-    const [hasMore, setHasMore] = useState(true);
+const Memes = () => {
+    const [loading, setLoading] = useState(false)
+    const [memes, setMemes] = useState([])
+    const [hasMore, setHasMore] = useState(true)
 
     const loadMore = async (page) => {
-        setLoading(true);
-        const newMemes = await getMemesPage(page - 1);
+        setLoading(true)
+        const newMemes = await getMemesPage(page - 1)
         if (!_.isEmpty(newMemes)) {
-            setMemes(_.concat(memes, newMemes));
+            setMemes(_.concat(memes, newMemes))
         } else {
             setHasMore(false)
         }
-        setLoading(false);
-    };
+        setLoading(false)
+    }
 
     return (
         <div className="memes">
@@ -33,5 +33,7 @@ export const Memes = () => {
             </InfiniteScroll>
             <BackTop/>
         </div>
-    );
-};
+    )
+}
+
+export default Memes

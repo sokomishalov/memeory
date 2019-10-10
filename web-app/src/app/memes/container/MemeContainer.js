@@ -1,18 +1,18 @@
-import React from 'react';
+import React from 'react'
 import "./MemeContainer.css"
-import {VideoAttachment} from "./video/VideoAttachment";
-import {ImageAttachment} from "./image/ImageAttachment";
-import {timeAgo} from "../../../util/time/time";
-import {ChannelLogo} from "../../common/logo/ChannelLogo";
+import {VideoAttachment} from "./video/VideoAttachment"
+import {ImageAttachment} from "./image/ImageAttachment"
+import {timeAgo} from "../../../util/time/time"
+import {ChannelLogo} from "../../common/logo/ChannelLogo"
 import _ from "lodash"
-import {Carousel} from "antd";
-import {AspectRatio} from "react-aspect-ratio";
-import {MEME_BORDER_RADIUS} from "../../../util/consts/consts";
+import {Carousel} from "antd"
+import {AspectRatio} from "react-aspect-ratio"
+import {MEME_BORDER_RADIUS} from "../../../util/consts/consts"
 
-export const MemeContainer = ({meme}) => {
+const MemeContainer = ({meme}) => {
 
     const renderAttachments = (attachments) => {
-        const size = _.size(attachments);
+        const size = _.size(attachments)
         if (size > 1) {
             return <Carousel autoplay>{_.map(attachments, renderAttachment)}</Carousel>
         } else if (size === 1) {
@@ -20,22 +20,22 @@ export const MemeContainer = ({meme}) => {
         } else {
             return <div/>
         }
-    };
+    }
 
     const renderAttachment = (a) => {
         switch (a["type"]) {
             case "IMAGE":
-                return <ImageAttachment attachment={a}/>;
+                return <ImageAttachment attachment={a}/>
             case "VIDEO":
-                return <VideoAttachment attachment={a}/>;
+                return <VideoAttachment attachment={a}/>
             case "NONE":
             default:
-                return <div/>;
+                return <div/>
         }
-    };
+    }
 
     // noinspection JSCheckFunctionSignatures
-    const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0);
+    const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0)
 
     return (
         <div className="meme"
@@ -70,5 +70,7 @@ export const MemeContainer = ({meme}) => {
                 {renderAttachments(meme["attachments"])}
             </AspectRatio>
         </div>
-    );
-};
+    )
+}
+
+export default MemeContainer
