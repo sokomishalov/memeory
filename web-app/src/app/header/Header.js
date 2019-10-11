@@ -11,7 +11,7 @@ import {isBrowser} from "react-device-detect";
 const Header = ({history}) => {
     return (
         <div className="header">
-            <div className="header-main">
+            <div className="header-main" onClick={() => history.push(ROUTE.CORE)}>
                 <MemeoryLogo width={35}
                              height={35}
                              style={{

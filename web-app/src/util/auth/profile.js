@@ -18,8 +18,6 @@ export const getUserDisplayName = (orElse = "") => {
     return _.defaultTo(_.head(names), orElse)
 }
 
-export const getAccountDisplayName = (key, orElse = "") => _.get(getAccount(key), "displayName", orElse)
-
 export const getSocialsMap = () => {
     let result = {};
     AVAILABLE_PROVIDERS.forEach((it) => {
@@ -31,9 +29,11 @@ export const getSocialsMap = () => {
     return result
 }
 
+export const getAccountDisplayName = (key, orElse = "") => _.get(getAccount(key), "displayName", orElse)
+
 export const getProfile = () => getAccount(MEMEORY_PROFILE)
 
-export const setProfile = (profile) => setAccount(MEMEORY_PROFILE, profile)
+export const setProfile = (profile) => setAccount(MEMEORY_PROFILE, _.omit(profile, ["socialsMap"]))
 
 export const getAccount = (key) => JSON.parse(_.defaultTo(window.localStorage.getItem(key), "{}"));
 

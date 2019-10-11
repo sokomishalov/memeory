@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import ru.sokomishalov.commons.core.collections.isNotNullOrEmpty
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.log.Loggable
@@ -36,7 +35,6 @@ class MongoProfileService(
         return profile?.let { profileMapper.toDto(it) }
     }
 
-    @Transactional
     override suspend fun saveIfNecessary(profile: ProfileDTO): ProfileDTO {
         return when {
             profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
@@ -62,7 +60,7 @@ class MongoProfileService(
         }
     }
 
-    suspend fun saveProfile(profile: ProfileDTO): ProfileDTO {
+    private suspend fun saveProfile(profile: ProfileDTO): ProfileDTO {
         if (profile.id.isNullOrBlank()) {
             profile.id = randomUUID().toString()
         }
