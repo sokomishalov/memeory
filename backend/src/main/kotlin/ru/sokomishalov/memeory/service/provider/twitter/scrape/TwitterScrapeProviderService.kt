@@ -50,7 +50,7 @@ class TwitterScrapeProviderService : ProviderService {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         return getWebPage("$TWITTER_URL/${channel.uri}")
                 .body()
                 .getSingleElementByClass("ProfileAvatar-image")

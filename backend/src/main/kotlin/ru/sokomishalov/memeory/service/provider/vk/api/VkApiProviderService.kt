@@ -10,7 +10,6 @@ import kotlinx.coroutines.withContext
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
-import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -59,7 +58,7 @@ class VkApiProviderService(
         }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         val response = withContext(IO) {
             vkApiClient
                     .wall()
@@ -71,7 +70,7 @@ class VkApiProviderService(
 
         val groupFull = response.groups.firstOrNull()
 
-        return groupFull?.photo100 ?: groupFull?.photo50 ?: groupFull?.photo200 ?: EMPTY
+        return groupFull?.photo100 ?: groupFull?.photo50 ?: groupFull?.photo200
     }
 
     override fun sourceType(): SourceType = VK

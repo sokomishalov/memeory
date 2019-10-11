@@ -55,10 +55,15 @@ class PinterestScrapeProviderService : ProviderService, Loggable {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         val infoJsonNode = parseInitJson(channel)
 
-        return infoJsonNode["resourceDataCache"].first()["data"]["owner"]["image_medium_url"].asText()
+        return infoJsonNode["resourceDataCache"]
+                ?.first()
+                ?.get("data")
+                ?.get("owner")
+                ?.get("image_medium_url")
+                ?.asText()
     }
 
     override fun sourceType(): SourceType = PINTEREST

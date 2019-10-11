@@ -43,7 +43,7 @@ class FacebookScrapeProviderService : ProviderService {
     }
 
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         return "$FACEBOOK_GRAPH_BASE_URL/${channel.uri}/picture?type=small"
     }
 

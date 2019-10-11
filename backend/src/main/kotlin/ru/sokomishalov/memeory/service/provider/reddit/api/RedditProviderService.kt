@@ -61,7 +61,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         val response = webClient
                 .get()
                 .uri("$REDDIT_BASE_URL/r/${channel.uri}/about.json")
@@ -72,7 +72,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
         val communityIcon = response["data"].getValue("community_icon")
         val imgIcon = response["data"].getValue("icon_img")
 
-        return communityIcon?.ifBlank { imgIcon }.orEmpty()
+        return communityIcon?.ifBlank { imgIcon }
     }
 
     override fun sourceType(): SourceType = REDDIT

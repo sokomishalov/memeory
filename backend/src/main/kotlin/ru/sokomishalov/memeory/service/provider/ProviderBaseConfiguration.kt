@@ -3,6 +3,7 @@ package ru.sokomishalov.memeory.service.provider
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import ru.sokomishalov.memeory.service.provider.facebook.FacebookConfigurationProperties
+import ru.sokomishalov.memeory.service.provider.ifunny.IFunnyConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.instagram.InstagramConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.ninegag.NinegagConfigurationProperties
 import ru.sokomishalov.memeory.service.provider.pinterest.PinterestConfigurationProperties
@@ -22,6 +23,7 @@ import ru.sokomishalov.memeory.service.provider.vk.VkConfigurationProperties
         TwitterConfigurationProperties::class,
         VkConfigurationProperties::class,
         NinegagConfigurationProperties::class,
-        PinterestConfigurationProperties::class
+        PinterestConfigurationProperties::class,
+        IFunnyConfigurationProperties::class
 )
 class ProviderBaseConfiguration

@@ -36,6 +36,9 @@ provider:
   pinterest:
     enabled: true
     scrape-enabled: true
+  ifunny:
+    enabled: true
+    scrape-enabled: true
 
 management:
   health:

@@ -59,13 +59,12 @@ class NinegagScrapeProviderService : ProviderService, Loggable {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
         return getWebPage("$NINEGAG_URL/${channel.uri}")
                 .head()
                 .getElementsByAttributeValueContaining("rel", "image_src")
                 ?.first()
                 ?.attr("href")
-                ?: EMPTY
     }
 
     override fun sourceType(): SourceType = NINEGAG

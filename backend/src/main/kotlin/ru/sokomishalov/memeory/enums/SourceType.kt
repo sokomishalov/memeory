@@ -7,5 +7,6 @@ enum class SourceType {
     TWITTER,
     NINEGAG,
     PINTEREST,
-    VK
+    VK,
+    IFUNNY
 }

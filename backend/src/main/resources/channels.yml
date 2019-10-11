@@ -47,7 +47,13 @@
   uri: meme
 
 - id: pinterest:celiatoler:pinterest-memes
-  name: some funny memes (pinterest)
+  name: some memes (pinterest)
   enabled: true
   sourceType: PINTEREST
   uri: celiatoler/pinterest-memes
+
+- id: ifunny:memes
+  name: memes (ifunny)
+  enabled: true
+  sourceType: IFUNNY
+  uri: memes

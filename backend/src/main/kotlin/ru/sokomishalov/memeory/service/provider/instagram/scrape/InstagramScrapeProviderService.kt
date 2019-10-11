@@ -50,7 +50,7 @@ class InstagramScrapeProviderService(private val instagram: Instagram) : Provide
         }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String = withContext(IO) {
+    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? = withContext(IO) {
         instagram.getAccountByUsername(channel.uri).profilePicUrl
     }
 

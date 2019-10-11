@@ -8,7 +8,7 @@ interface ProviderService {
 
     suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO>
 
-    suspend fun getLogoUrlByChannel(channel: ChannelDTO): String
+    suspend fun getLogoUrlByChannel(channel: ChannelDTO): String?
 
     fun sourceType(): SourceType
 }
