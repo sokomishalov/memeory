@@ -21,8 +21,11 @@ const Channels = () => {
 
     return (
         <Loader loading={loading}>
-            <div className="mt-20">
-                {_.map(channels, (channel) => <ChannelContainer key={channel["id"]} channel={channel}/>)}
+            <div className="channels">
+                <div className="channels-header">Выберите каналы, которые Вам интересны!</div>
+                <div className="channels-list">
+                    {_.map(channels, (channel) => <ChannelContainer key={channel["id"]} channel={channel}/>)}
+                </div>
             </div>
         </Loader>
     )

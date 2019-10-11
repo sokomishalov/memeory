@@ -6,6 +6,7 @@ import {getUserDisplayName, isLoggedIn} from "../../util/auth/profile"
 import LoginModal from "../auth/LoginModal"
 import {withRouter} from "react-router";
 import {ROUTE} from "../../util/router/router";
+import {isBrowser} from "react-device-detect";
 
 const Header = ({history}) => {
     return (
@@ -17,7 +18,7 @@ const Header = ({history}) => {
                                  marginRight: 10,
                                  borderRadius: 10
                              }}/>
-                Memeory
+                {isBrowser && "Memeory"}
             </div>
 
             <Dropdown overlay={

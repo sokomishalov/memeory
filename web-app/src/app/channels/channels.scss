@@ -1,3 +1,16 @@
 .channels {
+    height: 100%;
+    width: 100%;
+    padding: 20px 20vw 0;
 
+    &-header {
+        margin: 0 auto;
+        font-size: 18px;
+    }
+
+    &-list {
+        margin-top: 20px;
+        display: flex;
+        flex-flow: row wrap;
+    }
 }
