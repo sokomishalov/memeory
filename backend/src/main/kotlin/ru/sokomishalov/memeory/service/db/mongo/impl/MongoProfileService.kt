@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.isNotNullOrEmpty
-import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
@@ -43,7 +42,7 @@ class MongoProfileService(
                     criteriaWhere("socialsMap.$key")
                             .exists(true)
                             .and("socialsMap.$key.email")
-                            .`is`(it.value.getOrDefault("email", EMPTY))
+                            .`is`(it.value.email)
                 }
 
                 val query = Query(Criteria().orOperator(*criteriaList.toTypedArray()))

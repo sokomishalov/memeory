@@ -2,9 +2,7 @@ import axios from "axios"
 import _ from "lodash"
 import {getProfile, getSocialsMap, getToken, setAccount, setProfile} from "../util/auth/profile"
 
-export const saveProfile = async (
-    profile = getProfile()
-) => {
+export const saveProfile = async (profile = getProfile()) => {
 
     const socialsMap = getSocialsMap()
 
