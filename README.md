@@ -21,6 +21,7 @@ The list of implemented meme sources looks like this so far:
 - [9gag](https://9gag.com)
 - [pinterest](https://www.pinterest.com)
 - [vk](https://vk.com)
+- [ifunny](https://ifunny.co)
 
 After fetching and parsing memes are ready to be stored in db. 
 MongoDB is current storage of all information so far.
@@ -38,4 +39,7 @@ Mobile app so far allows to:
 ### Web app
 
 Web app so far allows to:
+- authorize with either google or facebook for sharing user 
+ customizations between devices
+ - choose channels
  - laugh out loud every day :)
