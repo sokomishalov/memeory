@@ -37,6 +37,7 @@
     "webpack-ant-icon-loader": "~1.0.8"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "npm-run-all -p watch-css start-js",
     "start-js": "react-app-rewired start",
     "build-less": "lessc --js src/app/common/styles/antd.less src/app/common/styles/antd.css",
