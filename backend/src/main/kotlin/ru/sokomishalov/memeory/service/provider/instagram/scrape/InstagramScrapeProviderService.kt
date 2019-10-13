@@ -3,6 +3,7 @@ package ru.sokomishalov.memeory.service.provider.instagram.scrape
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import me.postaddict.instagram.scraper.Instagram
+import okhttp3.OkHttpClient
 import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
@@ -23,11 +24,15 @@ import ru.sokomishalov.memeory.util.consts.DELIMITER
  */
 @Service
 @Conditional(InstagramCondition::class, InstagramScrapeCondition::class)
-class InstagramScrapeProviderService(private val instagram: Instagram) : ProviderService {
+class InstagramScrapeProviderService : ProviderService {
+
+    companion object {
+        private val client: Instagram = Instagram(OkHttpClient())
+    }
 
     override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
         val posts = withContext(IO) {
-            instagram.getMedias(channel.uri, 1).nodes
+            client.getMedias(channel.uri, 1).nodes
         }
 
         return posts.aMap {
@@ -51,7 +56,7 @@ class InstagramScrapeProviderService(private val instagram: Instagram) : Provide
     }
 
     override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? = withContext(IO) {
-        instagram.getAccountByUsername(channel.uri).profilePicUrl
+        client.getAccountByUsername(channel.uri).profilePicUrl
     }
 
     override fun sourceType(): SourceType = INSTAGRAM

@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package ru.sokomishalov.memeory.config
 
 import org.springframework.context.annotation.Configuration
@@ -14,9 +12,7 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @EnableReactiveMongoRepositories("ru.sokomishalov.memeory.service.db.mongo.repository")
-class MongoConfig(
-        private val mongoConverter: MappingMongoConverter
-) {
+class MongoConfig(private val mongoConverter: MappingMongoConverter) {
 
     @PostConstruct
     fun customizeConversion() = mongoConverter.setMapKeyDotReplacement(MONGO_KEY_DOT_REPLACEMENT)

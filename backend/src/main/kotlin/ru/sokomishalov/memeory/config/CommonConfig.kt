@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.commons.io.IOUtils.toByteArray
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -13,6 +12,7 @@ import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.http.codec.json.Jackson2JsonEncoder
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.web.reactive.function.client.WebClient
+import ru.sokomishalov.commons.core.io.toByteArray
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.commons.spring.serialization.JACKSON_DECODER
 import ru.sokomishalov.commons.spring.serialization.JACKSON_ENCODER
@@ -44,7 +44,7 @@ class CommonConfig {
     @Bean
     @Qualifier("placeholder")
     fun placeholder(@Value("classpath:images/logo.png") logoPlaceHolder: Resource): ByteArray {
-        return toByteArray(logoPlaceHolder.inputStream)
+        return logoPlaceHolder.inputStream.toByteArray()
     }
 }
 

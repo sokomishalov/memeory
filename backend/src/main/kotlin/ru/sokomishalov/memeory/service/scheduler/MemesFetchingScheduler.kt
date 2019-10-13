@@ -10,23 +10,18 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.collections.aFilter
-import ru.sokomishalov.commons.core.collections.aForEach
-import ru.sokomishalov.commons.core.consts.DEFAULT_DATE_FORMATTER
-import ru.sokomishalov.commons.core.images.checkImageUrl
+import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
 import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
 import ru.sokomishalov.commons.spring.locks.cluster.withClusterLock
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.ChannelDTO
+import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import java.time.LocalDateTime.now
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
-import javax.annotation.PostConstruct
 import kotlin.concurrent.schedule
 
 /**
@@ -43,8 +38,26 @@ class MemesFetchingScheduler(
         private val resource: Resource
 ) : Loggable {
 
-    @PostConstruct
-    fun init() {
+    @EventListener(ApplicationReadyEvent::class)
+    fun fetchMemes() {
+        storeDefaultChannels()
+
+        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
+            log("About to fetch some new memes")
+
+            GlobalScope.launch {
+                val fetchedMemes = channelService
+                        .findAllEnabled()
+                        .aMap { fetchMemesByChannel(it) }
+                        .flatten()
+
+                val savedMemes = memeService.saveMemesIfNotExist(fetchedMemes)
+                log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+            }
+        }
+    }
+
+    private fun storeDefaultChannels() {
         GlobalScope.launch {
             val channelDTOs = withContext(IO) {
                 YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream)
@@ -53,47 +66,28 @@ class MemesFetchingScheduler(
         }
     }
 
-    @EventListener(ApplicationReadyEvent::class)
-    fun fetchMemes() {
-        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
-            log("About to fetch some new memes at ${now().format(DEFAULT_DATE_FORMATTER)}")
-
-            GlobalScope.launch {
-                val totalFetched = AtomicInteger(0)
-                val channels = channelService.findAllEnabled()
-
-                channels.aForEach { channel ->
-                    lockProvider.withClusterLock(
-                            lockName = channel.id,
-                            lockAtLeastFor = props.fetchInterval.minusMinutes(1)
-                    ) {
-                        val providerService = providerServices.find { it.sourceType() == channel.sourceType }
-
-                        val fetchedMemes = runCatching {
-                            providerService?.fetchMemesFromChannel(channel) ?: emptyList()
-                        }.getOrElse { emptyList() }
-
-                        totalFetched.addAndGet(fetchedMemes.size)
-
-                        val memesToSave = fetchedMemes
-                                .aFilter {
-                                    when {
-                                        props.checkUrls -> it.attachments.all { att -> checkImageUrl(att.url) }
-                                        else -> true
-                                    }
+    private suspend fun fetchMemesByChannel(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {
+        return lockProvider.withClusterLock(
+                lockName = channel.id,
+                lockAtLeastFor = props.fetchInterval.minusMinutes(1)
+        ) {
+            val providerService = providerServices.find { it.sourceType() == channel.sourceType }
+            when {
+                providerService != null -> runCatching {
+                    providerService
+                            .fetchMemesFromChannel(channel)
+                            .map {
+                                it.apply {
+                                    it.channelId = channel.id
+                                    it.channelName = channel.name
                                 }
-                                .map {
-                                    it.apply {
-                                        it.channelId = channel.id
-                                        it.channelName = channel.name
-                                    }
-                                }
-
-                        memeService.saveMemesIfNotExist(memesToSave)
-                    }
+                            }
+                }.getOrElse {
+                    logWarn(it)
+                    orElse
                 }
-                log("Finished fetching memes at ${now().format(DEFAULT_DATE_FORMATTER)}, total fetched: $totalFetched")
+                else -> orElse
             }
-        }
+        } ?: orElse
     }
 }
