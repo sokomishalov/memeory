@@ -40,7 +40,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-security")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
-    implementation("com.github.sokomishalov.commons:commons-spring:1.0.21")
+    implementation("com.github.sokomishalov.commons:commons-spring:1.0.22")
 
     compile("org.mapstruct:mapstruct:1.3.1.Final")
     kapt("org.mapstruct:mapstruct-processor:1.3.1.Final")

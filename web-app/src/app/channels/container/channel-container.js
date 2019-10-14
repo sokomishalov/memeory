@@ -16,7 +16,7 @@ const ChannelContainer = ({channel, active, toggle}) => (
                   <ChannelLogo width={50} height={50} channelId={channel["id"]}/>
               </div>
           }>
-        <Card.Meta title={channel["name"]} description={_.defaultTo(channel["sourceType"], "").toLowerCase()}/>
+        <Card.Meta title={channel["name"]} description={_.defaultTo(channel["provider"], "").toLowerCase()}/>
     </Card>
 );
 

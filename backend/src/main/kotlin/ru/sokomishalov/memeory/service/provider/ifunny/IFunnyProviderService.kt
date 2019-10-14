@@ -1,7 +1,10 @@
+@file:Suppress("ComplexRedundantLet")
+
 package ru.sokomishalov.memeory.service.provider.ifunny
 
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.html.getSingleElementByClass
+import ru.sokomishalov.commons.core.html.getSingleElementByTag
 import ru.sokomishalov.commons.core.html.getWebPage
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -13,6 +16,7 @@ import ru.sokomishalov.memeory.enums.Provider.IFUNNY
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.IFUNNY_URL
+import ru.sokomishalov.memeory.util.time.mockDate
 
 /**
  * @author sokomishalov
@@ -26,11 +30,12 @@ class IFunnyProviderService : ProviderService {
                 .getElementsByClass("stream__item")
 
         return posts
-                .map {
-                    it.getElementsByTag("a").first().let { a ->
-                        a.getElementsByTag("img").first().let { img ->
+                .mapIndexed { i, it ->
+                    it.getSingleElementByTag("a").let { a ->
+                        a.getSingleElementByTag("img").let { img ->
                             MemeDTO(
                                     id = "${channel.id}$DELIMITER${a.attr("href").replace("/", DELIMITER)}",
+                                    publishedAt = mockDate(i),
                                     attachments = listOf(AttachmentDTO(
                                             url = img.attr("data-src"),
                                             type = when {
