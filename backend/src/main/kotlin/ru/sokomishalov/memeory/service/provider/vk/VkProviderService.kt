@@ -68,23 +68,29 @@ class VkProviderService : ProviderService, Loggable {
 
     private suspend fun extractAttachments(element: Element): List<AttachmentDTO> {
         return element
-                .getSingleElementByClass("thumb_map_img")
+                .getElementsByClass("thumb_map_img")
+                .firstOrNull()
                 .let {
-                    val isVideo = it.attr("data-video").isNotBlank()
-                    val imageUrl = runCatching { it.getImageBackgroundUrl() }.getOrNull()
-                    val aspectRatio = imageUrl?.let { url -> getImageAspectRatio(url) }
+                    when (it) {
+                        null -> emptyList<AttachmentDTO>()
+                        else -> {
+                            val isVideo = it.attr("data-video").isNotBlank()
+                            val imageUrl = runCatching { it.getImageBackgroundUrl() }.getOrNull()
+                            val aspectRatio = imageUrl?.let { url -> getImageAspectRatio(url) }
 
-                    listOf(AttachmentDTO(
-                            url = when {
-                                isVideo -> "$VK_URL${it.attr("href")}"
-                                else -> imageUrl
-                            },
-                            type = when {
-                                isVideo -> VIDEO
-                                else -> IMAGE
-                            },
-                            aspectRatio = aspectRatio
-                    ))
+                            listOf(AttachmentDTO(
+                                    url = when {
+                                        isVideo -> "$VK_URL${it.attr("href")}"
+                                        else -> imageUrl
+                                    },
+                                    type = when {
+                                        isVideo -> VIDEO
+                                        else -> IMAGE
+                                    },
+                                    aspectRatio = aspectRatio
+                            ))
+                        }
+                    }
                 }
     }
 }
