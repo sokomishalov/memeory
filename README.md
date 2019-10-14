@@ -9,9 +9,9 @@ This repository contains:
 
 This is just another pet project. There is no rocket science inside.
 
-### Backend
+### Backend side
 
-There is the scheduler which is requesting for a batch of memes 
+There is the scheduler which is requesting for a batch of memes
 from different sources. Most of meme providers are scrapers.
 The list of implemented meme sources looks like this so far:
 - [reddit](https://www.reddit.com)
@@ -26,20 +26,12 @@ The list of implemented meme sources looks like this so far:
 After fetching and parsing memes are ready to be stored in db. 
 MongoDB is current storage of all information so far.
 
-### Mobile app
+### Client side
 
-Mobile app so far allows to:
+Clients allow to:
  - authorize with either google or facebook for sharing user 
- customizations between devices
- - switch between light and dark themes
- - choose memes' scrolling axis
- - choose channels
- - laugh out loud every day :)
-
-### Web app
-
-Web app so far allows to:
-- authorize with either google or facebook for sharing user 
- customizations between devices
- - choose channels
- - laugh out loud every day :)
+ customizations between devices `(mobile/web)`
+ - switch between light and dark themes `(mobile)`
+ - choose memes' scrolling axis `(mobile)`
+ - choose relevant channels `(mobile/web)`
+ - laugh out loud every day :) `(mobile/web)`
