@@ -1,9 +1,8 @@
 @file:Suppress("RemoveExplicitTypeArguments")
 
-package ru.sokomishalov.memeory.service.provider.vk.scrape
+package ru.sokomishalov.memeory.service.provider.vk
 
 import org.jsoup.nodes.Element
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.html.fixText
@@ -17,10 +16,9 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.VK
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.vk.VkCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
 import java.lang.System.currentTimeMillis
@@ -28,9 +26,8 @@ import java.util.*
 
 
 @Service
-@Conditional(VkCondition::class, VkScrapeCondition::class)
-class VkScrapeProviderService : ProviderService, Loggable {
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
+class VkProviderService : ProviderService, Loggable {
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         val posts = getWebPage("$VK_URL/${channel.uri}")
                 .getElementById("page_wall_posts")
                 .getElementsByClass("post")
@@ -45,7 +42,7 @@ class VkScrapeProviderService : ProviderService, Loggable {
         }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
         return getWebPage("$VK_URL/${channel.uri}")
                 .getSingleElementByClass("page_cover_image")
                 .getElementsByTag("img")
@@ -53,8 +50,7 @@ class VkScrapeProviderService : ProviderService, Loggable {
                 .attr("src")
     }
 
-    override fun sourceType(): SourceType = VK
-
+    override val provider: Provider = VK
 
     private fun extractId(element: Element): String {
         return element

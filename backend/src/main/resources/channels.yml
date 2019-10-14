@@ -1,59 +1,59 @@
 - id: reddit:memes
   name: memes (Reddit)
   enabled: true
-  sourceType: REDDIT
+  provider: REDDIT
   uri: memes
 
 - id: reddit:videos
   name: videos (Reddit)
   enabled: true
-  sourceType: REDDIT
+  provider: REDDIT
   uri: videos
 
 - id: vk:vgik
   name: ВГИК (VK)
   enabled: true
-  sourceType: VK
+  provider: VK
   uri: komment
 
 - id: vk:p_drogba
   name: Портье Дрогба (VK)
   enabled: true
-  sourceType: VK
+  provider: VK
   uri: p_drogba
 
 - id: facebook:originaltrollfootball
   name: Troll Football (Facebook)
   enabled: true
-  sourceType: FACEBOOK
+  provider: FACEBOOK
   uri: originaltrollfootball
 
 - id: instagram:originaltrollfootball
   name: Troll Football (Instagram)
   enabled: true
-  sourceType: INSTAGRAM
+  provider: INSTAGRAM
   uri: originaltrollfootball
 
 - id: twitter:russianmemesltd
   name: Russian Memes United (Twitter)
   enabled: true
-  sourceType: TWITTER
+  provider: TWITTER
   uri: russianmemesltd
 
 - id: 9gag:meme
   name: memes (9gag)
   enabled: true
-  sourceType: NINEGAG
+  provider: NINEGAG
   uri: meme
 
 - id: pinterest:celiatoler:pinterest-memes
   name: some memes (pinterest)
   enabled: true
-  sourceType: PINTEREST
+  provider: PINTEREST
   uri: celiatoler/pinterest-memes
 
 - id: ifunny:memes
   name: memes (ifunny)
   enabled: true
-  sourceType: IFUNNY
+  provider: IFUNNY
   uri: memes

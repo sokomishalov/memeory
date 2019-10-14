@@ -1,7 +1,6 @@
-package ru.sokomishalov.memeory.service.provider.facebook.scrape
+package ru.sokomishalov.memeory.service.provider.facebook
 
 import org.jsoup.nodes.Element
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.html.getWebPage
@@ -10,10 +9,9 @@ import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.FACEBOOK
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.facebook.FacebookCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_BASE_URL
 import ru.sokomishalov.memeory.util.consts.FACEBOOK_GRAPH_BASE_URL
@@ -25,10 +23,9 @@ import java.util.UUID.randomUUID
  * @author sokomishalov
  */
 @Service
-@Conditional(FacebookCondition::class, FacebookScrapeCondition::class)
-class FacebookScrapeProviderService : ProviderService {
+class FacebookProviderService : ProviderService {
 
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         val webPage = getWebPage("$FACEBOOK_BASE_URL/${channel.uri}/posts")
         val elements = webPage.getElementsByClass("userContentWrapper")
 
@@ -43,13 +40,11 @@ class FacebookScrapeProviderService : ProviderService {
     }
 
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
         return "$FACEBOOK_GRAPH_BASE_URL/${channel.uri}/picture?type=small"
     }
 
-
-    override fun sourceType(): SourceType = FACEBOOK
-
+    override val provider: Provider = FACEBOOK
 
     private fun getIdByUserContentWrapper(contentWrapper: Element): String {
         return contentWrapper

@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.service.provider
 
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.enums.SourceType.REDDIT
+import ru.sokomishalov.memeory.enums.Provider.REDDIT
 
 /**
  * @author sokomishalov
@@ -11,7 +11,7 @@ class RedditApiIntegrationTest : AbstractProviderIntegrationTest() {
             id = "reddit:memes",
             name = "memes (Reddit)",
             enabled = true,
-            sourceType = REDDIT,
+            provider = REDDIT,
             uri = "memes"
     )
 }

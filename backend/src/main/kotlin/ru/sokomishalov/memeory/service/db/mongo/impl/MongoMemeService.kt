@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.service.db.mongo.impl
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -30,7 +29,6 @@ import ru.sokomishalov.memeory.mapper.MemeMapper.Companion.INSTANCE as memeMappe
 
 @Service
 @Primary
-@ExperimentalCoroutinesApi
 class MongoMemeService(
         private val repository: MemeRepository,
         private val profileService: ProfileService,
@@ -56,7 +54,7 @@ class MongoMemeService(
 
         val foundMemes = when {
             profile == null || profile.watchAllChannels -> repository.findAllMemesBy(pageRequest).await()
-            else -> repository.findAllByChannelIdIn(profile.channels ?: emptyList(), pageRequest).await()
+            else -> repository.findAllByChannelIdIn(profile.channels, pageRequest).await()
         }
 
         return foundMemes.aMap { memeMapper.toDto(it) }

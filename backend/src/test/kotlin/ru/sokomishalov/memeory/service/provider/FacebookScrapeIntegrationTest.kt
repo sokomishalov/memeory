@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.service.provider
 
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.enums.SourceType.FACEBOOK
+import ru.sokomishalov.memeory.enums.Provider.FACEBOOK
 
 /**
  * @author sokomishalov
@@ -11,7 +11,7 @@ class FacebookScrapeIntegrationTest : AbstractProviderIntegrationTest() {
             id = "facebook:originaltrollfootball",
             name = "Troll Football (Facebook)",
             enabled = true,
-            sourceType = FACEBOOK,
+            provider = FACEBOOK,
             uri = "originaltrollfootball"
     )
 }

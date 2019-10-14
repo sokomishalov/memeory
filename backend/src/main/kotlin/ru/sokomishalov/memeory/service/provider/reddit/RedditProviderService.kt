@@ -1,37 +1,32 @@
-package ru.sokomishalov.memeory.service.provider.reddit.api
+package ru.sokomishalov.memeory.service.provider.reddit
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.awaitStrict
+import ru.sokomishalov.commons.spring.webclient.REACTIVE_WEB_CLIENT
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.*
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.REDDIT
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.REDDIT
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.reddit.RedditCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.REDDIT_BASE_URL
 import java.lang.System.currentTimeMillis
 import java.util.*
 
 @Service
-@Conditional(RedditCondition::class)
-class RedditProviderService(private val globalProps: MemeoryProperties,
-                            private val webClient: WebClient
-) : ProviderService {
+class RedditProviderService(private val props: MemeoryProperties) : ProviderService {
 
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
-        val response = webClient
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
+        val response = REACTIVE_WEB_CLIENT
                 .get()
-                .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${globalProps.fetchMaxCount}")
+                .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${props.fetchMaxCount}")
                 .exchange()
                 .awaitStrict()
                 .awaitBody<JsonNode>()
@@ -61,8 +56,8 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
-        val response = webClient
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
+        val response = REACTIVE_WEB_CLIENT
                 .get()
                 .uri("$REDDIT_BASE_URL/r/${channel.uri}/about.json")
                 .exchange()
@@ -75,7 +70,7 @@ class RedditProviderService(private val globalProps: MemeoryProperties,
         return communityIcon?.ifBlank { imgIcon }
     }
 
-    override fun sourceType(): SourceType = REDDIT
+    override val provider: Provider = REDDIT
 
     private fun JsonNode?.getValue(field: String): String? {
         return this

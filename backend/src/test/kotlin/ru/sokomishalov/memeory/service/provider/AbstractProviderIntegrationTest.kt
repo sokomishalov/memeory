@@ -1,7 +1,10 @@
+@file:Suppress("unused")
+
 package ru.sokomishalov.memeory.service.provider
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -22,21 +25,26 @@ abstract class AbstractProviderIntegrationTest : AbstractSpringTest(), Loggable 
 
     protected abstract val channel: ChannelDTO
 
+    private lateinit var service: ProviderService
+
     @MockBean
-    @Suppress("unused")
     lateinit var scheduler: MemesFetchingScheduler
 
     @Autowired
-    lateinit var providers: List<ProviderService>
+    lateinit var providerFactory: ProviderFactory
 
     @Autowired
     @Qualifier("placeholder")
     lateinit var placeholder: ByteArray
 
+    @Before
+    fun setUp() {
+        service = providerFactory.getService(channel.provider)!!
+    }
+
     @Test
     fun `Check that channel memes has been fetched`() {
-        val service = providers.find { it.sourceType() == channel.sourceType }!!
-        val memes = runBlocking { service.fetchMemesFromChannel(channel) }
+        val memes = runBlocking { service.fetchMemes(channel) }
         log("Memes: ${OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(memes)}")
 
         assertFalse(memes.isNullOrEmpty())
@@ -52,8 +60,7 @@ abstract class AbstractProviderIntegrationTest : AbstractSpringTest(), Loggable 
 
     @Test
     fun `Check that channel logo has been fetched`() {
-        val service = providers.find { it.sourceType() == channel.sourceType }!!
-        val image = runBlocking { getImageByteArray(service.getLogoUrlByChannel(channel), orElse = placeholder) }
+        val image = runBlocking { getImageByteArray(service.getLogoUrl(channel), orElse = placeholder) }
 
         assertNotEquals(placeholder.size, image.size)
         assertNotEquals(placeholder, image)

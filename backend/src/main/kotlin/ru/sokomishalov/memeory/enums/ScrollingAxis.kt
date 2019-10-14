@@ -2,7 +2,7 @@
 
 package ru.sokomishalov.memeory.enums
 
-enum class PreferredOrientation {
+enum class ScrollingAxis {
     HORIZONTAL,
     VERTICAL
 }

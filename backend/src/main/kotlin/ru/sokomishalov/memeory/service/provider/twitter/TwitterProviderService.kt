@@ -1,7 +1,6 @@
-package ru.sokomishalov.memeory.service.provider.twitter.scrape
+package ru.sokomishalov.memeory.service.provider.twitter
 
 import org.jsoup.nodes.Element
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.html.fixText
@@ -12,10 +11,9 @@ import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.TWITTER
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.twitter.TwitterCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
 import java.util.*
@@ -25,10 +23,9 @@ import java.util.*
  * @author sokomishalov
  */
 @Service
-@Conditional(TwitterCondition::class, TwitterScrapeCondition::class)
-class TwitterScrapeProviderService : ProviderService {
+class TwitterProviderService : ProviderService {
 
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         val webPage = getWebPage("$TWITTER_URL/${channel.uri}")
 
         val posts = webPage
@@ -50,16 +47,14 @@ class TwitterScrapeProviderService : ProviderService {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
         return getWebPage("$TWITTER_URL/${channel.uri}")
                 .body()
                 .getSingleElementByClass("ProfileAvatar-image")
                 .attr("src")
     }
 
-
-    override fun sourceType(): SourceType = TWITTER
-
+    override val provider: Provider = TWITTER
 
     private fun extractIdFromTweet(tweet: Element): String {
         return tweet

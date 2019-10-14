@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.service.provider
 
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.enums.SourceType.IFUNNY
+import ru.sokomishalov.memeory.enums.Provider.IFUNNY
 
 /**
  * @author sokomishalov
@@ -11,7 +11,7 @@ class IFunnyScrapeIntegrationTest : AbstractProviderIntegrationTest() {
             id = "ifunny:user:memes",
             name = "memes user (ifunny)",
             enabled = true,
-            sourceType = IFUNNY,
+            provider = IFUNNY,
             uri = "memes"
     )
 }

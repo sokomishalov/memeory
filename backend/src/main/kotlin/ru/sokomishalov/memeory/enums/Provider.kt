@@ -1,6 +1,6 @@
 package ru.sokomishalov.memeory.enums
 
-enum class SourceType {
+enum class Provider {
     REDDIT,
     FACEBOOK,
     INSTAGRAM,

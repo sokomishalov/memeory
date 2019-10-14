@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.dto
 
-import ru.sokomishalov.memeory.enums.PreferredOrientation
-import ru.sokomishalov.memeory.enums.PreferredOrientation.VERTICAL
+import ru.sokomishalov.memeory.enums.ScrollingAxis
+import ru.sokomishalov.memeory.enums.ScrollingAxis.VERTICAL
 
 
 /**
@@ -9,7 +9,7 @@ import ru.sokomishalov.memeory.enums.PreferredOrientation.VERTICAL
  */
 data class ProfileDTO(
         var id: String? = null,
-        var selectedOrientation: PreferredOrientation = VERTICAL,
+        var selectedOrientation: ScrollingAxis = VERTICAL,
         var watchAllChannels: Boolean = true,
         var channels: List<String> = emptyList(),
         var socialsMap: Map<String, SocialAccountDTO> = emptyMap()

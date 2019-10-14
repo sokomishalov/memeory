@@ -52,10 +52,6 @@ dependencies {
 
     implementation("io.netty:netty-transport-native-epoll:4.1.42.Final")
 
-    implementation("com.vk.api:sdk:0.5.12") {
-        exclude(group = "org.apache.logging.log4j")
-        exclude(group = "org.asynchttpclient")
-    }
     implementation("com.github.igor-suhorukov:instagramscraper:2.2")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -10,9 +10,10 @@ import FloatingButton from "../common/buttons/floating-button";
 import {addOrRemove} from "../../util/collections/collections";
 import {infoToast} from "../common/toast/toast";
 import {setProfile as saveProfileAtLocalStorage} from "../../util/auth/profile"
-import {Switch} from "antd";
+import {Button, Switch} from "antd";
+import {withRouter} from "react-router";
 
-const Channels = () => {
+const Channels = ({history}) => {
     const [loading, setLoading] = useState(false)
     const [channels, setChannels] = useState([])
     const [fetchedProfile, setFetchedProfile] = useState({})
@@ -57,12 +58,20 @@ const Channels = () => {
     return (
         <Loader loading={loading}>
             <div className="channels">
-                <div className="channels-header">Выберите каналы, которые Вам интересны!</div>
-                <div className="channels-watch-all">
-                    Смотреть все
-                    <Switch style={{marginLeft: 10}}
-                            onChange={toggleWatchAll}
-                            checked={profile["watchAllChannels"]}/>
+                <div className="channels-header">
+                    <Button icon="left"
+                            onClick={history.goBack}>
+                        Назад
+                    </Button>
+                    <div className="channels-header-caption">
+                        Выберите каналы, которые Вам интересны!
+                    </div>
+                    <div className="channels-header-watch-all">
+                        Смотреть все
+                        <Switch style={{marginLeft: 10}}
+                                onChange={toggleWatchAll}
+                                checked={profile["watchAllChannels"]}/>
+                    </div>
                 </div>
                 <div className="channels-list">
                     {_.map(channels, (channel) => {
@@ -87,4 +96,4 @@ const Channels = () => {
     )
 }
 
-export default Channels
+export default withRouter(Channels)

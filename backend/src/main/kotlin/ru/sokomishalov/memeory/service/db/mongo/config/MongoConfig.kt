@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.config
+package ru.sokomishalov.memeory.service.db.mongo.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
@@ -15,5 +15,7 @@ import javax.annotation.PostConstruct
 class MongoConfig(private val mongoConverter: MappingMongoConverter) {
 
     @PostConstruct
-    fun customizeConversion() = mongoConverter.setMapKeyDotReplacement(MONGO_KEY_DOT_REPLACEMENT)
+    fun customizeConversion() {
+        mongoConverter.setMapKeyDotReplacement(MONGO_KEY_DOT_REPLACEMENT)
+    }
 }

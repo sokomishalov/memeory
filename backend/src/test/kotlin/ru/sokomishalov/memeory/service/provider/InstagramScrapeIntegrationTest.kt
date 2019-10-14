@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.service.provider
 
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.enums.SourceType.INSTAGRAM
+import ru.sokomishalov.memeory.enums.Provider.INSTAGRAM
 
 /**
  * @author sokomishalov
@@ -11,7 +11,7 @@ class InstagramScrapeIntegrationTest : AbstractProviderIntegrationTest() {
             id = "instagram:originaltrollfootball",
             name = "Troll Football (Instagram)",
             enabled = true,
-            sourceType = INSTAGRAM,
+            provider = INSTAGRAM,
             uri = "originaltrollfootball"
     )
 }

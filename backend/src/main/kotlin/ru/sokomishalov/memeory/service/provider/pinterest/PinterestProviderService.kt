@@ -1,8 +1,6 @@
-package ru.sokomishalov.memeory.service.provider.pinterest.scrape
+package ru.sokomishalov.memeory.service.provider.pinterest
 
 import com.fasterxml.jackson.databind.JsonNode
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.html.getWebPage
@@ -13,10 +11,9 @@ import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.PINTEREST
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.PINTEREST
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.pinterest.PinterestCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.PINTEREST_URL
 import java.util.Locale.ROOT
@@ -29,13 +26,13 @@ import java.util.Date.from as dateFrom
  * @author sokomishalov
  */
 @Service
-@Conditional(PinterestCondition::class, PinterestScrapeCondition::class)
-@ExperimentalCoroutinesApi
-class PinterestScrapeProviderService : ProviderService, Loggable {
+class PinterestProviderService : ProviderService, Loggable {
 
-    private val dateTimeFormatter = dateTimeFormatterOfPattern("EEE, d MMM yyyy HH:mm:ss Z", ROOT)
+    companion object {
+        private val DATE_FORMATTER = dateTimeFormatterOfPattern("EEE, d MMM yyyy HH:mm:ss Z", ROOT)
+    }
 
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         val infoJsonNode = parseInitJson(channel)
         val feedList = infoJsonNode["resourceDataCache"][1]["data"]["board_feed"].asIterable()
 
@@ -45,7 +42,7 @@ class PinterestScrapeProviderService : ProviderService, Loggable {
                     MemeDTO(
                             id = "${channel.id}$DELIMITER${it["id"].asText()}",
                             caption = it["description"]?.asText(),
-                            publishedAt = dateFrom(zonedDateTimeParse(it["created_at"]?.asText(), dateTimeFormatter).toInstant()),
+                            publishedAt = dateFrom(zonedDateTimeParse(it["created_at"]?.asText(), DATE_FORMATTER).toInstant()),
                             attachments = listOf(AttachmentDTO(
                                     type = IMAGE,
                                     url = imageInfo["url"]?.asText(),
@@ -55,7 +52,7 @@ class PinterestScrapeProviderService : ProviderService, Loggable {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
         val infoJsonNode = parseInitJson(channel)
 
         return infoJsonNode["resourceDataCache"]
@@ -66,8 +63,7 @@ class PinterestScrapeProviderService : ProviderService, Loggable {
                 ?.asText()
     }
 
-    override fun sourceType(): SourceType = PINTEREST
-
+    override val provider: Provider = PINTEREST
 
     private suspend fun parseInitJson(channel: ChannelDTO): JsonNode {
         val webPage = getWebPage("$PINTEREST_URL/${channel.uri}")

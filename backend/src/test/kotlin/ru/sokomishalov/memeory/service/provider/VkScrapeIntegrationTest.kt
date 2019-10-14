@@ -1,7 +1,7 @@
 package ru.sokomishalov.memeory.service.provider
 
 import ru.sokomishalov.memeory.dto.ChannelDTO
-import ru.sokomishalov.memeory.enums.SourceType.VK
+import ru.sokomishalov.memeory.enums.Provider.VK
 
 /**
  * @author sokomishalov
@@ -11,7 +11,7 @@ class VkScrapeIntegrationTest : AbstractProviderIntegrationTest() {
             id = "vk:vgik",
             name = "ВГИК (VK)",
             enabled = true,
-            sourceType = VK,
+            provider = VK,
             uri = "komment"
     )
 }

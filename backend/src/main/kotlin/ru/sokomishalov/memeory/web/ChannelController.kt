@@ -10,6 +10,7 @@ import ru.sokomishalov.commons.core.images.getImageByteArray
 import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
+import ru.sokomishalov.memeory.service.provider.ProviderFactory
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.consts.DELIMITER
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity.ok as responseEntityOk
 @RequestMapping("/channels")
 class ChannelController(private val channelService: ChannelService,
                         private val providerServices: List<ProviderService>,
+                        private val providerFactory: ProviderFactory,
                         private val cache: CacheService,
                         @Qualifier("placeholder")
                         private val placeholder: ByteArray
@@ -51,9 +53,8 @@ class ChannelController(private val channelService: ChannelService,
     suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
         val logoByteArray = cache.get(CHANNEL_LOGO_CACHE_KEY, channelId) {
             val channel = channelService.findById(channelId)
-            val service = providerServices.find { p -> p.sourceType() == channel.sourceType }
-
-            val url = service?.getLogoUrlByChannel(channel)
+            val service = providerFactory.getService(channel.provider)
+            val url = service?.getLogoUrl(channel)
             getImageByteArray(url, orElse = placeholder)
         }
 

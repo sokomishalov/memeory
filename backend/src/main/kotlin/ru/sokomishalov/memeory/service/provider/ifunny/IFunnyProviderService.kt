@@ -1,6 +1,5 @@
-package ru.sokomishalov.memeory.service.provider.ifunny.scrape
+package ru.sokomishalov.memeory.service.provider.ifunny
 
-import org.springframework.context.annotation.Conditional
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.html.getSingleElementByClass
 import ru.sokomishalov.commons.core.html.getWebPage
@@ -9,10 +8,9 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
 import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO
-import ru.sokomishalov.memeory.enums.SourceType
-import ru.sokomishalov.memeory.enums.SourceType.IFUNNY
+import ru.sokomishalov.memeory.enums.Provider
+import ru.sokomishalov.memeory.enums.Provider.IFUNNY
 import ru.sokomishalov.memeory.service.provider.ProviderService
-import ru.sokomishalov.memeory.service.provider.ifunny.IFunnyCondition
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.IFUNNY_URL
 
@@ -20,10 +18,9 @@ import ru.sokomishalov.memeory.util.consts.IFUNNY_URL
  * @author sokomishalov
  */
 @Service
-@Conditional(IFunnyCondition::class, IFunnyScrapeCondition::class)
 class IFunnyProviderService : ProviderService {
 
-    override suspend fun fetchMemesFromChannel(channel: ChannelDTO): List<MemeDTO> {
+    override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         val posts = getWebPage("${IFUNNY_URL}/${channel.uri}")
                 .getSingleElementByClass("feed__list")
                 .getElementsByClass("stream__item")
@@ -48,12 +45,12 @@ class IFunnyProviderService : ProviderService {
                 }
     }
 
-    override suspend fun getLogoUrlByChannel(channel: ChannelDTO): String? {
+    override suspend fun getLogoUrl(channel: ChannelDTO): String? {
         return getWebPage("${IFUNNY_URL}/${channel.uri}")
                 .getElementsByTag("meta")
                 .find { it.attr("property") == "og:image" }
                 ?.attr("content")
     }
 
-    override fun sourceType(): SourceType = IFUNNY
+    override val provider: Provider = IFUNNY
 }

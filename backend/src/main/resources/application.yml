@@ -14,32 +14,6 @@ memeory:
   fetch-interval: 30m
   meme-life-time: 10d
 
-provider:
-  reddit:
-    enabled: true
-    scrape-enabled: false
-  vk:
-    enabled: true
-    scrape-enabled: true
-  facebook:
-    enabled: true
-    scrape-enabled: true
-  instagram:
-    enabled: true
-    scrape-enabled: true
-  twitter:
-    enabled: true
-    scrape-enabled: true
-  ninegag:
-    enabled: true
-    scrape-enabled: true
-  pinterest:
-    enabled: true
-    scrape-enabled: true
-  ifunny:
-    enabled: true
-    scrape-enabled: true
-
 management:
   health:
     mongo:

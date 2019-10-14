@@ -20,7 +20,7 @@ import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.db.MemeService
-import ru.sokomishalov.memeory.service.provider.ProviderService
+import ru.sokomishalov.memeory.service.provider.ProviderFactory
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -31,7 +31,7 @@ import kotlin.concurrent.schedule
 class MemesFetchingScheduler(
         private val channelService: ChannelService,
         private val props: MemeoryProperties,
-        private val providerServices: List<ProviderService>,
+        private val providerFactory: ProviderFactory,
         private val memeService: MemeService,
         private val lockProvider: LockProvider,
         @Value("classpath:channels.yml")
@@ -71,11 +71,11 @@ class MemesFetchingScheduler(
                 lockName = channel.id,
                 lockAtLeastFor = props.fetchInterval.minusMinutes(1)
         ) {
-            val providerService = providerServices.find { it.sourceType() == channel.sourceType }
+            val providerService = providerFactory.getService(channel.provider)
             when {
                 providerService != null -> runCatching {
                     providerService
-                            .fetchMemesFromChannel(channel)
+                            .fetchMemes(channel)
                             .map {
                                 it.apply {
                                     it.channelId = channel.id
