@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 enum BuildFlavor {
   local,
-  development,
+  heroku,
   production,
 }
 

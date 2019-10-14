@@ -4,7 +4,7 @@ import ru.sokomishalov.memeory.dto.MemeDTO
 
 interface MemeService {
 
-    suspend fun saveMemesIfNotExist(memes: List<MemeDTO>): List<MemeDTO>
+    suspend fun saveBatch(batch: List<MemeDTO>): List<MemeDTO>
 
-    suspend fun pageOfMemes(page: Int, count: Int, token: String?): List<MemeDTO>
+    suspend fun getPage(page: Int, count: Int, token: String?): List<MemeDTO>
 }

@@ -21,5 +21,5 @@ class ProfileController(
 
     @PostMapping("/save")
     suspend fun saveProfileInfo(@RequestBody profile: ProfileDTO): ProfileDTO? =
-            service.saveIfNecessary(profile)
+            service.save(profile)
 }

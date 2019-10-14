@@ -6,6 +6,6 @@ interface ProfileService {
 
     suspend fun findById(id: String): ProfileDTO?
 
-    suspend fun saveIfNecessary(profile: ProfileDTO): ProfileDTO
+    suspend fun save(profile: ProfileDTO): ProfileDTO
 
 }

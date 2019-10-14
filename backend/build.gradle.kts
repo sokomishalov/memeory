@@ -61,8 +61,18 @@ dependencies {
     }
 }
 
+task("copyToLib") {
+    doLast {
+        copy {
+            into("$buildDir/libs")
+            from(configurations.compile)
+        }
+    }
+}
+
 task("stage") {
     dependsOn.add("build")
+    dependsOn.add("copyToLib")
 }
 
 tasks.withType<Test> {

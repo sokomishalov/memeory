@@ -6,8 +6,6 @@ import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update.update
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.collections.aFilter
-import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ChannelDTO
@@ -28,12 +26,12 @@ class MongoChannelService(
 ) : ChannelService {
     override suspend fun findAllEnabled(): List<ChannelDTO> {
         val channels = repository.findAllByEnabled(true).await()
-        return channels.aMap { channelMapper.toDto(it) }
+        return channels.map { channelMapper.toDto(it) }
     }
 
     override suspend fun findAll(): List<ChannelDTO> {
         val channels = repository.findAll().await()
-        return channels.aMap { channelMapper.toDto(it) }
+        return channels.map { channelMapper.toDto(it) }
     }
 
     override suspend fun findById(channelId: String): ChannelDTO {
@@ -50,12 +48,12 @@ class MongoChannelService(
     override suspend fun saveIfNotExist(vararg channels: ChannelDTO): List<ChannelDTO> {
         val channelsToSave = channels
                 .toList()
-                .aFilter { repository.existsById(it.id).awaitStrict().not() }
-                .aMap { channelMapper.toEntity(it) }
+                .filter { repository.existsById(it.id).awaitStrict().not() }
+                .map { channelMapper.toEntity(it) }
 
         val savedChannels = repository.saveAll(channelsToSave).await()
 
-        return savedChannels.aMap { channelMapper.toDto(it) }
+        return savedChannels.map { channelMapper.toDto(it) }
     }
 
     override suspend fun toggleEnabled(enabled: Boolean, vararg channelIds: String) {

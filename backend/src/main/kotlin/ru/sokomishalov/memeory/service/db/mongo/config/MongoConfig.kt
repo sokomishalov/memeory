@@ -1,10 +1,16 @@
 package ru.sokomishalov.memeory.service.db.mongo.config
 
+import com.mongodb.MongoClientOptions
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
+import org.springframework.data.mongodb.MongoDbFactory
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 import ru.sokomishalov.memeory.util.consts.MONGO_KEY_DOT_REPLACEMENT
-import javax.annotation.PostConstruct
+import java.time.Duration.ofSeconds
 
 
 /**
@@ -12,10 +18,24 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @EnableReactiveMongoRepositories("ru.sokomishalov.memeory.service.db.mongo.repository")
-class MongoConfig(private val mongoConverter: MappingMongoConverter) {
+class MongoConfig {
 
-    @PostConstruct
-    fun customizeConversion() {
-        mongoConverter.setMapKeyDotReplacement(MONGO_KEY_DOT_REPLACEMENT)
+    @Bean
+    @Primary
+    fun mongoOptions(): MongoClientOptions {
+        return MongoClientOptions
+                .builder()
+                .retryWrites(false)
+                .connectTimeout(ofSeconds(10).toMillis().toInt())
+                .socketTimeout(ofSeconds(10).toMillis().toInt())
+                .build()
+    }
+
+    @Bean
+    @Primary
+    fun mongoConverter(mongoFactory: MongoDbFactory, mongoMappingContext: MongoMappingContext): MappingMongoConverter {
+        return MappingMongoConverter(DefaultDbRefResolver(mongoFactory), mongoMappingContext).apply {
+            setMapKeyDotReplacement(MONGO_KEY_DOT_REPLACEMENT)
+        }
     }
 }

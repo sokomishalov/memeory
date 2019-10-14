@@ -34,7 +34,7 @@ class MongoProfileService(
         return profile?.let { profileMapper.toDto(it) }
     }
 
-    override suspend fun saveIfNecessary(profile: ProfileDTO): ProfileDTO {
+    override suspend fun save(profile: ProfileDTO): ProfileDTO {
         return when {
             profile.id.isNullOrBlank() && profile.socialsMap.isNotNullOrEmpty() -> {
                 val criteriaList = profile.socialsMap.entries.map {

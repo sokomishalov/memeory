@@ -16,5 +16,5 @@ class MemeController(
                      @PathVariable count: Int,
                      @RequestHeader(required = false, name = MEMEORY_TOKEN_HEADER) token: String?
     ): List<MemeDTO> =
-            service.pageOfMemes(page, count, token)
+            service.getPage(page, count, token)
 }

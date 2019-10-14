@@ -11,7 +11,6 @@ import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.service.db.ChannelService
 import ru.sokomishalov.memeory.service.provider.ProviderFactory
-import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import org.springframework.http.ResponseEntity.ok as responseEntityOk
@@ -22,7 +21,6 @@ import org.springframework.http.ResponseEntity.ok as responseEntityOk
 @RestController
 @RequestMapping("/channels")
 class ChannelController(private val channelService: ChannelService,
-                        private val providerServices: List<ProviderService>,
                         private val providerFactory: ProviderFactory,
                         private val cache: CacheService,
                         @Qualifier("placeholder")

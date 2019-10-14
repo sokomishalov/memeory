@@ -11,10 +11,9 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.collections.aFilter
-import ru.sokomishalov.commons.core.collections.aForEach
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
+import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
@@ -34,19 +33,19 @@ class MongoMemeService(
         private val profileService: ProfileService,
         private val template: ReactiveMongoTemplate,
         private val props: MemeoryProperties
-) : MemeService {
+) : MemeService, Loggable {
 
-    override suspend fun saveMemesIfNotExist(memes: List<MemeDTO>): List<MemeDTO> {
-        val memesToInsert = memes
-                .aFilter { (repository.existsById(it.id)).awaitStrict().not() }
-                .aMap { memeMapper.toEntity(it) }
+    override suspend fun saveBatch(batch: List<MemeDTO>): List<MemeDTO> {
+        val memesToInsert = batch
+                .filter { (repository.existsById(it.id)).awaitStrict().not() }
+                .map { memeMapper.toEntity(it) }
 
         val savedMemes = repository.saveAll(memesToInsert).await()
 
-        return savedMemes.aMap { memeMapper.toDto(it) }
+        return savedMemes.map { memeMapper.toDto(it) }
     }
 
-    override suspend fun pageOfMemes(page: Int, count: Int, token: String?): List<MemeDTO> {
+    override suspend fun getPage(page: Int, count: Int, token: String?): List<MemeDTO> {
         val id = token ?: EMPTY
         val profile = profileService.findById(id)
 
@@ -67,7 +66,7 @@ class MongoMemeService(
                     Index().on("createdAt", DESC).expire(props.memeLifeTime),
                     Index().on("publishedAt", DESC)
             )
-            indexes.aForEach { template.indexOps(Meme::class.java).ensureIndex(it) }
+            indexes.forEach { template.indexOps(Meme::class.java).ensureIndex(it) }
         }
     }
 }

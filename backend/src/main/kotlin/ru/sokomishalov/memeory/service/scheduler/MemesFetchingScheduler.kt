@@ -10,7 +10,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
 import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
@@ -48,10 +47,10 @@ class MemesFetchingScheduler(
             GlobalScope.launch {
                 val fetchedMemes = channelService
                         .findAllEnabled()
-                        .aMap { fetchMemesByChannel(it) }
+                        .map { fetchMemesClusterable(it) }
                         .flatten()
 
-                val savedMemes = memeService.saveMemesIfNotExist(fetchedMemes)
+                val savedMemes = memeService.saveBatch(fetchedMemes)
                 log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
             }
         }
@@ -66,28 +65,38 @@ class MemesFetchingScheduler(
         }
     }
 
-    private suspend fun fetchMemesByChannel(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {
-        return lockProvider.withClusterLock(
-                lockName = channel.id,
-                lockAtLeastFor = props.fetchInterval.minusMinutes(1)
-        ) {
-            val providerService = providerFactory.getService(channel.provider)
-            when {
-                providerService != null -> runCatching {
-                    providerService
-                            .fetchMemes(channel)
-                            .map {
-                                it.apply {
-                                    it.channelId = channel.id
-                                    it.channelName = channel.name
-                                }
-                            }
-                }.getOrElse {
-                    logWarn(it)
-                    orElse
-                }
-                else -> orElse
+    private suspend fun fetchMemesClusterable(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {
+        return when {
+            props.useClusterLocks -> {
+                lockProvider.withClusterLock(
+                        lockName = channel.id,
+                        lockAtLeastFor = props.fetchInterval.minusMinutes(1)
+                ) {
+                    fetchMemes(channel, orElse)
+                } ?: orElse
             }
-        } ?: orElse
+            else -> fetchMemes(channel, orElse)
+        }
+
+    }
+
+    private suspend fun fetchMemes(channel: ChannelDTO, orElse: List<MemeDTO>): List<MemeDTO> {
+        val providerService = providerFactory.getService(channel.provider)
+        return when {
+            providerService != null -> runCatching {
+                providerService
+                        .fetchMemes(channel)
+                        .map {
+                            it.apply {
+                                it.channelId = channel.id
+                                it.channelName = channel.name
+                            }
+                        }
+            }.getOrElse {
+                logWarn(it)
+                orElse
+            }
+            else -> orElse
+        }
     }
 }
