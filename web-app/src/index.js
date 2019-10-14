@@ -1,22 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'moment/locale/ru'
+
 import './app/common/styles/index.css';
 import './app/common/styles/boilerplates.css'
 import './app/common/styles/antd.css';
 import 'react-aspect-ratio/aspect-ratio.css'
-import * as sw from './app/sw/sw';
-import {App} from "./app/App";
+
 import moment from "moment";
+import 'moment/min/locales'
+import "./locales/i18n";
+import {BROWSER_LANGUAGE} from "./locales/i18n";
+
 import {createBrowserHistory} from "history";
 import {Router} from "react-router";
+import * as sw from './app/sw/sw';
 
-moment.locale("ru")
+import App from "./app/App";
 
-export const history = createBrowserHistory();
+
+moment.locale(BROWSER_LANGUAGE)
 
 ReactDOM.render(
-    <Router history={history}>
+    <Router history={createBrowserHistory()}>
         <App/>
     </Router>,
     document.getElementById('root')

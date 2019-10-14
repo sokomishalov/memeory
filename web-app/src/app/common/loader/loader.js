@@ -4,8 +4,9 @@ import {isMobile} from "react-device-detect"
 import _ from "lodash";
 import './loader.scss'
 import {ActivityIndicator} from "antd-mobile";
+import {withT} from "../../../locales/i18n";
 
-const Loader = ({loading, ...props}) => {
+const Loader = ({loading, t, ...props}) => {
     let children;
     if (_.isEmpty(props.children)) {
         children = <div/>
@@ -15,7 +16,7 @@ const Loader = ({loading, ...props}) => {
 
     if (loading) {
         if (isMobile) {
-            return <ActivityIndicator toast text="Подождите..."/>;
+            return <ActivityIndicator toast text={t("wait.please")}/>;
         } else {
             return (
                 <div style={{textAlign: 'left'}}>
@@ -35,4 +36,4 @@ const Loader = ({loading, ...props}) => {
     return children
 };
 
-export default Loader;
+export default withT(Loader);

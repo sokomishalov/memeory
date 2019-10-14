@@ -17,19 +17,19 @@ const Confirm = ({onConfirm, text, ...props}) => {
     );
 };
 
-export const withConfirmation = (text, onConfirm) => {
+export const withConfirmation = (text, onConfirm, yesText = "Yes", noText = "No") => {
     return isBrowser
         ? BrowserModal.confirm({
             title: text,
             content: '',
-            okText: 'Да',
-            cancelText: 'Нет',
+            okText: yesText,
+            cancelText: noText,
             onOk: onConfirm,
             onCancel: _.noop,
         })
         : MobileModal.alert(text, '', [
-            {text: 'Нет', onPress: _.noop},
-            {text: 'Да', onPress: onConfirm},
+            {text: noText, onPress: _.noop},
+            {text: yesText, onPress: onConfirm},
         ])
 };
 

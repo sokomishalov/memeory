@@ -15,6 +15,7 @@ import {
 import {saveProfile} from "../../api/profile";
 import {FIREBASE_CONFIG} from "../../util/auth/firebase";
 import {unAwait} from "../../util/http/axios";
+import {withT} from "../../locales/i18n";
 
 const Firebase = {
     firebaseAppAuth: firebase.initializeApp(FIREBASE_CONFIG).auth(),
@@ -25,7 +26,7 @@ const Firebase = {
     }
 };
 
-const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
+const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
 
     const [visible, setVisible] = useState(false);
 
@@ -48,19 +49,19 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
             <div onClick={openModal}>
                 {trigger}
             </div>
-            <Modal title="Авторизация через соц. сети"
+            <Modal title={t("auth.modal.caption")}
                    visible={visible}
                    onCancel={closeModal}
                    footer={null}>
                 <div className="sign-in">
                     <Button className="sign-in-google" onClick={signInWithGoogle}>
                         <span>
-                            {getAccountDisplayName(GOOGLE_PROVIDER, "Авторизуйтесь через Google")}
+                            {getAccountDisplayName(GOOGLE_PROVIDER, t("sign.in.with.google"))}
                         </span>
                     </Button>
                     <Button className="sign-in-facebook" onClick={signInWithFacebook}>
                         <span>
-                            {getAccountDisplayName(FACEBOOK_PROVIDER, "Авторизуйтесь через Facebook")}
+                            {getAccountDisplayName(FACEBOOK_PROVIDER, t("sign.in.with.facebook"))}
                         </span>
                     </Button>
                 </div>
@@ -69,4 +70,7 @@ const LoginModal = ({trigger, user, error, signInWithGoogle, signInWithFacebook}
     );
 };
 
-export default withFirebaseAuth(Firebase)(LoginModal);
+export default _.flow(
+    withFirebaseAuth(Firebase),
+    withT
+)(LoginModal);

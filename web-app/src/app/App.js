@@ -7,7 +7,14 @@ import Memes from "./memes/Memes";
 import Channels from "./channels/channels";
 import NotFound from "./not-found/not-found";
 
-export const App = () => (
+const withHeader = (component) => (
+    <>
+        <Header/>
+        {component}
+    </>
+)
+
+const App = () => (
     <div className="memeory">
         <Switch>
             <Route exact path={ROUTE.CORE} render={() => withHeader(<Memes/>)}/>
@@ -19,9 +26,4 @@ export const App = () => (
     </div>
 );
 
-const withHeader = (component) => (
-    <>
-        <Header/>
-        {component}
-    </>
-)
+export default App

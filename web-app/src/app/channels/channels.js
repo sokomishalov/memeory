@@ -12,8 +12,9 @@ import {infoToast} from "../common/toast/toast";
 import {setProfile as saveProfileAtLocalStorage} from "../../util/auth/profile"
 import {Button, Switch} from "antd";
 import {withRouter} from "react-router";
+import {withT} from "../../locales/i18n";
 
-const Channels = ({history}) => {
+const Channels = ({t, history}) => {
     const [loading, setLoading] = useState(false)
     const [channels, setChannels] = useState([])
     const [fetchedProfile, setFetchedProfile] = useState({})
@@ -52,7 +53,7 @@ const Channels = ({history}) => {
         setFetchedProfile(newProfile)
         setProfile(newProfile)
         saveProfileAtLocalStorage(newProfile)
-        infoToast("Изменения успешно сохранены!")
+        infoToast(t("changes.have.been.saved"))
     }
 
     return (
@@ -61,13 +62,13 @@ const Channels = ({history}) => {
                 <div className="channels-header">
                     <Button icon="left"
                             onClick={history.goBack}>
-                        Назад
+                        {t("back")}
                     </Button>
                     <div className="channels-header-caption">
-                        Выберите каналы, которые Вам интересны!
+                        {t("choose.relevant.channels")}
                     </div>
                     <div className="channels-header-watch-all">
-                        Смотреть все
+                        {t("watch.all")}
                         <Switch style={{marginLeft: 10}}
                                 onChange={toggleWatchAll}
                                 checked={profile["watchAllChannels"]}/>
@@ -86,7 +87,7 @@ const Channels = ({history}) => {
             {
                 !_.isEmpty(fetchedProfile)
                 && !_.eq(fetchedProfile, profile)
-                && <FloatingButton text="Сохранить изменения"
+                && <FloatingButton text={t("save.changes")}
                                    icon="save"
                                    color="green"
                                    onClick={saveChanges}
@@ -96,4 +97,7 @@ const Channels = ({history}) => {
     )
 }
 
-export default withRouter(Channels)
+export default _.flow(
+    withRouter,
+    withT
+)(Channels)

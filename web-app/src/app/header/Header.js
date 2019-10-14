@@ -4,11 +4,13 @@ import {Avatar, Button, Dropdown, Icon, Menu} from "antd"
 import {MemeoryLogo} from "../common/logo/MemeoryLogo"
 import {getUserDisplayName, isLoggedIn} from "../../util/auth/profile"
 import LoginModal from "../auth/LoginModal"
-import {withRouter} from "react-router";
-import {ROUTE} from "../../util/router/router";
-import {isBrowser} from "react-device-detect";
+import {withRouter} from "react-router"
+import {ROUTE} from "../../util/router/router"
+import {isBrowser} from "react-device-detect"
+import _ from "lodash"
+import {withT} from "../../locales/i18n";
 
-const Header = ({history}) => {
+const Header = ({t, history}) => {
     return (
         <div className="header">
             <div className="header-main" onClick={() => history.push(ROUTE.CORE)}>
@@ -18,7 +20,7 @@ const Header = ({history}) => {
                                  marginRight: 10,
                                  borderRadius: 10
                              }}/>
-                {isBrowser && "Memeory"}
+                {isBrowser && t("app.caption")}
             </div>
 
             <Dropdown overlay={
@@ -27,7 +29,7 @@ const Header = ({history}) => {
                         <LoginModal trigger={
                             <div style={{padding: "5px 12px"}}>
                                 <Icon type="profile" className="mr-10"/>
-                                Авторизуйтесь
+                                {t("auth.please")}
                             </div>
                         }/>
                     </Menu.Item>
@@ -35,7 +37,7 @@ const Header = ({history}) => {
                         isLoggedIn() &&
                         <Menu.Item key="2" onClick={() => history.push(ROUTE.CHANNELS)}>
                             <Icon type="appstore" className="mr-10"/>
-                            Каналы
+                            {t("channels.caption")}
                         </Menu.Item>
                     }
                 </Menu>
@@ -53,4 +55,7 @@ const Header = ({history}) => {
     )
 }
 
-export default withRouter(Header)
+export default _.flow(
+    withRouter,
+    withT
+)(Header)
