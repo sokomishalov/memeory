@@ -1,4 +1,4 @@
-import org.gradle.api.JavaVersion.VERSION_11
+import org.gradle.api.JavaVersion.VERSION_1_8
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -16,8 +16,7 @@ apply {
 }
 
 group = "ru.sokomishalov"
-version = "1.0.0"
-java.sourceCompatibility = VERSION_11
+java.sourceCompatibility = VERSION_1_8
 
 val developmentOnly: Configuration by configurations.creating
 configurations.runtimeClasspath.get().extendsFrom(developmentOnly)
@@ -62,10 +61,6 @@ dependencies {
     }
 }
 
-tasks.jar {
-    archiveBaseName.set(project.name)
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
 }
@@ -73,6 +68,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
 }
