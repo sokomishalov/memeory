@@ -16,7 +16,7 @@ apply {
 }
 
 group = "ru.sokomishalov"
-version = "0.0.1"
+version = "1.0.0"
 java.sourceCompatibility = VERSION_11
 
 val developmentOnly: Configuration by configurations.creating
@@ -60,6 +60,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+}
+
+tasks.jar {
+    archiveBaseName.set(project.name)
 }
 
 tasks.withType<Test> {
