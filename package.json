@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "build": "cp -r ./web-app/* ./"
+    "heroku-prebuild": "cp -r ./web-app/* ./"
   }
 }
