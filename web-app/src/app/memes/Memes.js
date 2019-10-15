@@ -31,7 +31,7 @@ const Memes = () => {
                             loader={<Loader loading={loading}/>}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
             </InfiniteScroll>
-            <BackTop/>
+            <BackTop className="memes-backtop"/>
         </div>
     )
 }
