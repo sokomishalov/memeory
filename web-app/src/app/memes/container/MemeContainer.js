@@ -1,7 +1,7 @@
 import React from 'react'
 import "./MemeContainer.css"
-import {VideoAttachment} from "./video/VideoAttachment"
-import {ImageAttachment} from "./image/ImageAttachment"
+import VideoAttachment from "./video/VideoAttachment"
+import ImageAttachment from "./image/ImageAttachment"
 import {timeAgo} from "../../../util/time/time"
 import {ChannelLogo} from "../../common/logo/ChannelLogo"
 import _ from "lodash"

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ImageAttachment = ({attachment}) => (
+const ImageAttachment = ({attachment}) => (
     <img src={attachment["url"]}
          width={400}
          height={400}
@@ -11,3 +11,5 @@ export const ImageAttachment = ({attachment}) => (
          }}
          alt="-1"/>
 );
+
+export default ImageAttachment;

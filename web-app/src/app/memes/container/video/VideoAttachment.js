@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactPlayer from 'react-player'
 
-export const VideoAttachment = ({attachment}) => (
+const VideoAttachment = ({attachment}) => (
     <ReactPlayer url={attachment["url"]}
                  width="100%"
                  height="100%"
@@ -16,3 +16,5 @@ export const VideoAttachment = ({attachment}) => (
                      }
                  }}/>
 );
+
+export default VideoAttachment;

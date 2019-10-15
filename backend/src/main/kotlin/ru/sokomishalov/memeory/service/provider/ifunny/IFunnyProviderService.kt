@@ -42,7 +42,7 @@ class IFunnyProviderService : ProviderService {
                                                 "video" in a.attr("href") -> VIDEO
                                                 else -> IMAGE
                                             },
-                                            aspectRatio = it.attr("data-ratio").toDoubleOrNull()
+                                            aspectRatio = it.attr("data-ratio").toDoubleOrNull()?.let { 1.div(it) }
                                     ))
                             )
                         }
