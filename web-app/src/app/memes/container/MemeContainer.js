@@ -11,10 +11,14 @@ import {MEME_BORDER_RADIUS} from "../../../util/consts/consts"
 
 const MemeContainer = ({meme}) => {
 
-    const renderAttachments = (attachments) => {
+    // noinspection JSCheckFunctionSignatures
+    const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0)
+
+    const renderItems = (attachments) => {
         const size = _.size(attachments)
         if (size > 1) {
-            return <Carousel autoplay>{_.map(attachments, renderAttachment)}</Carousel>
+            const items = _.map(attachments, renderAttachment)
+            return <Carousel autoplay>{items}</Carousel>
         } else if (size === 1) {
             return renderAttachment(_.head(attachments))
         } else {
@@ -23,19 +27,28 @@ const MemeContainer = ({meme}) => {
     }
 
     const renderAttachment = (a) => {
+        const key = a["url"]
         switch (a["type"]) {
             case "IMAGE":
-                return <ImageAttachment attachment={a}/>
+                return <ImageAttachment key={key} attachment={a}/>
             case "VIDEO":
-                return <VideoAttachment attachment={a}/>
+                return <VideoAttachment key={key} attachment={a}/>
             case "NONE":
             default:
-                return <div/>
+                return <div key={key}/>
         }
     }
 
-    // noinspection JSCheckFunctionSignatures
-    const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0)
+    const withAspectRatio = (component) => (
+        <AspectRatio ratio={attachmentsAspectRatio}
+                     style={{
+                         borderBottomRightRadius: MEME_BORDER_RADIUS,
+                         borderBottomLeftRadius: MEME_BORDER_RADIUS,
+                         overflow: "hidden"
+                     }}>
+            {component}
+        </AspectRatio>
+    )
 
     return (
         <div className="meme"
@@ -61,14 +74,8 @@ const MemeContainer = ({meme}) => {
                 {meme["caption"]}
             </div>
 
-            <AspectRatio ratio={attachmentsAspectRatio}
-                         style={{
-                             borderBottomRightRadius: MEME_BORDER_RADIUS,
-                             borderBottomLeftRadius: MEME_BORDER_RADIUS,
-                             overflow: "hidden"
-                         }}>
-                {renderAttachments(meme["attachments"])}
-            </AspectRatio>
+
+            {withAspectRatio(renderItems(meme["attachments"]))}
         </div>
     )
 }
