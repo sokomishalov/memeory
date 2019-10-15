@@ -56,7 +56,7 @@ packages:
       name: chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.8"
+    version: "0.9.8+1"
   collection:
     dependency: transitive
     description:
@@ -206,7 +206,7 @@ packages:
       name: page_transition
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.4"
+    version: "1.1.5"
   path:
     dependency: transitive
     description:
@@ -248,7 +248,7 @@ packages:
       name: pull_to_refresh
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.6"
+    version: "1.5.7"
   quiver:
     dependency: transitive
     description:
@@ -288,7 +288,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.6+5"
+    version: "1.1.7+1"
   stack_trace:
     dependency: transitive
     description:
@@ -372,7 +372,7 @@ packages:
       name: video_player
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.2+1"
+    version: "0.10.2+3"
   webview_flutter:
     dependency: "direct main"
     description:
@@ -395,5 +395,5 @@ packages:
     source: hosted
     version: "2.2.0"
 sdks:
-  dart: ">=2.4.0 <3.0.0"
-  flutter: ">=1.5.0 <2.0.0"
+  dart: ">=2.5.0 <3.0.0"
+  flutter: ">=1.9.1 <2.0.0"
