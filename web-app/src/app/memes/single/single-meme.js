@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import "./single-meme.css"
-import _ from "lodash"
 import {withRouter} from "react-router";
-import {withT} from "../../../locales";
 import MemeContainer from "../container/MemeContainer";
 import {unAwait} from "../../../util/http";
 import {getSingleMeme} from "../../../api/memes";
 import Loader from "../../common/loader/loader";
 
 
-const SingleMeme = ({t, match}) => {
+const SingleMeme = ({match}) => {
     const id = match.params.id
 
     const [meme, setMeme] = useState({})
@@ -32,7 +30,4 @@ const SingleMeme = ({t, match}) => {
     );
 }
 
-export default _.flow(
-    withRouter,
-    withT
-)(SingleMeme)
+export default withRouter(SingleMeme)

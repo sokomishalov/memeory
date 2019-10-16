@@ -49,6 +49,7 @@ const MemeContainer = ({t, history, meme}) => {
         const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0)
         return (
             <AspectRatio ratio={attachmentsAspectRatio}
+                         onClick={stopPropagation}
                          style={{
                              borderBottomRightRadius: MEME_BORDER_RADIUS,
                              borderBottomLeftRadius: MEME_BORDER_RADIUS,
