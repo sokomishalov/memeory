@@ -5,6 +5,8 @@ import {getBackendUrl} from "../../firebase/firebase";
 axios.interceptors.request.use(async (config) => {
     const url = await getBackendUrl();
 
+    console.log(url)
+
     axios.defaults.baseURL = url
     config.baseURL = url;
 
