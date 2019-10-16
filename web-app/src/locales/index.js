@@ -10,7 +10,6 @@ unAwait(i18next
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        debug: true,
         fallbackLng: 'en-US',
         defaultNS: "memeory",
         nsSeparator: ':::',

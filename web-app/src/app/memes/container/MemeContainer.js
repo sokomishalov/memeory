@@ -101,7 +101,7 @@ const MemeContainer = ({t, history, meme}) => {
                     </div>
                 </div>
                 <div className="mr-10">
-                    <Dropdown trigger={isBrowser ? "hover" : "click"}
+                    <Dropdown trigger={isBrowser ? ["hover", "click"] : ["click"]}
                               placement="bottomCenter"
                               overlay={
                                   <Menu>

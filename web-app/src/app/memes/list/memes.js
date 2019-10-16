@@ -14,20 +14,23 @@ const Memes = () => {
 
     const loadMore = async (page) => {
         setLoading(true)
-        const newMemes = await getMemesPage(page - 1)
-        if (!_.isEmpty(newMemes)) {
-            setMemes(_.concat(memes, newMemes))
-        } else {
-            setHasMore(false)
+        try {
+            const newMemes = await getMemesPage(page - 1)
+            if (!_.isEmpty(newMemes)) {
+                setMemes(_.concat(memes, newMemes))
+            } else {
+                setHasMore(false)
+            }
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     return (
         <div className="memes">
             <InfiniteScroll pageStart={0}
                             loadMore={loadMore}
-                            hasMore={hasMore}
+                            hasMore={hasMore && !loading}
                             loader={<Loader key={0} loading={loading}/>}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
             </InfiniteScroll>
