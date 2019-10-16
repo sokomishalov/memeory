@@ -1,4 +1,6 @@
-import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/remote-config"
 import _ from "lodash"
 
 const FIREBASE_CONFIG = {
@@ -11,12 +13,10 @@ const FIREBASE_CONFIG = {
     appId: "1:142446820744:web:54e8b6c71153bba130ce3d"
 };
 
-console.log(FIREBASE_CONFIG)
-
 export const FIREBASE = firebase.initializeApp(FIREBASE_CONFIG)
 
 export const FIREBASE_AUTH = {
-    firebaseAppAuth: FIREBASE.auth(),
+    firebaseAppAuth: firebase.auth(),
     providers: {
         googleProvider: new firebase.auth.GoogleAuthProvider(),
         facebookProvider: new firebase.auth.FacebookAuthProvider(),
@@ -38,7 +38,7 @@ export const getBackendUrl = async () => {
         if (!_.isEmpty(cachedValue)) {
             return cachedValue
         } else {
-            await FIREBASE_REMOTE_CONFIG.fetch()
+            await FIREBASE_REMOTE_CONFIG.fetchAndActivate()
             return FIREBASE_REMOTE_CONFIG.getString(key)
         }
     }
