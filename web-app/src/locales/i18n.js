@@ -4,6 +4,7 @@ import i18next from 'i18next';
 import {initReactI18next, withTranslation} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import {unAwait} from "../util/http/axios";
+import detectBrowserLanguage from 'detect-browser-language'
 
 unAwait(i18next
     .use(LanguageDetector)
@@ -29,7 +30,7 @@ unAwait(i18next
 
 export const withT = (component) => withTranslation("memeory")(component)
 
-export const BROWSER_LANGUAGE = window.navigator.userLanguage || window.navigator.language
+export const BROWSER_LANGUAGE = detectBrowserLanguage()
 
 // noinspection JSUnusedGlobalSymbols
 export default i18next

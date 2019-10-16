@@ -1,12 +1,10 @@
 import React from 'react';
-import {BASE_BACKEND_URL} from "../../../util/http/axios";
+import {getChannelLogoUrl} from "../../../api/channels";
 
 export const ChannelLogo = ({channelId, width = 30, height = 30, ...props}) => {
 
-    const logoUrl = () => `${BASE_BACKEND_URL}channels/logo/${channelId}`;
-
     return (
-        <img src={logoUrl()}
+        <img src={getChannelLogoUrl(channelId)}
              width={width}
              height={height}
              style={{

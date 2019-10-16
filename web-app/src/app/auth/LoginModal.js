@@ -2,29 +2,20 @@ import React, {useEffect, useState} from "react";
 import "./LoginModal.css"
 import {Button, Modal} from 'antd';
 import "firebase/auth";
-import * as firebase from "firebase/app";
 import _ from "lodash";
 import withFirebaseAuth from "react-with-firebase-auth";
+
+import {saveProfile} from "../../api/profile";
+import {unAwait} from "../../util/http/axios";
+import {withT} from "../../locales/i18n";
+import {FIREBASE_AUTH} from "../../firebase/firebase";
 import {
     FACEBOOK_PROVIDER,
     getAccountDisplayName,
     GOOGLE_PROVIDER,
     isLoggedIn,
     setAccount
-} from "../../util/auth/profile";
-import {saveProfile} from "../../api/profile";
-import {FIREBASE_CONFIG} from "../../util/auth/firebase";
-import {unAwait} from "../../util/http/axios";
-import {withT} from "../../locales/i18n";
-
-const Firebase = {
-    firebaseAppAuth: firebase.initializeApp(FIREBASE_CONFIG).auth(),
-    providers: {
-        googleProvider: new firebase.auth.GoogleAuthProvider(),
-        facebookProvider: new firebase.auth.FacebookAuthProvider(),
-        emailProvider: new firebase.auth.EmailAuthProvider()
-    }
-};
+} from "../../util/storage/storage";
 
 const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
 
@@ -71,6 +62,6 @@ const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebo
 };
 
 export default _.flow(
-    withFirebaseAuth(Firebase),
+    withFirebaseAuth(FIREBASE_AUTH),
     withT
 )(LoginModal);

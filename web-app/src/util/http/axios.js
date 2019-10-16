@@ -1,13 +1,23 @@
 import axios from "axios";
 import _ from "lodash";
+import {getBackendUrl} from "../../firebase/firebase";
 
-export const BASE_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+axios.interceptors.request.use(async (config) => {
+    const url = await getBackendUrl();
 
-axios.defaults.baseURL = BASE_BACKEND_URL;
+    axios.defaults.baseURL = url
+    config.baseURL = url;
 
-axios.interceptors.request.use(config => config, error => Promise.reject(error));
+    return config
+}, error => {
+    return Promise.reject(error);
+});
 
-axios.interceptors.response.use(response => response.data, error => Promise.reject(error));
+axios.interceptors.response.use(response => {
+    return response.data;
+}, error => {
+    return Promise.reject(error);
+});
 
 // noinspection JSUnusedLocalSymbols
 export const unAwait = (promise) => _.noop()

@@ -2,13 +2,13 @@ import React from 'react'
 import "./Header.css"
 import {Avatar, Button, Dropdown, Icon, Menu} from "antd"
 import {MemeoryLogo} from "../common/logo/MemeoryLogo"
-import {getUserDisplayName, isLoggedIn} from "../../util/auth/profile"
 import LoginModal from "../auth/LoginModal"
 import {withRouter} from "react-router"
 import {ROUTE} from "../../util/router/router"
 import {isBrowser} from "react-device-detect"
 import _ from "lodash"
 import {withT} from "../../locales/i18n";
+import {getUserDisplayName, isLoggedIn} from "../../util/storage/storage";
 
 const Header = ({t, history}) => {
     return (

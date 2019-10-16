@@ -11,6 +11,8 @@ import 'moment/min/locales'
 import "./locales/i18n";
 import {BROWSER_LANGUAGE} from "./locales/i18n";
 
+import "./firebase/firebase"
+
 import {createBrowserHistory} from "history";
 import {Router} from "react-router";
 import * as sw from './app/sw/sw';

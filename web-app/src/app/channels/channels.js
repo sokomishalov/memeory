@@ -9,7 +9,7 @@ import {fetchProfile, saveProfile} from "../../api/profile";
 import FloatingButton from "../common/buttons/floating-button";
 import {addOrRemove} from "../../util/collections/collections";
 import {infoToast} from "../common/toast/toast";
-import {setProfile as saveProfileAtLocalStorage} from "../../util/auth/profile"
+import {setProfile as saveProfileAtLocalStorage} from "../../util/storage/storage"
 import {Button, Switch} from "antd";
 import {withRouter} from "react-router";
 import {withT} from "../../locales/i18n";
