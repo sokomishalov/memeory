@@ -34,7 +34,7 @@ class MemesFetchingScheduler(
         private val memeService: MemeService,
         private val lockProvider: LockProvider,
         @Value("classpath:channels.yml")
-        private val resource: Resource
+        private val defaultChannels: Resource
 ) : Loggable {
 
     @EventListener(ApplicationReadyEvent::class)
@@ -59,9 +59,9 @@ class MemesFetchingScheduler(
     private fun storeDefaultChannels() {
         GlobalScope.launch {
             val channelDTOs = withContext(IO) {
-                YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(resource.inputStream)
+                YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream)
             }
-            channelService.saveIfNotExist(*channelDTOs)
+            channelService.saveBatch(*channelDTOs)
         }
     }
 

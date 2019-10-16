@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import "./Memes.css"
-import {getMemesPage} from "../../api/memes"
-import MemeContainer from "./container/MemeContainer"
+import "./memes.css"
+import MemeContainer from "../container/MemeContainer"
+import {getMemesPage} from "../../../api/memes"
 import _ from "lodash"
 import InfiniteScroll from 'react-infinite-scroller'
 import {BackTop} from "antd"
-import Loader from "../common/loader/loader"
+import Loader from "../../common/loader/loader"
 
 const Memes = () => {
     const [loading, setLoading] = useState(false)

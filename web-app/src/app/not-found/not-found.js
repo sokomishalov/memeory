@@ -1,7 +1,7 @@
 import React from 'react';
 import "./not-found.css"
 import {Button} from "antd";
-import {ROUTE} from "../../util/router/router";
+import {ROUTE} from "../../util/router";
 import {withT} from "../../locales";
 
 const NotFound = ({t}) => (

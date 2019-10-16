@@ -17,7 +17,7 @@ class BuildEnvironment {
 
   static void init({
     @required flavor,
-    @required backendUrl,
+    backendUrl = "",
   }) =>
       _env ??= BuildEnvironment._init(
         flavor: flavor,

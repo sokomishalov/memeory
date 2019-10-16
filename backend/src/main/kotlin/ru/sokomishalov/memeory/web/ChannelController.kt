@@ -44,15 +44,17 @@ class ChannelController(private val channelService: ChannelService,
             channelService.toggleEnabled(false, *channelIds.toTypedArray())
 
     @PostMapping("/add")
-    suspend fun add(@RequestBody account: ChannelDTO): ChannelDTO? =
-            channelService.saveOne(account)
+    suspend fun add(@RequestBody channel: ChannelDTO): ChannelDTO? =
+            channelService.save(channel)
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
         val logoByteArray = cache.get(CHANNEL_LOGO_CACHE_KEY, channelId) {
-            val channel = channelService.findById(channelId)
-            val service = providerFactory.getService(channel.provider)
-            val url = service?.getLogoUrl(channel)
+            val url = runCatching {
+                val channel = channelService.findById(channelId)
+                val service = providerFactory.getService(channel.provider)
+                service?.getLogoUrl(channel)
+            }.getOrNull()
             getImageByteArray(url, orElse = placeholder)
         }
 

@@ -3,6 +3,7 @@
 package ru.sokomishalov.memeory.service.provider.ifunny
 
 import org.springframework.stereotype.Service
+import org.springframework.web.util.UriComponentsBuilder
 import ru.sokomishalov.commons.core.html.getSingleElementByClass
 import ru.sokomishalov.commons.core.html.getSingleElementByTag
 import ru.sokomishalov.commons.core.html.getWebPage
@@ -10,7 +11,6 @@ import ru.sokomishalov.memeory.dto.AttachmentDTO
 import ru.sokomishalov.memeory.dto.ChannelDTO
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.enums.AttachmentType.IMAGE
-import ru.sokomishalov.memeory.enums.AttachmentType.VIDEO
 import ru.sokomishalov.memeory.enums.Provider
 import ru.sokomishalov.memeory.enums.Provider.IFUNNY
 import ru.sokomishalov.memeory.service.provider.ProviderService
@@ -25,7 +25,9 @@ import ru.sokomishalov.memeory.util.time.mockDate
 class IFunnyProviderService : ProviderService {
 
     override suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
-        val posts = getWebPage("${IFUNNY_URL}/${channel.uri}")
+        val document = getWebPage("${IFUNNY_URL}/${channel.uri}")
+
+        val posts = document
                 .getSingleElementByClass("feed__list")
                 .getElementsByClass("stream__item")
 
@@ -33,21 +35,26 @@ class IFunnyProviderService : ProviderService {
                 .mapIndexed { i, it ->
                     it.getSingleElementByTag("a").let { a ->
                         a.getSingleElementByTag("img").let { img ->
+                            val link = a.attr("href")
+
+                            // videos and gifs cannot be scraped :(
+                            if ("video" in link || "gif" in link) {
+                                return@mapIndexed null
+                            }
+
                             MemeDTO(
-                                    id = "${channel.id}$DELIMITER${a.attr("href").replace("/", DELIMITER)}",
+                                    id = "${channel.id}$DELIMITER${link.convertUrlToId()}",
                                     publishedAt = mockDate(i),
                                     attachments = listOf(AttachmentDTO(
                                             url = img.attr("data-src"),
-                                            type = when {
-                                                "video" in a.attr("href") -> VIDEO
-                                                else -> IMAGE
-                                            },
+                                            type = IMAGE,
                                             aspectRatio = it.attr("data-ratio").toDoubleOrNull()?.let { 1.div(it) }
                                     ))
                             )
                         }
                     }
                 }
+                .filterNotNull()
     }
 
     override suspend fun getLogoUrl(channel: ChannelDTO): String? {
@@ -58,4 +65,13 @@ class IFunnyProviderService : ProviderService {
     }
 
     override val provider: Provider = IFUNNY
+
+    private fun String.convertUrlToId(): String? {
+        return UriComponentsBuilder
+                .fromUriString(this)
+                .replaceQuery(null)
+                .build(emptyMap<String, String>())
+                .toASCIIString()
+                .replace("/", DELIMITER)
+    }
 }

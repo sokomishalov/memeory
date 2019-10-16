@@ -1,10 +1,16 @@
 import 'dart:convert';
 
-import 'package:memeory/util/env.dart';
+import 'package:memeory/util/firebase.dart';
 import 'package:memeory/util/http.dart';
 
 Future<List> fetchChannels() async {
-  final url = '${env.backendUrl}/channels/list/enabled';
+  final baseUrl = await getBackendUrl();
+  final url = '${baseUrl}channels/list/enabled';
   final response = await http.get(url);
   return json.decode(utf8.decode(response.bodyBytes));
+}
+
+Future<String> getLogoUrl(String channelId) async {
+  final baseUrl = await getBackendUrl();
+  return '${baseUrl}channels/logo/$channelId';
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
+import org.springframework.web.util.UriComponentsBuilder
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.log.Loggable
@@ -57,6 +58,10 @@ class MongoMemeService(
         }
 
         return foundMemes.aMap { memeMapper.toDto(it) }
+    }
+
+    override suspend fun findById(id: String): MemeDTO? {
+        return repository.findById(id).await()?.let { memeMapper.toDto(it) }
     }
 
     @EventListener(ApplicationReadyEvent::class)

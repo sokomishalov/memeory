@@ -34,19 +34,19 @@ class MongoChannelService(
         return channels.map { channelMapper.toDto(it) }
     }
 
-    override suspend fun findById(channelId: String): ChannelDTO {
-        val channel = repository.findById(channelId).awaitStrict()
+    override suspend fun findById(id: String): ChannelDTO {
+        val channel = repository.findById(id).awaitStrict()
         return channelMapper.toDto(channel)
     }
 
-    override suspend fun saveOne(channel: ChannelDTO): ChannelDTO {
+    override suspend fun save(channel: ChannelDTO): ChannelDTO {
         val channelsToSave = channelMapper.toEntity(channel)
         val savedChannel = repository.save(channelsToSave).awaitStrict()
         return channelMapper.toDto(savedChannel)
     }
 
-    override suspend fun saveIfNotExist(vararg channels: ChannelDTO): List<ChannelDTO> {
-        val channelsToSave = channels
+    override suspend fun saveBatch(vararg batch: ChannelDTO): List<ChannelDTO> {
+        val channelsToSave = batch
                 .toList()
                 .filter { repository.existsById(it.id).awaitStrict().not() }
                 .map { channelMapper.toEntity(it) }

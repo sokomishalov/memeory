@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react'
 import "./channels.css"
 import {getChannels} from "../../api/channels"
 import Loader from "../common/loader/loader";
-import {unAwait} from "../../util/http/axios";
+import {unAwait} from "../../util/http";
 import _ from "lodash";
 import ChannelContainer from "./container/channel-container";
 import {fetchProfile, saveProfile} from "../../api/profile";
 import FloatingButton from "../common/buttons/floating-button";
-import {addOrRemove} from "../../util/collections/collections";
+import {addOrRemove} from "../../util/collections";
 import {infoToast} from "../common/toast/toast";
-import {setProfile as saveProfileAtLocalStorage} from "../../util/storage/storage"
+import {setProfile as saveProfileAtLocalStorage} from "../../util/storage"
 import {Button, Switch} from "antd";
 import {withRouter} from "react-router";
 import {withT} from "../../locales";

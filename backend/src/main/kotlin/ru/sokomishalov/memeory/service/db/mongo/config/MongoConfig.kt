@@ -27,6 +27,7 @@ import java.time.Duration.ofSeconds
 class MongoConfig {
 
     @Bean
+    @Primary
     fun mongoReactiveLockProvider(client: MongoClient, props: MongoProperties): LockProvider {
         return MongoReactiveLockProvider(client, props)
     }
