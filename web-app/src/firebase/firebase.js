@@ -24,7 +24,7 @@ export const FIREBASE_AUTH = {
 
 export const FIREBASE_REMOTE_CONFIG = firebase.remoteConfig(FIREBASE)
 
-export const getBackendUrl = async () => {``
+export const getBackendUrl = async () => {
     const urlFromEnv = process.env.REACT_APP_BACKEND_URL
 
     if (!_.isEmpty(urlFromEnv)) {
