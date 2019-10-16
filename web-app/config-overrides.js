@@ -1,5 +1,4 @@
 const {override: customizeCRA, fixBabelImports, disableEsLint} = require('customize-cra');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 
 module.exports = function override(config) {
     disableEsLint()
@@ -11,8 +10,6 @@ module.exports = function override(config) {
             require.resolve('@ant-design/icons/lib/dist')
         ]
     });
-
-    config.resolve.plugins = config.resolve.plugins.filter(plugin => !(plugin instanceof ModuleScopePlugin));
 
     return customizeCRA(
         fixBabelImports("lodash", {
