@@ -8,10 +8,10 @@ import 'react-aspect-ratio/aspect-ratio.css'
 
 import moment from "moment";
 import 'moment/min/locales'
-import "./locales/i18n";
-import {BROWSER_LANGUAGE} from "./locales/i18n";
+import "./locales";
+import {BROWSER_LANGUAGE} from "./locales";
 
-import "./firebase/firebase"
+import "./firebase"
 
 import {createBrowserHistory} from "history";
 import {Router} from "react-router";

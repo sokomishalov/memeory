@@ -28,7 +28,7 @@ const Memes = () => {
             <InfiniteScroll pageStart={0}
                             loadMore={loadMore}
                             hasMore={hasMore}
-                            loader={<Loader loading={loading}/>}>
+                            loader={<Loader key={0} loading={loading}/>}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
             </InfiniteScroll>
             <BackTop className="memes-backtop"/>

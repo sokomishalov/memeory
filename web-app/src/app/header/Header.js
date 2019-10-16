@@ -7,7 +7,7 @@ import {withRouter} from "react-router"
 import {ROUTE} from "../../util/router/router"
 import {isBrowser} from "react-device-detect"
 import _ from "lodash"
-import {withT} from "../../locales/i18n";
+import {withT} from "../../locales";
 import {getUserDisplayName, isLoggedIn} from "../../util/storage/storage";
 
 const Header = ({t, history}) => {

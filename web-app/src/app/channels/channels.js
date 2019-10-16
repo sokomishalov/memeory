@@ -12,7 +12,7 @@ import {infoToast} from "../common/toast/toast";
 import {setProfile as saveProfileAtLocalStorage} from "../../util/storage/storage"
 import {Button, Switch} from "antd";
 import {withRouter} from "react-router";
-import {withT} from "../../locales/i18n";
+import {withT} from "../../locales";
 
 const Channels = ({t, history}) => {
     const [loading, setLoading] = useState(false)

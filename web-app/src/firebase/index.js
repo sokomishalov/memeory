@@ -11,6 +11,8 @@ const FIREBASE_CONFIG = {
     appId: "1:142446820744:web:54e8b6c71153bba130ce3d"
 };
 
+console.log(FIREBASE_CONFIG)
+
 export const FIREBASE = firebase.initializeApp(FIREBASE_CONFIG)
 
 export const FIREBASE_AUTH = {
@@ -26,22 +28,18 @@ export const FIREBASE_REMOTE_CONFIG = firebase.remoteConfig(FIREBASE)
 
 export const getBackendUrl = async () => {
     const urlFromEnv = process.env.REACT_APP_BACKEND_URL
-    console.log(urlFromEnv)
 
     if (!_.isEmpty(urlFromEnv)) {
         return urlFromEnv
     } else {
         const key = "BACKEND_URL"
         const cachedValue = FIREBASE_REMOTE_CONFIG.getString(key)
-        console.log(cachedValue)
 
         if (!_.isEmpty(cachedValue)) {
             return cachedValue
         } else {
             await FIREBASE_REMOTE_CONFIG.fetch()
-            const newValue = FIREBASE_REMOTE_CONFIG.getString(key)
-            console.log(newValue)
-            return newValue
+            return FIREBASE_REMOTE_CONFIG.getString(key)
         }
     }
 }

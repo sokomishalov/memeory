@@ -7,8 +7,8 @@ import withFirebaseAuth from "react-with-firebase-auth";
 
 import {saveProfile} from "../../api/profile";
 import {unAwait} from "../../util/http/axios";
-import {withT} from "../../locales/i18n";
-import {FIREBASE_AUTH} from "../../firebase/firebase";
+import {withT} from "../../locales";
+import {FIREBASE_AUTH} from "../../firebase";
 import {
     FACEBOOK_PROVIDER,
     getAccountDisplayName,
