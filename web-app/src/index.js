@@ -15,7 +15,7 @@ import "./firebase"
 
 import {createBrowserHistory} from "history";
 import {Router} from "react-router";
-import * as sw from './app/sw/sw';
+import {register as registerServiceWorker} from './app/sw';
 
 import App from "./app/App";
 
@@ -29,4 +29,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-sw.register();
+registerServiceWorker();
