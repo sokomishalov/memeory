@@ -70,7 +70,7 @@ const MemeContainer = ({t, history, meme}) => {
 
     const shareMeme = (e) => {
         stopPropagation(e)
-        const link = `${window.location.origin.toString()}${prepareMemeUri()}`
+        const link = `${process.env.PUBLIC_URL}/${prepareMemeUri()}`
         copy(link)
         infoToast(t("copied.to.clipboard"))
     }
