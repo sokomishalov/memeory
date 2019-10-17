@@ -1,8 +1,8 @@
 import axios from "axios"
 import _ from "lodash"
-import {getProfile, getSocialsMap, getToken, setAccount, setProfile} from "../util/storage/storage";
+import {getMemeoryProfile, getSocialsMap, getToken, setAccount, setMemeoryProfile} from "../util/storage/storage";
 
-export const saveProfile = async (profile = getProfile()) => {
+export const saveProfile = async (profile = getMemeoryProfile()) => {
 
     const socialsMap = getSocialsMap()
 
@@ -14,7 +14,7 @@ export const saveProfile = async (profile = getProfile()) => {
     })
 
     _.forOwn(_.get(savedProfile, "socialsMap", {}), (value, key) => setAccount(key, value))
-    setProfile(savedProfile)
+    setMemeoryProfile(savedProfile)
 
     return savedProfile
 };

@@ -1,38 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import "./LoginModal.css"
-import {Button, Modal} from 'antd';
+import {Modal} from 'antd';
 import "firebase/auth";
-import _ from "lodash";
-import withFirebaseAuth from "react-with-firebase-auth";
-import {saveProfile} from "../../api/profile";
-import {unAwait} from "../../util/http/http";
-import {withT} from "../../locales/i18n";
-import {FIREBASE_AUTH} from "../../firebase/firebase";
-import {
-    FACEBOOK_PROVIDER,
-    getAccountDisplayName,
-    GOOGLE_PROVIDER,
-    isLoggedIn,
-    setAccount
-} from "../../util/storage/storage";
+import {withT} from "../../util/locales/i18n";
+import Socials from "../settings/socials/socials";
 
-const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
+const LoginModal = ({t, trigger}) => {
 
     const [visible, setVisible] = useState(false);
 
     const openModal = () => setVisible(true)
     const closeModal = () => setVisible(false)
-
-    _.forEach(_.get(user, "providerData", []), (p) => {
-        const providerId = p["providerId"]
-        setAccount(providerId, p)
-    })
-
-    useEffect(() => {
-        if (isLoggedIn()) {
-            unAwait(saveProfile())
-        }
-    }, [user, error]);
 
     return (
         <div>
@@ -43,24 +21,10 @@ const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebo
                    visible={visible}
                    onCancel={closeModal}
                    footer={null}>
-                <div className="sign-in">
-                    <Button className="sign-in-google" onClick={signInWithGoogle}>
-                        <span>
-                            {getAccountDisplayName(GOOGLE_PROVIDER, t("sign.in.with.google"))}
-                        </span>
-                    </Button>
-                    <Button className="sign-in-facebook" onClick={signInWithFacebook}>
-                        <span>
-                            {getAccountDisplayName(FACEBOOK_PROVIDER, t("sign.in.with.facebook"))}
-                        </span>
-                    </Button>
-                </div>
+                <Socials/>
             </Modal>
         </div>
     );
 };
 
-export default _.flow(
-    withFirebaseAuth(FIREBASE_AUTH),
-    withT
-)(LoginModal);
+export default withT(LoginModal);

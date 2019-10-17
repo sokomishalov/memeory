@@ -8,7 +8,7 @@ import _ from "lodash"
 import {Button, Carousel, Dropdown, Menu} from "antd"
 import {AspectRatio} from "react-aspect-ratio"
 import {ATTACHMENT_TYPE, MEME_BORDER_RADIUS} from "../../../util/consts/consts"
-import {withT} from "../../../locales/i18n";
+import {withT} from "../../../util/locales/i18n";
 import {infoToast} from "../../common/toast/toast";
 import copy from "copy-to-clipboard";
 import {PARAMS, ROUTE} from "../../../util/router/router";

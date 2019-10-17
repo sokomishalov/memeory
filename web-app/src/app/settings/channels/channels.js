@@ -1,20 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import "./channels.css"
-import {getChannels} from "../../api/channels"
-import Loader from "../common/loader/loader";
-import {unAwait} from "../../util/http/http";
+import {getChannels} from "../../../api/channels"
+import Loader from "../../common/loader/loader";
 import _ from "lodash";
 import ChannelContainer from "./container/channel-container";
-import {fetchProfile, saveProfile} from "../../api/profile";
-import FloatingButton from "../common/buttons/floating-button";
-import {addOrRemove} from "../../util/collections/collections";
-import {infoToast} from "../common/toast/toast";
-import {setProfile as saveProfileAtLocalStorage} from "../../util/storage/storage"
-import {Button, Switch} from "antd";
-import {withRouter} from "react-router";
-import {withT} from "../../locales/i18n";
+import {fetchProfile, saveProfile} from "../../../api/profile";
+import FloatingButton from "../../common/buttons/floating-button";
+import {addOrRemove} from "../../../util/collections/collections";
+import {infoToast} from "../../common/toast/toast";
+import {setMemeoryProfile} from "../../../util/storage/storage"
+import {Switch} from "antd";
+import {withT} from "../../../util/locales/i18n";
+import {unAwait} from "../../../util/http/http";
 
-const Channels = ({t, history}) => {
+const Channels = ({t}) => {
     const [loading, setLoading] = useState(false)
     const [channels, setChannels] = useState([])
     const [fetchedProfile, setFetchedProfile] = useState({})
@@ -52,7 +51,7 @@ const Channels = ({t, history}) => {
         const newProfile = await saveProfile(profile)
         setFetchedProfile(newProfile)
         setProfile(newProfile)
-        saveProfileAtLocalStorage(newProfile)
+        setMemeoryProfile(newProfile)
         infoToast(t("changes.have.been.saved"))
     }
 
@@ -60,10 +59,6 @@ const Channels = ({t, history}) => {
         <Loader loading={loading}>
             <div className="channels">
                 <div className="channels-header">
-                    <Button icon="left"
-                            onClick={history.goBack}>
-                        {t("back")}
-                    </Button>
                     <div className="channels-header-caption">
                         {t("choose.relevant.channels")}
                     </div>
@@ -97,7 +92,4 @@ const Channels = ({t, history}) => {
     )
 }
 
-export default _.flow(
-    withRouter,
-    withT
-)(Channels)
+export default withT(Channels)

@@ -3,7 +3,7 @@ import en from "./langs/en.json";
 import i18next from 'i18next';
 import {initReactI18next, withTranslation} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import {unAwait} from "../util/http/http";
+import {unAwait} from "../http/http";
 import detectBrowserLanguage from 'detect-browser-language'
 
 unAwait(i18next
