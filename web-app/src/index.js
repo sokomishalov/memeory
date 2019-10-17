@@ -12,20 +12,18 @@ import "./util/locales/i18n";
 import {BROWSER_LANGUAGE} from "./util/locales/i18n";
 
 import "./util/firebase/firebase"
-
-import {createBrowserHistory} from "history";
-import {Router} from "react-router";
 import {register as registerServiceWorker} from './app/sw/sw';
 
 import App from "./app/App";
+import {BrowserRouter} from "react-router-dom";
 
 
 moment.locale(BROWSER_LANGUAGE)
 
 ReactDOM.render(
-    <Router history={createBrowserHistory()}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
         <App/>
-    </Router>,
+    </BrowserRouter>,
     document.getElementById('root')
 );
 
