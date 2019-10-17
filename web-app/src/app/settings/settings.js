@@ -17,12 +17,6 @@ const Settings = ({t, history}) => {
         {title: t("theme.caption"), uri: SETTINGS_ROUTE.THEME}
     ];
 
-    const renderContent = (uri, component) => (
-        <div className="mt-20">
-            <Route path={uri} component={component}/>
-        </div>
-    )
-
     const getPage = () => _.findIndex(tabs, o => _.includes(window.location.pathname, o.uri))
 
     return (
@@ -39,12 +33,12 @@ const Settings = ({t, history}) => {
                   tabBarTextStyle={{
                       backgroundColor: "rgba(26, 26, 27, 1)",
                       cursor: "pointer"
-                  }}
-            >
-                {renderContent(SETTINGS_ROUTE.SOCIALS, Socials)}
-                {renderContent(SETTINGS_ROUTE.CHANNELS, Channels)}
-                {renderContent(SETTINGS_ROUTE.THEME, Theme)}
-            </Tabs>
+                  }}/>
+            <div className="mt-20">
+                <Route path={SETTINGS_ROUTE.SOCIALS} component={Socials}/>
+                <Route path={SETTINGS_ROUTE.CHANNELS} component={Channels}/>
+                <Route path={SETTINGS_ROUTE.THEME} component={Theme}/>
+            </div>
         </>
     );
 };
