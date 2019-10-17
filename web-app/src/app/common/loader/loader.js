@@ -4,7 +4,7 @@ import {isMobile} from "react-device-detect"
 import _ from "lodash";
 import './loader.scss'
 import {ActivityIndicator} from "antd-mobile";
-import {withT} from "../../../locales";
+import {withT} from "../../../locales/i18n";
 
 const Loader = ({loading, t, ...props}) => {
     let children;

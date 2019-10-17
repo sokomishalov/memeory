@@ -1,7 +1,7 @@
 import {message} from "antd";
 import {isMobile} from "react-device-detect";
 import {Toast} from "antd-mobile";
-import {TOAST_DEFAULT_DURATION, UNKNOWN_ERROR_TEXT} from "../../../util/consts";
+import {TOAST_DEFAULT_DURATION, UNKNOWN_ERROR_TEXT} from "../../../util/consts/consts";
 
 export const infoToast = (msg) => _showMessage(msg, isMobile ? Toast.info : message.info);
 

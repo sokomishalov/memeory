@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react'
 import "./channels.css"
 import {getChannels} from "../../api/channels"
 import Loader from "../common/loader/loader";
-import {unAwait} from "../../util/http";
+import {unAwait} from "../../util/http/http";
 import _ from "lodash";
 import ChannelContainer from "./container/channel-container";
 import {fetchProfile, saveProfile} from "../../api/profile";
 import FloatingButton from "../common/buttons/floating-button";
-import {addOrRemove} from "../../util/collections";
+import {addOrRemove} from "../../util/collections/collections";
 import {infoToast} from "../common/toast/toast";
-import {setProfile as saveProfileAtLocalStorage} from "../../util/storage"
+import {setProfile as saveProfileAtLocalStorage} from "../../util/storage/storage"
 import {Button, Switch} from "antd";
 import {withRouter} from "react-router";
-import {withT} from "../../locales";
+import {withT} from "../../locales/i18n";
 
 const Channels = ({t, history}) => {
     const [loading, setLoading] = useState(false)

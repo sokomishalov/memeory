@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Redirect, Route, Switch} from "react-router";
-import {ROUTE} from "../util/router";
+import {ROUTE} from "../util/router/router";
 import Header from "./header/Header";
 import Memes from "./memes/list/memes";
 import SingleMeme from "./memes/single/single-meme";

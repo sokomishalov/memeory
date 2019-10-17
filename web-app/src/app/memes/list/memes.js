@@ -6,6 +6,7 @@ import _ from "lodash"
 import InfiniteScroll from 'react-infinite-scroller'
 import {BackTop} from "antd"
 import Loader from "../../common/loader/loader"
+import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
 
 const Memes = () => {
     const [loading, setLoading] = useState(false)
@@ -31,7 +32,9 @@ const Memes = () => {
                             loader={<Loader key={0} loading={loading}/>}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
             </InfiniteScroll>
-            <BackTop className="memes-backtop"/>
+            <OnScrollUpReveal useFade={false}>
+                <BackTop className="memes-backtop"/>
+            </OnScrollUpReveal>
         </div>
     )
 }

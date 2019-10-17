@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import "./single-meme.css"
 import {withRouter} from "react-router";
 import MemeContainer from "../container/MemeContainer";
-import {unAwait} from "../../../util/http";
+import {unAwait} from "../../../util/http/http";
 import {getSingleMeme} from "../../../api/memes";
 import Loader from "../../common/loader/loader";
 

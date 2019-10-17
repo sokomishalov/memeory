@@ -5,10 +5,16 @@ import "firebase/auth";
 import _ from "lodash";
 import withFirebaseAuth from "react-with-firebase-auth";
 import {saveProfile} from "../../api/profile";
-import {unAwait} from "../../util/http";
-import {withT} from "../../locales";
-import {FIREBASE_AUTH} from "../../firebase";
-import {FACEBOOK_PROVIDER, getAccountDisplayName, GOOGLE_PROVIDER, isLoggedIn, setAccount} from "../../util/storage";
+import {unAwait} from "../../util/http/http";
+import {withT} from "../../locales/i18n";
+import {FIREBASE_AUTH} from "../../firebase/firebase";
+import {
+    FACEBOOK_PROVIDER,
+    getAccountDisplayName,
+    GOOGLE_PROVIDER,
+    isLoggedIn,
+    setAccount
+} from "../../util/storage/storage";
 
 const LoginModal = ({t, trigger, user, error, signInWithGoogle, signInWithFacebook}) => {
 

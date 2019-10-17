@@ -1,6 +1,6 @@
 import axios from "axios"
 import _ from "lodash"
-import {getProfile, getSocialsMap, getToken, setAccount, setProfile} from "../util/storage";
+import {getProfile, getSocialsMap, getToken, setAccount, setProfile} from "../util/storage/storage";
 
 export const saveProfile = async (profile = getProfile()) => {
 

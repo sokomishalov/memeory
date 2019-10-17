@@ -1,6 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
-import {getBackendUrl} from "../../firebase";
+import {getBackendUrl} from "../../firebase/firebase";
 
 axios.interceptors.request.use(async (config) => {
     const url = await getBackendUrl();

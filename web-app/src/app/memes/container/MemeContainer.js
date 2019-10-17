@@ -2,19 +2,19 @@ import React from 'react'
 import "./MemeContainer.css"
 import VideoAttachment from "./video/VideoAttachment"
 import ImageAttachment from "./image/ImageAttachment"
-import {timeAgo} from "../../../util/time"
+import {timeAgo} from "../../../util/time/time"
 import {ChannelLogo} from "../../common/logo/ChannelLogo"
 import _ from "lodash"
 import {Button, Carousel, Dropdown, Menu} from "antd"
 import {AspectRatio} from "react-aspect-ratio"
-import {ATTACHMENT_TYPE, MEME_BORDER_RADIUS} from "../../../util/consts"
-import {withT} from "../../../locales";
+import {ATTACHMENT_TYPE, MEME_BORDER_RADIUS} from "../../../util/consts/consts"
+import {withT} from "../../../locales/i18n";
 import {infoToast} from "../../common/toast/toast";
 import copy from "copy-to-clipboard";
-import {PARAMS, ROUTE} from "../../../util/router";
+import {PARAMS, ROUTE} from "../../../util/router/router";
 import {isBrowser} from "react-device-detect"
 import {withRouter} from "react-router";
-import {stopPropagation} from "../../common/events";
+import {stopPropagation} from "../../common/event/events";
 
 const MemeContainer = ({t, history, meme}) => {
 
@@ -115,6 +115,7 @@ const MemeContainer = ({t, history, meme}) => {
                                       </Menu.Item>
                                   </Menu>
                               }>
+
                         <Button icon="ellipsis"
                                 onClick={stopPropagation}
                                 style={{
