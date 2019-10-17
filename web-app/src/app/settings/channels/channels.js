@@ -5,13 +5,13 @@ import Loader from "../../common/loader/loader";
 import _ from "lodash";
 import ChannelContainer from "./container/channel-container";
 import {fetchProfile, saveProfile} from "../../../api/profile";
-import FloatingButton from "../../common/buttons/floating-button";
 import {addOrRemove} from "../../../util/collections/collections";
 import {infoToast} from "../../common/toast/toast";
 import {setMemeoryProfile} from "../../../util/storage/storage"
 import {Switch} from "antd";
 import {withT} from "../../../util/locales/i18n";
 import {unAwait} from "../../../util/http/http";
+import FloatingButton from "../../common/buttons/floating-button";
 
 const Channels = ({t}) => {
     const [loading, setLoading] = useState(false)
@@ -78,16 +78,15 @@ const Channels = ({t}) => {
                                                  toggle={() => toggleChannel(channel["id"])}/>;
                     })}
                 </div>
+                {
+                    !_.isEmpty(fetchedProfile)
+                    && !_.eq(fetchedProfile, profile)
+                    && <FloatingButton text={t("save.changes")}
+                                       icon="save"
+                                       color="green"
+                                       onClick={saveChanges}/>
+                }
             </div>
-            {
-                !_.isEmpty(fetchedProfile)
-                && !_.eq(fetchedProfile, profile)
-                && <FloatingButton text={t("save.changes")}
-                                   icon="save"
-                                   color="green"
-                                   onClick={saveChanges}
-                />
-            }
         </Loader>
     )
 }

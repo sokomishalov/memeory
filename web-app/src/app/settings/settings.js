@@ -23,7 +23,7 @@ const Settings = ({t, history}) => {
         </div>
     )
 
-    const getPage = () => _.findIndex(tabs, o => _.includes(o.uri, window.location.pathname))
+    const getPage = () => _.findIndex(tabs, o => _.includes(window.location.pathname, o.uri))
 
     return (
         <>

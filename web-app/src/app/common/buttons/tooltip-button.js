@@ -8,7 +8,6 @@ const TooltipButton = ({text = "", placement = "bottom", ...props}) => (
                    title={text}>
             <Button {...props}/>
         </Tooltip>
-
         : <Button {...props}/>
 );
 
