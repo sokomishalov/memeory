@@ -17,8 +17,7 @@ const SingleMeme = ({match}) => {
 
     const loadMeme = async () => {
         setLoading(true)
-        const meme = await getSingleMeme(id)
-        setMeme(meme)
+        setMeme(await getSingleMeme(id))
         setLoading(false)
     }
 
