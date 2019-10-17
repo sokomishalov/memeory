@@ -22,10 +22,11 @@ const SingleMeme = ({match}) => {
     }
 
     return (
-        <Loader className="single-meme"
-                loading={loading}>
-            <MemeContainer meme={meme}/>
-        </Loader>
+        <div className="single-meme">
+            <Loader loading={loading}>
+                <MemeContainer meme={meme}/>
+            </Loader>
+        </div>
     );
 }
 
