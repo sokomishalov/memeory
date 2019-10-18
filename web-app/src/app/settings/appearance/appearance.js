@@ -1,8 +1,8 @@
 import React from 'react';
 import {withT} from "../../../util/locales/i18n";
 
-const Theme = () => (
+const Appearance = () => (
     <></>
 );
 
-export default withT(Theme);
+export default withT(Appearance);

@@ -3,7 +3,7 @@ import {ROUTE, SETTINGS_ROUTE} from "../../util/router/router";
 import {Route, withRouter} from "react-router";
 import Socials from "./socials/socials";
 import Channels from "./channels/channels";
-import Theme from "./theme/theme";
+import Theme from "./appearance/appearance";
 import {Tabs} from "antd-mobile";
 import _ from "lodash"
 import {withT} from "../../util/locales/i18n";
@@ -14,7 +14,7 @@ const Settings = ({t, history}) => {
     const tabs = [
         {title: t("profile.caption"), uri: SETTINGS_ROUTE.SOCIALS},
         {title: t("channels.caption"), uri: SETTINGS_ROUTE.CHANNELS},
-        {title: t("theme.caption"), uri: SETTINGS_ROUTE.THEME}
+        {title: t("appearance.caption"), uri: SETTINGS_ROUTE.APPEARANCE}
     ];
 
     const getPage = () => _.findIndex(tabs, o => _.includes(window.location.pathname, o.uri))
@@ -37,7 +37,7 @@ const Settings = ({t, history}) => {
             <div className="mt-20">
                 <Route path={SETTINGS_ROUTE.SOCIALS} component={Socials}/>
                 <Route path={SETTINGS_ROUTE.CHANNELS} component={Channels}/>
-                <Route path={SETTINGS_ROUTE.THEME} component={Theme}/>
+                <Route path={SETTINGS_ROUTE.APPEARANCE} component={Theme}/>
             </div>
         </>
     );

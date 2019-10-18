@@ -9,7 +9,7 @@ import {Button, Carousel, Dropdown, Menu} from "antd"
 import {AspectRatio} from "react-aspect-ratio"
 import {ATTACHMENT_TYPE, MEME_BORDER_RADIUS} from "../../../util/consts/consts"
 import {withT} from "../../../util/locales/i18n";
-import {infoToast} from "../../common/toast/toast";
+import {errorToast, successToast} from "../../common/toast/toast";
 import copy from "copy-to-clipboard";
 import {PARAMS, ROUTE} from "../../../util/router/router";
 import {isBrowser} from "react-device-detect"
@@ -72,12 +72,12 @@ const MemeContainer = ({t, history, meme}) => {
         stopPropagation(e)
         const link = `${window.location.origin.toString()}${process.env.PUBLIC_URL}${prepareMemeUri()}`
         copy(link)
-        infoToast(t("copied.to.clipboard"))
+        successToast(t("copied.to.clipboard"))
     }
 
     const report = (e) => {
         stopPropagation(e)
-        infoToast(t("report.your.ass"))
+        errorToast(t("report.your.ass"))
     }
 
     return (

@@ -14,8 +14,8 @@ export const ROUTE = {
 
 export const SETTINGS_ROUTE = {
     CHANNELS:       `${ROUTE.SETTINGS}/channels`,
-    SOCIALS:       `${ROUTE.SETTINGS}/socials`,
-    THEME:       `${ROUTE.SETTINGS}/theme`,
+    SOCIALS:        `${ROUTE.SETTINGS}/socials`,
+    APPEARANCE:     `${ROUTE.SETTINGS}/appearance`,
 }
 
 // @formatter:on
