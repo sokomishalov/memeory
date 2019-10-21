@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/components/message/messages.dart';
@@ -37,38 +37,25 @@ class _SocialPreferencesState extends State<SocialPreferences> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            child: RaisedButton(
-              color: Colors.white,
-              onPressed: () async =>
-                  await _providerSignIn(GOOGLE_PROVIDER, context),
-              child: GradientText(
-                _googleProfile?.displayName == null
-                    ? t(context, "auth_google")
-                    : _googleProfile.displayName,
-                gradient: LinearGradient(colors: [
-                  Color.fromRGBO(234, 67, 53, 1),
-                  Color.fromRGBO(251, 188, 5, 1),
-                  Color.fromRGBO(52, 168, 83, 1),
-                  Color.fromRGBO(66, 133, 244, 1),
-                ]),
-                textAlign: TextAlign.center,
-              ),
+            child: SignInButton(
+              Buttons.Google,
+              onPressed: () async {
+                await _providerSignIn(GOOGLE_PROVIDER, context);
+              },
+              text: _googleProfile?.displayName == null
+                  ? t(context, "auth_google")
+                  : _googleProfile.displayName,
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 15),
-            child: RaisedButton(
-              color: Color.fromRGBO(66, 103, 178, 1),
-              onPressed: () async =>
-                  await _providerSignIn(FACEBOOK_PROVIDER, context),
-              child: Text(
-                _facebookProfile?.displayName == null
-                    ? t(context, "auth_facebook")
-                    : _facebookProfile.displayName,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
+            child: SignInButton(
+              Buttons.Facebook,
+              onPressed: () async {
+                await _providerSignIn(FACEBOOK_PROVIDER, context);
+              },
+              text: _facebookProfile?.displayName == null
+                  ? t(context, "auth_facebook")
+                  : _facebookProfile.displayName,
             ),
           ),
         ],
@@ -101,7 +88,9 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       await _refreshProfiles();
 
       successToast(
-          "${t(context, "welcome")}, ${providerAuth.displayName}", context);
+        "${t(context, "welcome")}, ${providerAuth.displayName}",
+        context,
+      );
     } catch (e) {
       debugPrint(e.toString());
       errorToast(t(context, "unsuccessful_auth"), context);

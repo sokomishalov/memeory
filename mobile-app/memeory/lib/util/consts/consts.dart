@@ -32,5 +32,7 @@ const VERTICAL_ORIENTATION_ASSET = 'assets/orientation/vertical.mp4';
 const MEMEORY_TOKEN_HEADER_NAME = "MEMEORY_TOKEN";
 const APPLICATION_JSON_HEADER_VALUE = 'application/json';
 
+const USERNAME = "sokomishalov";
+const GITHUB_REPO = "sokomishalov/memeory";
+const GITHUB_REPO_PAGE = "https://github.com/$GITHUB_REPO";
 const YANDEX_DONATE_PAGE = "https://money.yandex.ru/to/410016644283944";
-const CREATOR_LINK = "https://www.facebook.com/sokomishalov";

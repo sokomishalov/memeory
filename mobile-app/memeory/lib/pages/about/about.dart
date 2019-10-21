@@ -1,13 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/components/buttons/rounded_button.dart';
-import 'package:memeory/components/containers/web_view.dart';
-import 'package:memeory/components/text/link_text_span.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/util/consts/consts.dart';
-import 'package:memeory/util/i18n/i18n.dart';
-import 'package:memeory/util/theme/dark.dart';
-import 'package:memeory/util/theme/light.dart';
-import 'package:memeory/util/theme/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutApp extends StatelessWidget {
   @override
@@ -16,38 +11,34 @@ class AboutApp extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text("Memeory"),
-          Padding(
-            padding: EdgeInsets.only(top: 24.0),
-            child: RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: t(context, "made_by"),
-                      style: TextStyle(
-                        color: dependingOnThemeChoice(
-                          context: context,
-                          light: TEXT_COLOR_LIGHT,
-                          dark: TEXT_COLOR_DARK,
-                        ),
-                      )),
-                  LinkTextSpan(
-                    context: context,
-                    url: CREATOR_LINK,
-                    text: "@${t(context, "creator")}",
-                  )
-                ],
-              ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+            child: Text(
+              "If you wanna improve project and contribute, visit github repo",
             ),
           ),
+          RaisedButton.icon(
+            icon: Icon(FontAwesomeIcons.github),
+            label: Text(GITHUB_REPO),
+            color: Colors.black54,
+            onPressed: () async {
+              await launch(GITHUB_REPO_PAGE);
+            },
+          ),
           Container(
-            padding: EdgeInsets.only(top: 10),
-            child: RoundedButton(
-              caption: t(context, "donate"),
-              onPressed: () {
-                openMemeoryWebView(context, YANDEX_DONATE_PAGE);
-              },
+            padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+            child: Text(
+              "If you wanna help with money",
             ),
-          )
+          ),
+          RaisedButton.icon(
+            icon: Icon(FontAwesomeIcons.yandexInternational),
+            label: Text(USERNAME),
+            color: Colors.red,
+            onPressed: () async {
+              await launch(YANDEX_DONATE_PAGE);
+            },
+          ),
         ],
       ),
     );

@@ -105,7 +105,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                       child: GridTile(
                         child: Card(
                           color: _watchAll || isActive
-                              ? ButtonTheme.of(context).colorScheme.primary
+                              ? Colors.greenAccent
                               : CardTheme.of(context).color,
                           child: Column(
                             children: [
