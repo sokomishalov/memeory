@@ -9,6 +9,7 @@ import {isBrowser} from "react-device-detect"
 import _ from "lodash"
 import {withT} from "../../util/locales/i18n";
 import {getUserDisplayName, getUserPhotoUrl, isLoggedIn} from "../../util/storage/storage";
+import {APP_NAME} from "../../util/consts/consts";
 
 const Header = ({t, history}) => {
 
@@ -20,7 +21,7 @@ const Header = ({t, history}) => {
                                  marginRight: 10,
                                  borderRadius: 10
                              }}/>
-                {isBrowser && t("app.caption")}
+                {isBrowser && APP_NAME}
             </div>
 
             {

@@ -11,7 +11,7 @@ const VideoAttachment = ({attachment}) => (
                          playerVars: {
                              showinfo: 0,
                              playsinline: 1,
-                             origin: process.env.PUBLIC_URL
+                             origin: window.location.origin
                          }
                      }
                  }}/>

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutApp extends StatelessWidget {
@@ -10,12 +11,10 @@ class AboutApp extends StatelessWidget {
     return Center(
       child: Column(
         children: <Widget>[
-          Text("Memeory"),
+          Text(APP_NAME),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-            child: Text(
-              "If you wanna improve project and contribute, visit github repo",
-            ),
+            child: Text(t(context, "please_contribute")),
           ),
           RaisedButton.icon(
             icon: Icon(FontAwesomeIcons.github),
@@ -27,9 +26,7 @@ class AboutApp extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-            child: Text(
-              "If you wanna help with money",
-            ),
+            child: Text(t(context, "please_donate")),
           ),
           RaisedButton.icon(
             icon: Icon(FontAwesomeIcons.yandexInternational),
