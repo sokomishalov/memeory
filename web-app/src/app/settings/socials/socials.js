@@ -37,7 +37,7 @@ const Socials = ({t, user, error, signInWithGoogle, signInWithFacebook}) => {
                         style={{backgroundColor: "#d34836"}}
                         onClick={signInWithGoogle}>
                     <FontAwesomeIcon icon={faGoogle} className="mr-10"/>
-                    <span>{getAccountDisplayName(GOOGLE_PROVIDER, t("sign.in.with.google"))}</span>
+                    <span>{getAccountDisplayName(GOOGLE_PROVIDER, t("sign.in"))}</span>
                 </Button>
             </div>
 
@@ -47,7 +47,7 @@ const Socials = ({t, user, error, signInWithGoogle, signInWithFacebook}) => {
                         style={{backgroundColor: "#3b5998"}}
                         onClick={signInWithFacebook}>
                     <FontAwesomeIcon icon={faFacebookF} className="mr-10"/>
-                    <span>{getAccountDisplayName(FACEBOOK_PROVIDER, t("sign.in.with.facebook"))}</span>
+                    <span>{getAccountDisplayName(FACEBOOK_PROVIDER, t("sign.in"))}</span>
                 </Button>
             </div>
         </>

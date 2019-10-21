@@ -51,7 +51,7 @@ const Header = ({t, history}) => {
                             backgroundColor: "inherit"
                         }}>
                             <Icon type="user" className="mr-10"/>
-                            {t("auth.please")}
+                            {t("sign.in")}
                         </Button>
                     }/>
             }

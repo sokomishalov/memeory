@@ -51,7 +51,7 @@
     "watch-css": "npm run build-less && node-sass-chokidar src/ -o src/ --watch --recursive",
     "build-css": "npm run build-less && node-sass-chokidar src/ -o src/",
     "build": "npm run build-css && react-app-rewired build",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && cp build/index.html build/404.html",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
