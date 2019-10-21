@@ -1,6 +1,6 @@
 import 'package:localstorage/localstorage.dart';
-import 'package:memeory/util/consts.dart';
-import 'package:memeory/util/os.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/os/os.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final LocalStorage _desktopStorage = LocalStorage('storage');

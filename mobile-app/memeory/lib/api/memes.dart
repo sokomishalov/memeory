@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:memeory/cache/repository/token_repo.dart';
-import 'package:memeory/util/consts.dart';
-import 'package:memeory/util/firebase.dart';
-import 'package:memeory/util/http.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/firebase/firebase.dart';
+import 'package:memeory/util/http/http.dart';
 
 Future<List> fetchMemes(page) async {
   final baseUrl = await getBackendUrl();

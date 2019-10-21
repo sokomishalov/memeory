@@ -8,11 +8,11 @@ import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/containers/loader.dart';
 import 'package:memeory/components/images/channel_logo.dart';
-import 'package:memeory/model/orientation.dart';
-import 'package:memeory/strings/ru.dart';
-import 'package:memeory/util/collections.dart';
-import 'package:memeory/util/consts.dart';
-import 'package:memeory/util/time.dart';
+import 'package:memeory/model/scrolling_axis.dart';
+import 'package:memeory/util/collections/collections.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'attachments/image.dart';
@@ -79,7 +79,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
                 padding: EdgeInsets.only(top: 4),
                 child: Opacity(
                   child: Text(
-                    timeAgo(item["publishedAt"]),
+                    timeAgo(context, item["publishedAt"]),
                     style: TextStyle(fontSize: 12),
                   ),
                   opacity: 0.5,
@@ -134,14 +134,14 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
         [];
   }
 
-  Widget buildLoaderHeader(MemesOrientation orientation) {
-    return orientation == MemesOrientation.HORIZONTAL
+  Widget buildLoaderHeader(ScrollingAxis orientation) {
+    return orientation == ScrollingAxis.HORIZONTAL
         ? ClassicHeader(
             releaseText: EMPTY,
             refreshingText: EMPTY,
             completeText: EMPTY,
             idleText: EMPTY,
-            failedText: ERROR_LOADING_MEMES,
+            failedText: t(context, "error_loading_memes"),
             idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
           )
         : WaterDropHeader(
@@ -163,7 +163,8 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
               children: [
                 Icon(Icons.close, color: Colors.grey),
                 Container(width: 15.0),
-                Text(ERROR_LOADING_MEMES, style: TextStyle(color: Colors.grey))
+                Text(t(context, "error_loading_memes"),
+                    style: TextStyle(color: Colors.grey))
               ],
             ),
           );
@@ -177,13 +178,13 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
           case LoadStatus.idle:
           case LoadStatus.canLoading:
           case LoadStatus.loading:
-            widget = Text(LOADING_MEMES);
+            widget = Text(t(context, "loading_memes"));
             break;
           case LoadStatus.noMore:
-            widget = Text(NO_MORE_MEMES);
+            widget = Text(t(context, "no_more_memes"));
             break;
           case LoadStatus.failed:
-            widget = Text(ERROR_LOADING_MEMES);
+            widget = Text(t(context, "error_loading_memes"));
             break;
         }
 
@@ -200,7 +201,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
       context: context,
       children: [
         BottomSheetItem(
-          caption: REMOVE_CHANNEL,
+          caption: t(context, "remove_channel"),
           icon: Icon(Icons.report),
           onPressed: () async {
             final watchAll = await getWatchAll();

@@ -8,7 +8,7 @@ import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
-import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
@@ -43,24 +43,24 @@ class UserPreferencesPage extends StatelessWidget {
         controller: _controller,
         children: [
           PreferencesPageWrapper(
-            title: CHOOSE_THEME,
+            title: t(context, "choose_theme"),
             nextPage: _nextPage,
             child: ThemePreferences(),
           ),
           PreferencesPageWrapper(
-            title: PLEASE_AUTHORIZE,
+            title: t(context, "please_authorize"),
             nextPage: _nextPage,
             child: SocialPreferences(),
           ),
           PreferencesPageWrapper(
-            title: CHOOSE_ORIENTATION,
+            title: t(context, "choose_orientation"),
             nextPage: _nextPage,
             child: OrientationPreferences(),
           ),
           PreferencesPageWrapper(
-            title: CHOOSE_CHANNELS,
+            title: t(context, "choose_channels"),
             apply: () => _close(context),
-            applyText: START_WATCHING_MEMES,
+            applyText: t(context, "start_watching_memes"),
             child: ChannelPreferences(),
           )
         ],

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:memeory/util/firebase.dart';
-import 'package:memeory/util/http.dart';
+import 'package:memeory/util/firebase/firebase.dart';
+import 'package:memeory/util/http/http.dart';
+
 
 Future<List> fetchChannels() async {
   final baseUrl = await getBackendUrl();

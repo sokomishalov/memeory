@@ -1,6 +1,5 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-
-import 'env.dart';
+import 'package:memeory/util/env/env.dart';
 
 Future<String> getBackendUrl() async {
   if (env.backendUrl.isNotEmpty) {

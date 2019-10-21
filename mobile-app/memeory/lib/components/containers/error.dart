@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/strings/ru.dart';
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 
 class ErrorContainer extends StatelessWidget {
   const ErrorContainer({Key key, this.error, this.reload}) : super(key: key);
@@ -23,7 +23,7 @@ class ErrorContainer extends StatelessWidget {
           padding: EdgeInsets.only(left: 20, right: 20, top: 20),
           child: RichText(
             text: TextSpan(
-              text: ERROR_OCCURED,
+              text: t(context, "error_occurred"),
               style: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class ErrorContainer extends StatelessWidget {
                   onPressed: reload,
                   padding: EdgeInsets.all(12),
                   child: Text(
-                    RETRY,
+                    t(context, "retry"),
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

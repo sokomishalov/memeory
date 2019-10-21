@@ -1,8 +1,6 @@
 const {override: customizeCRA, fixBabelImports, disableEsLint} = require('customize-cra');
 
 module.exports = function override(config) {
-    disableEsLint()
-
     config.module.rules.push({
         loader: 'webpack-ant-icon-loader',
         enforce: 'pre',
@@ -12,6 +10,7 @@ module.exports = function override(config) {
     });
 
     return customizeCRA(
+        disableEsLint(),
         fixBabelImports("lodash", {
             libraryDirectory: "",
             camel2DashComponentName: false
@@ -22,7 +21,7 @@ module.exports = function override(config) {
         }),
         fixBabelImports("antd-mobile", {
             libraryName: "antd-mobile",
-            libraryDirectory: "lib"
+            libraryDirectory: "es"
         })
     )(config);
 };

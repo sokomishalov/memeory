@@ -1,12 +1,12 @@
 import React from 'react';
 import Logo from "../../../images/logo.png"
 
-export const MemeoryLogo = ({width = 80, height = 80, ...props}) => (
+export const MemeoryLogo = ({size = 80, ...props}) => (
     <img src={Logo}
-         width={width}
-         height={height}
+         width={size}
+         height={size}
          style={{objectFit: "contain"}}
-         alt="logo"
+         alt=""
          {...props}
     />
 );

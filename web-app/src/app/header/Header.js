@@ -15,8 +15,7 @@ const Header = ({t, history}) => {
     return (
         <div className="header">
             <div className="header-main" onClick={() => history.push(ROUTE.CORE)}>
-                <MemeoryLogo width={35}
-                             height={35}
+                <MemeoryLogo size={35}
                              style={{
                                  marginRight: 10,
                                  borderRadius: 10

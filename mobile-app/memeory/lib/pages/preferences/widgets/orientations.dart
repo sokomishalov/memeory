@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/components/containers/conditional_widget.dart';
-import 'package:memeory/model/orientation.dart';
-import 'package:memeory/theme/dark.dart';
-import 'package:memeory/theme/light.dart';
-import 'package:memeory/theme/theme.dart';
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/model/scrolling_axis.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/theme/dark.dart';
+import 'package:memeory/util/theme/light.dart';
+import 'package:memeory/util/theme/theme.dart';
 import 'package:video_player/video_player.dart';
 
 class OrientationPreferences extends StatefulWidget {
@@ -24,7 +24,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
   ChewieController _verticalChewieController;
   ChewieController _horizontalChewieController;
 
-  MemesOrientation _preferredOrientation;
+  ScrollingAxis _preferredOrientation;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
     super.initState();
 
     getPreferredOrientation().then((o) {
-      if (o == MemesOrientation.HORIZONTAL) {
+      if (o == ScrollingAxis.HORIZONTAL) {
         _horizontalChewieController.play();
       } else {
         _verticalChewieController.play();
@@ -84,8 +84,8 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
         child: SingleChildScrollView(
           child: Row(
             children: [
-              videoWrapper(MemesOrientation.VERTICAL),
-              videoWrapper(MemesOrientation.HORIZONTAL),
+              videoWrapper(ScrollingAxis.VERTICAL),
+              videoWrapper(ScrollingAxis.HORIZONTAL),
             ],
           ),
         ),
@@ -93,7 +93,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
     );
   }
 
-  Future<void> setOrientation(MemesOrientation orientation) async {
+  Future<void> setOrientation(ScrollingAxis orientation) async {
     await setPreferredOrientation(orientation);
 
     var newOrientation = await getPreferredOrientation();
@@ -102,7 +102,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
       _preferredOrientation = newOrientation;
     });
 
-    if (orientation == MemesOrientation.HORIZONTAL) {
+    if (orientation == ScrollingAxis.HORIZONTAL) {
       await _horizontalChewieController.play();
       await _verticalChewieController.pause();
     } else {
@@ -113,7 +113,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
     await saveProfile();
   }
 
-  Widget videoWrapper(MemesOrientation orientation) {
+  Widget videoWrapper(ScrollingAxis orientation) {
     final width = (MediaQuery.of(context).size.width / 2);
     final height = width / aspectRatio;
 
@@ -126,7 +126,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
             width: width,
             height: height,
             child: Chewie(
-              controller: orientation == MemesOrientation.HORIZONTAL
+              controller: orientation == ScrollingAxis.HORIZONTAL
                   ? _horizontalChewieController
                   : _verticalChewieController,
             ),

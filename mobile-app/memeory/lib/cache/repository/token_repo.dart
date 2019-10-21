@@ -1,4 +1,4 @@
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
 
 import '../storage.dart';
 

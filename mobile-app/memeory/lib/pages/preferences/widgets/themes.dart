@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/strings/ru.dart';
-import 'package:memeory/theme/theme.dart';
+import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/theme/theme.dart';
 
 class ThemePreferences extends StatelessWidget {
   @override
@@ -8,7 +8,7 @@ class ThemePreferences extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(50.0),
       child: SwitchListTile(
-        title: Text(DARK_THEME),
+        title: Text(t(context, "theme_dark")),
         value: Theme.of(context).brightness == Brightness.dark,
         onChanged: (value) async {
           await changeTheme(context);

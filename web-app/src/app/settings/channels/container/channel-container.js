@@ -12,7 +12,7 @@ const ChannelContainer = ({channel, active, toggle}) => (
           cover={
               <div className="mt-8">
                   <Fade>
-                      <ChannelLogo width={40} height={40} channelId={channel["id"]}/>
+                      <ChannelLogo size={40} channelId={channel["id"]}/>
                   </Fade>
               </div>
           }>

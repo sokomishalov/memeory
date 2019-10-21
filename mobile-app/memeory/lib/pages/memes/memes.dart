@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
-import 'package:memeory/model/orientation.dart';
+import 'package:memeory/model/scrolling_axis.dart';
 import 'package:memeory/pages/about/about.dart';
 import 'package:memeory/pages/memes/memes_horizontal.dart';
 import 'package:memeory/pages/memes/memes_vertical.dart';
@@ -8,19 +8,19 @@ import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
-import 'package:memeory/strings/ru.dart';
-import 'package:memeory/theme/dark.dart';
-import 'package:memeory/theme/light.dart';
-import 'package:memeory/theme/theme.dart';
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/theme/dark.dart';
+import 'package:memeory/util/theme/light.dart';
+import 'package:memeory/util/theme/theme.dart';
 import 'package:page_transition/page_transition.dart';
 
 class MemesPage extends StatelessWidget {
   const MemesPage({
-    this.orientation = MemesOrientation.VERTICAL,
+    this.orientation = ScrollingAxis.VERTICAL,
   });
 
-  final MemesOrientation orientation;
+  final ScrollingAxis orientation;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class MemesPage extends StatelessWidget {
           iconTheme: getDefaultIconThemeData(context),
           centerTitle: true,
           title: Text(
-            MEMES,
+            t(context, "memes"),
             style: TextStyle(
               color: dependingOnThemeChoice(
                 context: context,
@@ -83,7 +83,7 @@ class MemesPage extends StatelessWidget {
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 10),
-                          child: Text('$APP_NAME!'),
+                          child: Text('Memeory!'),
                         ),
                       ],
                     ),
@@ -97,10 +97,10 @@ class MemesPage extends StatelessWidget {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.person_outline),
-                    title: Text(PROFILE),
+                    title: Text(t(context, "profile")),
                     onTap: () {
                       pushToPrefs(
-                        title: PLEASE_AUTHORIZE,
+                        title: t(context, "please_authorize"),
                         context: context,
                         body: SocialPreferences(),
                       );
@@ -108,10 +108,10 @@ class MemesPage extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.star_border),
-                    title: Text(CHANNELS),
+                    title: Text(t(context, "channels")),
                     onTap: () {
                       pushToPrefs(
-                        title: CHOOSE_CHANNELS,
+                        title: t(context, "choose_channels"),
                         context: context,
                         body: ChannelPreferences(),
                       );
@@ -119,10 +119,10 @@ class MemesPage extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.rss_feed),
-                    title: Text(ORIENTATION),
+                    title: Text(t(context, "orientation")),
                     onTap: () {
                       pushToPrefs(
-                        title: CHOOSE_ORIENTATION,
+                        title: t(context, "choose_orientation"),
                         context: context,
                         body: OrientationPreferences(),
                       );
@@ -130,10 +130,10 @@ class MemesPage extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.info_outline),
-                    title: Text(ABOUT_APP),
+                    title: Text(t(context, "about_app")),
                     onTap: () {
                       pushToPrefs(
-                        title: ABOUT_APP,
+                        title: t(context, "about_app"),
                         context: context,
                         body: AboutApp(),
                       );
@@ -146,7 +146,7 @@ class MemesPage extends StatelessWidget {
               height: 50,
               margin: EdgeInsets.only(bottom: 20),
               child: SwitchListTile(
-                title: Text("Темная тема"),
+                title: Text(t(context, "theme_dark")),
                 value: Theme.of(context).brightness == Brightness.dark,
                 onChanged: (value) async {
                   Navigator.pop(context);
@@ -157,7 +157,7 @@ class MemesPage extends StatelessWidget {
           ],
         ),
       ),
-      body: orientation == MemesOrientation.VERTICAL
+      body: orientation == ScrollingAxis.VERTICAL
           ? MemesVertical()
           : MemesHorizontal(),
     );
@@ -187,7 +187,7 @@ class MemesPage extends StatelessWidget {
                 ),
               );
             },
-            applyText: BACK_TO_WATCH_MEMES,
+            applyText: t(context, "back_to_watch_memes"),
             child: body,
           ),
         ),

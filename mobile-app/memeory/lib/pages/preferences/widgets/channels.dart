@@ -4,7 +4,7 @@ import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
-import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 
 class ChannelPreferences extends StatefulWidget {
   @override
@@ -74,9 +74,9 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
           Container(
             padding: EdgeInsets.only(top: 10),
             child: SwitchListTile(
-                title: Text(WATCH_ALL),
+                title: Text(t(context, "watch_all")),
                 subtitle: Text(
-                  WATCH_ALL_SUBTITLE,
+                  t(context, "watch_all_subtitle"),
                   style: TextStyle(fontSize: 11),
                 ),
                 value: _watchAll,
@@ -105,7 +105,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                       child: GridTile(
                         child: Card(
                           color: _watchAll || isActive
-                              ? Colors.greenAccent
+                              ? ButtonTheme.of(context).colorScheme.primary
                               : CardTheme.of(context).color,
                           child: Column(
                             children: [

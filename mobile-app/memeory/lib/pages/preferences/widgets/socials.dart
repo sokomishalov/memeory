@@ -7,8 +7,8 @@ import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/model/user.dart';
-import 'package:memeory/strings/ru.dart';
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 import 'package:pedantic/pedantic.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -43,7 +43,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
                   await _providerSignIn(GOOGLE_PROVIDER, context),
               child: GradientText(
                 _googleProfile?.displayName == null
-                    ? AUTH_GOOGLE
+                    ? t(context, "auth_google")
                     : _googleProfile.displayName,
                 gradient: LinearGradient(colors: [
                   Color.fromRGBO(234, 67, 53, 1),
@@ -63,7 +63,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
                   await _providerSignIn(FACEBOOK_PROVIDER, context),
               child: Text(
                 _facebookProfile?.displayName == null
-                    ? AUTH_FACEBOOK
+                    ? t(context, "auth_facebook")
                     : _facebookProfile.displayName,
                 style: TextStyle(
                   color: Colors.white,
@@ -90,7 +90,8 @@ class _SocialPreferencesState extends State<SocialPreferences> {
     try {
       AuthCredential credential = await getAuthCredential(provider);
 
-      final FirebaseUser profile = (await _auth.signInWithCredential(credential)).user;
+      final FirebaseUser profile =
+          (await _auth.signInWithCredential(credential)).user;
 
       if (profile == null) throw new FlutterError(EMPTY);
 
@@ -99,10 +100,11 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       await saveProfile();
       await _refreshProfiles();
 
-      successToast("$WELCOME, ${providerAuth.displayName}", context);
+      successToast(
+          "${t(context, "welcome")}, ${providerAuth.displayName}", context);
     } catch (e) {
       debugPrint(e.toString());
-      errorToast(UNSUCCESSFUL_AUTH, context);
+      errorToast(t(context, "unsuccessful_auth"), context);
     }
   }
 

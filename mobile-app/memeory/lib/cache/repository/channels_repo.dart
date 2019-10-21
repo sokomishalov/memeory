@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
 import 'package:quiver/strings.dart';
 
 import '../storage.dart';

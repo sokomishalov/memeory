@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/model/orientation.dart';
-import 'package:memeory/theme/dark.dart';
-import 'package:memeory/theme/light.dart';
-import 'package:memeory/theme/theme.dart';
+import 'package:memeory/model/scrolling_axis.dart';
+import 'package:memeory/util/theme/dark.dart';
+import 'package:memeory/util/theme/light.dart';
+import 'package:memeory/util/theme/theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'memes_mixin.dart';
@@ -33,7 +33,7 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: buildLoaderHeader(MemesOrientation.HORIZONTAL),
+      header: buildLoaderHeader(ScrollingAxis.HORIZONTAL),
       footer: buildLoaderFooter(),
       controller: refreshController,
       onRefresh: onRefresh,

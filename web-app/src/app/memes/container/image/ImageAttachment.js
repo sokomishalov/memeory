@@ -1,15 +1,15 @@
 import React from 'react';
 
-const ImageAttachment = ({attachment}) => (
+const ImageAttachment = ({attachment, defaultSize = 400}) => (
     <img src={attachment["url"]}
-         width={400}
-         height={400}
+         width={defaultSize}
+         height={defaultSize}
          style={{
              objectFit: "contain",
              width: "100%",
              height: "100%"
          }}
-         alt="-1"/>
+         alt=""/>
 );
 
 export default ImageAttachment;

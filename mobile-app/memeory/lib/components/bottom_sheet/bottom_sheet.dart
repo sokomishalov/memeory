@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/strings/ru.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 
 class BottomSheet extends StatelessWidget {
   const BottomSheet({
@@ -22,7 +22,7 @@ class BottomSheet extends StatelessWidget {
       items = [
         ...children,
         BottomSheetItem(
-          caption: CLOSE,
+          caption: t(context, "close"),
           icon: Icon(Icons.close),
           onPressed: close,
         ),

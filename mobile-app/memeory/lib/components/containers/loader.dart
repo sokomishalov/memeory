@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/util/os.dart';
+import 'package:memeory/util/os/os.dart';
 
 class Loader extends StatelessWidget {
   const Loader({Key key, this.width, this.height}) : super(key: key);

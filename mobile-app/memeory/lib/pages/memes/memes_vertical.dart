@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:memeory/model/orientation.dart';
+import 'package:memeory/model/scrolling_axis.dart';
 import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
-import 'package:memeory/theme/dark.dart';
-import 'package:memeory/theme/light.dart';
-import 'package:memeory/theme/theme.dart';
-import 'package:memeory/util/collections.dart';
+import 'package:memeory/util/collections/collections.dart';
+import 'package:memeory/util/theme/dark.dart';
+import 'package:memeory/util/theme/light.dart';
+import 'package:memeory/util/theme/theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'memes_mixin.dart';
@@ -22,7 +22,7 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: buildLoaderHeader(MemesOrientation.VERTICAL),
+      header: buildLoaderHeader(ScrollingAxis.VERTICAL),
       footer: buildLoaderFooter(),
       controller: refreshController,
       onRefresh: onRefresh,

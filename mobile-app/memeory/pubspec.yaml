@@ -21,6 +21,8 @@ dependencies:
   shared_preferences: ^0.5.3
   timeago: ^2.0.20
   pedantic: ^1.8.0
+  flutter_i18n: ^0.7.0
+  recase: ^2.0.1
 
   cupertino_icons: ^0.1.2
   dynamic_theme: ^1.0.1
@@ -46,6 +48,7 @@ flutter:
     - assets/logo/logo-inverted.png
     - assets/orientation/horizontal.mp4
     - assets/orientation/vertical.mp4
+    - assets/i18n/
 
   fonts:
     - family: Memeory

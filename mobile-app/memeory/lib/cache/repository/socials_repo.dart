@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:memeory/model/user.dart';
-import 'package:memeory/util/consts.dart';
+import 'package:memeory/util/consts/consts.dart';
 
 import '../storage.dart';
 
