@@ -173,8 +173,8 @@ class MemesPage extends StatelessWidget {
   }
 
   void pushToPrefs({
-    BuildContext context,
-    String title,
+    @required BuildContext context,
+    String title = EMPTY,
     Widget body,
     Future apply,
   }) {
@@ -184,7 +184,7 @@ class MemesPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (pageContext) => Scaffold(
           body: PreferencesPageWrapper(
-            title: title ?? EMPTY,
+            title: title,
             apply: () async {
               if (apply != null) await apply;
               var orientation = await getPreferredOrientation();
