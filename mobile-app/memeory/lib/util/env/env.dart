@@ -11,17 +11,24 @@ BuildEnvironment _env;
 
 class BuildEnvironment {
   final String backendUrl;
+  final String frontendUrl;
   final BuildFlavor flavor;
 
-  BuildEnvironment._init({this.flavor, this.backendUrl});
+  BuildEnvironment._init({
+    this.flavor,
+    this.backendUrl = "",
+    this.frontendUrl = "",
+  });
 
   static void init({
     @required flavor,
     backendUrl = "",
+    frontendUrl = "",
   }) =>
       _env ??= BuildEnvironment._init(
         flavor: flavor,
         backendUrl: backendUrl,
+        frontendUrl: frontendUrl,
       );
 }
 

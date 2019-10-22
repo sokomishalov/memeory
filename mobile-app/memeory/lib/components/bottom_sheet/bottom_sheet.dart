@@ -1,49 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 
 class BottomSheet extends StatelessWidget {
   const BottomSheet({
     Key key,
-    this.children,
-    this.close,
-  })  : assert(children != null && children.length > 0),
+    this.items,
+    this.close(),
+  })  : assert(items != null && items.length > 0),
+        assert(close != null),
         super(key: key);
 
-  final List<BottomSheetItem> children;
+  final List<BottomSheetItem> items;
   final VoidCallback close;
 
   @override
   Widget build(BuildContext context) {
-    var items = <Widget>[];
+    var widgets = <Widget>[];
 
-    if (close == null) {
-      items = children;
-    } else {
-      items = [
-        ...children,
-        BottomSheetItem(
-          caption: t(context, "close"),
-          icon: Icon(Icons.close),
-          onPressed: close,
-        ),
-      ];
-    }
+    items.forEach((o) {
+      widgets.add(BottomSheetWidget(
+        caption: o.caption,
+        icon: o.icon,
+        onPressed: () {
+          o.onPressed();
+          close();
+        },
+      ));
+    });
+
+    widgets.add(BottomSheetWidget(
+      caption: t(context, "close"),
+      icon: Icon(FontAwesomeIcons.solidWindowClose),
+      onPressed: close,
+    ));
 
     return Container(
-      height: (items.length * 56).toDouble() + 20,
-      child: Column(
-        children: items,
-      ),
+      height: (widgets.length * 56).toDouble() + 20,
+      child: Column(children: widgets),
     );
   }
 }
 
-class BottomSheetItem extends StatelessWidget {
-  const BottomSheetItem({
+Future showMemeoryBottomSheet({
+  @required BuildContext context,
+  @required List<BottomSheetItem> items,
+}) async {
+  return await showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return BottomSheet(
+        items: items,
+        close: () {
+          Navigator.pop(context);
+        },
+      );
+    },
+  );
+}
+
+class BottomSheetWidget extends StatelessWidget {
+  const BottomSheetWidget({
     Key key,
-    this.caption,
-    this.icon,
-    this.onPressed,
+    @required this.caption,
+    @required this.icon,
+    @required this.onPressed,
   }) : super(key: key);
 
   final String caption;
@@ -62,19 +83,14 @@ class BottomSheetItem extends StatelessWidget {
   }
 }
 
-Future showMemeoryBottomSheet({
-  @required BuildContext context,
-  @required List<BottomSheetItem> children,
-}) async {
-  return await showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return BottomSheet(
-        children: children,
-        close: () {
-          Navigator.pop(context);
-        },
-      );
-    },
-  );
+class BottomSheetItem {
+  const BottomSheetItem({
+    @required this.caption,
+    @required this.icon,
+    @required this.onPressed,
+  });
+
+  final String caption;
+  final Icon icon;
+  final VoidCallback onPressed;
 }

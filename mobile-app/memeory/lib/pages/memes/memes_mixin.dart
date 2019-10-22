@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:memeory/api/channels.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/api/memes.dart';
-import 'package:memeory/api/profile.dart';
-import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/containers/loader.dart';
 import 'package:memeory/components/images/channel_logo.dart';
+import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/model/scrolling_axis.dart';
 import 'package:memeory/util/collections/collections.dart';
 import 'package:memeory/util/consts/consts.dart';
+import 'package:memeory/util/firebase/firebase.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:share/share.dart';
 
 import 'attachments/image.dart';
 import 'attachments/video.dart';
@@ -199,38 +200,35 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
   void onTapEllipsis(BuildContext context, Map<String, dynamic> item) {
     showMemeoryBottomSheet(
       context: context,
-      children: [
+      items: [
         BottomSheetItem(
-          caption: t(context, "remove_channel"),
-          icon: Icon(Icons.report),
+          caption: t(context, "share_meme"),
+          icon: Icon(FontAwesomeIcons.shareAlt),
           onPressed: () async {
-            final watchAll = await getWatchAll();
-
-            if (watchAll) {
-              var channelsToSave = (await fetchChannels())
-                  .map((it) => it["id"])
-                  .where((it) => it != item["channelId"])
-                  .toList();
-
-              await setChannels(channelsToSave);
-              await setWatchAll(false);
-            } else {
-              await removeChannel(item["channelId"]);
-            }
-
-            await saveProfile();
-
-            Navigator.pop(context);
-
-            setState(() {
-              _currentPage = -1;
-              memes = [];
-            });
-
-            await onRefresh();
+            await _shareMeme(context, item);
+          },
+        ),
+        BottomSheetItem(
+          caption: t(context, "report_abuse"),
+          icon: Icon(FontAwesomeIcons.lock),
+          onPressed: () {
+            _reportAbuse(context);
           },
         )
       ],
     );
+  }
+
+  _reportAbuse(BuildContext context) {
+    errorToast(context, t(context, "report_your_ass"));
+  }
+
+  Future _shareMeme(BuildContext context, Map<String, dynamic> item) async {
+    var baseUrl = await getFrontendUrl();
+    var url = "${baseUrl}meme/${item["id"]}";
+
+    Share.share(url);
+
+    await onRefresh();
   }
 }

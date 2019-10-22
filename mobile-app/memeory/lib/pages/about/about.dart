@@ -13,7 +13,7 @@ class AboutApp extends StatelessWidget {
         children: <Widget>[
           Text(APP_NAME),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+            margin: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 5),
             child: Text(t(context, "please_contribute")),
           ),
           RaisedButton.icon(
@@ -25,7 +25,7 @@ class AboutApp extends StatelessWidget {
             },
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+            margin: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 5),
             child: Text(t(context, "please_donate")),
           ),
           RaisedButton.icon(

@@ -88,12 +88,12 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       await _refreshProfiles();
 
       successToast(
-        "${t(context, "welcome")}, ${providerAuth.displayName}",
         context,
+        "${t(context, "welcome")}, ${providerAuth.displayName}",
       );
     } catch (e) {
       debugPrint(e.toString());
-      errorToast(t(context, "unsuccessful_auth"), context);
+      errorToast(context, t(context, "unsuccessful_auth"));
     }
   }
 
@@ -108,7 +108,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
         idToken: googleAuth.idToken,
       );
     } else if (provider == FACEBOOK_PROVIDER) {
-      final result = await _facebookSignIn.logIn(['email']);
+      final result = await _facebookSignIn.logInWithReadPermissions(['email']);
 
       if (result.status == FacebookLoginStatus.loggedIn) {
         return FacebookAuthProvider.getCredential(

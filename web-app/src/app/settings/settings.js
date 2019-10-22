@@ -26,7 +26,7 @@ const Settings = ({t, history}) => {
         <div className="settings">
             <Tabs tabs={tabs}
                   page={getPage()}
-                  onChange={(tab) => history.push(tab.uri)}
+                  onChange={tab => history.push(tab.uri)}
                   tabBarTextStyle={{
                       backgroundColor: "rgba(26, 26, 27, 1)",
                       cursor: "pointer"
@@ -35,7 +35,7 @@ const Settings = ({t, history}) => {
                 <div className="settings-content-header">
                     {tabs[getPage()].title}
                 </div>
-                <Divider style={{height: 3}}/>
+                <Divider style={{height: 2}}/>
                 <Route path={SETTINGS_ROUTE.SOCIALS} component={Socials}/>
                 <Route path={SETTINGS_ROUTE.CHANNELS} component={Channels}/>
                 <Route path={SETTINGS_ROUTE.APPEARANCE} component={Theme}/>

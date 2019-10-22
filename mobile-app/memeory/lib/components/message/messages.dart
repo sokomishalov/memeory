@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
-errorMessage(message, context) {
+errorMessage({
+  @required BuildContext context,
+  String headerMessage = "Error",
+  String message = "",
+  String closeText = "Close",
+}) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Ошибка"),
-      content: Text(message ?? ""),
+      title: Text(headerMessage),
+      content: Text(message),
       actions: <Widget>[
-        // usually buttons at the bottom of the dialog
         new FlatButton(
-          child: new Text("Закрыть"),
+          child: new Text(closeText),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -20,21 +24,28 @@ errorMessage(message, context) {
   );
 }
 
-withConfirmation(message, yesAction, context) {
+withConfirmation({
+  @required BuildContext context,
+  @required VoidCallback yesAction(),
+  String headerMessage = "Confirmation",
+  String message = "",
+  String yesCaption = "Yes",
+  String noCaption = "No",
+}) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Подтверждение"),
-      content: Text(message ?? ""),
+      title: Text(headerMessage),
+      content: Text(message),
       actions: <Widget>[
         FlatButton(
-          child: Text("Нет"),
+          child: Text(noCaption),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         FlatButton(
-          child: Text("Да"),
+          child: Text(yesCaption),
           onPressed: () {
             yesAction();
             Navigator.of(context).pop();
@@ -45,23 +56,32 @@ withConfirmation(message, yesAction, context) {
   );
 }
 
-infoToast(message, context) {
+infoToast(
+  BuildContext context,
+  String message,
+) {
   Toast.show(
     message ?? "",
     context,
   );
 }
 
-successToast(message, context) {
+successToast(
+  BuildContext context,
+  String message,
+) {
   Toast.show(
     message ?? "",
     context,
   );
 }
 
-errorToast(message, context) {
+errorToast(
+  BuildContext context,
+  String message,
+) {
   Toast.show(
-    "Ошибка: " + message ?? "Неизвестная ошибка",
+    message ?? "Unknown error",
     context,
     duration: 3,
   );

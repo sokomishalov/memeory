@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/model/scrolling_axis.dart';
 import 'package:memeory/pages/about/about.dart';
@@ -96,7 +97,7 @@ class MemesPage extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   ListTile(
-                    leading: Icon(Icons.person_outline),
+                    leading: Icon(FontAwesomeIcons.userCircle),
                     title: Text(t(context, "profile")),
                     onTap: () {
                       pushToPrefs(
@@ -107,7 +108,7 @@ class MemesPage extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.star_border),
+                    leading: Icon(FontAwesomeIcons.bomb),
                     title: Text(t(context, "channels")),
                     onTap: () {
                       pushToPrefs(
@@ -118,7 +119,7 @@ class MemesPage extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.rss_feed),
+                    leading: Icon(FontAwesomeIcons.scroll),
                     title: Text(t(context, "orientation")),
                     onTap: () {
                       pushToPrefs(
@@ -129,7 +130,7 @@ class MemesPage extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.info_outline),
+                    leading: Icon(FontAwesomeIcons.infoCircle),
                     title: Text(t(context, "about_app")),
                     onTap: () {
                       pushToPrefs(
