@@ -31,136 +31,144 @@ class MemesPage extends StatelessWidget {
         light: MEME_BACKGROUND_COLOR_LIGHT,
         dark: MEME_BACKGROUND_COLOR_DARK,
       ),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          backgroundColor: dependingOnThemeChoice(
-            context: context,
-            light: APP_BAR_COLOR_LIGHT,
-            dark: APP_BAR_COLOR_DARK,
-          ),
-          iconTheme: getDefaultIconThemeData(context),
-          centerTitle: true,
-          title: Text(
-            t(context, "memes"),
-            style: TextStyle(
-              color: dependingOnThemeChoice(
-                context: context,
-                light: TEXT_COLOR_LIGHT,
-                dark: TEXT_COLOR_DARK,
-              ),
-            ),
-          ),
-        ),
-      ),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            DrawerHeader(
-              child: Stack(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.close),
-                  ),
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: dependingOnThemeChoice(
-                                context: context,
-                                light: AssetImage(LOGO_ASSET),
-                                dark: AssetImage(LOGO_INVERTED_ASSET),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text('Memeory!'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(FontAwesomeIcons.userCircle),
-                    title: Text(t(context, "profile")),
-                    onTap: () {
-                      pushToPrefs(
-                        title: t(context, "please_authorize"),
-                        context: context,
-                        body: SocialPreferences(),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(FontAwesomeIcons.bomb),
-                    title: Text(t(context, "channels")),
-                    onTap: () {
-                      pushToPrefs(
-                        title: t(context, "choose_channels"),
-                        context: context,
-                        body: ChannelPreferences(),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(FontAwesomeIcons.scroll),
-                    title: Text(t(context, "orientation")),
-                    onTap: () {
-                      pushToPrefs(
-                        title: t(context, "choose_orientation"),
-                        context: context,
-                        body: OrientationPreferences(),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(FontAwesomeIcons.infoCircle),
-                    title: Text(t(context, "about_app")),
-                    onTap: () {
-                      pushToPrefs(
-                        title: t(context, "about_app"),
-                        context: context,
-                        body: AboutApp(),
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 50,
-              margin: EdgeInsets.only(bottom: 20),
-              child: SwitchListTile(
-                title: Text(t(context, "theme_dark")),
-                value: Theme.of(context).brightness == Brightness.dark,
-                onChanged: (value) async {
-                  Navigator.pop(context);
-                  await changeTheme(context);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: _buildAppBar(context),
+      drawer: _buildDrawer(context),
       body: orientation == ScrollingAxis.VERTICAL
           ? MemesVertical()
           : MemesHorizontal(),
+    );
+  }
+
+  Drawer _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          DrawerHeader(
+            child: Stack(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.close),
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: dependingOnThemeChoice(
+                              context: context,
+                              light: AssetImage(LOGO_ASSET),
+                              dark: AssetImage(LOGO_INVERTED_ASSET),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text('Memeory!'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.userAlt),
+                  title: Text(t(context, "profile")),
+                  onTap: () {
+                    pushToPrefs(
+                      title: t(context, "please_authorize"),
+                      context: context,
+                      body: SocialPreferences(),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.rss),
+                  title: Text(t(context, "channels")),
+                  onTap: () {
+                    pushToPrefs(
+                      title: t(context, "choose_channels"),
+                      context: context,
+                      body: ChannelPreferences(),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.arrowsAlt),
+                  title: Text(t(context, "orientation")),
+                  onTap: () {
+                    pushToPrefs(
+                      title: t(context, "choose_orientation"),
+                      context: context,
+                      body: OrientationPreferences(),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.info),
+                  title: Text(t(context, "about_app")),
+                  onTap: () {
+                    pushToPrefs(
+                      title: t(context, "about_app"),
+                      context: context,
+                      body: AboutApp(),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: 50,
+            margin: EdgeInsets.only(bottom: 20),
+            child: SwitchListTile(
+              title: Text(t(context, "theme_dark")),
+              value: Theme.of(context).brightness == Brightness.dark,
+              onChanged: (value) async {
+                Navigator.pop(context);
+                await changeTheme(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  PreferredSize _buildAppBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(50),
+      child: AppBar(
+        backgroundColor: dependingOnThemeChoice(
+          context: context,
+          light: APP_BAR_COLOR_LIGHT,
+          dark: APP_BAR_COLOR_DARK,
+        ),
+        iconTheme: getDefaultIconThemeData(context),
+        centerTitle: true,
+        title: Text(
+          t(context, "memes"),
+          style: TextStyle(
+            color: dependingOnThemeChoice(
+              context: context,
+              light: TEXT_COLOR_LIGHT,
+              dark: TEXT_COLOR_DARK,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
