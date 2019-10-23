@@ -4,7 +4,10 @@ package ru.sokomishalov.memeory.service.provider.vk
 
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.html.*
+import ru.sokomishalov.commons.core.html.getImageBackgroundUrl
+import ru.sokomishalov.commons.core.html.getSingleElementByClass
+import ru.sokomishalov.commons.core.html.getSingleElementByTag
+import ru.sokomishalov.commons.core.html.getWebPage
 import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.dto.AttachmentDTO
@@ -17,6 +20,7 @@ import ru.sokomishalov.memeory.enums.Provider.VK
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.VK_URL
+import ru.sokomishalov.memeory.util.html.removeLinks
 import ru.sokomishalov.memeory.util.time.mockDate
 import java.util.*
 
@@ -59,7 +63,7 @@ class VkProviderService : ProviderService, Loggable {
         return element
                 .getElementsByClass("pi_text")
                 ?.firstOrNull()
-                ?.fixText()
+                ?.removeLinks()
     }
 
     private fun extractDate(i: Int): Date {

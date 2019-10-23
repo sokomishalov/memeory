@@ -1,8 +1,9 @@
 package ru.sokomishalov.memeory.service.provider.twitter
 
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import org.jsoup.safety.Whitelist
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.html.fixText
 import ru.sokomishalov.commons.core.html.getSingleElementByClass
 import ru.sokomishalov.commons.core.html.getWebPage
@@ -16,6 +17,7 @@ import ru.sokomishalov.memeory.enums.Provider.TWITTER
 import ru.sokomishalov.memeory.service.provider.ProviderService
 import ru.sokomishalov.memeory.util.consts.DELIMITER
 import ru.sokomishalov.memeory.util.consts.TWITTER_URL
+import ru.sokomishalov.memeory.util.html.removeLinks
 import java.util.*
 
 
@@ -37,7 +39,7 @@ class TwitterProviderService : ProviderService {
                 .map {
                     it.getSingleElementByClass("tweet")
                 }
-                .aMap {
+                .map {
                     MemeDTO(
                             id = "${channel.id}$DELIMITER${extractIdFromTweet(it)}",
                             caption = extractCaptionFromTweet(it),
@@ -62,10 +64,10 @@ class TwitterProviderService : ProviderService {
                 .attr("data-tweet-id")
     }
 
-    private suspend fun extractCaptionFromTweet(tweet: Element): String? {
+    private fun extractCaptionFromTweet(tweet: Element): String? {
         return tweet
                 .getSingleElementByClass("tweet-text")
-                .fixText()
+                .removeLinks()
     }
 
     private fun extractPublishedAtFromTweet(tweet: Element): Date {
