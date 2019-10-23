@@ -7,5 +7,5 @@ import ru.sokomishalov.commons.core.consts.EMPTY
  */
 data class TopicDTO(
         var id: String = EMPTY,
-        var name: String = EMPTY
+        var caption: String = EMPTY
 )

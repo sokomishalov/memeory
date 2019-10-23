@@ -11,5 +11,5 @@ import ru.sokomishalov.commons.core.consts.EMPTY
 data class Topic(
         @Id
         var id: String = EMPTY,
-        var name: String = EMPTY
+        var caption: String = EMPTY
 )

@@ -33,7 +33,7 @@ class MemesFetchingScheduler(
         private val providerFactory: ProviderFactory,
         private val memeService: MemeService,
         private val lockProvider: LockProvider,
-        @Value("classpath:channels.yml")
+        @Value("classpath:defaults/channels.yml")
         private val defaultChannels: Resource
 ) : Loggable {
 
