@@ -11,12 +11,12 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
-import org.springframework.web.util.UriComponentsBuilder
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
+import ru.sokomishalov.commons.core.reactor.awaitUnit
 import ru.sokomishalov.memeory.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.dto.MemeDTO
 import ru.sokomishalov.memeory.service.db.MemeService
@@ -71,7 +71,7 @@ class MongoMemeService(
                     Index().on("createdAt", DESC).expire(props.memeLifeTime),
                     Index().on("publishedAt", DESC)
             )
-            indexes.forEach { template.indexOps(Meme::class.java).ensureIndex(it) }
+            indexes.forEach { template.indexOps(Meme::class.java).ensureIndex(it).awaitUnit() }
         }
     }
 }
