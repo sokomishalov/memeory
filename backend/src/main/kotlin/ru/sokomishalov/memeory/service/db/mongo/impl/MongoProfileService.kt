@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.isNotNullOrEmpty
-import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.dto.ProfileDTO
@@ -27,7 +26,7 @@ import ru.sokomishalov.memeory.mapper.ProfileMapper.Companion.INSTANCE as profil
 class MongoProfileService(
         private val repository: ProfileRepository,
         private val template: ReactiveMongoTemplate
-) : ProfileService, Loggable {
+) : ProfileService {
 
     override suspend fun findById(id: String): ProfileDTO? {
         val profile = repository.findById(id).await()

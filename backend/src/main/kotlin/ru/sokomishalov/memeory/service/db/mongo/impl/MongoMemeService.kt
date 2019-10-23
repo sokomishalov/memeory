@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.index.Index
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
-import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.commons.core.reactor.awaitUnit
@@ -34,7 +33,7 @@ class MongoMemeService(
         private val profileService: ProfileService,
         private val template: ReactiveMongoTemplate,
         private val props: MemeoryProperties
-) : MemeService, Loggable {
+) : MemeService {
 
     override suspend fun saveBatch(batch: List<MemeDTO>): List<MemeDTO> {
         val memesToInsert = batch
