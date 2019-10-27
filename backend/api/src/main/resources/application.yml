@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: localdev,secret
+  main:
+    allow-bean-definition-overriding: true
+
+memeory:
+  fetch-limit: 100
+  fetch-interval: 30m
+  meme-life-time: 10d
+  use-cluster-locks: false
+
+management:
+  health:
+    mongo:
+      enabled: true
+  endpoint:
+    beans:
+      enabled: true
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    env:
+      enabled: true
+  info:
+    git:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"

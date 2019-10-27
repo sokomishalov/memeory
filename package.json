@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "heroku-prebuild": "cp -r ./web-app/* ./"
+    "heroku-prebuild": "cp ./additional/devops/heroku/frontend/Procfile ./ && cp -r ./web-app/* ./"
   }
 }
