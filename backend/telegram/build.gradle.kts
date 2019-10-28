@@ -2,6 +2,8 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
     api(project(":core"))
+    api(project(":db"))
+    implementation("org.telegram:telegrambots-spring-boot-starter:4.1.2")
 }
 
 val jar: Jar by tasks
