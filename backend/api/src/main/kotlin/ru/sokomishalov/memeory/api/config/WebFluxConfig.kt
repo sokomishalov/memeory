@@ -35,7 +35,7 @@ class WebFluxConfig : CustomWebFluxConfigurer(), Loggable {
 
     @Bean
     fun userDetailsService(passwordEncoder: PasswordEncoder, props: MemeoryProperties): ReactiveUserDetailsService? {
-        return MapReactiveUserDetailsService(*props
+        return props
                 .admins
                 .ifEmpty {
                     listOf(AdminUserDTO()
@@ -57,8 +57,7 @@ class WebFluxConfig : CustomWebFluxConfigurer(), Loggable {
                             .passwordEncoder(passwordEncoder::encode)
                             .build()
                 }
-                .toTypedArray()
-        )
+                .let { MapReactiveUserDetailsService(*it.toTypedArray()) }
     }
 
     @Bean
