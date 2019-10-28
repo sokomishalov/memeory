@@ -23,6 +23,7 @@ import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.providers.ProviderFactory
+import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -37,7 +38,8 @@ class MemesFetchingScheduler(
         private val memeService: MemeService,
         private val lockProvider: LockProvider,
         @Value("classpath:channels.yml")
-        private val defaultChannels: Resource
+        private val defaultChannels: Resource,
+        private val bot: MemeoryBot
 ) : Loggable {
 
     @EventListener(ApplicationReadyEvent::class)
@@ -55,6 +57,7 @@ class MemesFetchingScheduler(
 
                 val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
                 log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+                bot.broadcastBatch(savedMemes)
             }
         }.unit()
     }
