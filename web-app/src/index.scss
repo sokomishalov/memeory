@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Memeory';
+    src: local('Memeory Regular'), local('Memeory-Regular'), url(./fonts/Ubuntu-Regular.ttf) format('ttf');
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -5,5 +10,5 @@ body {
 }
 
 body * {
-    font-family: "Memeory", serif;
+    font-family: "Memeory", sans-serif;
 }
