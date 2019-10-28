@@ -4,13 +4,10 @@ val developmentOnly: Configuration by configurations.creating
 configurations.runtimeClasspath.get().extendsFrom(developmentOnly)
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":db"))
-    implementation(project(":providers"))
-    implementation(project(":telegram"))
-
-    compile(kotlin("stdlib-jdk8"))
-    implementation("com.github.sokomishalov.commons:commons-spring:1.0.24")
+    api(project(":core"))
+    api(project(":db"))
+    api(project(":providers"))
+    api(project(":telegram"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

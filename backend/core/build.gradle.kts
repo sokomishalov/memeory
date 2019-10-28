@@ -1,8 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
-    implementation("com.github.sokomishalov.commons:commons-spring:1.0.24")
+    api("com.github.sokomishalov.commons:commons-spring:1.0.24")
 }
 
 val jar: Jar by tasks
