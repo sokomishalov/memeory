@@ -6,6 +6,6 @@ import ru.sokomishalov.memeory.core.enums.AttachmentType.NONE
 
 data class AttachmentDTO(
         var url: String? = EMPTY,
-        var type: AttachmentType? = NONE,
+        var type: AttachmentType = NONE,
         var aspectRatio: Double? = null
 )

@@ -16,18 +16,19 @@ import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.ProfileService
 import ru.sokomishalov.memeory.db.mongo.entity.Meme
+import ru.sokomishalov.memeory.db.mongo.mapper.MemeMapper
 import ru.sokomishalov.memeory.db.mongo.repository.MemeRepository
 import java.time.Duration
 import org.springframework.data.domain.PageRequest.of as pageOf
 import org.springframework.data.domain.Sort.by as sortBy
-import ru.sokomishalov.memeory.db.mongo.mapper.MemeMapper.Companion.INSTANCE as memeMapper
 
 @Service
 @Primary
 class MongoMemeService(
         private val repository: MemeRepository,
         private val profileService: ProfileService,
-        private val template: ReactiveMongoTemplate
+        private val template: ReactiveMongoTemplate,
+        private val memeMapper: MemeMapper
 ) : MemeService {
 
     override suspend fun saveBatch(batch: List<MemeDTO>, ttl: Duration): List<MemeDTO> {

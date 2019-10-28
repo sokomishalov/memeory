@@ -12,10 +12,10 @@ import ru.sokomishalov.memeory.core.dto.ProfileDTO
 import ru.sokomishalov.memeory.core.util.consts.MONGO_KEY_DOT_REPLACEMENT
 import ru.sokomishalov.memeory.db.ProfileService
 import ru.sokomishalov.memeory.db.mongo.entity.Profile
+import ru.sokomishalov.memeory.db.mongo.mapper.ProfileMapper
 import ru.sokomishalov.memeory.db.mongo.repository.ProfileRepository
 import java.util.UUID.randomUUID
 import org.springframework.data.mongodb.core.query.Criteria.where as criteriaWhere
-import ru.sokomishalov.memeory.db.mongo.mapper.ProfileMapper.Companion.INSTANCE as profileMapper
 
 
 /**
@@ -25,7 +25,8 @@ import ru.sokomishalov.memeory.db.mongo.mapper.ProfileMapper.Companion.INSTANCE 
 @Primary
 class MongoProfileService(
         private val repository: ProfileRepository,
-        private val template: ReactiveMongoTemplate
+        private val template: ReactiveMongoTemplate,
+        private val profileMapper: ProfileMapper
 ) : ProfileService {
 
     override suspend fun findById(id: String): ProfileDTO? {
