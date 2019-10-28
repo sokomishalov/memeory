@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.starter.TelegramBotInitializer
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.string.isNotNullOrBlank
-import ru.sokomishalov.memeory.db.MemeService
-import ru.sokomishalov.memeory.db.ProfileService
+import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.bot.impl.MemeoryBotImpl
@@ -38,14 +37,15 @@ class TelegramConfig : Loggable {
 
     @Bean
     @ConditionalOnBean(TelegramBotInitializer::class)
-    fun bot(props: TelegramBotProperties, memeService: MemeService, profileService: ProfileService): MemeoryBot? {
+    fun bot(props: TelegramBotProperties,
+            botUserService: BotUserService
+    ): MemeoryBot? {
         return when {
             props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> {
                 runCatching {
                     MemeoryBotImpl(
                             props = props,
-                            profileService = profileService,
-                            memeService = memeService
+                            botUserService = botUserService
                     )
                 }.onSuccess {
                     logInfo("Bot initialized successfully")

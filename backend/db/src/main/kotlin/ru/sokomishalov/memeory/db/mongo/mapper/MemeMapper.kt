@@ -1,17 +1,10 @@
 package ru.sokomishalov.memeory.db.mongo.mapper
 
 import org.mapstruct.Mapper
-import org.mapstruct.factory.Mappers.getMapper
+import org.springframework.stereotype.Component
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.db.mongo.entity.Meme
 
-@Mapper
-interface MemeMapper {
-    companion object {
-        val INSTANCE: MemeMapper = getMapper(MemeMapper::class.java)
-    }
-
-    fun toEntity(dto: MemeDTO): Meme
-
-    fun toDto(entity: Meme): MemeDTO
-}
+@Mapper(componentModel = "spring")
+@Component
+interface MemeMapper : AbstractMapper<Meme, MemeDTO>

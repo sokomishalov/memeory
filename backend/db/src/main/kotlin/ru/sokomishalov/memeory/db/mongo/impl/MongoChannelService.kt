@@ -12,8 +12,8 @@ import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.util.consts.MONGO_ID_FIELD
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.mongo.entity.Channel
+import ru.sokomishalov.memeory.db.mongo.mapper.ChannelMapper
 import ru.sokomishalov.memeory.db.mongo.repository.ChannelRepository
-import ru.sokomishalov.memeory.db.mongo.mapper.ChannelMapper.Companion.INSTANCE as channelMapper
 
 /**
  * @author sokomishalov
@@ -22,7 +22,8 @@ import ru.sokomishalov.memeory.db.mongo.mapper.ChannelMapper.Companion.INSTANCE 
 @Primary
 class MongoChannelService(
         private val repository: ChannelRepository,
-        private val template: ReactiveMongoTemplate
+        private val template: ReactiveMongoTemplate,
+        private val channelMapper: ChannelMapper
 ) : ChannelService {
 
     override suspend fun findAllEnabled(): List<ChannelDTO> {

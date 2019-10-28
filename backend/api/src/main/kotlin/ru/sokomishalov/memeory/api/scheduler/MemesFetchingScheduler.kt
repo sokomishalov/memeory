@@ -57,7 +57,7 @@ class MemesFetchingScheduler(
 
                 val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
                 log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
-                bot.broadcastBatch(savedMemes)
+                bot.broadcastMemes(savedMemes)
             }
         }.unit()
     }

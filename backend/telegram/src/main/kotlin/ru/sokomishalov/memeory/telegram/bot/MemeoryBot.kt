@@ -4,6 +4,6 @@ import ru.sokomishalov.memeory.core.dto.MemeDTO
 
 interface MemeoryBot {
 
-    suspend fun broadcastBatch(memes: List<MemeDTO>)
+    suspend fun broadcastMemes(memes: List<MemeDTO>)
 
 }
