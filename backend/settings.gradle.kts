@@ -1,3 +1,5 @@
+include("api", "core", "db", "providers", "telegram")
+
 pluginManagement {
     repositories {
         maven { url = uri("http://repo.spring.io/snapshot") }
@@ -13,4 +15,3 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "memeory"
