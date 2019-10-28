@@ -12,6 +12,7 @@ import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.ProfileService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
+import ru.sokomishalov.memeory.telegram.bot.impl.MemeoryBotImpl
 
 /**
  * @author sokomishalov
@@ -41,7 +42,7 @@ class TelegramConfig : Loggable {
         return when {
             props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> {
                 runCatching {
-                    MemeoryBot(
+                    MemeoryBotImpl(
                             props = props,
                             profileService = profileService,
                             memeService = memeService
