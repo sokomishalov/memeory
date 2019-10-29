@@ -2,7 +2,7 @@ package ru.sokomishalov.memeory.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import ru.sokomishalov.memeory.telegram.api.initTelegramApi
+import ru.sokomishalov.memeory.telegram.util.api.initTelegramApi
 
 /**
  * @author sokomishalov

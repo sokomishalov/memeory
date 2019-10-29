@@ -24,7 +24,6 @@ import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import java.time.Duration.ZERO
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -44,25 +43,28 @@ class MemesFetchingScheduler(
 ) : Loggable {
 
     @EventListener(ApplicationReadyEvent::class)
-    fun fetchMemes(): Mono<Unit> = aMono {
+    fun onApplicationStartUp(): Mono<Unit> = aMono {
         storeDefaultChannels()
-
-        Timer(true).schedule(delay = ZERO.toMillis(), period = props.fetchInterval.toMillis()) {
-            log("About to fetch some new memes")
-
+        Timer(true).schedule(delay = props.fetchInterval.toMillis(), period = props.fetchInterval.toMillis()) {
             GlobalScope.launch {
-                val fetchedMemes = channelService
-                        .findAllEnabled()
-                        .map { fetchMemesClusterable(it) }
-                        .flatten()
-
-                val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
-                log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
-
-                bot.broadcastMemes(savedMemes)
-                log("Finished broadcasting memes")
+                loadMemes()
             }
         }.unit()
+    }
+
+    suspend fun loadMemes() {
+        log("About to fetch some new memes")
+
+        val fetchedMemes = channelService
+                .findAllEnabled()
+                .map { fetchMemesClusterable(it) }
+                .flatten()
+
+        val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
+        log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+
+        bot.broadcastMemes(savedMemes)
+        log("Finished broadcasting memes by bot")
     }
 
     private suspend fun storeDefaultChannels() {
