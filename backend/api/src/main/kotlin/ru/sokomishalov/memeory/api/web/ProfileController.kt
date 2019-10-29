@@ -16,10 +16,12 @@ class ProfileController(
 ) {
 
     @GetMapping("/get")
-    suspend fun getProfile(@RequestHeader(name = MEMEORY_TOKEN_HEADER) token: String): ProfileDTO? =
-            service.findById(token)
+    suspend fun getProfile(@RequestHeader(name = MEMEORY_TOKEN_HEADER) token: String): ProfileDTO? {
+        return service.findById(token)
+    }
 
     @PostMapping("/save")
-    suspend fun saveProfileInfo(@RequestBody profile: ProfileDTO): ProfileDTO? =
-            service.save(profile)
+    suspend fun saveProfileInfo(@RequestBody profile: ProfileDTO): ProfileDTO? {
+        return service.save(profile)
+    }
 }

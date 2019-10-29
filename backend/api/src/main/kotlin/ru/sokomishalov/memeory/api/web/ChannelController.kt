@@ -5,7 +5,10 @@ import org.springframework.http.HttpHeaders.ACCESS_CONTROL_MAX_AGE
 import org.springframework.http.HttpHeaders.CONTENT_DISPOSITION
 import org.springframework.http.MediaType.IMAGE_PNG
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import ru.sokomishalov.commons.core.images.getImageByteArray
 import ru.sokomishalov.commons.spring.cache.CacheService
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
@@ -27,25 +30,9 @@ class ChannelController(private val channelService: ChannelService,
                         private val placeholder: ByteArray
 ) {
 
-    @GetMapping("/list")
-    suspend fun all(): List<ChannelDTO> =
-            channelService.findAll()
-
     @GetMapping("/list/enabled")
     suspend fun enabled(): List<ChannelDTO> =
             channelService.findAllEnabled()
-
-    @PostMapping("/enable")
-    suspend fun enable(@RequestBody channelIds: List<String>) =
-            channelService.toggleEnabled(true, *channelIds.toTypedArray())
-
-    @PostMapping("/disable")
-    suspend fun disable(@RequestBody channelIds: List<String>) =
-            channelService.toggleEnabled(false, *channelIds.toTypedArray())
-
-    @PostMapping("/add")
-    suspend fun add(@RequestBody channel: ChannelDTO): ChannelDTO? =
-            channelService.save(channel)
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
