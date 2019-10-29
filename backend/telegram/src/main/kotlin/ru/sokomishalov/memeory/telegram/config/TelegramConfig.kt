@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.telegram.config
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,6 +10,7 @@ import ru.sokomishalov.commons.core.string.isNotNullOrBlank
 import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
+import ru.sokomishalov.memeory.telegram.bot.impl.DummyBot
 import ru.sokomishalov.memeory.telegram.bot.impl.MemeoryBotImpl
 
 /**
@@ -24,7 +24,6 @@ class TelegramConfig : Loggable {
     fun telegramBotsApi(): TelegramBotsApi = TelegramBotsApi()
 
     @Bean
-    @ConditionalOnBean(TelegramBotsApi::class)
     fun telegramBotInitializer(telegramBotsApi: TelegramBotsApi): TelegramBotInitializer? {
         return runCatching {
             TelegramBotInitializer(telegramBotsApi, emptyList(), emptyList())
@@ -36,10 +35,7 @@ class TelegramConfig : Loggable {
     }
 
     @Bean
-    @ConditionalOnBean(TelegramBotInitializer::class)
-    fun bot(props: TelegramBotProperties,
-            botUserService: BotUserService
-    ): MemeoryBot? {
+    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService): MemeoryBot {
         return when {
             props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> {
                 runCatching {
@@ -49,11 +45,15 @@ class TelegramConfig : Loggable {
                     )
                 }.onSuccess {
                     logInfo("Bot initialized successfully")
-                }.getOrNull()
+                }.onFailure {
+                    logWarn(it)
+                }.getOrElse {
+                    DummyBot()
+                }
             }
             else -> {
                 logWarn("Token and username for bot have not been specified, bot is off")
-                null
+                DummyBot()
             }
         }
     }
