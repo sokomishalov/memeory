@@ -1,9 +1,14 @@
 package ru.sokomishalov.memeory.telegram.config
 
+import org.springframework.beans.factory.ObjectProvider
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.telegram.telegrambots.meta.generics.WebhookBot
 import org.telegram.telegrambots.starter.TelegramBotInitializer
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.string.isNotNullOrBlank
@@ -24,37 +29,29 @@ class TelegramConfig : Loggable {
     fun telegramBotsApi(): TelegramBotsApi = TelegramBotsApi()
 
     @Bean
-    fun telegramBotInitializer(telegramBotsApi: TelegramBotsApi): TelegramBotInitializer? {
+    fun telegramBotInitializer(telegramBotsApi: TelegramBotsApi,
+                               longPollingBots: ObjectProvider<List<LongPollingBot>>,
+                               webHookBots: ObjectProvider<List<WebhookBot>>
+    ): TelegramBotInitializer? {
         return runCatching {
-            TelegramBotInitializer(telegramBotsApi, emptyList(), emptyList())
-        }.onFailure {
-            logWarn("Telegram API has not been initialized, bot is off")
+            TelegramBotInitializer(telegramBotsApi, longPollingBots.getIfAvailable { emptyList() }, webHookBots.getIfAvailable { emptyList() })
         }.onSuccess {
-            log("Telegram API has bean initialized successfully")
+            log("Bots were initialized successfully")
+        }.onFailure {
+            logWarn(it)
         }.getOrNull()
     }
 
     @Bean
-    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService): MemeoryBot {
+    @Primary
+    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService): MemeoryBot? {
         return when {
-            props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> {
-                runCatching {
-                    MemeoryBotImpl(
-                            props = props,
-                            botUserService = botUserService
-                    )
-                }.onSuccess {
-                    logInfo("Bot initialized successfully")
-                }.onFailure {
-                    logWarn(it)
-                }.getOrElse {
-                    DummyBot()
-                }
-            }
-            else -> {
-                logWarn("Token and username for bot have not been specified, bot is off")
-                DummyBot()
-            }
+            props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> MemeoryBotImpl(props = props, botUserService = botUserService)
+            else -> null
         }
     }
+
+    @Bean
+    @ConditionalOnMissingBean(MemeoryBot::class)
+    fun dummyBot(): DummyBot = DummyBot()
 }

@@ -24,6 +24,7 @@ import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
+import java.time.Duration.ZERO
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -46,7 +47,7 @@ class MemesFetchingScheduler(
     fun fetchMemes(): Mono<Unit> = aMono {
         storeDefaultChannels()
 
-        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
+        Timer(true).schedule(delay = ZERO.toMillis(), period = props.fetchInterval.toMillis()) {
             log("About to fetch some new memes")
 
             GlobalScope.launch {
@@ -57,7 +58,9 @@ class MemesFetchingScheduler(
 
                 val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
                 log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+
                 bot.broadcastMemes(savedMemes)
+                log("Finished broadcasting memes")
             }
         }.unit()
     }

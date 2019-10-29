@@ -7,10 +7,9 @@ import ru.sokomishalov.commons.core.consts.EMPTY
 @Document
 data class BotUser(
         @Id
-        val id: String = EMPTY,
-        val fullName: String = EMPTY,
-        val username: String = EMPTY,
-        val languageCode: String? = null,
-        val chatId: Long = 0,
-        val memeoryId: String? = null
+        var username: String = EMPTY,
+        var fullName: String = EMPTY,
+        var languageCode: String? = null,
+        var chatId: Long = 0,
+        var memeoryId: String? = null
 )
