@@ -38,12 +38,14 @@ class MongoProfileService(
     }
 
     override suspend fun saveSocials(id: String?, vararg accounts: SocialAccountDTO): ProfileDTO? {
-        val socials = accounts.map {
-            val toSave = socialAccountMapper.toEntity(it)
-            val savedSocial = socialsRepository.save(toSave).await()
+        val socials = accounts
+                .map {
+                    val toSave = socialAccountMapper.toEntity(it)
+                    val savedSocial = socialsRepository.save(toSave).await()
 
-            it.providerId?.replace(".", MONGO_KEY_DOT_REPLACEMENT) to savedSocial?.uid
-        }.toMap()
+                    it.providerId?.replace(".", MONGO_KEY_DOT_REPLACEMENT) to savedSocial?.uid
+                }
+                .toMap()
 
         val profileToSave = when {
             id.isNotNullOrBlank() -> {

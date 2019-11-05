@@ -83,7 +83,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       if (profile == null) throw new FlutterError(EMPTY);
 
       var providerAuth = ProviderAuth.fromFirebaseUser(profile);
-      await setSocialsAccount(provider, providerAuth);
+      await putSocialsAccount(provider, providerAuth);
       await saveProfile();
       await _refreshProfiles();
 

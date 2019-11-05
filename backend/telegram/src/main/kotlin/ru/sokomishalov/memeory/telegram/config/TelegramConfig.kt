@@ -35,7 +35,7 @@ class TelegramConfig : Loggable {
         return runCatching {
             TelegramBotInitializer(telegramBotsApi, longPollingBots.getIfAvailable { emptyList() }, webHookBots.getIfAvailable { emptyList() })
         }.onSuccess {
-            log("Bots were initialized successfully")
+            logInfo("Bots were initialized successfully")
         }.onFailure {
             logWarn(it)
         }.getOrNull()
