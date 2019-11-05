@@ -28,7 +28,7 @@ class ProfileController(
 
     @PostMapping("/socials/add")
     suspend fun addSocialAccount(@RequestHeader(name = MEMEORY_TOKEN_HEADER, required = false) token: String?,
-                                 @RequestBody account: SocialAccountDTO): ProfileDTO? {
-        return service.saveSocialAccount(token, account)
+                                 @RequestBody accounts: Array<SocialAccountDTO>): ProfileDTO? {
+        return service.saveSocials(token, *accounts)
     }
 }

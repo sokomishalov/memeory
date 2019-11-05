@@ -10,5 +10,5 @@ interface ProfileService {
 
     suspend fun update(profile: ProfileDTO): ProfileDTO
 
-    suspend fun saveSocialAccount(id: String?, account: SocialAccountDTO): ProfileDTO?
+    suspend fun saveSocials(id: String?, vararg accounts: SocialAccountDTO): ProfileDTO?
 }
