@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = "memeory.telegram.bot")
 class TelegramBotProperties {
+    var enabled: Boolean = true
     var username: String? = null
     var token: String? = null
 }

@@ -4,7 +4,7 @@ import {getChannels} from "../../../api/channels"
 import Loader from "../../common/loader/loader";
 import _ from "lodash";
 import ChannelContainer from "./container/channel-container";
-import {fetchProfile, saveProfile} from "../../../api/profile";
+import {fetchProfile, updateProfile} from "../../../api/profile";
 import {addOrRemove} from "../../../util/collections/collections";
 import {infoToast} from "../../common/toast/toast";
 import {setMemeoryProfile} from "../../../util/storage/storage"
@@ -48,7 +48,7 @@ const Channels = ({t}) => {
     }
 
     const saveChanges = async () => {
-        const newProfile = await saveProfile(profile)
+        const newProfile = await updateProfile(profile)
         setFetchedProfile(newProfile)
         setProfile(newProfile)
         setMemeoryProfile(newProfile)

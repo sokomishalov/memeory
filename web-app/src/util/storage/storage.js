@@ -1,6 +1,6 @@
 import _ from "lodash"
 
-export const MEMEORY_PROFILE = "Memeory"
+export const MEMEORY_PROFILE = "memeory"
 export const GOOGLE_PROVIDER = "google.com";
 export const FACEBOOK_PROVIDER = "facebook.com";
 
@@ -33,7 +33,7 @@ export const getAccountDisplayName = (key, orElse = "") => _.get(getAccount(key)
 
 export const getMemeoryProfile = () => getAccount(MEMEORY_PROFILE)
 
-export const setMemeoryProfile = (profile) => setAccount(MEMEORY_PROFILE, _.omit(profile, ["socialsMap"]))
+export const setMemeoryProfile = (profile) => setAccount(MEMEORY_PROFILE, profile)
 
 export const getAccount = (key) => JSON.parse(_.defaultTo(window.localStorage.getItem(key), "{}"));
 

@@ -1,33 +1,20 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import withFirebaseAuth from "react-with-firebase-auth";
 import {FIREBASE_AUTH} from "../../../util/firebase/firebase";
 import {withT} from "../../../util/locales/i18n";
-import {
-    FACEBOOK_PROVIDER,
-    getAccountDisplayName,
-    GOOGLE_PROVIDER,
-    isLoggedIn,
-    setAccount
-} from "../../../util/storage/storage";
+import {FACEBOOK_PROVIDER, getAccountDisplayName, GOOGLE_PROVIDER} from "../../../util/storage/storage";
 import _ from "lodash"
 import {unAwait} from "../../../util/http/http";
-import {saveProfile} from "../../../api/profile";
+import {saveSocialsAccount} from "../../../api/profile";
 import {faFacebookF, faGoogle} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button} from "antd";
 
-const Socials = ({t, user, error, signInWithGoogle, signInWithFacebook}) => {
+const Socials = ({t, user, signInWithGoogle, signInWithFacebook}) => {
 
     _.forEach(_.get(user, "providerData", []), (p) => {
-        const providerId = p["providerId"]
-        setAccount(providerId, p)
+        unAwait(saveSocialsAccount(p))
     })
-
-    useEffect(() => {
-        if (isLoggedIn()) {
-            unAwait(saveProfile())
-        }
-    }, [user, error]);
 
     return (
         <>
