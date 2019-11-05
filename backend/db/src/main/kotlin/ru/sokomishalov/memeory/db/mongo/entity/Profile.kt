@@ -12,5 +12,5 @@ data class Profile(
         var selectedOrientation: ScrollingAxis = VERTICAL,
         var watchAllChannels: Boolean = true,
         var channels: List<String> = emptyList(),
-        var socialsMap: Map<String, SocialAccount> = emptyMap()
+        var socialsMap: Map<String, String> = emptyMap()
 )

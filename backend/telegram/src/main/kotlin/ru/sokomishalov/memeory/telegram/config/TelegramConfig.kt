@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.telegram.config
 
 import org.springframework.beans.factory.ObjectProvider
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -44,14 +43,15 @@ class TelegramConfig : Loggable {
 
     @Bean
     @Primary
-    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService): MemeoryBot? {
+    fun memeoryBot(
+            props: TelegramBotProperties,
+            botUserService: BotUserService
+    ): MemeoryBot? {
         return when {
-            props.token.isNotNullOrBlank() && props.username.isNotNullOrBlank() -> MemeoryBotImpl(props = props, botUserService = botUserService)
-            else -> null
+            props.enabled
+                    && props.token.isNotNullOrBlank()
+                    && props.username.isNotNullOrBlank() -> MemeoryBotImpl(props = props, botUserService = botUserService)
+            else -> DummyBot()
         }
     }
-
-    @Bean
-    @ConditionalOnMissingBean(MemeoryBot::class)
-    fun dummyBot(): DummyBot = DummyBot()
 }

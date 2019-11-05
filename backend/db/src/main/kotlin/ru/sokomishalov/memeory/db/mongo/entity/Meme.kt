@@ -1,5 +1,6 @@
 package ru.sokomishalov.memeory.db.mongo.entity
 
+import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import ru.sokomishalov.commons.core.consts.EMPTY
@@ -14,5 +15,6 @@ data class Meme(
         var channelName: String? = null,
         var attachments: List<Attachment> = emptyList(),
         var publishedAt: Date = Date(),
+        @CreatedDate
         var createdAt: Date = Date()
 )

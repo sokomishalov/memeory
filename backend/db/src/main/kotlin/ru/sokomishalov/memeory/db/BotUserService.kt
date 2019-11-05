@@ -10,5 +10,4 @@ interface BotUserService {
     suspend fun findAll(): List<BotUserDTO>
 
     suspend fun save(botUser: BotUserDTO): BotUserDTO
-
 }

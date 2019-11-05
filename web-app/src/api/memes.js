@@ -1,13 +1,9 @@
 import axios from "axios";
 import {DEFAULT_PAGE_SIZE} from "../util/consts/consts";
-import {getToken} from "../util/storage/storage";
+import {withToken} from "../util/http/http";
 
 export const getMemesPage = async (pageNumber, pageSize = DEFAULT_PAGE_SIZE) => {
-    return await axios.get(`/memes/page/${pageNumber}/${pageSize}`, {
-        headers: {
-            MEMEORY_TOKEN: getToken()
-        }
-    });
+    return await axios.get(`/memes/page/${pageNumber}/${pageSize}`, withToken());
 };
 
 export const getSingleMeme = async (id) => {

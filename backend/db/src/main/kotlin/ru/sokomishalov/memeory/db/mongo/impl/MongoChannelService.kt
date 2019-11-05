@@ -61,6 +61,6 @@ class MongoChannelService(
     override suspend fun toggleEnabled(enabled: Boolean, vararg channelIds: String) {
         val query = query(where(MONGO_ID_FIELD).`in`(*channelIds))
         val update = update("enabled", enabled)
-        template.findAndModify(query, update, Channel::class.java).await()
+        template.findAndModify<Channel>(query, update, Channel::class.java).await()
     }
 }
