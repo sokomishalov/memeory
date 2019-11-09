@@ -1,20 +1,18 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:memeory/util/env/env.dart';
 
-Future<String> getFrontendUrl() async {
-  if (env.frontendUrl.isNotEmpty) {
-    return env.frontendUrl;
-  } else {
-    return await _getFirebaseRemoteConfig("FRONTEND_URL");
-  }
+Future<String> getFrontendUrl({String uri = ""}) async {
+  final baseUrl = env.frontendUrl.isNotEmpty
+      ? env.frontendUrl
+      : await _getFirebaseRemoteConfig("FRONTEND_URL");
+  return "$baseUrl$uri";
 }
 
-Future<String> getBackendUrl() async {
-  if (env.backendUrl.isNotEmpty) {
-    return env.backendUrl;
-  } else {
-    return await _getFirebaseRemoteConfig("BACKEND_URL");
-  }
+Future<String> getBackendUrl({String uri = ""}) async {
+  final baseUrl = env.backendUrl.isNotEmpty
+      ? env.backendUrl
+      : await _getFirebaseRemoteConfig("BACKEND_URL");
+  return "$baseUrl$uri";
 }
 
 Future<String> _getFirebaseRemoteConfig(String key) async {

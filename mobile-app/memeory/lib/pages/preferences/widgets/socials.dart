@@ -4,12 +4,10 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:memeory/api/profile.dart';
-import 'package:memeory/cache/repository/socials_repo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/model/user.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
-import 'package:pedantic/pedantic.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -26,7 +24,7 @@ class _SocialPreferencesState extends State<SocialPreferences> {
 
   @override
   void initState() {
-    unawaited(_refreshProfiles());
+    setState(() {});
     super.initState();
   }
 
@@ -63,16 +61,6 @@ class _SocialPreferencesState extends State<SocialPreferences> {
     );
   }
 
-  _refreshProfiles() async {
-    var googleProfile = await getSocialsAccount(GOOGLE_PROVIDER);
-    var facebookProfile = await getSocialsAccount(FACEBOOK_PROVIDER);
-
-    setState(() {
-      _facebookProfile = facebookProfile;
-      _googleProfile = googleProfile;
-    });
-  }
-
   _providerSignIn(String provider, BuildContext context) async {
     try {
       AuthCredential credential = await getAuthCredential(provider);
@@ -83,9 +71,8 @@ class _SocialPreferencesState extends State<SocialPreferences> {
       if (profile == null) throw new FlutterError(EMPTY);
 
       var providerAuth = ProviderAuth.fromFirebaseUser(profile);
-      await putSocialsAccount(provider, providerAuth);
-      await saveProfile();
-      await _refreshProfiles();
+      saveSocialsAccounts({provider: providerAuth});
+      setState(() {});
 
       successToast(
         context,
