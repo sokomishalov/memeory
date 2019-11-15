@@ -23,12 +23,6 @@ class _SocialPreferencesState extends State<SocialPreferences> {
   ProviderAuth _facebookProfile;
 
   @override
-  void initState() {
-    setState(() {});
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
@@ -37,9 +31,10 @@ class _SocialPreferencesState extends State<SocialPreferences> {
           Container(
             child: SignInButton(
               Buttons.Google,
-              onPressed: () async {
-                await _providerSignIn(GOOGLE_PROVIDER, context);
-              },
+              onPressed: () async => await _providerSignIn(
+                GOOGLE_PROVIDER,
+                context,
+              ),
               text: _googleProfile?.displayName == null
                   ? t(context, "auth_google")
                   : _googleProfile.displayName,
@@ -48,9 +43,10 @@ class _SocialPreferencesState extends State<SocialPreferences> {
           Container(
             child: SignInButton(
               Buttons.Facebook,
-              onPressed: () async {
-                await _providerSignIn(FACEBOOK_PROVIDER, context);
-              },
+              onPressed: () async => await _providerSignIn(
+                FACEBOOK_PROVIDER,
+                context,
+              ),
               text: _facebookProfile?.displayName == null
                   ? t(context, "auth_facebook")
                   : _facebookProfile.displayName,

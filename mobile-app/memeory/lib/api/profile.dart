@@ -39,35 +39,41 @@ Future<dynamic> saveSocialsAccounts(Map<String, ProviderAuth> accounts) async {
   return json.decode(utf8.decode(response.bodyBytes));
 }
 
-Future<dynamic> saveProfile() async {
-  final url = await getBackendUrl(uri: "profile/save");
+Future<dynamic> saveProfile({bool checkToken = true}) async {
+  var token = await getToken();
 
-  final body = json.encode({
-    "id": await getToken(),
-    "selectedOrientation": describeEnum(await getPreferredOrientation()),
-    "watchAllChannels": await getWatchAll(),
-    "channels": await getSelectedChannels()
-  });
+  if (checkToken && token != null) {
+    final url = await getBackendUrl(uri: "profile/save");
 
-  final headers = <String, String>{
-    HttpHeaders.contentTypeHeader: APPLICATION_JSON_HEADER_VALUE,
-  };
+    final body = json.encode({
+      "id": token,
+      "selectedOrientation": describeEnum(await getPreferredOrientation()),
+      "watchAllChannels": await getWatchAll(),
+      "channels": await getSelectedChannels()
+    });
 
-  final response = await http.post(url, body: body, headers: headers);
-  var savedUser = json.decode(utf8.decode(response.bodyBytes));
+    final headers = <String, String>{
+      HttpHeaders.contentTypeHeader: APPLICATION_JSON_HEADER_VALUE,
+    };
 
-  await putToken(
-    savedUser["id"],
-  );
-  await setPreferredOrientation(
-    orientationFromString(savedUser["selectedOrientation"].toString()),
-  );
-  await setWatchAll(
-    savedUser["watchAllChannels"],
-  );
-  await setChannels(
-    savedUser["channels"],
-  );
+    final response = await http.post(url, body: body, headers: headers);
+    var savedUser = json.decode(utf8.decode(response.bodyBytes));
 
-  return savedUser;
+    await putToken(
+      savedUser["id"],
+    );
+    await setPreferredOrientation(
+      orientationFromString(savedUser["selectedOrientation"].toString()),
+    );
+    await setWatchAll(
+      savedUser["watchAllChannels"],
+    );
+    await setChannels(
+      savedUser["channels"],
+    );
+
+    return savedUser;
+  } else {
+    return null;
+  }
 }

@@ -23,7 +23,7 @@ class UserPreferencesPage extends StatelessWidget {
   }
 
   void _close(context) async {
-    await saveProfile();
+    await saveProfile(checkToken: false);
 
     await setAppVisitDatetime();
     var orientation = await getPreferredOrientation();
