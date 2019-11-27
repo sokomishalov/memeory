@@ -31,7 +31,7 @@
     "react-with-firebase-auth": "~1.1.0"
   },
   "devDependencies": {
-    "babel-plugin-import": "~1.12.2",
+    "babel-plugin-import": "~1.13.0",
     "customize-cra": "~0.9.1",
     "gh-pages": "^2.1.1",
     "less": "^3.10.3",
