@@ -1,6 +1,6 @@
 @file:Suppress("ComplexRedundantLet")
 
-package ru.sokomishalov.memeory.providers.ifunny
+package ru.sokomishalov.memeory.providers.impls.ifunny
 
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
@@ -15,8 +15,8 @@ import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.core.enums.Provider.IFUNNY
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.IFUNNY_URL
-import ru.sokomishalov.memeory.core.util.time.mockDate
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.time.mockDate
 
 /**
  * @author sokomishalov

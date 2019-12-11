@@ -1,7 +1,8 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
-    api("com.github.sokomishalov.commons:commons-spring:1.0.24")
+    api("com.github.sokomishalov.commons:commons-spring:1.0.29")
+    api("org.springframework:spring-webflux")
 }
 
 val jar: Jar by tasks

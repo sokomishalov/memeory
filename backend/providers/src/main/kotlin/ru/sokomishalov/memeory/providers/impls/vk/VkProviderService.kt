@@ -1,6 +1,6 @@
 @file:Suppress("RemoveExplicitTypeArguments")
 
-package ru.sokomishalov.memeory.providers.vk
+package ru.sokomishalov.memeory.providers.impls.vk
 
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
@@ -17,9 +17,9 @@ import ru.sokomishalov.memeory.core.enums.AttachmentType.VIDEO
 import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.VK_URL
-import ru.sokomishalov.memeory.core.util.html.removeLinks
-import ru.sokomishalov.memeory.core.util.time.mockDate
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.removeLinks
+import ru.sokomishalov.memeory.providers.util.time.mockDate
 import java.util.*
 
 

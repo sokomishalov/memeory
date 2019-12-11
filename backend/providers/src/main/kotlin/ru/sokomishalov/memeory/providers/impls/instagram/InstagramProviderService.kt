@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.providers.instagram
+package ru.sokomishalov.memeory.providers.impls.instagram
 
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext

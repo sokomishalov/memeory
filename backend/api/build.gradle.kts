@@ -1,8 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val developmentOnly: Configuration by configurations.creating
-configurations.runtimeClasspath.get().extendsFrom(developmentOnly)
-
 dependencies {
     api(project(":core"))
     api(project(":db"))
@@ -19,8 +16,7 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
 
     implementation("io.netty:netty-transport-native-epoll:4.1.42.Final")
-
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.1")
 }
 
 val jar: Jar by tasks

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.core.util.html
+package ru.sokomishalov.memeory.providers.util.html
 
 import org.jsoup.Jsoup.parse
 import org.jsoup.nodes.Element

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.providers.facebook
+package ru.sokomishalov.memeory.providers.impls.facebook
 
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service

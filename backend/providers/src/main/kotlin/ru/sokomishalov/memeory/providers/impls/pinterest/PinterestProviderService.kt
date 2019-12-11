@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.providers.pinterest
+package ru.sokomishalov.memeory.providers.impls.pinterest
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.stereotype.Service

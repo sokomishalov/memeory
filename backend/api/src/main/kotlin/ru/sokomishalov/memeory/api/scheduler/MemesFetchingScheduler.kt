@@ -1,5 +1,7 @@
 package ru.sokomishalov.memeory.api.scheduler
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
@@ -14,7 +16,7 @@ import reactor.core.publisher.Mono
 import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.aMono
-import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
+import ru.sokomishalov.commons.core.serialization.buildComplexObjectMapper
 import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
 import ru.sokomishalov.commons.spring.locks.cluster.withClusterLock
 import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
@@ -40,7 +42,11 @@ class MemesFetchingScheduler(
         @Value("classpath:channels.yml")
         private val defaultChannels: Resource,
         private val bot: MemeoryBot
-) : Loggable {
+) {
+
+    companion object : Loggable {
+        val YAML_OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper(YAMLFactory())
+    }
 
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Unit> = aMono {

@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.core.util.time
+package ru.sokomishalov.memeory.providers.util.time
 
 import org.apache.commons.lang3.time.DateUtils.addMilliseconds
 import java.time.Duration
