@@ -29,7 +29,7 @@ class MongoConfig {
     @Bean
     @Primary
     fun mongoReactiveLockProvider(client: MongoClient, props: MongoProperties): LockProvider {
-        return MongoReactiveLockProvider(client, props)
+        return MongoReactiveLockProvider(mongoProperties = props, client = client)
     }
 
     @Bean

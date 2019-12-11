@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.providers.reddit
+package ru.sokomishalov.memeory.providers.impls.reddit
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.stereotype.Service

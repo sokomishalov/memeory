@@ -1,4 +1,4 @@
-package ru.sokomishalov.memeory.providers.ninegag
+package ru.sokomishalov.memeory.providers.impls.ninegag
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Service
