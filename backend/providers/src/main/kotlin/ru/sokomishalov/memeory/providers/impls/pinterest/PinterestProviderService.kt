@@ -1,10 +1,10 @@
 package ru.sokomishalov.memeory.providers.impls.pinterest
 
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.html.getWebPage
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
-import ru.sokomishalov.commons.core.serialization.aReadTree
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -14,6 +14,7 @@ import ru.sokomishalov.memeory.core.enums.Provider.PINTEREST
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.PINTEREST_URL
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.getWebPage
 import java.util.Locale.ROOT
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
 import java.time.format.DateTimeFormatter.ofPattern as dateTimeFormatterOfPattern
@@ -68,6 +69,6 @@ class PinterestProviderService : ProviderService {
     private suspend fun parseInitJson(channel: ChannelDTO): JsonNode {
         val webPage = getWebPage("$PINTEREST_URL/${channel.uri}")
         val infoJson = webPage.getElementById("jsInit1").html()
-        return OBJECT_MAPPER.aReadTree(infoJson)
+        return withContext(IO) { OBJECT_MAPPER.readTree(infoJson) }
     }
 }

@@ -2,9 +2,6 @@ package ru.sokomishalov.memeory.providers.impls.twitter
 
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.html.getSingleElementByClass
-import ru.sokomishalov.commons.core.html.getWebPage
-import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -13,7 +10,10 @@ import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.core.enums.Provider.TWITTER
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.TWITTER_URL
+import ru.sokomishalov.memeory.core.util.image.getImageAspectRatio
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.getSingleElementByClass
+import ru.sokomishalov.memeory.providers.util.html.getWebPage
 import ru.sokomishalov.memeory.providers.util.html.removeLinks
 import java.util.*
 

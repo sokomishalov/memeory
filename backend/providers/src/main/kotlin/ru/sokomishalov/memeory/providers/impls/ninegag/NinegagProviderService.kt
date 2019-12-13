@@ -3,8 +3,6 @@ package ru.sokomishalov.memeory.providers.impls.ninegag
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.consts.EMPTY
-import ru.sokomishalov.commons.core.html.getWebPage
-import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
@@ -15,7 +13,9 @@ import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.core.enums.Provider.NINEGAG
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.NINEGAG_URL
+import ru.sokomishalov.memeory.core.util.image.getImageAspectRatio
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.getWebPage
 import java.util.*
 import java.time.ZonedDateTime.parse as zonedDateTimeParse
 import java.util.Date.from as dateFrom

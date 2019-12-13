@@ -17,8 +17,8 @@ import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.aMono
 import ru.sokomishalov.commons.core.serialization.buildComplexObjectMapper
-import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
-import ru.sokomishalov.commons.spring.locks.cluster.withClusterLock
+import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
+import ru.sokomishalov.commons.distributed.locks.withDistributedLock
 import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -38,7 +38,7 @@ class MemesFetchingScheduler(
         private val props: MemeoryProperties,
         private val providerFactory: ProviderFactory,
         private val memeService: MemeService,
-        private val lockProvider: LockProvider,
+        private val lockProvider: DistributedLockProvider,
         @Value("classpath:channels.yml")
         private val defaultChannels: Resource,
         private val bot: MemeoryBot
@@ -81,7 +81,7 @@ class MemesFetchingScheduler(
     private suspend fun fetchMemesClusterable(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {
         return when {
             props.useClusterLocks -> {
-                lockProvider.withClusterLock(
+                lockProvider.withDistributedLock(
                         lockName = channel.id,
                         lockAtLeastFor = props.fetchInterval.minusMinutes(1)
                 ) {
