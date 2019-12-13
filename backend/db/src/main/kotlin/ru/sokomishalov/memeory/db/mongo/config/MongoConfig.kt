@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
-import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
-import ru.sokomishalov.commons.spring.locks.cluster.mongo.MongoReactiveLockProvider
+import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
+import ru.sokomishalov.commons.distributed.locks.mongo.MongoReactiveDistributedLockProvider
 import ru.sokomishalov.memeory.core.util.consts.MONGO_KEY_DOT_REPLACEMENT
 import java.time.Duration.ofSeconds
 
@@ -28,8 +28,8 @@ class MongoConfig {
 
     @Bean
     @Primary
-    fun mongoReactiveLockProvider(client: MongoClient, props: MongoProperties): LockProvider {
-        return MongoReactiveLockProvider(mongoProperties = props, client = client)
+    fun mongoReactiveLockProvider(client: MongoClient): DistributedLockProvider {
+        return MongoReactiveDistributedLockProvider(client = client)
     }
 
     @Bean

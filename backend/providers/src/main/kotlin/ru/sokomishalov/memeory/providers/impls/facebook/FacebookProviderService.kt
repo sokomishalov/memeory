@@ -2,8 +2,6 @@ package ru.sokomishalov.memeory.providers.impls.facebook
 
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
-import ru.sokomishalov.commons.core.html.getWebPage
-import ru.sokomishalov.commons.core.images.getImageAspectRatio
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -13,7 +11,9 @@ import ru.sokomishalov.memeory.core.enums.Provider.FACEBOOK
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.FACEBOOK_BASE_URL
 import ru.sokomishalov.memeory.core.util.consts.FACEBOOK_GRAPH_BASE_URL
+import ru.sokomishalov.memeory.core.util.image.getImageAspectRatio
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.getWebPage
 import java.util.*
 import java.util.UUID.randomUUID
 

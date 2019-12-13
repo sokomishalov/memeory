@@ -4,9 +4,6 @@ package ru.sokomishalov.memeory.providers.impls.ifunny
 
 import org.springframework.stereotype.Service
 import org.springframework.web.util.UriComponentsBuilder
-import ru.sokomishalov.commons.core.html.getSingleElementByClass
-import ru.sokomishalov.commons.core.html.getSingleElementByTag
-import ru.sokomishalov.commons.core.html.getWebPage
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -16,6 +13,9 @@ import ru.sokomishalov.memeory.core.enums.Provider.IFUNNY
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.IFUNNY_URL
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.html.getSingleElementByClass
+import ru.sokomishalov.memeory.providers.util.html.getSingleElementByTag
+import ru.sokomishalov.memeory.providers.util.html.getWebPage
 import ru.sokomishalov.memeory.providers.util.time.mockDate
 
 /**
