@@ -35,7 +35,7 @@ abstract class AbstractProviderIntegrationTest : Loggable {
 
     @Before
     fun setUp() {
-        service = providerFactory.getService(channel.provider)!!
+        service = providerFactory[channel.provider]!!
     }
 
     @Test

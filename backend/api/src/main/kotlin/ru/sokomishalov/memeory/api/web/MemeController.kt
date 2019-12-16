@@ -12,15 +12,15 @@ class MemeController(
 ) {
 
     @GetMapping("/page/{page}/{count}")
-    suspend fun page(@PathVariable page: Int,
-                     @PathVariable count: Int,
+    suspend fun page(@PathVariable("page") page: Int,
+                     @PathVariable("count") count: Int,
                      @RequestHeader(required = false, name = MEMEORY_TOKEN_HEADER) token: String?
     ): List<MemeDTO> {
         return service.getPage(page, count, token)
     }
 
     @GetMapping("/one/{id}")
-    suspend fun getOne(@PathVariable id: String): MemeDTO? {
+    suspend fun getOne(@PathVariable("id") id: String): MemeDTO? {
         return service.findById(id)
     }
 }

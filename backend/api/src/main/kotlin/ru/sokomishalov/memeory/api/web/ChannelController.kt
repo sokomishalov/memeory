@@ -37,11 +37,11 @@ class ChannelController(private val channelService: ChannelService,
             channelService.findAllEnabled()
 
     @GetMapping("/logo/{channelId}")
-    suspend fun logo(@PathVariable channelId: String): ResponseEntity<ByteArray> {
+    suspend fun logo(@PathVariable("channelId") channelId: String): ResponseEntity<ByteArray> {
         val logoByteArray = cache.get<ByteArray>(CHANNEL_LOGO_CACHE_KEY, channelId) ?: run {
             val url = runCatching {
                 val channel = channelService.findById(channelId)
-                val service = providerFactory.getService(channel.provider)
+                val service = providerFactory[channel.provider]
                 service?.getLogoUrl(channel)
             }.getOrNull()
 

@@ -94,7 +94,7 @@ class MemesFetchingScheduler(
     }
 
     private suspend fun fetchMemes(channel: ChannelDTO, orElse: List<MemeDTO>): List<MemeDTO> {
-        val providerService = providerFactory.getService(channel.provider)
+        val providerService = providerFactory[channel.provider]
         return when {
             providerService != null -> runCatching {
                 providerService
