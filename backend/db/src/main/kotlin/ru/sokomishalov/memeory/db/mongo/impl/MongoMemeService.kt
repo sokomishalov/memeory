@@ -31,7 +31,7 @@ class MongoMemeService(
         private val memeMapper: MemeMapper
 ) : MemeService {
 
-    override suspend fun saveBatch(batch: List<MemeDTO>, ttl: Duration): List<MemeDTO> {
+    override suspend fun save(batch: List<MemeDTO>, ttl: Duration): List<MemeDTO> {
         ensureIndexes(ttl)
         val memesToInsert = batch
                 .filter { (repository.existsById(it.id)).awaitStrict().not() }

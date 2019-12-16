@@ -1,7 +1,5 @@
 package ru.sokomishalov.memeory.api.scheduler
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
@@ -16,14 +14,16 @@ import reactor.core.publisher.Mono
 import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.aMono
-import ru.sokomishalov.commons.core.serialization.buildComplexObjectMapper
+import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
 import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
 import ru.sokomishalov.commons.distributed.locks.withDistributedLock
 import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
+import ru.sokomishalov.memeory.core.dto.TopicDTO
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
+import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import java.util.*
@@ -34,28 +34,39 @@ import kotlin.concurrent.schedule
  */
 @Service
 class MemesFetchingScheduler(
-        private val channelService: ChannelService,
         private val props: MemeoryProperties,
-        private val providerFactory: ProviderFactory,
+        private val channelService: ChannelService,
         private val memeService: MemeService,
+        private val topicService: TopicService,
+        private val providerFactory: ProviderFactory,
+        private val bot: MemeoryBot,
         private val lockProvider: DistributedLockProvider,
-        @Value("classpath:channels.yml")
+        @Value("classpath:defaults/channels.yml")
         private val defaultChannels: Resource,
-        private val bot: MemeoryBot
+        @Value("classpath:defaults/topics.yml")
+        private val defaultTopics: Resource
 ) {
 
-    companion object : Loggable {
-        val YAML_OBJECT_MAPPER: ObjectMapper = buildComplexObjectMapper(YAMLFactory())
-    }
+    companion object : Loggable
 
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Unit> = aMono {
-        storeDefaultChannels()
+        storeDefaults()
         Timer(true).schedule(delay = props.fetchInterval.toMillis(), period = props.fetchInterval.toMillis()) {
             GlobalScope.launch {
                 loadMemes()
             }
         }.unit()
+    }
+
+    private suspend fun storeDefaults() {
+        withContext(IO) {
+            val channels = YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream)
+            channelService.save(*channels)
+
+            val topics = YAML_OBJECT_MAPPER.readValue<Array<TopicDTO>>(defaultTopics.inputStream)
+            topicService.save(*topics)
+        }
     }
 
     suspend fun loadMemes() {
@@ -66,16 +77,11 @@ class MemesFetchingScheduler(
                 .map { fetchMemesClusterable(it) }
                 .flatten()
 
-        val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
-        log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+        val savedMemes = memeService.save(fetchedMemes, props.memeLifeTime)
+        logInfo("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
 
         bot.broadcastMemes(savedMemes)
-        log("Finished broadcasting memes by bot")
-    }
-
-    private suspend fun storeDefaultChannels() {
-        val channels = withContext(IO) { YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream) }
-        channelService.saveBatch(*channels)
+        logInfo("Finished broadcasting memes by bot")
     }
 
     private suspend fun fetchMemesClusterable(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {

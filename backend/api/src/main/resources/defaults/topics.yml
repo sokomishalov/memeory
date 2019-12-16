@@ -1,0 +1,26 @@
+- id: animals-and-nature
+  caption: topic.animals.and.nature
+
+- id: cars
+  caption: topic.cars
+
+- id: games
+  caption: topic.games
+
+- id: memes
+  caption: topic.memes
+
+- id: movies
+  caption: topic.movies
+
+- id: videos
+  caption: topic.videos
+
+- id: politics
+  caption: topic.politics
+
+- id: science-and-tech
+  caption: topic.science.and.tech
+
+- id: sports
+  caption: topic.sports
