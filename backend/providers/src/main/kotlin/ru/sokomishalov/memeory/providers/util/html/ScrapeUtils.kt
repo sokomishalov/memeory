@@ -15,19 +15,6 @@ import java.nio.charset.StandardCharsets.UTF_8
  * @author sokomishalov
  */
 
-fun Element.removeLinks(): String? {
-    val titleDoc = parse(html())
-
-    val allAnchors = titleDoc.select("a")
-    val hrefAnchors = titleDoc.select("a[href^=/]")
-    val unwantedAnchors = mutableListOf<Element>()
-
-    allAnchors.filterNotTo(unwantedAnchors) { hrefAnchors.contains(it) }
-    unwantedAnchors.forEach { it.remove() }
-
-    return titleDoc.text()
-}
-
 suspend fun getWebPage(
         url: String,
         userAgent: String? = null
@@ -45,6 +32,19 @@ suspend fun getWebPage(
             .asString(UTF_8)
             .awaitStrict()
             .let { parse(it) }
+}
+
+fun Element.removeLinks(): String? {
+    val titleDoc = parse(html())
+
+    val allAnchors = titleDoc.select("a")
+    val hrefAnchors = titleDoc.select("a[href^=/]")
+    val unwantedAnchors = mutableListOf<Element>()
+
+    allAnchors.filterNotTo(unwantedAnchors) { hrefAnchors.contains(it) }
+    unwantedAnchors.forEach { it.remove() }
+
+    return titleDoc.text()
 }
 
 fun Element.getSingleElementByClass(name: String): Element {

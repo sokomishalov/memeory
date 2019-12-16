@@ -14,11 +14,11 @@ import ru.sokomishalov.memeory.core.dto.BotUserDTO
 /**
  * @author sokomishalov
  */
-internal val log = loggerFor("TelegramApiUtils")
+private val log = loggerFor("TelegramApiUtils")
 
 fun initTelegramApi() = ApiContextInitializer.init()
 
-fun Message.extractUserInfo(): BotUserDTO {
+internal fun Message.extractUserInfo(): BotUserDTO {
     return BotUserDTO(
             username = from.userName,
             fullName = "${from.lastName} ${from.firstName}",
@@ -27,7 +27,7 @@ fun Message.extractUserInfo(): BotUserDTO {
     )
 }
 
-suspend fun DefaultAbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
+internal suspend fun DefaultAbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
     runCatching {
         execute(message)
     }.getOrElse {
@@ -36,7 +36,7 @@ suspend fun DefaultAbsSender.sendMessage(message: SendMessage): Message? = withC
     }
 }
 
-suspend fun DefaultAbsSender.sendPhoto(photo: SendPhoto): Message? = withContext(IO) {
+internal suspend fun DefaultAbsSender.sendPhoto(photo: SendPhoto): Message? = withContext(IO) {
     runCatching {
         execute(photo)
     }.getOrElse {
@@ -45,7 +45,7 @@ suspend fun DefaultAbsSender.sendPhoto(photo: SendPhoto): Message? = withContext
     }
 }
 
-suspend fun DefaultAbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {
+internal suspend fun DefaultAbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {
     runCatching {
         execute(mediaGroup)
     }.getOrElse {
