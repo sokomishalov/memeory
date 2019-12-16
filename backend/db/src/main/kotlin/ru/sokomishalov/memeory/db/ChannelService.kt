@@ -11,8 +11,6 @@ interface ChannelService {
 
     suspend fun findById(id: String): ChannelDTO?
 
-    suspend fun save(channel: ChannelDTO): ChannelDTO
-
     suspend fun save(vararg batch: ChannelDTO): List<ChannelDTO>
 
     suspend fun toggleEnabled(enabled: Boolean, vararg channelIds: String)

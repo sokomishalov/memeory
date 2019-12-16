@@ -47,12 +47,6 @@ class MongoChannelService(
                 ?.let { channelMapper.toDto(it) }
     }
 
-    override suspend fun save(channel: ChannelDTO): ChannelDTO {
-        val channelsToSave = channelMapper.toEntity(channel)
-        val savedChannel = repository.save(channelsToSave).awaitStrict()
-        return channelMapper.toDto(savedChannel)
-    }
-
     override suspend fun save(vararg batch: ChannelDTO): List<ChannelDTO> {
         val channelsToSave = batch
                 .toList()

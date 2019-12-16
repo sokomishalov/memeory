@@ -38,7 +38,7 @@ class AdminController(
 
     @PostMapping("/channels/add")
     suspend fun add(@RequestBody channel: ChannelDTO): ChannelDTO? {
-        return channelService.save(channel)
+        return channelService.save(channel).firstOrNull()
     }
 
     @GetMapping("/memes/force-load")

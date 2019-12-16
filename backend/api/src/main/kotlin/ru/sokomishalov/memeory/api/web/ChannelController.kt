@@ -41,8 +41,7 @@ class ChannelController(private val channelService: ChannelService,
         val logoByteArray = cache.get<ByteArray>(CHANNEL_LOGO_CACHE_KEY, channelId) ?: run {
             val url = runCatching {
                 val channel = channelService.findById(channelId)
-                val service = providerFactory[channel.provider]
-                service?.getLogoUrl(channel)
+                channel?.let { providerFactory[it.provider]?.getLogoUrl(it) }
             }.getOrNull()
 
             getImageByteArray(url, orElse = placeholder).also {
