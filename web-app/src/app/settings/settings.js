@@ -2,7 +2,6 @@ import React from 'react'
 import "./settings.css"
 import {SETTINGS_ROUTE} from "../../util/router/router"
 import {Route, withRouter} from "react-router"
-import Socials from "./socials/socials"
 import Channels from "./channels/channels"
 import Theme from "./appearance/appearance"
 import AboutApp from "./about-app/about-app"
@@ -14,7 +13,6 @@ import {Divider} from "antd"
 const Settings = ({t, history}) => {
 
     const tabs = [
-        {title: t("profile.caption"), uri: SETTINGS_ROUTE.SOCIALS},
         {title: t("channels.caption"), uri: SETTINGS_ROUTE.CHANNELS},
         {title: t("appearance.caption"), uri: SETTINGS_ROUTE.APPEARANCE},
         {title: t("about.app.caption"), uri: SETTINGS_ROUTE.ABOUT_APP}
@@ -36,7 +34,6 @@ const Settings = ({t, history}) => {
                     {tabs[getPage()].title}
                 </div>
                 <Divider style={{height: 2}}/>
-                <Route path={SETTINGS_ROUTE.SOCIALS} component={Socials}/>
                 <Route path={SETTINGS_ROUTE.CHANNELS} component={Channels}/>
                 <Route path={SETTINGS_ROUTE.APPEARANCE} component={Theme}/>
                 <Route path={SETTINGS_ROUTE.ABOUT_APP} component={AboutApp}/>

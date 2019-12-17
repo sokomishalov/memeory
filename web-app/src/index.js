@@ -11,7 +11,6 @@ import 'moment/min/locales'
 import "./util/locales/i18n"
 import {BROWSER_LANGUAGE} from "./util/locales/i18n"
 
-import "./util/firebase/firebase"
 import {register as registerServiceWorker} from './app/sw/sw'
 
 import App from "./app/App"

@@ -1,10 +1,9 @@
 import axios from "axios";
 import _ from "lodash";
-import {getBackendUrl} from "../firebase/firebase";
-import {getToken} from "../storage/storage";
+import {getBackendUrl} from "../env/env";
 
 axios.interceptors.request.use(async (config) => {
-    const url = await getBackendUrl();
+    const url = getBackendUrl();
 
     axios.defaults.baseURL = url
     config.baseURL = url;
@@ -22,9 +21,3 @@ axios.interceptors.response.use(response => {
 
 // noinspection JSUnusedLocalSymbols
 export const unAwait = (promise) => _.noop()
-
-export const withToken = () => ({
-    headers: {
-        MEMEORY_TOKEN: _.defaultTo(getToken(), "")
-    }
-})

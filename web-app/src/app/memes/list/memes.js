@@ -16,7 +16,7 @@ const Memes = () => {
     const loadMore = async (page) => {
         setLoading(true)
         try {
-            const newMemes = await getMemesPage(page - 1)
+            const newMemes = await getMemesPage(null, page - 1)
             if (!_.isEmpty(newMemes)) {
                 setMemes(_.concat(memes, newMemes))
             } else {

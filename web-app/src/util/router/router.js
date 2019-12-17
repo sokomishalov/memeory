@@ -14,7 +14,6 @@ export const ROUTE = {
 
 export const SETTINGS_ROUTE = {
     CHANNELS:       `${ROUTE.SETTINGS}/channels`,
-    SOCIALS:        `${ROUTE.SETTINGS}/socials`,
     APPEARANCE:     `${ROUTE.SETTINGS}/appearance`,
     ABOUT_APP:       `${ROUTE.SETTINGS}/about-app`,
 }

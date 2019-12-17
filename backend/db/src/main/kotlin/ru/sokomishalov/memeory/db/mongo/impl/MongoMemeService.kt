@@ -42,17 +42,26 @@ class MongoMemeService(
         return memeMapper.toDtoList(savedMemes)
     }
 
-    override suspend fun getPage(page: Int, count: Int, topic: String?): List<MemeDTO> {
-        val pageRequest = PageRequest.of(page, count, Sort.by(Order(DESC, "publishedAt", NULLS_LAST)))
+    override suspend fun getPage(pageNumber: Int, pageSize: Int, topic: String?, channel: String?): List<MemeDTO> {
+        val pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Order(DESC, "publishedAt", NULLS_LAST)))
 
         val foundMemes = when {
+
+            // paginated memes by specific topic
             topic.isNotNullOrBlank() -> {
                 val channelIds = channelService
                         .findByTopic(topic)
                         .map { it.id }
-
                 repository.findAllByChannelIdIn(channelIds, pageRequest).await()
             }
+
+            // paginated memes by specific channel
+            channel.isNotNullOrBlank() -> {
+                val channelIds = listOf(channel)
+                repository.findAllByChannelIdIn(channelIds, pageRequest).await()
+            }
+
+            // paginated memes from all sources
             else -> repository.findAllMemesBy(pageRequest).await()
         }
 

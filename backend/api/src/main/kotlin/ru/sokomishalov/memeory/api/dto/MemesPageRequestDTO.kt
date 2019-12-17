@@ -5,6 +5,7 @@ package ru.sokomishalov.memeory.api.dto
  */
 data class MemesPageRequestDTO(
         val topic: String?,
-        val pageSize: Int,
-        val pageCount: Int
+        val channel: String?,
+        val pageNumber: Int,
+        val pageSize: Int
 )

@@ -21,7 +21,7 @@ const App = () => (
             <Route exact path={ROUTE.CORE} render={() => withHeader(<Memes/>)}/>
             <Route path={ROUTE.MEME} render={() => withHeader(<SingleMeme/>)}/>
 
-            <Redirect exact from={ROUTE.SETTINGS} to={SETTINGS_ROUTE.SOCIALS}/>
+            <Redirect exact from={ROUTE.SETTINGS} to={SETTINGS_ROUTE.CHANNELS}/>
             <Route path={ROUTE.SETTINGS} render={() => withHeader(<Settings/>)}/>
 
             <Route path={ROUTE.NOT_FOUND} component={NotFound}/>
