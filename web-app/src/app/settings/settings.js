@@ -9,6 +9,7 @@ import {Tabs} from "antd-mobile"
 import _ from "lodash"
 import {withT} from "../../util/locales/i18n"
 import {Divider} from "antd"
+import withHeader from "../header/hoc";
 
 const Settings = ({t, history}) => {
 
@@ -44,5 +45,6 @@ const Settings = ({t, history}) => {
 
 export default _.flow(
     withRouter,
-    withT
+    withT,
+    withHeader
 )(Settings)

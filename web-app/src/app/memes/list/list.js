@@ -1,16 +1,14 @@
 import React, {useState} from 'react'
-import "./list.css"
-import MemeContainer from "../container/container"
-import {getMemesPage} from "../../../api/memes"
-import _ from "lodash"
-import InfiniteScroll from 'react-infinite-scroller'
-import {BackTop} from "antd"
-import Loader from "../../common/loader/loader"
+import InfiniteScroll from "react-infinite-scroller";
+import Loader from "../../common/loader/loader";
+import _ from "lodash";
+import MemeContainer from "../container/container";
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
-import withHeader from "../../header/hoc";
-import withMemesPage from "../memes-hoc";
+import {BackTop} from "antd";
+import {getMemesPage} from "../../../api/memes";
 
-const ListMemes = () => {
+const ListMemes = ({topic = null, channel = null}) => {
+
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
     const [hasMore, setHasMore] = useState(true)
@@ -18,7 +16,7 @@ const ListMemes = () => {
     const loadMore = async (page) => {
         setLoading(true)
         try {
-            const newMemes = await getMemesPage(null, page - 1)
+            const newMemes = await getMemesPage(topic, channel, page - 1)
             if (!_.isEmpty(newMemes)) {
                 setMemes(_.concat(memes, newMemes))
             } else {
@@ -29,8 +27,9 @@ const ListMemes = () => {
         }
     }
 
+
     return (
-        <div className="memes">
+        <>
             <InfiniteScroll pageStart={0}
                             loadMore={loadMore}
                             hasMore={hasMore && !loading}
@@ -40,11 +39,8 @@ const ListMemes = () => {
             <OnScrollUpReveal useFade={false}>
                 <BackTop className="memes-backtop"/>
             </OnScrollUpReveal>
-        </div>
-    )
-}
+        </>
+    );
+};
 
-export default _.flow(
-    withMemesPage,
-    withHeader
-)(ListMemes)
+export default ListMemes

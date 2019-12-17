@@ -3,6 +3,7 @@ import {DEFAULT_PAGE_SIZE} from "../util/consts/consts";
 
 export const getMemesPage = async (
     topic = null,
+    channel = null,
     pageNumber = 0,
     pageSize = DEFAULT_PAGE_SIZE
 ) => {

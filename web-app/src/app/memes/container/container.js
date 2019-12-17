@@ -1,7 +1,7 @@
 import React from 'react'
 import "./container.css"
-import VideoAttachment from "./video/VideoAttachment"
-import ImageAttachment from "./image/ImageAttachment"
+import VideoAttachment from "./video/video-attachment"
+import ImageAttachment from "./image/image-attachment"
 import {timeAgo} from "../../../util/time/time"
 import {ChannelLogo} from "../../common/logo/channel"
 import _ from "lodash"
@@ -61,7 +61,7 @@ const MemeContainer = ({t, history, meme}) => {
     }
 
     const prepareMemeUri = () => {
-        return ROUTE.MEME.replace(PARAMS.ID, meme["id"])
+        return ROUTE.MEMES_SINGLE.replace(PARAMS.ID, meme["id"])
     }
 
     const openSingleMeme = () => {

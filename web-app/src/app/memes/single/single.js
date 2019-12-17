@@ -1,17 +1,10 @@
-import React, {useEffect, useState} from 'react'
-import "./single.css"
-import {withRouter} from "react-router";
-import MemeContainer from "../container/container";
+import React, {useEffect, useState} from "react";
 import {unAwait} from "../../../util/http/http";
 import {getSingleMeme} from "../../../api/memes";
 import Loader from "../../common/loader/loader";
-import _ from "lodash"
-import withHeader from "../../header/hoc";
+import MemeContainer from "../container/container";
 
-
-const SingleMeme = ({match}) => {
-    const id = match.params.id
-
+const SingleMeme = ({id}) => {
     const [meme, setMeme] = useState({})
     const [loading, setLoading] = useState(false)
 
@@ -24,15 +17,10 @@ const SingleMeme = ({match}) => {
     }
 
     return (
-        <div className="single-meme">
-            <Loader loading={loading}>
-                <MemeContainer meme={meme}/>
-            </Loader>
-        </div>
+        <Loader loading={loading}>
+            <MemeContainer meme={meme}/>
+        </Loader>
     );
 }
 
-export default _.flow(
-    withRouter,
-    withHeader
-)(SingleMeme)
+export default SingleMeme
