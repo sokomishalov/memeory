@@ -23,9 +23,10 @@ const Topics = ({history}) => {
             <Divider/>
             <div className="topics-items">
                 {_.map(topics, it => (
-                    <div className="topics-items-item"
-                         onClick={() => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, it.id))}>
-                        {it.caption}
+                    <div key={it["id"]}
+                         className="topics-items-item"
+                         onClick={() => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, it["id"]))}>
+                        {it["caption"]}
                     </div>
                 ))}
             </div>
