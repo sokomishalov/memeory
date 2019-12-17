@@ -5,27 +5,20 @@ import withHeader from "../header/hoc";
 import Topics from "./topics/topics";
 import {withRouter} from "react-router";
 import {ROUTE} from "../../util/router/router";
-import SingleMeme from "./single/single";
 import ListMemes from "./list/list";
 
 const Memes = ({match}) => {
     const id = match.params.id
 
-    let component
-    if (ROUTE.MEMES_SINGLE === match.path) {
-        component = <SingleMeme key={match.url}
-                                id={id}/>
-    } else {
-        component = <ListMemes key={match.url}
-                               topic={(ROUTE.MEMES_TOPIC === match.path) ? id : null}
-                               channel={(ROUTE.MEMES_CHANNEL === match.path) ? id : null}/>
-    }
-
     return (
         <div className="flex-space-between">
             <Topics/>
             <div className="memes">
-                {component}
+                <ListMemes key={match.url}
+                           topicId={(ROUTE.MEMES_TOPIC === match.path) ? id : null}
+                           channelId={(ROUTE.MEMES_CHANNEL === match.path) ? id : null}
+                           memeId={(ROUTE.MEMES_SINGLE === match.path) ? id : null}
+                />
             </div>
             <Topics/>
         </div>

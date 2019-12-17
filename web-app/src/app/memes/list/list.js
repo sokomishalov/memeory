@@ -5,9 +5,9 @@ import _ from "lodash";
 import MemeContainer from "../container/container";
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
 import {BackTop} from "antd";
-import {getMemesPage} from "../../../api/memes";
+import {getMemesPage, getSingleMeme} from "../../../api/memes";
 
-const ListMemes = ({topic = null, channel = null}) => {
+const ListMemes = ({topicId = null, channelId = null, memeId = null}) => {
 
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
@@ -16,11 +16,18 @@ const ListMemes = ({topic = null, channel = null}) => {
     const loadMore = async (page) => {
         setLoading(true)
         try {
-            const newMemes = await getMemesPage(topic, channel, page - 1)
-            if (!_.isEmpty(newMemes)) {
-                setMemes(_.concat(memes, newMemes))
+            if (_.isEmpty(memeId)) {
+                const newMemes = await getMemesPage(topicId, channelId, page - 1)
+
+                if (!_.isEmpty(newMemes)) {
+                    setMemes(_.concat(memes, newMemes))
+                } else {
+                    setHasMore(false)
+                }
             } else {
+                const meme = await getSingleMeme(memeId)
                 setHasMore(false)
+                setMemes([meme])
             }
         } finally {
             setLoading(false)
@@ -29,7 +36,7 @@ const ListMemes = ({topic = null, channel = null}) => {
 
 
     return (
-        <>
+        <div>
             <InfiniteScroll pageStart={0}
                             loadMore={loadMore}
                             hasMore={hasMore && !loading}
@@ -39,7 +46,7 @@ const ListMemes = ({topic = null, channel = null}) => {
             <OnScrollUpReveal useFade={false}>
                 <BackTop className="memes-backtop"/>
             </OnScrollUpReveal>
-        </>
+        </div>
     );
 };
 
