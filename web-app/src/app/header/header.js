@@ -1,7 +1,7 @@
 import React from 'react'
-import "./Header.css"
+import "./header.css"
 import {Avatar, Button, Dropdown, Icon, Menu} from "antd"
-import {MemeoryLogo} from "../common/logo/MemeoryLogo"
+import {MemeoryLogo} from "../common/logo/memeory"
 import {withRouter} from "react-router"
 import {ROUTE, SETTINGS_ROUTE} from "../../util/router/router"
 import {isBrowser} from "react-device-detect"

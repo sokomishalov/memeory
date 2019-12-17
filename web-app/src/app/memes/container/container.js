@@ -1,9 +1,9 @@
 import React from 'react'
-import "./MemeContainer.css"
+import "./container.css"
 import VideoAttachment from "./video/VideoAttachment"
 import ImageAttachment from "./image/ImageAttachment"
 import {timeAgo} from "../../../util/time/time"
-import {ChannelLogo} from "../../common/logo/ChannelLogo"
+import {ChannelLogo} from "../../common/logo/channel"
 import _ from "lodash"
 import {Button, Carousel, Dropdown, Menu} from "antd"
 import {AspectRatio} from "react-aspect-ratio"

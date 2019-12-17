@@ -1,14 +1,16 @@
 import React, {useState} from 'react'
-import "./memes.css"
-import MemeContainer from "../container/MemeContainer"
+import "./list.css"
+import MemeContainer from "../container/container"
 import {getMemesPage} from "../../../api/memes"
 import _ from "lodash"
 import InfiniteScroll from 'react-infinite-scroller'
 import {BackTop} from "antd"
 import Loader from "../../common/loader/loader"
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
+import withHeader from "../../header/hoc";
+import withMemesPage from "../memes-hoc";
 
-const Memes = () => {
+const ListMemes = () => {
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
     const [hasMore, setHasMore] = useState(true)
@@ -42,4 +44,7 @@ const Memes = () => {
     )
 }
 
-export default Memes
+export default _.flow(
+    withMemesPage,
+    withHeader
+)(ListMemes)

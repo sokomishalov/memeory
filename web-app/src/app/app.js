@@ -1,28 +1,21 @@
 import React from 'react';
-import './App.css';
+import './app.css';
 import {Redirect, Route, Switch} from "react-router";
 import {ROUTE, SETTINGS_ROUTE} from "../util/router/router";
-import Header from "./header/Header";
-import Memes from "./memes/list/memes";
-import SingleMeme from "./memes/single/single-meme";
+import ListMemes from "./memes/list/list";
+import SingleMeme from "./memes/single/single";
 import NotFound from "./not-found/not-found";
 import Settings from "./settings/settings";
-
-export const withHeader = (component) => (
-    <>
-        <Header/>
-        {component}
-    </>
-)
+import withHeader from "./header/hoc";
 
 const App = () => (
     <div className="memeory">
         <Switch>
-            <Route exact path={ROUTE.CORE} render={() => withHeader(<Memes/>)}/>
-            <Route path={ROUTE.MEME} render={() => withHeader(<SingleMeme/>)}/>
+            <Route exact path={ROUTE.CORE} component={ListMemes}/>
+            <Route path={ROUTE.MEME} component={SingleMeme}/>
 
             <Redirect exact from={ROUTE.SETTINGS} to={SETTINGS_ROUTE.CHANNELS}/>
-            <Route path={ROUTE.SETTINGS} render={() => withHeader(<Settings/>)}/>
+            <Route path={ROUTE.SETTINGS} component={withHeader(Settings)}/>
 
             <Route path={ROUTE.NOT_FOUND} component={NotFound}/>
             <Redirect to={ROUTE.NOT_FOUND}/>

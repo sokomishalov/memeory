@@ -1,14 +1,14 @@
 import React from 'react'
 import "./channel-container.css"
 import {Card} from "antd"
-import {ChannelLogo} from "../../../common/logo/ChannelLogo"
+import {ChannelLogo} from "../../../common/logo/channel"
 import Fade from "react-reveal/Fade"
 import _ from "lodash"
 
-const ChannelContainer = ({channel, active, toggle}) => (
+const ChannelContainer = ({channel, active, onClick}) => (
     <Card hoverable
           className={`channel ${active ? "channel-active" : ""}`}
-          onClick={toggle}
+          onClick={onClick}
           cover={
               <div className="mt-8">
                   <Fade>

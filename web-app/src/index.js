@@ -13,7 +13,7 @@ import {BROWSER_LANGUAGE} from "./util/locales/i18n"
 
 import {register as registerServiceWorker} from './app/sw/sw'
 
-import App from "./app/App"
+import App from "./app/app"
 import {BrowserRouter} from "react-router-dom"
 
 

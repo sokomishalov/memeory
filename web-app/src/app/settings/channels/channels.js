@@ -39,8 +39,7 @@ const Channels = ({t}) => {
                     {_.map(channels, (channel) => {
                         return <ChannelContainer key={channel["id"]}
                                                  channel={channel}
-                                                 active={true}
-                                                 toggle={_.noop}/>;
+                                                 onClick={_.noop}/>;
                     })}
                 </div>
             </div>

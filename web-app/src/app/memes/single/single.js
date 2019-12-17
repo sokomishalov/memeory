@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import "./single-meme.css"
+import "./single.css"
 import {withRouter} from "react-router";
-import MemeContainer from "../container/MemeContainer";
+import MemeContainer from "../container/container";
 import {unAwait} from "../../../util/http/http";
 import {getSingleMeme} from "../../../api/memes";
 import Loader from "../../common/loader/loader";
+import _ from "lodash"
+import withHeader from "../../header/hoc";
 
 
 const SingleMeme = ({match}) => {
@@ -30,4 +32,7 @@ const SingleMeme = ({match}) => {
     );
 }
 
-export default withRouter(SingleMeme)
+export default _.flow(
+    withRouter,
+    withHeader
+)(SingleMeme)
