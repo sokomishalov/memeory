@@ -11,7 +11,6 @@ class IFunnyScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "ifunny:user:memes",
             name = "memes user (ifunny)",
-            enabled = true,
             provider = IFUNNY,
             uri = "memes"
     )

@@ -10,7 +10,6 @@ class NinegagScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "9gag:meme",
             name = "memes (9gag)",
-            enabled = true,
             provider = NINEGAG,
             uri = "meme"
     )

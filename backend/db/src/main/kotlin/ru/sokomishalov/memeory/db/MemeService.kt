@@ -8,7 +8,7 @@ interface MemeService {
 
     suspend fun save(batch: List<MemeDTO>, ttl: Duration = ofDays(30)): List<MemeDTO>
 
-    suspend fun getPage(page: Int, count: Int, token: String? = null): List<MemeDTO>
+    suspend fun getPage(page: Int, count: Int, topic: String? = null): List<MemeDTO>
 
     suspend fun findById(id: String): MemeDTO?
 }

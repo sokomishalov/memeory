@@ -10,7 +10,6 @@ class InstagramScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "instagram:originaltrollfootball",
             name = "Troll Football (Instagram)",
-            enabled = true,
             provider = INSTAGRAM,
             uri = "originaltrollfootball"
     )

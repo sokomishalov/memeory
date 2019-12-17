@@ -1,16 +1,10 @@
 package ru.sokomishalov.memeory.core.util.image
+
 import ru.sokomishalov.commons.core.http.REACTIVE_NETTY_HTTP_CLIENT
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
-
-
-fun ByteArray.toBufferedImage(): BufferedImage {
-    return ByteArrayInputStream(this).use {
-        ImageIO.read(it)
-    }
-}
 
 suspend fun getImageByteArray(url: String?, orElse: ByteArray = ByteArray(0)): ByteArray {
     return runCatching {
@@ -23,6 +17,13 @@ suspend fun getImageByteArray(url: String?, orElse: ByteArray = ByteArray(0)): B
                 .awaitStrict()
     }.getOrElse {
         orElse
+    }
+}
+
+
+fun ByteArray.toBufferedImage(): BufferedImage {
+    return ByteArrayInputStream(this).use {
+        ImageIO.read(it)
     }
 }
 

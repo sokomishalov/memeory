@@ -3,7 +3,11 @@ package ru.sokomishalov.memeory.api.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.router
 import ru.sokomishalov.commons.spring.swagger.customize
+import ru.sokomishalov.commons.spring.swagger.redirectRootToSwagger
 import ru.sokomishalov.memeory.api.MemeoryApplication
 import springfox.documentation.builders.RequestHandlerSelectors.basePackage
 import springfox.documentation.service.AuthorizationScope
@@ -34,6 +38,11 @@ class SwaggerConfig {
                             securityContext = securityContext(),
                             securityScheme = securityScheme()
                     )
+
+    @Bean
+    fun router(): RouterFunction<ServerResponse> = router {
+        redirectRootToSwagger()
+    }
 
     private fun securityScheme(): SecurityScheme? =
             BasicAuth("basic")

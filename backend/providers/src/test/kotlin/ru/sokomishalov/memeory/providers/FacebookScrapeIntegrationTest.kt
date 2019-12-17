@@ -10,7 +10,6 @@ class FacebookScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "facebook:originaltrollfootball",
             name = "Troll Football (Facebook)",
-            enabled = true,
             provider = FACEBOOK,
             uri = "originaltrollfootball"
     )

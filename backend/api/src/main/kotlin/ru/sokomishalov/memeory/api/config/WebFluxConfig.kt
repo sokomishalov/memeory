@@ -75,7 +75,8 @@ class WebFluxConfig : CustomWebFluxConfigurer(), Loggable {
                         "/swagger-resources/**",
                         "/memes/**",
                         "/profile/**",
-                        "/channels/**"
+                        "/channels/**",
+                        "/topics/**"
                 ).permitAll()
                 .anyExchange().authenticated()
                 .and()

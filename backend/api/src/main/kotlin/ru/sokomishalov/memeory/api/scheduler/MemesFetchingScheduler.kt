@@ -73,7 +73,7 @@ class MemesFetchingScheduler(
         log("About to fetch some new memes")
 
         val fetchedMemes = channelService
-                .findAllEnabled()
+                .findAll()
                 .map { fetchMemesClusterable(it) }
                 .flatten()
 

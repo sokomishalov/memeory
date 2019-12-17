@@ -32,9 +32,10 @@ class ChannelController(private val channelService: ChannelService,
                         private val placeholder: ByteArray
 ) {
 
-    @GetMapping("/list/enabled")
-    suspend fun enabled(): List<ChannelDTO> =
-            channelService.findAllEnabled()
+    @GetMapping("/list")
+    suspend fun list(): List<ChannelDTO> {
+        return channelService.findAll()
+    }
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable("channelId") channelId: String): ResponseEntity<ByteArray> {

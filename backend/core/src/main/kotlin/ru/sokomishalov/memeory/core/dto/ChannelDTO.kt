@@ -8,7 +8,6 @@ import ru.sokomishalov.memeory.core.enums.Provider
  */
 data class ChannelDTO(
         var id: String = "",
-        var enabled: Boolean? = false,
         var provider: Provider? = null,
         var name: String? = "",
         var uri: String = "",

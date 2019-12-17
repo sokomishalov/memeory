@@ -10,7 +10,6 @@ class TwitterScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "twitter:russianmemesltd",
             name = "Russian Memes United (Twitter)",
-            enabled = true,
             provider = TWITTER,
             uri = "russianmemesltd"
     )

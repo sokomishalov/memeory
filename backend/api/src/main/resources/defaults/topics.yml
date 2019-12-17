@@ -1,26 +1,27 @@
 - id: animals-and-nature
-  caption: topic.animals.and.nature
+  caption: 🐼 Animals and nature
 
 - id: cars
-  caption: topic.cars
-
-- id: games
-  caption: topic.games
-
-- id: memes
-  caption: topic.memes
-
-- id: movies
-  caption: topic.movies
-
-- id: videos
-  caption: topic.videos
-
-- id: politics
-  caption: topic.politics
-
-- id: science-and-tech
-  caption: topic.science.and.tech
+  caption: 🚗 Cars
 
 - id: sports
-  caption: topic.sports
+  caption: ⚽ Sports
+
+- id: games
+  caption: 🎮 Games
+
+- id: memes
+  caption: 👾 Memes
+
+- id: movies
+  caption: 🎬 Movies
+
+- id: videos
+  caption: 📹 Videos
+
+- id: politics
+  caption: 🌐 Politics
+
+- id: science-and-tech
+  caption: 💡 Science and tech
+

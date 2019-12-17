@@ -10,7 +10,6 @@ class RedditApiIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "reddit:memes",
             name = "memes (Reddit)",
-            enabled = true,
             provider = REDDIT,
             uri = "memes"
     )

@@ -12,6 +12,6 @@ import ru.sokomishalov.memeory.db.mongo.entity.Channel
 @Repository
 interface ChannelRepository : ReactiveMongoRepository<Channel, String> {
 
-    fun findAllByEnabled(enabled: Boolean): Flux<Channel>
+    fun findAllByTopicsIn(topicId: String): Flux<Channel>
 
 }

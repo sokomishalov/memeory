@@ -11,7 +11,6 @@ class VkScrapeIntegrationTest : AbstractProviderIntegrationTest() {
     override val channel: ChannelDTO = ChannelDTO(
             id = "vk:vgik",
             name = "ВГИК (VK)",
-            enabled = true,
             provider = VK,
             uri = "komment"
     )

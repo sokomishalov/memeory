@@ -21,21 +21,6 @@ class AdminController(
         private val scheduler: MemesFetchingScheduler
 ) {
 
-    @GetMapping("/channels/list")
-    suspend fun all(): List<ChannelDTO> {
-        return channelService.findAll()
-    }
-
-    @PostMapping("/channels/enable")
-    suspend fun enable(@RequestBody channelIds: List<String>) {
-        channelService.toggleEnabled(true, *channelIds.toTypedArray())
-    }
-
-    @PostMapping("/channels/disable")
-    suspend fun disable(@RequestBody channelIds: List<String>) {
-        channelService.toggleEnabled(false, *channelIds.toTypedArray())
-    }
-
     @PostMapping("/channels/add")
     suspend fun add(@RequestBody channel: ChannelDTO): ChannelDTO? {
         return channelService.save(channel).firstOrNull()
@@ -50,8 +35,8 @@ class AdminController(
 
     @GetMapping("/bot/broadcast-batch/{page}/{count}")
     suspend fun broadcastBatch(
-            @PathVariable page: Int,
-            @PathVariable count: Int
+            @PathVariable("page") page: Int,
+            @PathVariable("count") count: Int
     ) {
         GlobalScope.launch {
             val memes = memeService.getPage(page, count)
@@ -61,7 +46,7 @@ class AdminController(
 
     @GetMapping("/bot/broadcast-batch/{id}")
     suspend fun broadcastOne(
-            @PathVariable id: String
+            @PathVariable("id") id: String
     ) {
         GlobalScope.launch {
             val meme = memeService.findById(id)
