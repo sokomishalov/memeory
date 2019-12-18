@@ -20,7 +20,6 @@ const MemesList = ({t, providerId = null, topicId = null, channelId = null, meme
         try {
             if (_.isEmpty(memeId)) {
                 const newMemes = await getMemesPage(providerId, topicId, channelId, page - 1)
-                console.log(newMemes)
 
                 if (!_.isEmpty(newMemes)) {
                     setMemes(_.concat(memes, newMemes))

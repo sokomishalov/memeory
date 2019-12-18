@@ -8,7 +8,7 @@ import {withRouter} from "react-router";
 import {PARAMS, ROUTE} from "../../../util/router/router";
 import {withT} from "../../../util/locales/i18n";
 
-const LeftPanel = ({t, history, match}) => {
+const TopicsPanel = ({t, history, match}) => {
 
     const [topics, setTopics] = useState([])
 
@@ -41,4 +41,4 @@ const LeftPanel = ({t, history, match}) => {
 export default _.flow(
     withRouter,
     withT
-)(LeftPanel);
+)(TopicsPanel);
