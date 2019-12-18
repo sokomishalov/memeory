@@ -7,6 +7,7 @@ export const PARAMS = {
 export const ROUTE = {
     CORE:             `/`,
     MEMES:            `/memes`,
+    MEMES_PROVIDER:   `/memes/provider/${PARAMS.ID}`,
     MEMES_TOPIC:      `/memes/topic/${PARAMS.ID}`,
     MEMES_CHANNEL:    `/memes/channel/${PARAMS.ID}`,
     MEMES_SINGLE:     `/memes/single/${PARAMS.ID}`,

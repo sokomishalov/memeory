@@ -8,7 +8,7 @@ import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
 import {BackTop} from "antd";
 import {getMemesPage, getSingleMeme} from "../../../api/memes";
 
-const MemesList = ({topicId = null, channelId = null, memeId = null}) => {
+const MemesList = ({providerId = null, topicId = null, channelId = null, memeId = null}) => {
 
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
@@ -18,7 +18,7 @@ const MemesList = ({topicId = null, channelId = null, memeId = null}) => {
         setLoading(true)
         try {
             if (_.isEmpty(memeId)) {
-                const newMemes = await getMemesPage(topicId, channelId, page - 1)
+                const newMemes = await getMemesPage(providerId, topicId, channelId, page - 1)
                 console.log(newMemes)
 
                 if (!_.isEmpty(newMemes)) {
@@ -37,7 +37,9 @@ const MemesList = ({topicId = null, channelId = null, memeId = null}) => {
     }
 
     const buildCaption = () => {
-        if (!_.isEmpty(topicId)) {
+        if (!_.isEmpty(providerId)) {
+            return `Provider: ${topicId}`
+        } else if (!_.isEmpty(topicId)) {
             return `Topic: ${topicId}`
         } else if (!_.isEmpty(channelId)) {
             return `Channel: ${channelId}`

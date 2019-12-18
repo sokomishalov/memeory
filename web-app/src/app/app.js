@@ -11,8 +11,9 @@ const App = () => (
         <Switch>
             <Redirect exact from={ROUTE.CORE} to={ROUTE.MEMES}/>
             <Route exact path={ROUTE.MEMES} component={Memes}/>
-            <Route path={ROUTE.MEMES_CHANNEL} component={Memes}/>
+            <Route path={ROUTE.MEMES_PROVIDER} component={Memes}/>
             <Route path={ROUTE.MEMES_TOPIC} component={Memes}/>
+            <Route path={ROUTE.MEMES_CHANNEL} component={Memes}/>
             <Route path={ROUTE.MEMES_SINGLE} component={Memes}/>
 
             <Redirect exact from={ROUTE.SETTINGS} to={SETTINGS_ROUTE.CHANNELS}/>

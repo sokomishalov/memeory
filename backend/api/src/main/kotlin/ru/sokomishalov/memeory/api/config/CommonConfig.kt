@@ -44,7 +44,8 @@ class CommonConfig {
     @Bean
     @Qualifier("placeholder")
     fun placeholder(@Value("classpath:images/logo.png") logoPlaceHolder: Resource): ByteArray {
-        return logoPlaceHolder.inputStream.toByteArray()
+        return logoPlaceHolder.inputStream.use {
+            it.toByteArray()
+        }
     }
 }
-

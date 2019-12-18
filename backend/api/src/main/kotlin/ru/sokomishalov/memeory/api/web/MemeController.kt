@@ -1,8 +1,8 @@
 package ru.sokomishalov.memeory.api.web
 
 import org.springframework.web.bind.annotation.*
-import ru.sokomishalov.memeory.api.dto.MemesPageRequestDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
+import ru.sokomishalov.memeory.core.dto.MemesPageRequestDTO
 import ru.sokomishalov.memeory.db.MemeService
 
 @RestController
@@ -13,7 +13,7 @@ class MemeController(
 
     @PostMapping("/page")
     suspend fun page(@RequestBody request: MemesPageRequestDTO): List<MemeDTO> {
-        return service.getPage(request.pageNumber, request.pageSize, request.topic, request.channel)
+        return service.getPage(request)
     }
 
     @GetMapping("/one/{id}")

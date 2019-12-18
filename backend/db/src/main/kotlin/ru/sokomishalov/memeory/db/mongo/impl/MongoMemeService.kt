@@ -15,6 +15,7 @@ import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.commons.core.reactor.awaitUnit
 import ru.sokomishalov.commons.core.string.isNotNullOrBlank
 import ru.sokomishalov.memeory.core.dto.MemeDTO
+import ru.sokomishalov.memeory.core.dto.MemesPageRequestDTO
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.mongo.entity.Meme
@@ -42,22 +43,34 @@ class MongoMemeService(
         return memeMapper.toDtoList(savedMemes)
     }
 
-    override suspend fun getPage(pageNumber: Int, pageSize: Int, topic: String?, channel: String?): List<MemeDTO> {
-        val pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Order(DESC, "publishedAt", NULLS_LAST)))
+    override suspend fun getPage(request: MemesPageRequestDTO): List<MemeDTO> {
+        val pageRequest = PageRequest.of(
+                request.pageNumber ?: 0,
+                request.pageSize ?: Int.MAX_VALUE,
+                Sort.by(Order(DESC, "publishedAt", NULLS_LAST))
+        )
 
         val foundMemes = when {
 
-            // paginated memes by specific topic
-            topic.isNotNullOrBlank() -> {
+            // paginated memes by specific provider
+            request.providerId != null -> {
                 val channelIds = channelService
-                        .findByTopic(topic)
+                        .findByProvider(request.providerId!!)
+                        .map { it.id }
+                repository.findAllByChannelIdIn(channelIds, pageRequest).await()
+            }
+
+            // paginated memes by specific topic
+            request.topicId.isNotNullOrBlank() -> {
+                val channelIds = channelService
+                        .findByTopic(request.topicId!!)
                         .map { it.id }
                 repository.findAllByChannelIdIn(channelIds, pageRequest).await()
             }
 
             // paginated memes by specific channel
-            channel.isNotNullOrBlank() -> {
-                val channelIds = listOf(channel)
+            request.channelId.isNotNullOrBlank() -> {
+                val channelIds = listOf(request.channelId!!)
                 repository.findAllByChannelIdIn(channelIds, pageRequest).await()
             }
 

@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import org.springframework.web.bind.annotation.*
 import ru.sokomishalov.memeory.api.scheduler.MemesFetchingScheduler
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
+import ru.sokomishalov.memeory.core.dto.MemesPageRequestDTO
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
@@ -39,7 +40,10 @@ class AdminController(
             @PathVariable("count") count: Int
     ) {
         GlobalScope.launch {
-            val memes = memeService.getPage(page, count)
+            val memes = memeService.getPage(MemesPageRequestDTO(
+                    pageNumber = page,
+                    pageSize = count
+            ))
             bot.broadcastMemes(memes)
         }
     }

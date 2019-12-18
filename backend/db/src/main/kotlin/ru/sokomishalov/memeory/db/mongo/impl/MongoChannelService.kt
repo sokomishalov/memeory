@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.reactor.await
 import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
+import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.mongo.mapper.ChannelMapper
 import ru.sokomishalov.memeory.db.mongo.repository.ChannelRepository
@@ -36,6 +37,13 @@ class MongoChannelService(
     override suspend fun findByTopic(topicId: String): List<ChannelDTO> {
         return repository
                 .findAllByTopicsIn(topicId)
+                .await()
+                .let { channelMapper.toDtoList(it) }
+    }
+
+    override suspend fun findByProvider(providerId: Provider): List<ChannelDTO> {
+        return repository
+                .findAllByProvider(providerId)
                 .await()
                 .let { channelMapper.toDtoList(it) }
     }

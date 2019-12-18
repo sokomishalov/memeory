@@ -14,6 +14,7 @@ const Memes = ({match}) => {
         <div>
             <LeftPanel/>
             <MemesList key={match.url}
+                       providerId={(ROUTE.MEMES_PROVIDER === match.path) ? id : null}
                        topicId={(ROUTE.MEMES_TOPIC === match.path) ? id : null}
                        channelId={(ROUTE.MEMES_CHANNEL === match.path) ? id : null}
                        memeId={(ROUTE.MEMES_SINGLE === match.path) ? id : null}
