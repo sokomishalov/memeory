@@ -1,14 +1,14 @@
 import React from 'react'
 import "./settings.css"
-import {SETTINGS_ROUTE} from "../../util/router/router"
-import {Route, withRouter} from "react-router"
+import { SETTINGS_ROUTE } from "../../util/router/router"
+import { Route, withRouter } from "react-router"
 import Channels from "./channels/channels"
 import Theme from "./appearance/appearance"
 import AboutApp from "./about-app/about-app"
-import {Tabs} from "antd-mobile"
+import { Tabs } from "antd-mobile"
 import _ from "lodash"
-import {withT} from "../../util/locales/i18n"
-import {Divider} from "antd"
+import { withT } from "../../util/locales/i18n"
+import { Divider } from "antd"
 import withHeader from "../header/hoc";
 
 const Settings = ({t, history}) => {
@@ -25,11 +25,7 @@ const Settings = ({t, history}) => {
         <div className="settings">
             <Tabs tabs={tabs}
                   page={getPage()}
-                  onChange={tab => history.push(tab.uri)}
-                  tabBarTextStyle={{
-                      backgroundColor: "rgba(26, 26, 27, 1)",
-                      cursor: "pointer"
-                  }}/>
+                  onChange={tab => history.push(tab.uri)}/>
             <div className="settings-content">
                 <div className="settings-content-header">
                     {tabs[getPage()].title}
