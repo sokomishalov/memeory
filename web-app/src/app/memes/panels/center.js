@@ -55,8 +55,7 @@ const MemesList = ({providerId = null, topicId = null, channelId = null, memeId 
             <div className="memes-caption">
                 {buildCaption()}
             </div>
-            <InfiniteScroll pageStart={0}
-                            loadMore={loadMore}
+            <InfiniteScroll loadMore={loadMore}
                             hasMore={hasMore && !loading}
                             loader={<Loader key={0} loading={loading}/>}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
