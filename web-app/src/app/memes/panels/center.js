@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import "./center.css"
 import InfiniteScroll from "react-infinite-scroller";
 import Loader from "../../common/loader/loader";
 import _ from "lodash";
@@ -7,7 +8,7 @@ import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
 import {BackTop} from "antd";
 import {getMemesPage, getSingleMeme} from "../../../api/memes";
 
-const ListMemes = ({topicId = null, channelId = null, memeId = null}) => {
+const MemesList = ({topicId = null, channelId = null, memeId = null}) => {
 
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
@@ -18,6 +19,7 @@ const ListMemes = ({topicId = null, channelId = null, memeId = null}) => {
         try {
             if (_.isEmpty(memeId)) {
                 const newMemes = await getMemesPage(topicId, channelId, page - 1)
+                console.log(newMemes)
 
                 if (!_.isEmpty(newMemes)) {
                     setMemes(_.concat(memes, newMemes))
@@ -34,9 +36,23 @@ const ListMemes = ({topicId = null, channelId = null, memeId = null}) => {
         }
     }
 
+    const buildCaption = () => {
+        if (!_.isEmpty(topicId)) {
+            return `Topic: ${topicId}`
+        } else if (!_.isEmpty(channelId)) {
+            return `Channel: ${channelId}`
+        } else if (!_.isEmpty(memeId)) {
+            return `Meme: ${memeId}`
+        } else {
+            return `All memes`
+        }
+    }
 
     return (
-        <div>
+        <div className="memes">
+            <div className="memes-caption">
+                {buildCaption()}
+            </div>
             <InfiniteScroll pageStart={0}
                             loadMore={loadMore}
                             hasMore={hasMore && !loading}
@@ -50,4 +66,4 @@ const ListMemes = ({topicId = null, channelId = null, memeId = null}) => {
     );
 };
 
-export default ListMemes
+export default MemesList

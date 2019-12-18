@@ -13,7 +13,7 @@ class MemeController(
 
     @PostMapping("/page")
     suspend fun page(@RequestBody request: MemesPageRequestDTO): List<MemeDTO> {
-        return service.getPage(request.pageNumber, request.pageSize, request.topic)
+        return service.getPage(request.pageNumber, request.pageSize, request.topic, request.channel)
     }
 
     @GetMapping("/one/{id}")

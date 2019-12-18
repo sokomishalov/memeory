@@ -9,6 +9,7 @@ export const getMemesPage = async (
 ) => {
     return await axios.post("/memes/page", {
         topic,
+        channel,
         pageNumber,
         pageSize
     });
