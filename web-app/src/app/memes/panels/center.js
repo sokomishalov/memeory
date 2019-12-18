@@ -38,7 +38,7 @@ const MemesList = ({providerId = null, topicId = null, channelId = null, memeId 
 
     const buildCaption = () => {
         if (!_.isEmpty(providerId)) {
-            return `Provider: ${topicId}`
+            return `Provider: ${providerId}`
         } else if (!_.isEmpty(topicId)) {
             return `Topic: ${topicId}`
         } else if (!_.isEmpty(channelId)) {

@@ -13,7 +13,7 @@ import ru.sokomishalov.memeory.core.util.consts.CHANNEL_LOGO_CACHE_KEY
  */
 @Configuration
 @EnableCaching
-class CacheConfig {
+class CacheConfiguration {
 
     @Bean
     fun cache(): CacheManager = ConcurrentMapCacheManager(CHANNEL_LOGO_CACHE_KEY)

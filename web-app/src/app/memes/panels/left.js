@@ -19,7 +19,7 @@ const LeftPanel = ({history, match}) => {
 
     return (
         <div className="topics">
-            <div className="topics-header">Memes catalog</div>
+            <div className="topics-header">Topics</div>
             <Divider/>
             <div className="topics-items">
                 {_.map(topics, it => {

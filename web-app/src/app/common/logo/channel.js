@@ -7,8 +7,6 @@ export const ChannelLogo = ({channelId, size = 30, ...props}) => (
          height={size}
          style={{
              margin: "0 auto",
-             width: size,
-             height: size,
              borderRadius: 5
          }}
          alt=""

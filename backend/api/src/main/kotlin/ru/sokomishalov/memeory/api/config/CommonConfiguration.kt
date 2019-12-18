@@ -25,7 +25,7 @@ import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
 @Configuration
 @EnableAsync
 @EnableConfigurationProperties(MemeoryProperties::class)
-class CommonConfig {
+class CommonConfiguration {
 
     @Bean
     @Primary

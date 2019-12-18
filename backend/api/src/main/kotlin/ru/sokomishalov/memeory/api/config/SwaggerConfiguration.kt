@@ -24,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
  */
 @Configuration
 @EnableSwagger2WebFlux
-class SwaggerConfig {
+class SwaggerConfiguration {
 
     @Bean
     fun customImplementation(): Docket =
