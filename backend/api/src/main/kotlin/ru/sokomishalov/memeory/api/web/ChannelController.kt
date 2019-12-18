@@ -18,7 +18,6 @@ import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.image.getImageByteArray
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.providers.ProviderFactory
-import org.springframework.http.ResponseEntity.ok as responseEntityOk
 
 /**
  * @author sokomishalov
@@ -50,7 +49,8 @@ class ChannelController(private val channelService: ChannelService,
             }
         }
 
-        return responseEntityOk()
+        return ResponseEntity
+                .ok()
                 .contentType(IMAGE_PNG)
                 .contentLength(logoByteArray.size.toLong())
                 .header(CONTENT_DISPOSITION, "attachment; filename=$channelId${DELIMITER}logo.png")

@@ -24,9 +24,9 @@ import ru.sokomishalov.memeory.core.dto.AdminUserDTO
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-class WebFluxConfig : CustomWebFluxConfigurer(), Loggable {
+class WebfluxConfig : CustomWebFluxConfigurer() {
 
-    companion object {
+    companion object : Loggable {
         private const val ADMIN_ROLE = "ADMIN"
     }
 
@@ -76,6 +76,7 @@ class WebFluxConfig : CustomWebFluxConfigurer(), Loggable {
                         "/memes/**",
                         "/profile/**",
                         "/channels/**",
+                        "/providers/**",
                         "/topics/**"
                 ).permitAll()
                 .anyExchange().authenticated()

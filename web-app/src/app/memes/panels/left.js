@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./left.css"
-import {Divider, Typography} from "antd";
+import {Divider} from "antd";
 import {unAwait} from "../../../util/http/http";
 import {getTopics} from "../../../api/topics";
 import _ from "lodash"
@@ -19,7 +19,7 @@ const LeftPanel = ({history, match}) => {
 
     return (
         <div className="topics">
-            <Typography.Text className="topics-header">Memes catalog</Typography.Text>
+            <div className="topics-header">Memes catalog</div>
             <Divider/>
             <div className="topics-items">
                 {_.map(topics, it => {

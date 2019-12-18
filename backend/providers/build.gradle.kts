@@ -4,7 +4,7 @@ dependencies {
     api(project(":core"))
 
     implementation("javax.xml.bind:jaxb-api:2.2.11")
-    implementation("org.jsoup:jsoup:1.11.3")
+    implementation("org.jsoup:jsoup:1.12.1")
     implementation("com.github.igor-suhorukov:instagramscraper:2.2")
 
     testImplementation("junit:junit:4.12")
