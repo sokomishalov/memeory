@@ -9,7 +9,7 @@ import {PARAMS, ROUTE} from "../../../util/router/router";
 import {getProviders} from "../../../api/providers";
 import {ProviderLogo} from "../../common/logo/provider";
 
-const Right = ({history, match}) => {
+const Right = ({t, history, match}) => {
     const [providers, setProviders] = useState([])
 
     useEffect(() => unAwait(loadProviders()), [])
@@ -20,7 +20,7 @@ const Right = ({history, match}) => {
 
     return (
         <div className="providers">
-            <div className="providers-header">Providers</div>
+            <div className="providers-header">{t("providers.caption")}</div>
             <Divider/>
             <div className="providers-items">
                 {_.map(providers, it => {

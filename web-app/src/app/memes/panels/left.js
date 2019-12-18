@@ -6,8 +6,9 @@ import {getTopics} from "../../../api/topics";
 import _ from "lodash"
 import {withRouter} from "react-router";
 import {PARAMS, ROUTE} from "../../../util/router/router";
+import {withT} from "../../../util/locales/i18n";
 
-const LeftPanel = ({history, match}) => {
+const LeftPanel = ({t, history, match}) => {
 
     const [topics, setTopics] = useState([])
 
@@ -19,14 +20,14 @@ const LeftPanel = ({history, match}) => {
 
     return (
         <div className="topics">
-            <div className="topics-header">Topics</div>
+            <div className="topics-header">{t("topics.caption")}</div>
             <Divider/>
             <div className="topics-items">
                 {_.map(topics, it => {
                     const active = _.isEqual(ROUTE.MEMES_TOPIC, match.path) && _.isEqual(_.get(match, "params.id", ""), it["id"])
                     return (
                         <div key={it["id"]}
-                             className={`topics-items-item ${active ? "topics-items-item-active": ""}`}
+                             className={`topics-items-item ${active ? "topics-items-item-active" : ""}`}
                              onClick={() => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, it["id"]))}>
                             {it["caption"]}
                         </div>
@@ -37,4 +38,7 @@ const LeftPanel = ({history, match}) => {
     );
 };
 
-export default withRouter(LeftPanel);
+export default _.flow(
+    withRouter,
+    withT
+)(LeftPanel);

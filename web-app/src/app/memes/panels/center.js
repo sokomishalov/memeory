@@ -7,8 +7,9 @@ import MemeContainer from "../container/container";
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
 import {BackTop} from "antd";
 import {getMemesPage, getSingleMeme} from "../../../api/memes";
+import {withT} from "../../../util/locales/i18n";
 
-const MemesList = ({providerId = null, topicId = null, channelId = null, memeId = null}) => {
+const MemesList = ({t, providerId = null, topicId = null, channelId = null, memeId = null}) => {
 
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
@@ -38,15 +39,15 @@ const MemesList = ({providerId = null, topicId = null, channelId = null, memeId 
 
     const buildCaption = () => {
         if (!_.isEmpty(providerId)) {
-            return `Provider: ${providerId}`
+            return `${t("provider.caption")}: ${providerId}`
         } else if (!_.isEmpty(topicId)) {
-            return `Topic: ${topicId}`
+            return `${t("topic.caption")}: ${topicId}`
         } else if (!_.isEmpty(channelId)) {
-            return `Channel: ${channelId}`
+            return `${t("channel.caption")}: ${channelId}`
         } else if (!_.isEmpty(memeId)) {
-            return `Meme: ${memeId}`
+            return `${t("meme.caption")}: ${memeId}`
         } else {
-            return `All memes`
+            return t("all.memes.caption")
         }
     }
 
@@ -67,4 +68,4 @@ const MemesList = ({providerId = null, topicId = null, channelId = null, memeId 
     );
 };
 
-export default MemesList
+export default withT(MemesList)
