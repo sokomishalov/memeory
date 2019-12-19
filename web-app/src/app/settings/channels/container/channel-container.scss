@@ -1,8 +1,8 @@
 .channel {
     margin-bottom: 10px;
     margin-right: 10px;
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 10px;
 
     &-active {
@@ -10,7 +10,7 @@
     }
 
     .ant-card-body {
-        padding: 20px 2px 2px 2px !important;
+        padding: 20px 2px 0 2px !important;
     }
 
     &-name {
@@ -21,6 +21,11 @@
     }
 
     &-description {
+        font-size: 10px;
+    }
+
+    &-topics {
+        margin-top: 5px;
         font-size: 10px;
     }
 }

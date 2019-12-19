@@ -11,7 +11,7 @@
   caption: 🎮 Games
 
 - id: memes
-  caption: 👾 Memes
+  caption: 😂 Memes
 
 - id: movies
   caption: 🎬 Movies
@@ -24,4 +24,7 @@
 
 - id: science-and-tech
   caption: 💡 Science and tech
+
+- id: programming
+  caption: 💻 Programming
 
