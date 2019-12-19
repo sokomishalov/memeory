@@ -15,13 +15,18 @@ const TopicTabs = ({match, history}) => {
 
     const loadTopics = async () => setTopics(await getTopics())
 
+    const activeTabIndex = _.findIndex(topics, o => o["id"] === _.get(match, "params.id", ""))
+
     return (
         <div className="topic-tabs">
             <Tabs tabs={ topics }
                   swipeable
-                  page={ _.findIndex(topics, o => o["id"] === _.get(match, "params.id", "")) }
+                  page={ activeTabIndex }
                   renderTab={ o => _.truncate(o["caption"], {"length": 10}) }
-                  onChange={ o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"])) }/>
+                  onChange={ o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"])) }
+                  tabBarActiveTextColor={ activeTabIndex === -1 ? "inherit" : null }
+                  tabBarUnderlineStyle={ activeTabIndex === -1 ? {border: "none"} : null }
+            />
         </div>
     )
 }

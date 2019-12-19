@@ -15,13 +15,18 @@ const ProviderTabs = ({match, history}) => {
 
     const loadProviders = async () => setProviders(await getProviders())
 
+    const activeTabIndex = _.findIndex(providers, o => _.lowerCase(o) === _.get(match, "params.id", ""))
+
     return (
         <div className="provider-tabs">
             <Tabs tabs={ providers }
                   swipeable
-                  page={ _.findIndex(providers, o => _.lowerCase(o) === _.get(match, "params.id", "")) }
+                  page={ activeTabIndex }
                   renderTab={ o => _.truncate(_.capitalize(o), {"length": 10}) }
-                  onChange={ o => history.push(ROUTE.MEMES_PROVIDER.replace(PARAMS.ID, _.lowerCase(o))) }/>
+                  onChange={ o => history.push(ROUTE.MEMES_PROVIDER.replace(PARAMS.ID, _.lowerCase(o))) }
+                  tabBarActiveTextColor={ activeTabIndex === -1 ? "inherit" : null }
+                  tabBarUnderlineStyle={ activeTabIndex === -1 ? {border: "none"} : null }
+            />
         </div>
     )
 }
