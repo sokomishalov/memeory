@@ -21,7 +21,7 @@ const TopicTabs = ({match, history}) => {
                   swipeable
                   page={ _.findIndex(topics, o => o["id"] === _.get(match, "params.id", "")) }
                   renderTab={ o => _.truncate(o["caption"], {"length": 10}) }
-                  onChange={ tab => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, tab["id"])) }/>
+                  onChange={ o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"])) }/>
         </div>
     )
 }

@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import "./right.css"
-import {Divider} from "antd";
+import { Divider } from "antd";
 import _ from "lodash";
-import {withRouter} from "react-router";
-import {withT} from "../../../util/locales/i18n";
-import {unAwait} from "../../../util/http/http";
-import {PARAMS, ROUTE} from "../../../util/router/router";
-import {getProviders} from "../../../api/providers";
-import {ProviderLogo} from "../../common/logo/provider";
+import { withRouter } from "react-router";
+import { withT } from "../../../util/locales/i18n";
+import { unAwait } from "../../../util/http/http";
+import { PARAMS, ROUTE } from "../../../util/router/router";
+import { getProviders } from "../../../api/providers";
+import { ProviderLogo } from "../../common/logo/provider";
 
-const Right = ({t, history, match}) => {
+const ProvidersPanel = ({t, history, match}) => {
     const [providers, setProviders] = useState([])
 
     useEffect(() => unAwait(loadProviders()), [])
@@ -43,4 +43,4 @@ const Right = ({t, history, match}) => {
 export default _.flow(
     withRouter,
     withT
-)(Right);
+)(ProvidersPanel);
