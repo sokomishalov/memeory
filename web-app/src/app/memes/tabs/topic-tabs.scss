@@ -3,6 +3,7 @@
 .topic-tabs {
     position: absolute;
     top: 8vh;
+    width: 100vw;
 
     @media only screen and (min-width: $screen-mobile-limit) {
         display: none;

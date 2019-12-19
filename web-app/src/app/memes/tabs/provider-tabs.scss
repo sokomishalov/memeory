@@ -3,6 +3,7 @@
 .provider-tabs {
     position: absolute;
     top: 15vh;
+    width: 100vw;
 
     @media only screen and (min-width: $screen-mobile-limit) {
         display: none;
