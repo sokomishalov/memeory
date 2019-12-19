@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
 import 'package:memeory/pages/memes/memes.dart';
-import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
@@ -47,12 +46,6 @@ class UserPreferencesPage extends StatelessWidget {
             title: t(context, "choose_orientation"),
             nextPage: _nextPage,
             child: OrientationPreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "choose_channels"),
-            apply: () => _close(context),
-            applyText: t(context, "start_watching_memes"),
-            child: ChannelPreferences(),
           )
         ],
       ),

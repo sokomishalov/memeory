@@ -5,7 +5,7 @@
 This repository contains:
  - [backend](./backend) (Kotlin + Spring boot) 
  - [mobile application](./mobile-app/memeory) (Flutter)
- - [web application](./web-app) (React JS) 
+ - [web application](./web-app) (React) 
  - [telegram bot](./backend/telegram) (Kotlin)
 
 This is just another pet project. There is no rocket science inside.
