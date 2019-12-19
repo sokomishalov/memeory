@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import "./memes-panel.css"
 import InfiniteScroll from "react-infinite-scroller";
-import Loader from "../../common/loader/loader";
 import _ from "lodash";
 import MemeContainer from "../container/container";
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
-import {BackTop} from "antd";
+import {BackTop, Icon} from "antd";
 import {getMemesPage, getSingleMeme} from "../../../api/memes";
 import {withT} from "../../../util/locales/i18n";
+import Loader from "../../common/loader/loader";
 
 const MemesList = ({t, providerId = null, topicId = null, channelId = null, memeId = null}) => {
 
@@ -55,10 +55,19 @@ const MemesList = ({t, providerId = null, topicId = null, channelId = null, meme
             <div className="memes-caption">
                 {buildCaption()}
             </div>
-            <InfiniteScroll loadMore={loadMore}
-                            hasMore={hasMore && !loading}
-                            loader={<Loader key={0} loading={loading}/>}>
+            <InfiniteScroll className="min-h-500"
+                            loadMore={loadMore}
+                            hasMore={hasMore && !loading}>
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
+                {!hasMore && (
+                    <div className="memes-no-more">
+                        <Icon type="meh" className="mr-5"/>
+                        There are no memes more here!
+                    </div>
+                )}
+                {loading && (
+                    <Loader key={0} loading={loading}/>
+                )}
             </InfiniteScroll>
             <OnScrollUpReveal useFade={false}>
                 <BackTop className="memes-backtop"/>
