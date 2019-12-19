@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import "./topic-tabs.css"
-import { PARAMS, ROUTE } from "../../../util/router/router";
+import {PARAMS, ROUTE} from "../../../util/router/router";
 import _ from "lodash"
-import { withRouter } from "react-router";
-import { unAwait } from "../../../util/http/http";
-import { getTopics } from "../../../api/topics";
-import { Tabs } from "antd-mobile"
+import {withRouter} from "react-router";
+import {unAwait} from "../../../util/http/http";
+import {getTopics} from "../../../api/topics";
+import {Tabs} from "antd-mobile"
 
 const TopicTabs = ({match, history}) => {
 
@@ -19,13 +19,13 @@ const TopicTabs = ({match, history}) => {
 
     return (
         <div className="topic-tabs">
-            <Tabs tabs={ topics }
+            <Tabs tabs={topics}
                   swipeable
-                  page={ activeTabIndex }
-                  renderTab={ o => _.truncate(o["caption"], {"length": 10}) }
-                  onChange={ o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"])) }
-                  tabBarActiveTextColor={ activeTabIndex === -1 ? "inherit" : null }
-                  tabBarUnderlineStyle={ activeTabIndex === -1 ? {border: "none"} : null }
+                  page={activeTabIndex}
+                  renderTab={o => _.truncate(o["caption"], {"length": 10})}
+                  onTabClick={o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"]))}
+                  tabBarActiveTextColor={activeTabIndex === -1 ? "inherit" : null}
+                  tabBarUnderlineStyle={activeTabIndex === -1 ? {border: "none"} : null}
             />
         </div>
     )
