@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
-import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/channels_repo.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
@@ -49,8 +48,6 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
       setState(() {
         _selectedChannels = newSelectedChannels;
       });
-
-      await saveProfile();
     }
   }
 
@@ -62,8 +59,6 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
       _watchAll = value;
       _selectedChannels = [];
     });
-
-    await saveProfile();
   }
 
   @override

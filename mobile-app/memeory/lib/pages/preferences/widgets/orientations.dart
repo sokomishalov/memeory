@@ -1,6 +1,5 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/components/containers/conditional_widget.dart';
 import 'package:memeory/model/scrolling_axis.dart';
@@ -109,8 +108,6 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
       await _verticalChewieController.play();
       await _horizontalChewieController.pause();
     }
-
-    await saveProfile();
   }
 
   Widget videoWrapper(ScrollingAxis orientation) {

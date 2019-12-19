@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/api/profile.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
 import 'package:memeory/pages/memes/memes.dart';
 import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
-import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/util/i18n/i18n.dart';
@@ -23,8 +21,6 @@ class UserPreferencesPage extends StatelessWidget {
   }
 
   void _close(context) async {
-    await saveProfile(checkToken: false);
-
     await setAppVisitDatetime();
     var orientation = await getPreferredOrientation();
 
@@ -46,11 +42,6 @@ class UserPreferencesPage extends StatelessWidget {
             title: t(context, "choose_theme"),
             nextPage: _nextPage,
             child: ThemePreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "please_authorize"),
-            nextPage: _nextPage,
-            child: SocialPreferences(),
           ),
           PreferencesPageWrapper(
             title: t(context, "choose_orientation"),

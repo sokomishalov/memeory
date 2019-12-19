@@ -16,14 +16,14 @@ class BuildEnvironment {
 
   BuildEnvironment._init({
     this.flavor,
-    this.backendUrl = "",
-    this.frontendUrl = "",
+    this.backendUrl,
+    this.frontendUrl,
   });
 
   static void init({
     @required flavor,
-    backendUrl = "",
-    frontendUrl = "",
+    backendUrl,
+    frontendUrl,
   }) =>
       _env ??= BuildEnvironment._init(
         flavor: flavor,

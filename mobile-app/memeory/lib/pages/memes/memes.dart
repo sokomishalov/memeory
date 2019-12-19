@@ -7,7 +7,6 @@ import 'package:memeory/pages/memes/memes_horizontal.dart';
 import 'package:memeory/pages/memes/memes_vertical.dart';
 import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
-import 'package:memeory/pages/preferences/widgets/socials.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
@@ -83,17 +82,6 @@ class MemesPage extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                ListTile(
-                  leading: Icon(FontAwesomeIcons.userAlt),
-                  title: Text(t(context, "profile")),
-                  onTap: () {
-                    pushToPrefs(
-                      title: t(context, "please_authorize"),
-                      context: context,
-                      body: SocialPreferences(),
-                    );
-                  },
-                ),
                 ListTile(
                   leading: Icon(FontAwesomeIcons.rss),
                   title: Text(t(context, "channels")),

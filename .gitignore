@@ -64,6 +64,7 @@ yarn-error.log*
 .svn/
 mobile-app/memeory/ios/Flutter/flutter_export_environment.sh
 Flutter.podspec
+.flutter-plugins-dependencies
 
 ### Visual Studio Code related ###
 .vscode/
