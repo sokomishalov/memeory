@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import "./memes-panel.css"
 import InfiniteScroll from "react-infinite-scroller";
 import _ from "lodash";
@@ -14,6 +14,8 @@ const MemesList = ({t, providerId = null, topicId = null, channelId = null, meme
     const [loading, setLoading] = useState(false)
     const [memes, setMemes] = useState([])
     const [hasMore, setHasMore] = useState(true)
+
+    useEffect(() => window.scrollTo(0, 0), [providerId, topicId, channelId, memeId])
 
     const loadMore = async (page) => {
         setLoading(true)
@@ -62,7 +64,7 @@ const MemesList = ({t, providerId = null, topicId = null, channelId = null, meme
                 {!hasMore && (
                     <div className="memes-no-more">
                         <Icon type="meh" className="mr-5"/>
-                        There are no memes more here!
+                        {t("no.more.memes")}
                     </div>
                 )}
                 {loading && (
