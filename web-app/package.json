@@ -22,7 +22,7 @@
     "react-aspect-ratio": "~1.0.41",
     "react-device-detect": "^1.9.10",
     "react-dom": "^16.12.0",
-    "react-i18next": "~11.2.2",
+    "react-i18next": "~11.2.7",
     "react-infinite-scroller": "~1.2.4",
     "react-player": "^1.14.2",
     "react-reveal": "^1.2.2",
