@@ -1,12 +1,14 @@
+@import "../../common/styles/global-consts.scss";
+
 .topic-tabs {
     position: absolute;
     top: 8vh;
 
-    @media only screen and (min-width: 800px) {
+    @media only screen and (min-width: $screen-mobile-limit) {
         display: none;
     }
 
-    @media only screen and (max-width: 800px) {
+    @media only screen and (max-width: $screen-mobile-limit) {
         display: block;
     }
 }
