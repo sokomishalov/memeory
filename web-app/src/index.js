@@ -11,18 +11,23 @@ import 'moment/min/locales'
 import "./util/locales/i18n"
 import {BROWSER_LANGUAGE} from "./util/locales/i18n"
 
-import {register as registerServiceWorker} from './app/sw/sw'
-
 import App from "./app/app"
 import {BrowserRouter} from "react-router-dom"
+
+import {Provider} from "react-redux";
+import store from "./store/store";
+
+import {register as registerServiceWorker} from './app/sw/sw'
 
 
 moment.locale(BROWSER_LANGUAGE)
 
 ReactDOM.render(
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <App/>
-    </BrowserRouter>,
+    <Provider store={store}>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+            <App/>
+        </BrowserRouter>
+    </Provider>,
     document.getElementById('root')
 );
 

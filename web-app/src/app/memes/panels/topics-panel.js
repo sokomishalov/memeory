@@ -1,23 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import "./left.css"
+import React from 'react';
+import "./topics-panel.css"
 import {Divider} from "antd";
-import {unAwait} from "../../../util/http/http";
-import {getTopics} from "../../../api/topics";
 import _ from "lodash"
 import {withRouter} from "react-router";
 import {PARAMS, ROUTE} from "../../../util/router/router";
 import {withT} from "../../../util/locales/i18n";
+import {connect} from "react-redux";
+import {selectTopics} from "../../../store/selectors/topics";
 
-const TopicsPanel = ({t, history, match}) => {
-
-    const [topics, setTopics] = useState([])
-
-    useEffect(() => unAwait(loadTopics()), [])
-
-    const loadTopics = async () => {
-        setTopics(await getTopics())
-    }
-
+const TopicsPanel = ({t, topics, history, match}) => {
     return (
         <div className="topics">
             <div className="topics-header">{t("topics.caption")}</div>
@@ -38,7 +29,12 @@ const TopicsPanel = ({t, history, match}) => {
     );
 };
 
+const mapStateToProps = state => ({
+    topics: selectTopics(state),
+});
+
 export default _.flow(
     withRouter,
-    withT
+    withT,
+    connect(mapStateToProps)
 )(TopicsPanel);

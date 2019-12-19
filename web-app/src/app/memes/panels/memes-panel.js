@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import "./center.css"
+import "./memes-panel.css"
 import InfiniteScroll from "react-infinite-scroller";
 import Loader from "../../common/loader/loader";
 import _ from "lodash";

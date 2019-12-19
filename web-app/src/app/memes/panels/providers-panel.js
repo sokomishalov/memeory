@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import "./right.css"
-import { Divider } from "antd";
+import React from 'react';
+import "./providers-panel.css"
+import {Divider} from "antd";
 import _ from "lodash";
-import { withRouter } from "react-router";
-import { withT } from "../../../util/locales/i18n";
-import { unAwait } from "../../../util/http/http";
-import { PARAMS, ROUTE } from "../../../util/router/router";
-import { getProviders } from "../../../api/providers";
-import { ProviderLogo } from "../../common/logo/provider";
+import {withRouter} from "react-router";
+import {withT} from "../../../util/locales/i18n";
+import {PARAMS, ROUTE} from "../../../util/router/router";
+import {ProviderLogo} from "../../common/logo/provider";
+import {selectProviders} from "../../../store/selectors/providers";
+import {connect} from "react-redux";
 
-const ProvidersPanel = ({t, history, match}) => {
-    const [providers, setProviders] = useState([])
-
-    useEffect(() => unAwait(loadProviders()), [])
-
-    const loadProviders = async () => {
-        setProviders(await getProviders())
-    }
-
+const ProvidersPanel = ({t, providers, history, match}) => {
     return (
         <div className="providers">
             <div className="providers-header">{t("providers.caption")}</div>
@@ -40,7 +32,12 @@ const ProvidersPanel = ({t, history, match}) => {
     );
 };
 
+const mapStateToProps = state => ({
+    providers: selectProviders(state),
+});
+
 export default _.flow(
     withRouter,
-    withT
+    withT,
+    connect(mapStateToProps)
 )(ProvidersPanel);

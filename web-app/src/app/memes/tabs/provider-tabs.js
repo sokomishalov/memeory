@@ -1,19 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import "./provider-tabs.css"
 import {PARAMS, ROUTE} from "../../../util/router/router";
 import _ from "lodash"
 import {withRouter} from "react-router";
-import {unAwait} from "../../../util/http/http";
 import {Tabs} from "antd-mobile"
-import {getProviders} from "../../../api/providers";
+import {selectProviders} from "../../../store/selectors/providers";
+import {connect} from "react-redux";
 
-const ProviderTabs = ({match, history}) => {
-
-    const [providers, setProviders] = useState([])
-
-    useEffect(() => unAwait(loadProviders()), [])
-
-    const loadProviders = async () => setProviders(await getProviders())
+const ProviderTabs = ({providers, match, history}) => {
 
     const activeTabIndex = _.findIndex(providers, o => _.lowerCase(o) === _.get(match, "params.id", ""))
 
@@ -31,4 +25,11 @@ const ProviderTabs = ({match, history}) => {
     )
 }
 
-export default withRouter(ProviderTabs)
+const mapStateToProps = state => ({
+    providers: selectProviders(state),
+});
+
+export default _.flow(
+    withRouter,
+    connect(mapStateToProps)
+)(ProviderTabs)

@@ -1,19 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import "./topic-tabs.css"
 import {PARAMS, ROUTE} from "../../../util/router/router";
 import _ from "lodash"
 import {withRouter} from "react-router";
-import {unAwait} from "../../../util/http/http";
-import {getTopics} from "../../../api/topics";
 import {Tabs} from "antd-mobile"
+import {selectTopics} from "../../../store/selectors/topics";
+import {connect} from "react-redux";
 
-const TopicTabs = ({match, history}) => {
-
-    const [topics, setTopics] = useState([])
-
-    useEffect(() => unAwait(loadTopics()), [])
-
-    const loadTopics = async () => setTopics(await getTopics())
+const TopicTabs = ({topics, match, history}) => {
 
     const activeTabIndex = _.findIndex(topics, o => o["id"] === _.get(match, "params.id", ""))
 
@@ -31,4 +25,11 @@ const TopicTabs = ({match, history}) => {
     )
 }
 
-export default withRouter(TopicTabs)
+const mapStateToProps = state => ({
+    topics: selectTopics(state),
+});
+
+export default _.flow(
+    withRouter,
+    connect(mapStateToProps)
+)(TopicTabs)
