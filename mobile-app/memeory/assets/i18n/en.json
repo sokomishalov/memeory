@@ -1,10 +1,8 @@
 {
   "about_app": "About app",
-  "auth_google": "Sign in with Google",
-  "auth_facebook": "Sign in with Facebook",
+  "appearance": "Appearance",
   "back_to_watch_memes": "Back to memes",
   "channels": "Channels",
-  "creator": "sokomishalov",
   "choose_theme": "Choose app theme!",
   "choose_orientation": "Choose scrolling axis!",
   "choose_channels": "Choose your relevant channels!",
@@ -19,7 +17,6 @@
   "no_more_memes": "No more memes :(",
   "not_realized_yet": "Not realized yet",
   "orientation": "Scrolling axis",
-  "please_authorize": "Sign in with socials to save your preferences!",
   "please_contribute": "Improve app and contribute to it",
   "please_donate": "Donate",
   "profile": "Profile",
@@ -30,8 +27,5 @@
   "start_watching_memes": "It is time to laugh out loud of memes!",
   "save_changes": "Save changes",
   "theme_dark": "Dark theme",
-  "unsuccessful_auth": "Unsuccessful sign in",
-  "watch_all": "Watch all!",
-  "watch_all_subtitle": "This will be applied to all new channels too",
   "welcome": "Welcome"
 }

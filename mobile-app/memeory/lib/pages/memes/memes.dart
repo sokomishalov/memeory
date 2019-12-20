@@ -7,6 +7,7 @@ import 'package:memeory/pages/memes/memes_horizontal.dart';
 import 'package:memeory/pages/memes/memes_vertical.dart';
 import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
+import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
@@ -43,20 +44,22 @@ class MemesPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          DrawerHeader(
-            child: Stack(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.close),
-                ),
-                Center(
-                  child: Column(
+          Container(
+            height: 110,
+            child: DrawerHeader(
+              child: Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.close),
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        width: 70,
-                        height: 70,
+                        width: 30,
+                        height: 30,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -69,17 +72,23 @@ class MemesPage extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text('Memeory!'),
+                        margin: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Memeory!',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(
             child: ListView(
+              itemExtent: 50,
               padding: EdgeInsets.zero,
               children: <Widget>[
                 ListTile(
@@ -114,26 +123,28 @@ class MemesPage extends StatelessWidget {
                       body: AboutApp(),
                     );
                   },
-                )
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.slidersH),
+                  title: Text(t(context, "appearance")),
+                  onTap: () {
+                    pushToPrefs(
+                      title: t(context, "appearance"),
+                      context: context,
+                      body: ThemePreferences(),
+                    );
+                  },
+                ),
+                Divider(),
               ],
-            ),
-          ),
-          Container(
-            height: 50,
-            margin: EdgeInsets.only(bottom: 20),
-            child: SwitchListTile(
-              title: Text(t(context, "theme_dark")),
-              value: Theme.of(context).brightness == Brightness.dark,
-              onChanged: (value) async {
-                Navigator.pop(context);
-                await changeTheme(context);
-              },
             ),
           ),
         ],
       ),
     );
   }
+
+  Lis
 
   PreferredSize _buildAppBar(BuildContext context) {
     return PreferredSize(
