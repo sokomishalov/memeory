@@ -144,8 +144,6 @@ class MemesPage extends StatelessWidget {
     );
   }
 
-  Lis
-
   PreferredSize _buildAppBar(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(50),
