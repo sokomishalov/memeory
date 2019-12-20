@@ -17,7 +17,7 @@ class _ChannelLogoState extends State<ChannelLogo> {
   @override
   void initState() {
     super.initState();
-    getLogoUrl(widget.channelId).then((url) {
+    getChannelLogoUrl(widget.channelId).then((url) {
       setState(() {
         _url = url;
       });
