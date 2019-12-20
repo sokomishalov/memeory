@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/model/scrolling_axis.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/theme/dark.dart';
 import 'package:memeory/util/theme/light.dart';
 import 'package:memeory/util/theme/theme.dart';
@@ -33,11 +33,18 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: buildLoaderHeader(ScrollingAxis.HORIZONTAL),
-      footer: buildLoaderFooter(),
       controller: refreshController,
       onRefresh: onRefresh,
       onLoading: onLoading,
+      header: ClassicHeader(
+        releaseText: "",
+        refreshingText: "",
+        completeText: "",
+        idleText: "",
+        failedText: t(context, "error_loading_memes"),
+        idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
+      ),
+      footer: buildLoaderFooter(),
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,

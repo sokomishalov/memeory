@@ -44,8 +44,9 @@ class UserPreferencesPage extends StatelessWidget {
           ),
           PreferencesPageWrapper(
             title: t(context, "choose_orientation"),
-            nextPage: _nextPage,
             child: OrientationPreferences(),
+            apply: () => _close(context),
+            applyText: t(context, "start_watching_memes"),
           )
         ],
       ),

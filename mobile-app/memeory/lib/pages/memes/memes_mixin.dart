@@ -4,13 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
-import 'package:memeory/components/containers/loader.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
-import 'package:memeory/model/scrolling_axis.dart';
-import 'package:memeory/util/collections/collections.dart';
 import 'package:memeory/util/consts/consts.dart';
-import 'package:memeory/util/firebase/firebase.dart';
+import 'package:memeory/util/env/env.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -49,11 +46,11 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _loadMore(int page) async {
-    var newMemes = await fetchMemes(page);
+    var newMemes = await fetchMemes(pageNumber: page);
 
     setState(() {
       _currentPage = page;
-      memes = distinctByProperty([...memes, ...newMemes], "id");
+      memes = memes + newMemes;
     });
   }
 
@@ -135,42 +132,6 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
         [];
   }
 
-  Widget buildLoaderHeader(ScrollingAxis orientation) {
-    return orientation == ScrollingAxis.HORIZONTAL
-        ? ClassicHeader(
-            releaseText: EMPTY,
-            refreshingText: EMPTY,
-            completeText: EMPTY,
-            idleText: EMPTY,
-            failedText: t(context, "error_loading_memes"),
-            idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
-          )
-        : WaterDropHeader(
-            completeDuration: Duration(milliseconds: 400),
-            refresh: SizedBox(
-              width: 25,
-              height: 25,
-              child: Loader(),
-            ),
-            complete: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.done, color: Colors.grey),
-                Container(width: 15.0)
-              ],
-            ),
-            failed: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.close, color: Colors.grey),
-                Container(width: 15.0),
-                Text(t(context, "error_loading_memes"),
-                    style: TextStyle(color: Colors.grey))
-              ],
-            ),
-          );
-  }
-
   Widget buildLoaderFooter() {
     return CustomFooter(
       builder: (BuildContext context, LoadStatus mode) {
@@ -205,7 +166,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
           caption: t(context, "share_meme"),
           icon: Icon(FontAwesomeIcons.shareAlt),
           onPressed: () async {
-            await _shareMeme(context, item);
+            await _shareMeme(item);
           },
         ),
         BottomSheetItem(
@@ -223,9 +184,9 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     errorToast(context, t(context, "report_your_ass"));
   }
 
-  Future _shareMeme(BuildContext context, Map<String, dynamic> item) async {
-    var baseUrl = await getFrontendUrl();
-    var url = "${baseUrl}meme/${item["id"]}";
+  Future _shareMeme(Map<String, dynamic> item) async {
+    var baseUrl = getFrontendUrl();
+    var url = "${baseUrl}memes/single/${item["id"]}";
 
     Share.share(url);
 

@@ -32,6 +32,15 @@ class BuildEnvironment {
       );
 }
 
+String getFrontendUrl({String uri = ""}) {
+  return "${env.frontendUrl}$uri";
+}
+
+String getBackendUrl({String uri = ""}) {
+  return "${env.backendUrl}$uri";
+}
+
+
 bool isDebugModeOn() {
   bool inDebugMode = false;
   assert(inDebugMode = true);
