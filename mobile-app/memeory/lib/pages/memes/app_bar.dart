@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/util/i18n/i18n.dart';
-import 'package:memeory/util/theme/dark.dart';
-import 'package:memeory/util/theme/light.dart';
+import 'package:memeory/api/topics.dart';
 import 'package:memeory/util/theme/theme.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -10,24 +8,51 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+  String _activeTopic;
+  List<dynamic> _topics;
+
+  @override
+  void initState() {
+    _activeTopic = "all";
+    _topics = [];
+
+    super.initState();
+
+    fetchTopics().then((List<dynamic> topics) {
+      setState(() {
+        _topics = topics;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: dependingOnThemeChoice(
-        context: context,
-        light: APP_BAR_COLOR_LIGHT,
-        dark: APP_BAR_COLOR_DARK,
-      ),
-      iconTheme: getDefaultIconThemeData(context),
-      centerTitle: true,
-      title: Text(
-        t(context, "memes"),
-        style: TextStyle(
-          color: dependingOnThemeChoice(
-            context: context,
-            light: TEXT_COLOR_LIGHT,
-            dark: TEXT_COLOR_DARK,
+      title: Theme(
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: _activeTopic,
+            items: <DropdownMenuItem<String>>[
+              DropdownMenuItem(
+                value: "all",
+                child: Text('All memes'),
+              ),
+              ...(_topics.map(
+                (it) => DropdownMenuItem(
+                  value: it["id"],
+                  child: Text(it["caption"]),
+                ),
+              ))
+            ],
+            onChanged: (String value) {
+              // todo
+            },
           ),
+        ),
+        data: dependingOnThemeChoice(
+          context: context,
+          light: new ThemeData.light(),
+          dark: new ThemeData.dark(),
         ),
       ),
     );
