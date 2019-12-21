@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/model/scrolling_axis.dart';
-import 'package:memeory/pages/memes/app_bar.dart';
-import 'package:memeory/pages/memes/drawer.dart';
+import 'package:memeory/pages/appbar/appbar.dart';
+import 'package:memeory/pages/drawer/drawer.dart';
 import 'package:memeory/pages/memes/memes_horizontal.dart';
 import 'package:memeory/pages/memes/memes_vertical.dart';
 import 'package:memeory/util/theme/dark.dart';
@@ -25,7 +25,7 @@ class MemesPage extends StatelessWidget {
       ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: CustomAppBar(),
+        child: MemeoryAppBar(),
       ),
       drawer: CustomDrawer(),
       body: orientation == ScrollingAxis.VERTICAL

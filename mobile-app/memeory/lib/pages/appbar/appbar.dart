@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/topics.dart';
 import 'package:memeory/util/theme/theme.dart';
 
-class CustomAppBar extends StatefulWidget {
+class MemeoryAppBar extends StatefulWidget {
   @override
-  _CustomAppBarState createState() => _CustomAppBarState();
+  _MemeoryAppBarState createState() => _MemeoryAppBarState();
 }
 
-class _CustomAppBarState extends State<CustomAppBar> {
+class _MemeoryAppBarState extends State<MemeoryAppBar> {
   String _activeTopic;
   List<dynamic> _topics;
 
