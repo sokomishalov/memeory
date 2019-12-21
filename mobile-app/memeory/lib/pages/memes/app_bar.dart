@@ -45,7 +45,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ))
             ],
             onChanged: (String value) {
-              // todo
+              setState(() {
+                _activeTopic = value;
+              });
             },
           ),
         ),
