@@ -39,7 +39,6 @@ class MemeoryBotImpl(
             }
             else -> logInfo("Unsupported action ${message.text}")
         }
-        unit()
     }
 
     override suspend fun broadcastMemes(memes: List<MemeDTO>) {
