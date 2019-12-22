@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/pages/memes/memes.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/pages/preferences/widgets/wrapper.dart';
 import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/routes/routes.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SettingsListTile extends StatelessWidget {
@@ -47,12 +49,15 @@ class SettingsListTile extends StatelessWidget {
             title: title,
             apply: () async {
               if (apply != null) await apply;
-              var orientation = await getPreferredOrientation();
+              var scrollingAxis = await getPreferredScrollingAxis();
 
-              Navigator.of(pageContext).pushReplacement(
-                PageTransition(
+              Navigator.pushReplacementNamed(
+                context,
+                ROUTES.MEMES.route,
+                arguments: MemesScreenArgs(scrollingAxis: scrollingAxis),
+                result: PageTransition(
                   type: PageTransitionType.leftToRightWithFade,
-                  child: MemesPage(orientation: orientation),
+                  child: MemesPage(),
                 ),
               );
             },

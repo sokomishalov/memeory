@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:memeory/pages/home/home.dart';
+import 'package:memeory/pages/memes/memes.dart';
+import 'package:memeory/pages/preferences/preferences.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/routes/routes.dart';
 import 'package:memeory/util/theme/theme.dart';
 
 runMemeory() {
@@ -30,7 +32,12 @@ class DmsApp extends StatelessWidget {
         return MaterialApp(
           theme: theme,
           title: APP_NAME,
-          home: HomePage(),
+          // todo check if first app visit
+          initialRoute: ROUTES.PREFERENCES.route,
+          routes: {
+            ROUTES.PREFERENCES.route: (_) => UserPreferencesPage(),
+            ROUTES.MEMES.route: (_) => MemesPage(),
+          },
           localizationsDelegates: [
             i18nDelegate,
             GlobalMaterialLocalizations.delegate,

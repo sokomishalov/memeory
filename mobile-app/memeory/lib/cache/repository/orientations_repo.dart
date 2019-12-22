@@ -3,11 +3,11 @@ import 'package:memeory/util/consts/consts.dart';
 
 import '../storage.dart';
 
-Future<ScrollingAxis> getPreferredOrientation() async {
-  final value = await get(SELECTED_ORIENTATION_KEY);
-  return orientationFromString(value) ?? ScrollingAxis.VERTICAL;
+Future<ScrollingAxis> getPreferredScrollingAxis() async {
+  final value = await get(SELECTED_SCROLLING_AXIS_KEY);
+  return scrollingAxisFromString(value) ?? ScrollingAxis.VERTICAL;
 }
 
-setPreferredOrientation(ScrollingAxis orientation) async {
-  await put(SELECTED_ORIENTATION_KEY, orientation.toString().split('.').last);
+setPreferredScrollingAxis(ScrollingAxis orientation) async {
+  await put(SELECTED_SCROLLING_AXIS_KEY, orientation.toString().split('.').last);
 }

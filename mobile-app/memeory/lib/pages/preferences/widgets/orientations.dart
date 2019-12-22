@@ -53,7 +53,7 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
 
     super.initState();
 
-    getPreferredOrientation().then((o) {
+    getPreferredScrollingAxis().then((o) {
       if (o == ScrollingAxis.HORIZONTAL) {
         _horizontalChewieController.play();
       } else {
@@ -93,9 +93,9 @@ class _OrientationPreferencesState extends State<OrientationPreferences> {
   }
 
   Future<void> setOrientation(ScrollingAxis orientation) async {
-    await setPreferredOrientation(orientation);
+    await setPreferredScrollingAxis(orientation);
 
-    var newOrientation = await getPreferredOrientation();
+    var newOrientation = await getPreferredScrollingAxis();
 
     setState(() {
       _preferredOrientation = newOrientation;
