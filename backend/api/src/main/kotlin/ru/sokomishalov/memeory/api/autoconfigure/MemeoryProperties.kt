@@ -11,7 +11,7 @@ import java.time.Duration.ofMinutes
 
 @ConfigurationProperties(prefix = "memeory")
 @ConstructorBinding
-class MemeoryProperties(
+data class MemeoryProperties(
         val fetchLimit: Int = 100,
         val fetchInterval: Duration = ofMinutes(30),
         val memeLifeTime: Duration = ofDays(10),
