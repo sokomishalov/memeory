@@ -40,7 +40,6 @@ class SettingsListTile extends StatelessWidget {
     Widget body,
     Future apply,
   }) {
-    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(

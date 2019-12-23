@@ -52,7 +52,7 @@ class MemesFetchingScheduler(
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Unit> = aMono {
         storeDefaults()
-        Timer(true).schedule(delay = props.fetchInterval.toMillis(), period = props.fetchInterval.toMillis()) {
+        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
             GlobalScope.launch {
                 loadMemes()
             }
@@ -96,7 +96,6 @@ class MemesFetchingScheduler(
             }
             else -> fetchMemes(channel, orElse)
         }
-
     }
 
     private suspend fun fetchMemes(channel: ChannelDTO, orElse: List<MemeDTO>): List<MemeDTO> {
