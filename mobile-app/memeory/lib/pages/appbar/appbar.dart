@@ -1,62 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/api/topics.dart';
-import 'package:memeory/util/theme/theme.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/util/strings/strings.dart';
 
-class MemeoryAppBar extends StatefulWidget {
-  @override
-  _MemeoryAppBarState createState() => _MemeoryAppBarState();
-}
+class MemeoryAppBar extends StatelessWidget {
+  const MemeoryAppBar({Key key, this.screenArgs}) : super(key: key);
 
-class _MemeoryAppBarState extends State<MemeoryAppBar> {
-  String _activeTopic;
-  List<dynamic> _topics;
-
-  @override
-  void initState() {
-    _activeTopic = "all";
-    _topics = [];
-
-    super.initState();
-
-    fetchTopics().then((List<dynamic> topics) {
-      setState(() {
-        _topics = topics;
-      });
-    });
-  }
+  final MemesScreenArgs screenArgs;
 
   @override
   Widget build(BuildContext context) {
+    var caption;
+    if (screenArgs.providerId.isNotEmpty) {
+      caption = "Provider: ${screenArgs.providerId.capitalize()}";
+    } else if (screenArgs.topicId.isNotEmpty) {
+      caption = "Topic: ${screenArgs.topicId}";
+    } else if (screenArgs.channelId.isNotEmpty) {
+      caption = "Channel: ${screenArgs.topicId}";
+    } else if (screenArgs.memeId.isNotEmpty) {
+      caption = "Meme: ${screenArgs.memeId}";
+    } else {
+      caption = "All memes";
+    }
+
     return AppBar(
-      title: Theme(
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: _activeTopic,
-            items: <DropdownMenuItem<String>>[
-              DropdownMenuItem(
-                value: "all",
-                child: Text('All memes'),
-              ),
-              ...(_topics.map(
-                (it) => DropdownMenuItem(
-                  value: it["id"],
-                  child: Text(it["caption"]),
-                ),
-              ))
-            ],
-            onChanged: (String value) {
-              setState(() {
-                _activeTopic = value;
-              });
-            },
-          ),
-        ),
-        data: dependingOnThemeChoice(
-          context: context,
-          light: new ThemeData.light(),
-          dark: new ThemeData.dark(),
-        ),
-      ),
+      title: Text(caption),
     );
   }
 }

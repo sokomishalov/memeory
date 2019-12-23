@@ -10,7 +10,6 @@ import 'package:memeory/util/theme/light.dart';
 import 'package:memeory/util/theme/theme.dart';
 
 class MemesPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final MemesScreenArgs args = ModalRoute.of(context).settings.arguments;
@@ -23,7 +22,9 @@ class MemesPage extends StatelessWidget {
       ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
-        child: MemeoryAppBar(),
+        child: MemeoryAppBar(
+          screenArgs: args,
+        ),
       ),
       drawer: CustomDrawer(),
       body: args.scrollingAxis == ScrollingAxis.VERTICAL

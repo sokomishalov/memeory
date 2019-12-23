@@ -7,7 +7,6 @@ import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/util/consts/consts.dart';
-import 'package:memeory/util/env/env.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -54,7 +53,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     });
   }
 
-  Widget buildMemeHeader(item, context) {
+  Widget buildMemeHeader(BuildContext context, Map item) {
     return Container(
       padding: EdgeInsets.only(
         left: 10,
@@ -95,7 +94,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget buildMemeCaption(item, context) {
+  Widget buildMemeCaption(Map item) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Text(
@@ -106,7 +105,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  List<Widget> buildMemeAttachments(item) {
+  List<Widget> buildMemeAttachments(Map item) {
     return item["attachments"]
             ?.map((a) {
               var aspectRatio = a["aspectRatio"];
@@ -185,11 +184,8 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future _shareMeme(Map<String, dynamic> item) async {
-    var baseUrl = getFrontendUrl();
-    var url = "${baseUrl}memes/single/${item["id"]}";
-
+    var url = getMemeShareUrl(item["id"]);
     Share.share(url);
-
     await onRefresh();
   }
 }

@@ -10,7 +10,7 @@ Future<List> fetchChannels() async {
   return json.decode(utf8.decode(response.bodyBytes));
 }
 
-Future<String> getChannelLogoUrl(String channelId) async {
+String getChannelLogoUrl(String channelId) {
   final baseUrl = getBackendUrl();
   return '${baseUrl}channels/logo/$channelId';
 }

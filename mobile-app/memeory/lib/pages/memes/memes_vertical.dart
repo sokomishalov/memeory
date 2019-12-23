@@ -72,8 +72,8 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                buildMemeHeader(item, context),
-                buildMemeCaption(item, context),
+                buildMemeHeader(context, item),
+                buildMemeCaption(item),
                 AttachmentCarousel(
                   minAspectRatio: isNotEmpty(item["attachments"])
                       ? item["attachments"]

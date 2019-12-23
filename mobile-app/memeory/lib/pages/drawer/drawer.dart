@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/api/providers.dart';
 import 'package:memeory/api/topics.dart';
+import 'package:memeory/components/images/provider_logo.dart';
 import 'package:memeory/pages/about/about.dart';
 import 'package:memeory/pages/drawer/drawer_header.dart';
 import 'package:memeory/pages/drawer/settings_list_tile.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/pages/preferences/widgets/channels.dart';
 import 'package:memeory/pages/preferences/widgets/orientations.dart';
 import 'package:memeory/pages/preferences/widgets/themes.dart';
 import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/routes/routes.dart';
+import 'package:memeory/util/strings/strings.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -79,6 +83,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 ...(_topics.map((it) => ListTile(
                       title: Text(it["caption"]),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                          context,
+                          ROUTES.MEMES.route,
+                          arguments: MemesScreenArgs(topicId: it["id"]),
+                        );
+                      },
                     ))),
                 Divider(),
                 Container(
@@ -89,7 +101,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 ...(_providers.map((it) => ListTile(
-                      title: Text(it),
+                      leading: ProviderLogo(providerId: it),
+                      title: Text((it as String).capitalize()),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                          context,
+                          ROUTES.MEMES.route,
+                          arguments: MemesScreenArgs(providerId: it),
+                        );
+                      },
                     ))),
                 Divider(),
               ],

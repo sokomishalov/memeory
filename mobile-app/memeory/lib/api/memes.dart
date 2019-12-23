@@ -30,3 +30,8 @@ Future<List> fetchMemes({
 
   return json.decode(utf8.decode(response.bodyBytes));
 }
+
+String getMemeShareUrl(String memeId) {
+  var baseFrontendUrl = getFrontendUrl();
+  return "${baseFrontendUrl}memes/single/$memeId";
+}

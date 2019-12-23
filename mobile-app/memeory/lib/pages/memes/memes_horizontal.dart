@@ -70,8 +70,8 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildMemeHeader(item, context),
-                    buildMemeCaption(item, context),
+                    buildMemeHeader(context, item),
+                    buildMemeCaption(item),
                     ...buildMemeAttachments(item),
                   ],
                 ),
