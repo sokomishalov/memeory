@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
+import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/util/routes/routes.dart';
 
 class ChannelPreferences extends StatefulWidget {
   @override
@@ -17,10 +20,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
     super.initState();
   }
 
-  onTapChannel(String id) async {
-    // TODO
-    debugPrint("todo");
-  }
+  Future<void> onTapChannel(String id) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,16 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                     var name = item["name"] ?? id;
 
                     return GestureDetector(
-                      onTap: () async => await onTapChannel(id),
+                      onTap: () async {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          ROUTES.MEMES.route,
+                          arguments: MemesScreenArgs(
+                            scrollingAxis: await getPreferredScrollingAxis(),
+                            channelId: id,
+                          ),
+                        );
+                      },
                       child: GridTile(
                         child: Card(
                           color: CardTheme.of(context).color,

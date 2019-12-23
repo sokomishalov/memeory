@@ -6,6 +6,7 @@ import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
@@ -34,18 +35,23 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 
-  Future<void> onRefresh() async {
-    await _loadMore(0);
+  Future<void> onRefresh(MemesScreenArgs memeScreenArgs) async {
+    await _loadMore(memeScreenArgs, 0);
     refreshController.refreshCompleted();
   }
 
-  Future<void> onLoading() async {
-    await _loadMore(_currentPage + 1);
+  Future<void> onLoading(MemesScreenArgs memeScreenArgs) async {
+    await _loadMore(memeScreenArgs, _currentPage + 1);
     refreshController.loadComplete();
   }
 
-  Future<void> _loadMore(int page) async {
-    var newMemes = await fetchMemes(pageNumber: page);
+  Future<void> _loadMore(MemesScreenArgs memeScreenArgs, int page) async {
+    var newMemes = await fetchMemes(
+      pageNumber: page,
+      providerId: memeScreenArgs.providerId,
+      topicId: memeScreenArgs.topicId,
+      channelId: memeScreenArgs.channelId
+    );
 
     setState(() {
       _currentPage = page;
@@ -185,7 +191,6 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
 
   Future _shareMeme(Map<String, dynamic> item) async {
     var url = getMemeShareUrl(item["id"]);
-    Share.share(url);
-    await onRefresh();
+    await Share.share(url);
   }
 }

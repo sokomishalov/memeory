@@ -11,8 +11,13 @@ import 'package:memeory/util/theme/theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'memes_mixin.dart';
+import 'memes_screen_args.dart';
 
 class MemesVertical extends StatefulWidget {
+  const MemesVertical({Key key, this.screenArgs}) : super(key: key);
+
+  final MemesScreenArgs screenArgs;
+
   @override
   _MemesVerticalState createState() => _MemesVerticalState();
 }
@@ -24,8 +29,8 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
       enablePullDown: true,
       enablePullUp: true,
       controller: refreshController,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
+      onRefresh: () => onRefresh(widget.screenArgs),
+      onLoading: () => onLoading(widget.screenArgs),
       header: WaterDropHeader(
         completeDuration: Duration(milliseconds: 400),
         refresh: SizedBox(

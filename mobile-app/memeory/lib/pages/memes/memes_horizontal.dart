@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/theme/dark.dart';
 import 'package:memeory/util/theme/light.dart';
@@ -9,6 +10,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'memes_mixin.dart';
 
 class MemesHorizontal extends StatefulWidget {
+  const MemesHorizontal({Key key, this.screenArgs}) : super(key: key);
+
+  final MemesScreenArgs screenArgs;
+
   @override
   _MemesHorizontalState createState() => _MemesHorizontalState();
 }
@@ -34,8 +39,8 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
       enablePullDown: true,
       enablePullUp: true,
       controller: refreshController,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
+      onRefresh: () => onRefresh(widget.screenArgs),
+      onLoading: () => onLoading(widget.screenArgs),
       header: ClassicHeader(
         releaseText: "",
         refreshingText: "",
