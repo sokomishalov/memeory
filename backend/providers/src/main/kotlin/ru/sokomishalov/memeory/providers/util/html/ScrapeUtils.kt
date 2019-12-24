@@ -1,30 +1,27 @@
 package ru.sokomishalov.memeory.providers.util.html
 
-import org.jsoup.Jsoup.clean
 import org.jsoup.Jsoup.parse
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.jsoup.safety.Whitelist
-import ru.sokomishalov.commons.core.http.REACTIVE_NETTY_HTTP_CLIENT
+import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.reactor.awaitStrict
-import java.nio.charset.StandardCharsets.UTF_8
+import ru.sokomishalov.memeory.providers.util.client.CUSTOM_WEB_CLIENT
 
 /**
  * @author sokomishalov
  */
 
-suspend fun getWebPage(url: String): Document {
-    return REACTIVE_NETTY_HTTP_CLIENT
+internal suspend fun getWebPage(url: String): Document {
+    return CUSTOM_WEB_CLIENT
             .get()
             .uri(url)
-            .responseContent()
-            .aggregate()
-            .asString(UTF_8)
+            .exchange()
             .awaitStrict()
+            .awaitBody<String>()
             .let { parse(it) }
 }
 
-fun Element.removeLinks(): String? {
+internal fun Element.removeLinks(): String? {
     val titleDoc = parse(html())
 
     val allAnchors = titleDoc.select("a")
@@ -37,19 +34,15 @@ fun Element.removeLinks(): String? {
     return titleDoc.text()
 }
 
-fun Element.getSingleElementByClass(name: String): Element {
+internal fun Element.getSingleElementByClass(name: String): Element {
     return getElementsByClass(name).first()
 }
 
-fun Element.getSingleElementByTag(name: String): Element {
+internal fun Element.getSingleElementByTag(name: String): Element {
     return getElementsByTag(name).first()
 }
 
-fun Element.getImageBackgroundUrl(): String {
+internal fun Element.getImageBackgroundUrl(): String {
     val style = attr("style")
     return style.substring(style.indexOf("http"), style.indexOf(")"))
-}
-
-fun Element.fixText(): String {
-    return clean(toString(), Whitelist.simpleText())
 }

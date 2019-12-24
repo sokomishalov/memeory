@@ -6,7 +6,6 @@ import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.collections.aMap
 import ru.sokomishalov.commons.core.consts.EMPTY
 import ru.sokomishalov.commons.core.reactor.awaitStrict
-import ru.sokomishalov.commons.spring.webclient.REACTIVE_WEB_CLIENT
 import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -16,6 +15,7 @@ import ru.sokomishalov.memeory.core.enums.Provider.REDDIT
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.memeory.core.util.consts.REDDIT_BASE_URL
 import ru.sokomishalov.memeory.providers.ProviderService
+import ru.sokomishalov.memeory.providers.util.client.CUSTOM_WEB_CLIENT
 import java.lang.System.currentTimeMillis
 import java.util.*
 
@@ -23,7 +23,7 @@ import java.util.*
 class RedditProviderService : ProviderService {
 
     override suspend fun fetchMemes(channel: ChannelDTO, limit: Int): List<MemeDTO> {
-        val response = REACTIVE_WEB_CLIENT
+        val response = CUSTOM_WEB_CLIENT
                 .get()
                 .uri("$REDDIT_BASE_URL/r/${channel.uri}/hot.json?limit=${limit}")
                 .exchange()
@@ -56,7 +56,7 @@ class RedditProviderService : ProviderService {
     }
 
     override suspend fun getLogoUrl(channel: ChannelDTO): String? {
-        val response = REACTIVE_WEB_CLIENT
+        val response = CUSTOM_WEB_CLIENT
                 .get()
                 .uri("$REDDIT_BASE_URL/r/${channel.uri}/about.json")
                 .exchange()
