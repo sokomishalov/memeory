@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:memeory/cache/repository/orientations_repo.dart';
+import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/pages/about/about.dart';
+import 'package:memeory/pages/appearance/appearance.dart';
+import 'package:memeory/pages/channels/channels.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
-import 'package:memeory/pages/preferences/widgets/channels.dart';
-import 'package:memeory/pages/preferences/widgets/orientations.dart';
-import 'package:memeory/pages/preferences/widgets/themes.dart';
-import 'package:memeory/pages/preferences/widgets/wrapper.dart';
+import 'package:memeory/pages/preferences/preferences_wrapper.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/routes/routes.dart';
 import 'package:memeory/util/strings/strings.dart';
@@ -48,19 +47,14 @@ class MemesAppBar extends StatelessWidget {
                 pageBuilder: (_) => ChannelPreferences(),
               ),
               SettingsItem(
-                icon: FontAwesomeIcons.arrowsAlt,
-                title: t(context, "orientation"),
-                pageBuilder: (_) => OrientationPreferences(),
+                icon: FontAwesomeIcons.slidersH,
+                title: t(context, "appearance"),
+                pageBuilder: (_) => AppearancePreferences(),
               ),
               SettingsItem(
                 icon: FontAwesomeIcons.info,
                 title: t(context, "about_app"),
                 pageBuilder: (_) => AboutApp(),
-              ),
-              SettingsItem(
-                icon: FontAwesomeIcons.slidersH,
-                title: t(context, "appearance"),
-                pageBuilder: (_) => ThemePreferences(),
               ),
             ].map((SettingsItem item) {
               return PopupMenuItem<SettingsItem>(

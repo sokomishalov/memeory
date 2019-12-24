@@ -8,15 +8,18 @@ import 'package:url_launcher/url_launcher.dart';
 class AboutApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Text(APP_NAME),
-          Container(
-            margin: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 5),
-            child: Text(t(context, "please_contribute")),
-          ),
-          RaisedButton.icon(
+    final buttonWidth = MediaQuery.of(context).size.width - 100;
+
+    return Column(
+      children: <Widget>[
+        Text("Memeory !"),
+        Container(
+          margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 5),
+          child: Text(t(context, "please_contribute")),
+        ),
+        Container(
+          width: buttonWidth,
+          child: RaisedButton.icon(
             icon: Icon(FontAwesomeIcons.github),
             label: Text(GITHUB_REPO),
             color: Colors.black54,
@@ -24,11 +27,29 @@ class AboutApp extends StatelessWidget {
               await launch(GITHUB_REPO_PAGE);
             },
           ),
-          Container(
-            margin: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 5),
-            child: Text(t(context, "please_donate")),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 5),
+          child: Text("About creator"),
+        ),
+        Container(
+          width: buttonWidth,
+          child: RaisedButton.icon(
+            icon: Icon(FontAwesomeIcons.info),
+            label: Text(USERNAME),
+            color: Colors.black45,
+            onPressed: () async {
+              await launch(ABOUT_ME_PAGE);
+            },
           ),
-          RaisedButton.icon(
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 5),
+          child: Text(t(context, "please_donate")),
+        ),
+        Container(
+          width: buttonWidth,
+          child: RaisedButton.icon(
             icon: Icon(FontAwesomeIcons.yandexInternational),
             label: Text(USERNAME),
             color: Colors.red,
@@ -36,8 +57,8 @@ class AboutApp extends StatelessWidget {
               await launch(YANDEX_DONATE_PAGE);
             },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

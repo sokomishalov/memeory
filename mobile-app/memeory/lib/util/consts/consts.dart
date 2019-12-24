@@ -21,8 +21,6 @@ const SELECTED_SCROLLING_AXIS_KEY = "ORIENTATION";
 // Asset names
 const LOGO_ASSET = "assets/logo/logo.png";
 const LOGO_INVERTED_ASSET = "assets/logo/logo-inverted.png";
-const HORIZONTAL_ORIENTATION_ASSET = 'assets/orientation/horizontal.mp4';
-const VERTICAL_ORIENTATION_ASSET = 'assets/orientation/vertical.mp4';
 
 const APPLICATION_JSON_HEADER_VALUE = 'application/json';
 

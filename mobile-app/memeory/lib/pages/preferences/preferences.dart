@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/cache/repository/orientations_repo.dart';
+import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
+import 'package:memeory/pages/appearance/appearance.dart';
 import 'package:memeory/pages/memes/memes.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
-import 'package:memeory/pages/preferences/widgets/orientations.dart';
-import 'package:memeory/pages/preferences/widgets/themes.dart';
-import 'package:memeory/pages/preferences/widgets/wrapper.dart';
+import 'package:memeory/pages/preferences/preferences_wrapper.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/routes/routes.dart';
 import 'package:page_transition/page_transition.dart';
@@ -44,15 +43,10 @@ class UserPreferencesPage extends StatelessWidget {
         children: [
           PreferencesPageWrapper(
             title: t(context, "choose_theme"),
-            nextPage: _nextPage,
-            child: ThemePreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "choose_orientation"),
-            child: OrientationPreferences(),
+            child: AppearancePreferences(),
             apply: () => _close(context),
             applyText: t(context, "start_watching_memes"),
-          )
+          ),
         ],
       ),
     );
