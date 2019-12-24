@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/routes/routes.dart';
@@ -22,9 +21,7 @@ class MemeoryDrawerHeader extends StatelessWidget {
                 Navigator.pushReplacementNamed(
                   context,
                   ROUTES.MEMES.route,
-                  arguments: MemesScreenArgs(
-                    scrollingAxis: await getPreferredScrollingAxis(),
-                  ),
+                  arguments: MemesScreenArgs(),
                 );
               },
               child: Row(

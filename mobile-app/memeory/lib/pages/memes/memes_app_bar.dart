@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/pages/about/about.dart';
 import 'package:memeory/pages/appearance/appearance.dart';
 import 'package:memeory/pages/channels/channels.dart';
@@ -84,9 +83,7 @@ class MemesAppBar extends StatelessWidget {
                       Navigator.pushReplacementNamed(
                         context,
                         ROUTES.MEMES.route,
-                        arguments: MemesScreenArgs(
-                          scrollingAxis: await getPreferredScrollingAxis(),
-                        ),
+                        arguments: MemesScreenArgs(),
                         result: PageTransition(
                           type: PageTransitionType.leftToRightWithFade,
                           child: MemesPage(),

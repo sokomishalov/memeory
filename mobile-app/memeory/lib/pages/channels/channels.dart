@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
-import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
@@ -49,7 +48,6 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                           context,
                           ROUTES.MEMES.route,
                           arguments: MemesScreenArgs(
-                            scrollingAxis: await getPreferredScrollingAxis(),
                             channelId: id,
                           ),
                         );

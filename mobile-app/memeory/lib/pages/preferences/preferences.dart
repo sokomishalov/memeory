@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
 import 'package:memeory/pages/appearance/appearance.dart';
 import 'package:memeory/pages/memes/memes.dart';
@@ -22,12 +21,11 @@ class UserPreferencesPage extends StatelessWidget {
 
   void _close(context) async {
     await setAppVisitDatetime();
-    var scrollingAxis = await getPreferredScrollingAxis();
 
     Navigator.pushReplacementNamed(
       context,
       ROUTES.MEMES.route,
-      arguments: MemesScreenArgs(scrollingAxis: scrollingAxis),
+      arguments: MemesScreenArgs(),
       result: PageTransition(
         type: PageTransitionType.upToDown,
         child: MemesPage(),

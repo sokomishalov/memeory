@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:memeory/cache/repository/scrolling_axis_repo.dart';
+import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/model/scrolling_axis.dart';
 import 'package:memeory/pages/drawer/drawer.dart';
 import 'package:memeory/pages/memes/memes_horizontal.dart';
@@ -13,7 +15,8 @@ import 'memes_app_bar.dart';
 class MemesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MemesScreenArgs args = ModalRoute.of(context).settings.arguments;
+    final MemesScreenArgs args =
+        ModalRoute.of(context).settings.arguments ?? MemesScreenArgs();
 
     return Scaffold(
       backgroundColor: dependingOnThemeChoice(
@@ -28,9 +31,14 @@ class MemesPage extends StatelessWidget {
         ),
       ),
       drawer: CustomDrawer(),
-      body: args.scrollingAxis == ScrollingAxis.VERTICAL
-          ? MemesVertical(screenArgs: args)
-          : MemesHorizontal(screenArgs: args),
+      body: FutureWidget(
+        future: getPreferredScrollingAxis(),
+        render: (axis) {
+          return axis == ScrollingAxis.VERTICAL
+              ? MemesVertical(screenArgs: args)
+              : MemesHorizontal(screenArgs: args);
+        },
+      ),
     );
   }
 }
