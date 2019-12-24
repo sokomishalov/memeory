@@ -47,11 +47,10 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> _loadMore(MemesScreenArgs memeScreenArgs, int page) async {
     var newMemes = await fetchMemes(
-      pageNumber: page,
-      providerId: memeScreenArgs.providerId,
-      topicId: memeScreenArgs.topicId,
-      channelId: memeScreenArgs.channelId
-    );
+        pageNumber: page,
+        providerId: memeScreenArgs.providerId,
+        topicId: memeScreenArgs.topicId,
+        channelId: memeScreenArgs.channelId);
 
     setState(() {
       _currentPage = page;
