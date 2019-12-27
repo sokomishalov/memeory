@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/channels.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
+import 'package:memeory/components/images/provider_logo.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/routes/routes.dart';
+import 'package:memeory/util/strings/strings.dart';
 
 class ChannelPreferences extends StatefulWidget {
   @override
@@ -19,10 +21,11 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
     super.initState();
   }
 
-  Future<void> onTapChannel(String id) async {}
-
   @override
   Widget build(BuildContext context) {
+    final textColorWithOpacity =
+        Theme.of(context).textTheme.title.color.withOpacity(0.6);
+
     return Expanded(
       child: Column(
         children: [
@@ -34,8 +37,8 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   shrinkWrap: true,
                   itemCount: data.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 180,
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     var item = data[index];
@@ -43,7 +46,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                     var name = item["name"] ?? id;
 
                     return GestureDetector(
-                      onTap: () async {
+                      onTap: () {
                         Navigator.pushReplacementNamed(
                           context,
                           ROUTES.MEMES.route,
@@ -56,9 +59,10 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                         child: Card(
                           color: CardTheme.of(context).color,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(top: 22),
+                                padding: EdgeInsets.only(top: 10),
                                 child: ChannelLogo(
                                   channelId: item["id"],
                                 ),
@@ -68,9 +72,52 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                                 child: Text(
                                   name,
                                   softWrap: true,
-                                  maxLines: 2,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      child: ProviderLogo(
+                                        size: 15,
+                                        providerId: item["provider"],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 5),
+                                      child: Text(
+                                        item["provider"]
+                                            .toString()
+                                            .capitalize(),
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: textColorWithOpacity,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    item["topics"].join(','),
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: textColorWithOpacity,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

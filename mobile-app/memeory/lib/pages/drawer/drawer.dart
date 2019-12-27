@@ -74,7 +74,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 ...(_providers.map((it) => ListTile(
                       leading: ProviderLogo(providerId: it),
-                      title: Text((it as String).capitalize()),
+                      title: Text(it.toString().capitalize()),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushReplacementNamed(
