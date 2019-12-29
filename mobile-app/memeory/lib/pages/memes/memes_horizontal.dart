@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memeory/model/meme.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/theme/dark.dart';
@@ -57,11 +58,11 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
         physics: PageScrollPhysics(),
         itemCount: memes?.length ?? 0,
         itemBuilder: (context, index) {
-          var item = memes[index] ?? {};
+          Meme item = memes[index];
 
           return Container(
             width: MediaQuery.of(context).size.width,
-            key: Key(item["id"]),
+            key: Key(item.id),
             decoration: BoxDecoration(
               color: dependingOnThemeChoice(
                 context: context,

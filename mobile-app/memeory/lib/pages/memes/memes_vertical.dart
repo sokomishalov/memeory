@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:memeory/components/containers/loader.dart';
+import 'package:memeory/model/meme.dart';
 import 'package:memeory/pages/memes/attachments/carousel_slider.dart';
 import 'package:memeory/util/collections/collections.dart';
 import 'package:memeory/util/i18n/i18n.dart';
@@ -62,10 +63,10 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
         shrinkWrap: true,
         itemCount: memes?.length ?? 0,
         itemBuilder: (context, index) {
-          var item = memes[index] ?? {};
+          Meme item = memes[index];
 
           return Container(
-            key: Key(item["id"]),
+            key: Key(item.id),
             margin: EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
               color: dependingOnThemeChoice(
@@ -80,11 +81,11 @@ class _MemesVerticalState extends State<MemesVertical> with MemesMixin {
                 buildMemeHeader(context, item),
                 buildMemeCaption(item),
                 AttachmentCarousel(
-                  minAspectRatio: isNotEmpty(item["attachments"])
-                      ? item["attachments"]
-                          ?.map((a) => a["aspectRatio"])
+                  minAspectRatio: isNotEmpty(item.attachments)
+                      ? item.attachments
+                          ?.map((a) => a.aspectRatio)
                           ?.cast<double>()
-                          ?.reduce((double o1, double o2) =>
+                          ?.reduce((o1, o2) =>
                               (o1 != null && o2 != null) ? min(o1, o2) : 1.0)
                       : 1,
                   items: buildMemeAttachments(item),

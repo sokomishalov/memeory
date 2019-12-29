@@ -6,8 +6,9 @@ import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
+import 'package:memeory/model/attachment_type.dart';
+import 'package:memeory/model/meme.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
-import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -18,7 +19,7 @@ import 'attachments/video.dart';
 
 mixin MemesMixin<T extends StatefulWidget> on State<T> {
   int _currentPage;
-  List memes;
+  List<Meme> memes;
   RefreshController refreshController;
 
   @override
@@ -58,7 +59,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     });
   }
 
-  Widget buildMemeHeader(BuildContext context, Map item) {
+  Widget buildMemeHeader(BuildContext context, Meme item) {
     return Container(
       padding: EdgeInsets.only(
         left: 10,
@@ -68,20 +69,20 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
       ),
       child: Row(
         children: <Widget>[
-          ChannelLogo(channelId: item["channelId"]),
+          ChannelLogo(channelId: item.channelId),
           Spacer(flex: 1),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                item["channelName"],
+                item.channelName,
                 style: TextStyle(fontSize: 12),
               ),
               Container(
                 padding: EdgeInsets.only(top: 4),
                 child: Opacity(
                   child: Text(
-                    timeAgo(context, item["publishedAt"]),
+                    timeAgo(context, item.publishedAt),
                     style: TextStyle(fontSize: 12),
                   ),
                   opacity: 0.5,
@@ -99,33 +100,29 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget buildMemeCaption(Map item) {
+  Widget buildMemeCaption(Meme item) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Text(
-        item["caption"] ?? EMPTY,
+        item.caption ?? "",
         softWrap: true,
         style: TextStyle(fontSize: 16),
       ),
     );
   }
 
-  List<Widget> buildMemeAttachments(Map item) {
-    return item["attachments"]
+  List<Widget> buildMemeAttachments(Meme item) {
+    return item.attachments
             ?.map((a) {
-              var aspectRatio = a["aspectRatio"];
-              var url = a["url"];
-              var type = a["type"];
-
-              if (type == IMAGE_ATTACHMENT_TYPE) {
+              if (a.type == AttachmentType.IMAGE) {
                 return ImageAttachment(
-                  url: url,
-                  aspectRatio: aspectRatio,
+                  url: a.url,
+                  aspectRatio: a.aspectRatio,
                 );
-              } else if (type == VIDEO_ATTACHMENT_TYPE) {
+              } else if (a.type == AttachmentType.VIDEO) {
                 return VideoAttachment(
-                  url: url,
-                  aspectRatio: aspectRatio,
+                  url: a.url,
+                  aspectRatio: a.aspectRatio,
                 );
               } else {
                 return Container();
@@ -162,7 +159,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  void onTapEllipsis(BuildContext context, Map<String, dynamic> item) {
+  void onTapEllipsis(BuildContext context, Meme item) {
     showMemeoryBottomSheet(
       context: context,
       items: [
@@ -188,8 +185,8 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     errorToast(context, t(context, "report_your_ass"));
   }
 
-  Future _shareMeme(Map<String, dynamic> item) async {
-    var url = getMemeShareUrl(item["id"]);
+  Future _shareMeme(Meme item) async {
+    var url = getMemeShareUrl(item.id);
     await Share.share(url);
   }
 }
