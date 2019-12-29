@@ -21,7 +21,7 @@ class Channel {
       name: json["name"],
       provider: json["provider"],
       uri: json["uri"],
-      topics: List.of(json["topics"]).map((i) => json["topics"]).toList(),
+      topics: List.of(json["topics"]).map((i) => i.toString()).toList(),
     );
   }
 

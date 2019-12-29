@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memeory/api/providers.dart';
 import 'package:memeory/api/topics.dart';
 import 'package:memeory/components/images/provider_logo.dart';
+import 'package:memeory/model/topic.dart';
 import 'package:memeory/pages/drawer/drawer_header.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/routes/routes.dart';
@@ -13,8 +14,8 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  List<dynamic> _topics;
-  List<dynamic> _providers;
+  List<Topic> _topics;
+  List<String> _providers;
 
   @override
   void initState() {
@@ -23,14 +24,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     super.initState();
 
-    Future.wait([
-      fetchTopics(),
-      fetchProviders(),
-    ]).then((List<List<dynamic>> data) {
-      setState(() {
-        _topics = data[0];
-        _providers = data[1];
-      });
+    initData();
+  }
+
+  initData() async {
+    final topics = await fetchTopics();
+    final providers = await fetchProviders();
+    setState(() {
+      _topics = topics;
+      _providers = providers;
     });
   }
 
@@ -54,13 +56,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 ...(_topics.map((it) => ListTile(
-                      title: Text(it["caption"]),
+                      title: Text(it.caption),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushReplacementNamed(
                           context,
                           ROUTES.MEMES.route,
-                          arguments: MemesScreenArgs(topicId: it["id"]),
+                          arguments: MemesScreenArgs(topicId: it.id),
                         );
                       },
                     ))),

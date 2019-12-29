@@ -17,22 +17,15 @@ class ImageAttachment extends StatelessWidget {
         ? MediaQuery.of(context).size.width / aspectRatio
         : null;
 
-    return Container(
-      child: CachedNetworkImage(
+    return CachedNetworkImage(
+      width: width,
+      height: height,
+      imageUrl: url,
+      placeholder: (context, url) => Loader(
         width: width,
         height: height,
-        imageUrl: url,
-        placeholder: (context, url) => Loader(
-          width: width,
-          height: height,
-        ),
-        errorWidget: (context, url, error) => ErrorContainer(error: error),
       ),
-//      child: Image(
-//        image: NetworkImage(url),
-//        width: width,
-//        height: height,
-//      ),
+      errorWidget: (context, url, error) => ErrorContainer(error: error),
     );
   }
 }

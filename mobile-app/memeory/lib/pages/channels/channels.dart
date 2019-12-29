@@ -4,6 +4,8 @@ import 'package:memeory/api/topics.dart';
 import 'package:memeory/components/containers/future_builder.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/images/provider_logo.dart';
+import 'package:memeory/model/channel.dart';
+import 'package:memeory/model/topic.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/util/routes/routes.dart';
 import 'package:memeory/util/strings/strings.dart';
@@ -14,27 +16,19 @@ class ChannelPreferences extends StatefulWidget {
 }
 
 class _ChannelPreferencesState extends State<ChannelPreferences> {
-  Future<List> futureData;
-
-  @override
-  void initState() {
-    futureData = Future.wait([fetchChannels(), fetchTopics()]);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final textColorWithOpacity =
-        Theme.of(context).textTheme.title.color.withOpacity(0.6);
-
     return Expanded(
       child: Column(
         children: [
           FutureWidget(
-            future: futureData,
+            future: Future.wait([
+              fetchChannels(),
+              fetchTopics(),
+            ]),
             render: (data) {
-              List<dynamic> channels = data[0];
-              List<dynamic> topics = data[1];
+              List<Channel> channels = data[0];
+              List<Topic> topics = data[1];
 
               return Expanded(
                 child: GridView.builder(
@@ -46,7 +40,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     var item = channels[index];
-                    var id = item["id"];
+                    var id = item.id;
 
                     return GestureDetector(
                       onTap: () {
@@ -73,7 +67,7 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                               Container(
                                 padding: EdgeInsets.only(top: 7),
                                 child: Text(
-                                  item["name"] ?? id,
+                                  item.name ?? id,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -89,18 +83,20 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                                     Container(
                                       child: ProviderLogo(
                                         size: 15,
-                                        providerId: item["provider"],
+                                        providerId: item.provider,
                                       ),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(left: 5),
                                       child: Text(
-                                        item["provider"]
-                                            .toString()
-                                            .capitalize(),
+                                        item.provider.toString().capitalize(),
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: textColorWithOpacity,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .title
+                                              .color
+                                              .withOpacity(0.6),
                                         ),
                                       ),
                                     ),
@@ -113,15 +109,20 @@ class _ChannelPreferencesState extends State<ChannelPreferences> {
                                   margin: const EdgeInsets.only(left: 5),
                                   child: Text(
                                     topics
-                                        .where((it) => item["topics"].contains(it["id"]))
-                                        .map((it) => it["caption"])
+                                        .where(
+                                            (it) => item.topics.contains(it.id))
+                                        .map((it) => it.caption)
                                         .join(','),
                                     softWrap: true,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: textColorWithOpacity,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .title
+                                          .color
+                                          .withOpacity(0.6),
                                     ),
                                   ),
                                 ),
