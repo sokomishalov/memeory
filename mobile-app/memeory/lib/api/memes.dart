@@ -7,24 +7,11 @@ import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/env/env.dart';
 import 'package:memeory/util/http/http.dart';
 
-Future<List<Meme>> fetchMemes({
-  int pageNumber,
-  int pageSize = MEMES_COUNT_ON_THE_PAGE,
-  String providerId = null,
-  String topicId = null,
-  String channelId = null,
-}) async {
+Future<List<Meme>> fetchMemes(MemesPageRequest request) async {
   final headers = const <String, String>{
     HttpHeaders.contentTypeHeader: APPLICATION_JSON_HEADER_VALUE
   };
 
-  var request = MemesPageRequest(
-    pageNumber: pageNumber,
-    pageSize: pageSize,
-    providerId: providerId,
-    topicId: topicId,
-    channelId: channelId,
-  );
   final body = json.encode(request.toJson());
 
   final url = getBackendUrl(uri: "memes/page");

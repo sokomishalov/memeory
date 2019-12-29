@@ -8,7 +8,9 @@ import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
 import 'package:memeory/model/attachment_type.dart';
 import 'package:memeory/model/meme.dart';
+import 'package:memeory/model/memes_page_request.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -47,11 +49,13 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _loadMore(MemesScreenArgs memeScreenArgs, int page) async {
-    var newMemes = await fetchMemes(
-        pageNumber: page,
-        providerId: memeScreenArgs.providerId,
-        topicId: memeScreenArgs.topicId,
-        channelId: memeScreenArgs.channelId);
+    final newMemes = await fetchMemes(MemesPageRequest(
+      pageNumber: page,
+      pageSize: MEMES_COUNT_ON_THE_PAGE,
+      providerId: memeScreenArgs.providerId,
+      topicId: memeScreenArgs.topicId,
+      channelId: memeScreenArgs.channelId,
+    ));
 
     setState(() {
       _currentPage = page;
