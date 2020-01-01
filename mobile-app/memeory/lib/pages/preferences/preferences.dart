@@ -12,6 +12,8 @@ import 'package:preload_page_view/preload_page_view.dart';
 class UserPreferencesPage extends StatelessWidget {
   final _controller = PreloadPageController();
 
+  // maybe will be useful in future
+  // ignore: unused_element
   void _nextPage() {
     _controller.nextPage(
       duration: Duration(milliseconds: 300),

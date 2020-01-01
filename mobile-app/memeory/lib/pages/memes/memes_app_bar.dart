@@ -22,15 +22,15 @@ class MemesAppBar extends StatelessWidget {
     var caption;
 
     if (screenArgs.providerId.isNotEmpty) {
-      caption = "Provider: ${screenArgs.providerId.capitalize()}";
+      caption = "${t(context, "provider")}: ${screenArgs.providerId.capitalize()}";
     } else if (screenArgs.topicId.isNotEmpty) {
-      caption = "Topic: ${screenArgs.topicId}";
+      caption = "${t(context, "topic")}: ${screenArgs.topicId}";
     } else if (screenArgs.channelId.isNotEmpty) {
-      caption = "Channel: ${screenArgs.channelId}";
+      caption = "${t(context, "channel")}: ${screenArgs.channelId}";
     } else if (screenArgs.memeId.isNotEmpty) {
-      caption = "Meme: ${screenArgs.memeId}";
+      caption = "${t(context, "meme")}: ${screenArgs.memeId}";
     } else {
-      caption = "All memes";
+      caption = t(context, "all_memes");
     }
 
     return AppBar(
