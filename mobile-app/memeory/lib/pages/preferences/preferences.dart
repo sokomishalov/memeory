@@ -42,7 +42,7 @@ class UserPreferencesPage extends StatelessWidget {
         controller: _controller,
         children: [
           PreferencesPageWrapper(
-            title: t(context, "choose_theme"),
+            title: t(context, "customize_appearance"),
             child: AppearancePreferences(),
             apply: () => _close(context),
             applyText: t(context, "start_watching_memes"),
