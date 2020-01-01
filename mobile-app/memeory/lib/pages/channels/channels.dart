@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/images/provider_logo.dart';
 import 'package:memeory/model/channel.dart';
-import 'package:memeory/model/topic.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
 import 'package:memeory/store/state/app_state.dart';
 import 'package:memeory/util/routes/routes.dart';
@@ -89,19 +88,20 @@ class ChannelPreferences extends StatelessWidget {
                             ],
                           ),
                         ),
-                        StoreConnector<AppState, List<Topic>>(
-                          converter: (Store<AppState> store) => store.state.topics,
-                          builder: (BuildContext context, List<Topic> topics) {
+                        StoreConnector<AppState, String>(
+                          converter: (Store<AppState> store) {
+                            return store.state.topics
+                                .where((it) => item.topics.contains(it.id))
+                                .map((it) => it.caption)
+                                .join(',');
+                          },
+                          builder: (BuildContext context, String topics) {
                             return Container(
                               padding: const EdgeInsets.only(top: 2),
                               child: Container(
                                 margin: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  topics
-                                      .where(
-                                          (it) => item.topics.contains(it.id))
-                                      .map((it) => it.caption)
-                                      .join(','),
+                                  topics,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

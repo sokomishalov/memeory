@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
@@ -10,10 +11,12 @@ import 'package:memeory/model/attachment_type.dart';
 import 'package:memeory/model/meme.dart';
 import 'package:memeory/model/memes_page_request.dart';
 import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/store/state/app_state.dart';
 import 'package:memeory/util/consts/consts.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:redux/redux.dart';
 import 'package:share/share.dart';
 
 import 'attachments/image.dart';
@@ -78,9 +81,18 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                item.channelName,
-                style: TextStyle(fontSize: 12),
+              StoreConnector<AppState, String>(
+                converter: (Store<AppState> store) {
+                  return store.state.channels
+                          .firstWhere((it) => it.id == item.channelId)
+                          .name ?? "";
+                },
+                builder: (BuildContext context, String channelName) {
+                  return Text(
+                    channelName,
+                    style: TextStyle(fontSize: 12),
+                  );
+                },
               ),
               Container(
                 padding: EdgeInsets.only(top: 4),
