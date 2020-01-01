@@ -14,12 +14,11 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        children: <Widget>[
+        children: [
           MemeoryDrawerHeader(),
           Expanded(
             child: ListView(
               shrinkWrap: true,
-              itemExtent: 50,
               padding: EdgeInsets.zero,
               children: <Widget>[
                 Container(
