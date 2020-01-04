@@ -26,9 +26,7 @@ import ru.sokomishalov.memeory.core.dto.AdminUserDTO
 @EnableReactiveMethodSecurity
 class WebFluxConfiguration : CustomWebFluxConfigurer() {
 
-    companion object : Loggable {
-        private const val ADMIN_ROLE = "ADMIN"
-    }
+    companion object : Loggable
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder(10)
@@ -38,22 +36,19 @@ class WebFluxConfiguration : CustomWebFluxConfigurer() {
         return props
                 .admins
                 .ifEmpty {
-                    listOf(AdminUserDTO()
-                            .apply {
-                                val generatedUsername = randomString(length = (5..8).random(), lowerCase = true, upperCase = false)
-                                val generatedPassword = randomString(length = (10..15).random(), lowerCase = true, upperCase = false)
-                                logInfo("No admin users specified, generated one = { $generatedUsername : $generatedPassword }")
-                                username = generatedUsername
-                                password = generatedPassword
-                            }
+                    val adminUser = AdminUserDTO(
+                            username = randomString(length = (5..8).random(), lowerCase = true, upperCase = false),
+                            password = randomString(length = (10..15).random(), lowerCase = true, upperCase = false)
                     )
+                    logInfo("No admin users specified, generated one: $adminUser")
+                    listOf(adminUser)
                 }
                 .map {
                     User
                             .builder()
                             .username(it.username)
                             .password(it.password)
-                            .roles(ADMIN_ROLE)
+                            .roles("ADMIN")
                             .passwordEncoder(passwordEncoder::encode)
                             .build()
                 }
