@@ -81,7 +81,6 @@ const MemeContainer = ({t, history, meme, channel}) => {
         errorToast(t("report.your.ass"))
     }
 
-    console.log(channel)
     return (
         <div className="meme"
              style={{
