@@ -47,7 +47,7 @@ class MemesFetchingScheduler(
     companion object : Loggable
 
     @EventListener(ApplicationReadyEvent::class)
-    fun onApplicationStartUp(): Mono<Unit> = aMono {
+    fun onApplicationStartUp(): Mono<Any> = aMono {
         storeDefaults()
         runScheduled(delay = ZERO, interval = props.fetchInterval) {
             loadMemes()
