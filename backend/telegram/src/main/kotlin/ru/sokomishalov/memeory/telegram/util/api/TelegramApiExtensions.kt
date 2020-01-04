@@ -18,6 +18,7 @@ private val log = loggerFor("TelegramApiUtils")
 
 fun initTelegramApi() = ApiContextInitializer.init()
 
+@PublishedApi
 internal fun Message.extractUserInfo(): BotUserDTO {
     return BotUserDTO(
             username = from.userName,
@@ -30,26 +31,26 @@ internal fun Message.extractUserInfo(): BotUserDTO {
 internal suspend fun DefaultAbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
     runCatching {
         execute(message)
-    }.getOrElse {
+    }.onFailure {
         log.warn(it.message, it)
-        null
-    }
+    }.getOrNull()
 }
 
 internal suspend fun DefaultAbsSender.sendPhoto(photo: SendPhoto): Message? = withContext(IO) {
     runCatching {
         execute(photo)
-    }.getOrElse {
+    }.onFailure {
         log.warn(it.message, it)
-        null
-    }
+    }.getOrNull()
+
 }
 
 internal suspend fun DefaultAbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {
     runCatching {
         execute(mediaGroup)
-    }.getOrElse {
+    }.onFailure {
         log.warn(it.message, it)
+    }.getOrElse {
         emptyList()
     }
 }

@@ -2,8 +2,6 @@ package ru.sokomishalov.memeory.api.scheduler
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -11,9 +9,9 @@ import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.aMono
+import ru.sokomishalov.commons.core.scheduled.runScheduled
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
 import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
 import ru.sokomishalov.commons.distributed.locks.withDistributedLock
@@ -26,8 +24,7 @@ import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import java.util.*
-import kotlin.concurrent.schedule
+import java.time.Duration.ZERO
 
 /**
  * @author sokomishalov
@@ -52,19 +49,17 @@ class MemesFetchingScheduler(
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Unit> = aMono {
         storeDefaults()
-        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
-            GlobalScope.launch {
-                loadMemes()
-            }
-        }.unit()
+        runScheduled(delay = ZERO, interval = props.fetchInterval) {
+            loadMemes()
+        }
     }
 
     private suspend fun storeDefaults() {
         withContext(IO) {
             val channels = YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream)
-            channelService.save(*channels)
-
             val topics = YAML_OBJECT_MAPPER.readValue<Array<TopicDTO>>(defaultTopics.inputStream)
+
+            channelService.save(*channels)
             topicService.save(*topics)
         }
     }

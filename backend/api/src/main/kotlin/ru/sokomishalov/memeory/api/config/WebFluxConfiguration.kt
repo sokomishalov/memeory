@@ -1,6 +1,5 @@
 package ru.sokomishalov.memeory.api.config
 
-import org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod.OPTIONS
@@ -14,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import ru.sokomishalov.commons.core.log.Loggable
+import ru.sokomishalov.commons.core.random.randomString
 import ru.sokomishalov.commons.spring.config.CustomWebFluxConfigurer
 import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.core.dto.AdminUserDTO
@@ -40,9 +40,9 @@ class WebFluxConfiguration : CustomWebFluxConfigurer() {
                 .ifEmpty {
                     listOf(AdminUserDTO()
                             .apply {
-                                val generatedUsername = randomAlphabetic(5, 8).toLowerCase()
-                                val generatedPassword = randomAlphabetic(10, 15).toLowerCase()
-                                log("No admin users specified, generated one = { $generatedUsername : $generatedPassword }")
+                                val generatedUsername = randomString(length = (5..8).random(), lowerCase = true, upperCase = false)
+                                val generatedPassword = randomString(length = (10..15).random(), lowerCase = true, upperCase = false)
+                                logInfo("No admin users specified, generated one = { $generatedUsername : $generatedPassword }")
                                 username = generatedUsername
                                 password = generatedPassword
                             }

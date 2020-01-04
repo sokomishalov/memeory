@@ -16,7 +16,8 @@ import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import ru.sokomishalov.memeory.telegram.enum.Commands
+import ru.sokomishalov.memeory.telegram.enum.Commands.CUSTOMIZE
+import ru.sokomishalov.memeory.telegram.enum.Commands.START
 import ru.sokomishalov.memeory.telegram.util.api.extractUserInfo
 import ru.sokomishalov.memeory.telegram.util.api.sendMediaGroup
 import ru.sokomishalov.memeory.telegram.util.api.sendMessage
@@ -29,19 +30,24 @@ class MemeoryBotImpl(
 
     companion object : Loggable
 
-    override fun getBotUsername(): String = props.username ?: throw IllegalArgumentException()
-    override fun getBotToken(): String = props.token ?: throw IllegalArgumentException()
+    override fun getBotUsername(): String = requireNotNull(props.username)
+    override fun getBotToken(): String = requireNotNull(props.token)
     override fun onUpdateReceived(update: Update) = GlobalScope.launch { receiveMessage(update.message) }.unit()
 
     override suspend fun receiveMessage(message: Message) {
-        when {
-            Commands.START.cmd in message.text.orEmpty() -> {
+        when (message.text.orEmpty()) {
+            START.cmd -> {
                 val botUser = message.extractUserInfo()
                 botUserService.save(botUser)
-                logInfo { "Registered user ${botUser.fullName}" }
+                logInfo("Registered user ${botUser.fullName}")
                 sendMessage(SendMessage(message.chatId, "Hello"))
             }
-            else -> logInfo("Unsupported action ${message.text}")
+            CUSTOMIZE.cmd -> {
+                logInfo("Unsupported action ${message.text}")
+            }
+            else -> {
+                logInfo("Unsupported action ${message.text}")
+            }
         }
     }
 
@@ -57,7 +63,7 @@ class MemeoryBotImpl(
                         when (a?.type) {
                             IMAGE -> sendPhoto(SendPhoto().apply { chatId = c; caption = m.caption; setPhoto(a.url) })
                             VIDEO -> sendMessage(SendMessage(c, "${m.caption} \n\n ${a.url}"))
-                            NONE -> unit()
+                            NONE -> Unit
                         }
                     }
                     else -> sendMediaGroup(SendMediaGroup().apply {
