@@ -9,6 +9,5 @@ data class BotUserDTO(
         var username: String = EMPTY,
         var fullName: String = EMPTY,
         var languageCode: String? = null,
-        var chatId: Long = 0,
-        var memeoryId: String? = null
+        var chatId: Long = 0
 )

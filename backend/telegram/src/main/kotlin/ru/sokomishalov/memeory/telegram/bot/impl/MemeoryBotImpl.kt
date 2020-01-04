@@ -25,7 +25,9 @@ import ru.sokomishalov.memeory.telegram.util.api.sendPhoto
 class MemeoryBotImpl(
         private val props: TelegramBotProperties,
         private val botUserService: BotUserService
-) : TelegramLongPollingBot(), MemeoryBot, Loggable {
+) : TelegramLongPollingBot(), MemeoryBot {
+
+    companion object : Loggable
 
     override fun getBotUsername(): String = props.username ?: throw IllegalArgumentException()
     override fun getBotToken(): String = props.token ?: throw IllegalArgumentException()
@@ -34,7 +36,9 @@ class MemeoryBotImpl(
     override suspend fun receiveMessage(message: Message) {
         when {
             Commands.START.cmd in message.text.orEmpty() -> {
-                botUserService.save(message.extractUserInfo())
+                val botUser = message.extractUserInfo()
+                botUserService.save(botUser)
+                logInfo { "Registered user ${botUser.fullName}" }
                 sendMessage(SendMessage(message.chatId, "Hello"))
             }
             else -> logInfo("Unsupported action ${message.text}")
