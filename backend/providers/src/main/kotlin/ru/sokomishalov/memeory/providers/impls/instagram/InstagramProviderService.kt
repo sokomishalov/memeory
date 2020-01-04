@@ -18,6 +18,8 @@ import ru.sokomishalov.memeory.providers.ProviderService
 
 /**
  * @author sokomishalov
+ *
+ * todo rewrite it and get rid of instagram scraper out-of-date library
  */
 @Service
 class InstagramProviderService(

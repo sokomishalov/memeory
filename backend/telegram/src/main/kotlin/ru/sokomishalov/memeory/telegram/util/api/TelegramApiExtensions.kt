@@ -42,7 +42,6 @@ internal suspend fun DefaultAbsSender.sendPhoto(photo: SendPhoto): Message? = wi
     }.onFailure {
         log.warn(it.message, it)
     }.getOrNull()
-
 }
 
 internal suspend fun DefaultAbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {

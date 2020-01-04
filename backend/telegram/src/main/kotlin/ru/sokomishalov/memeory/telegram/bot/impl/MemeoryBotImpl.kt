@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.core.dto.MemeDTO
@@ -16,7 +17,6 @@ import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import ru.sokomishalov.memeory.telegram.enum.Commands.CUSTOMIZE
 import ru.sokomishalov.memeory.telegram.enum.Commands.START
 import ru.sokomishalov.memeory.telegram.util.api.extractUserInfo
 import ru.sokomishalov.memeory.telegram.util.api.sendMediaGroup
@@ -40,13 +40,25 @@ class MemeoryBotImpl(
                 val botUser = message.extractUserInfo()
                 botUserService.save(botUser)
                 logInfo("Registered user ${botUser.fullName}")
-                sendMessage(SendMessage(message.chatId, "Hello"))
-            }
-            CUSTOMIZE.cmd -> {
-                logInfo("Unsupported action ${message.text}")
+                sendMessage(SendMessage().apply {
+                    chatId = message.chatId.toString()
+                    text = "Hello"
+                    replyToMessageId = message.messageId
+                    replyMarkup = InlineKeyboardMarkup().apply {
+                        // todo
+                        keyboard = emptyList()
+                    }
+                })
             }
             else -> {
-                logInfo("Unsupported action ${message.text}")
+                sendMessage(SendMessage().apply {
+                    chatId = message.chatId.toString()
+                    text = "Unsupported action ${message.text} :("
+                    replyToMessageId = message.messageId
+                    replyMarkup = InlineKeyboardMarkup().apply {
+                        keyboard = emptyList()
+                    }
+                })
             }
         }
     }
