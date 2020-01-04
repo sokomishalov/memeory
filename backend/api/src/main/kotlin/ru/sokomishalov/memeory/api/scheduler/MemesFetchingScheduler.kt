@@ -104,12 +104,7 @@ class MemesFetchingScheduler(
             providerService != null -> runCatching {
                 providerService
                         .fetchMemes(channel, props.fetchLimit)
-                        .map {
-                            it.apply {
-                                it.channelId = channel.id
-                                it.channelName = channel.name
-                            }
-                        }
+                        .map { it.apply { it.channelId = channel.id } }
             }.getOrElse {
                 logWarn(it)
                 orElse

@@ -15,8 +15,10 @@ import {PARAMS, ROUTE} from "../../../util/router/router";
 import {isBrowser} from "react-device-detect"
 import {withRouter} from "react-router";
 import {stopPropagation} from "../../common/event/events";
+import {connect} from "react-redux";
+import {selectChannel} from "../../../store/selectors/channels";
 
-const MemeContainer = ({t, history, meme}) => {
+const MemeContainer = ({t, history, meme, channel}) => {
 
     const renderItems = (attachments) => {
         const size = _.size(attachments)
@@ -45,7 +47,6 @@ const MemeContainer = ({t, history, meme}) => {
     }
 
     const withAspectRatio = (component) => {
-        // noinspection JSCheckFunctionSignatures
         const attachmentsAspectRatio = _.get(_.head(meme["attachments"]), "aspectRatio", 1.0)
         return (
             <AspectRatio ratio={attachmentsAspectRatio}
@@ -80,6 +81,7 @@ const MemeContainer = ({t, history, meme}) => {
         errorToast(t("report.your.ass"))
     }
 
+    console.log(channel)
     return (
         <div className="meme"
              style={{
@@ -92,7 +94,7 @@ const MemeContainer = ({t, history, meme}) => {
                         <ChannelLogo channelId={meme["channelId"]}/>
                         <div className="meme-header-channel">
                             <div className="meme-header-channel-name">
-                                {meme["channelName"]}
+                                {_.get(channel, "name", "")}
                             </div>
                             <div className="meme-header-channel-ago">
                                 {timeAgo(meme["publishedAt"])}
@@ -135,7 +137,12 @@ const MemeContainer = ({t, history, meme}) => {
     )
 }
 
+const mapStateToProps = (state, ownProps) => ({
+    channel: selectChannel(state, _.get(ownProps, "meme.channelId"))
+});
+
 export default _.flow(
     withT,
-    withRouter
+    withRouter,
+    connect(mapStateToProps)
 )(MemeContainer)
