@@ -43,12 +43,12 @@ class TelegramConfig {
     @Bean
     @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled"], havingValue = "true", matchIfMissing = false)
     fun longPollingBot(props: TelegramBotProperties, memeoryBot: MemeoryBot): LongPollingBot? {
-        return LongPollingMemeoryBot(props, memeoryBot)
+        return LongPollingMemeoryBot(props = props, bot = memeoryBot)
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled", "path"], matchIfMissing = false)
     fun webHookBot(props: TelegramBotProperties, memeoryBot: MemeoryBot): WebhookBot {
-        return WebHookMemeoryBot(props, memeoryBot)
+        return WebHookMemeoryBot(props = props, bot = memeoryBot)
     }
 }
