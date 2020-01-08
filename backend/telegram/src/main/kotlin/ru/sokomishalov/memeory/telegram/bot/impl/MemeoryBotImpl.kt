@@ -2,9 +2,9 @@
 
 package ru.sokomishalov.memeory.telegram.bot.impl
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import org.telegram.telegrambots.bots.DefaultAbsSender
+import org.telegram.telegrambots.bots.DefaultBotOptions
+import org.telegram.telegrambots.meta.ApiContext
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
@@ -14,11 +14,11 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
-import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
+import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.enum.Commands.START
@@ -29,16 +29,16 @@ import ru.sokomishalov.memeory.telegram.util.api.sendMediaGroup
 import ru.sokomishalov.memeory.telegram.util.api.sendMessage
 import ru.sokomishalov.memeory.telegram.util.api.sendPhoto
 
+@Suppress("unused")
 class MemeoryBotImpl(
         private val props: TelegramBotProperties,
-        private val botUserService: BotUserService
-) : TelegramLongPollingBot(), MemeoryBot {
+        private val botUserService: BotUserService,
+        private val topicService: TopicService
+) : DefaultAbsSender(ApiContext.getInstance(DefaultBotOptions::class.java)), MemeoryBot {
 
     companion object : Loggable
 
-    override fun getBotUsername(): String = requireNotNull(props.username)
     override fun getBotToken(): String = requireNotNull(props.token)
-    override fun onUpdateReceived(update: Update) = GlobalScope.launch { receiveUpdate(update) }.unit()
 
     override suspend fun receiveUpdate(update: Update) {
         if (update.message == null) {

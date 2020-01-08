@@ -1,57 +1,54 @@
 package ru.sokomishalov.memeory.telegram.config
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.DependsOn
 import org.springframework.context.annotation.Primary
-import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.meta.generics.WebhookBot
-import org.telegram.telegrambots.starter.TelegramBotInitializer
 import ru.sokomishalov.commons.core.log.Loggable
-import ru.sokomishalov.commons.core.string.isNotNullOrBlank
 import ru.sokomishalov.memeory.db.BotUserService
+import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.bot.dummy.DummyBot
 import ru.sokomishalov.memeory.telegram.bot.impl.MemeoryBotImpl
+import ru.sokomishalov.memeory.telegram.bot.protocols.LongPollingMemeoryBot
+import ru.sokomishalov.memeory.telegram.bot.protocols.WebHookMemeoryBot
 
 /**
  * @author sokomishalov
  */
 @Configuration
 @EnableConfigurationProperties(TelegramBotProperties::class)
-class TelegramConfig : Loggable {
+class TelegramConfig {
+
+    companion object : Loggable
 
     @Bean
-    fun telegramBotsApi(): TelegramBotsApi = TelegramBotsApi()
-
-    @Bean("bot")
     @Primary
-    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService): MemeoryBot {
-        return when {
-            props.enabled
-                    && props.token.isNotNullOrBlank()
-                    && props.username.isNotNullOrBlank() -> MemeoryBotImpl(props = props, botUserService = botUserService)
-            else -> DummyBot
-        }
+    @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled"], havingValue = "true", matchIfMissing = false)
+    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService, topicService: TopicService): MemeoryBot {
+        return MemeoryBotImpl(props = props, botUserService = botUserService, topicService = topicService)
     }
 
     @Bean
-    @DependsOn("bot")
-    fun telegramBotInitializer(telegramBotsApi: TelegramBotsApi, bot: MemeoryBot): TelegramBotInitializer? {
-        return runCatching {
-            when (bot) {
-                is LongPollingBot -> TelegramBotInitializer(telegramBotsApi, listOf(bot), emptyList())
-                is WebhookBot -> TelegramBotInitializer(telegramBotsApi, emptyList(), listOf(bot))
-                else -> {
-                    logWarn("Not bots found")
-                    TelegramBotInitializer(telegramBotsApi, emptyList(), emptyList())
-                }
-            }
-        }.onFailure {
-            logWarn(it)
-        }.getOrNull()
+    @ConditionalOnMissingBean(MemeoryBot::class)
+    fun dummyBot(): MemeoryBot {
+        return DummyBot
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled"], havingValue = "true", matchIfMissing = false)
+    fun longPollingBot(props: TelegramBotProperties, memeoryBot: MemeoryBot): LongPollingBot? {
+        return LongPollingMemeoryBot(props, memeoryBot)
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled", "path"], matchIfMissing = false)
+    fun webHookBot(props: TelegramBotProperties, memeoryBot: MemeoryBot): WebhookBot {
+        return WebHookMemeoryBot(props, memeoryBot)
     }
 }

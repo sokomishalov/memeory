@@ -5,6 +5,6 @@ import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 
 object DummyBot : MemeoryBot {
-    override suspend fun receiveUpdate(update: Update) = Unit
+    override suspend fun receiveUpdate(update: Update): Unit = Unit
     override suspend fun broadcastMemes(memes: List<MemeDTO>) = Unit
 }

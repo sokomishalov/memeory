@@ -9,7 +9,8 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties(prefix = "memeory.telegram.bot")
 @ConstructorBinding
 data class TelegramBotProperties(
-        val enabled: Boolean = true,
+        val enabled: Boolean = false,
         val username: String? = null,
-        val token: String? = null
+        val token: String? = null,
+        val path: String? = null
 )
