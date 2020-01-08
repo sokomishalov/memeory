@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 dependencies {
     api(project(":core"))
     api(project(":db"))
-    implementation("org.telegram:telegrambots-spring-boot-starter:4.4.0.2")
+    implementation("org.telegram:telegrambots-spring-boot-starter:4.5")
 }
 
 val jar: Jar by tasks

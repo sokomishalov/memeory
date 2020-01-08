@@ -13,7 +13,7 @@ class LongPollingMemeoryBot(
 ) : TelegramLongPollingBot() {
 
     override fun getBotUsername(): String = requireNotNull(props.username)
-    override fun getBotToken(): String = requireNotNull(props.username)
+    override fun getBotToken(): String = requireNotNull(props.token)
 
     override fun onUpdateReceived(update: Update) {
         GlobalScope.launch {

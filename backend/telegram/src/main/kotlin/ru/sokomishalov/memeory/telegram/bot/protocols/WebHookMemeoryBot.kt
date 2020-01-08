@@ -13,7 +13,7 @@ class WebHookMemeoryBot(
         private val bot: MemeoryBot
 ) : TelegramWebhookBot() {
     override fun getBotUsername(): String = requireNotNull(props.username)
-    override fun getBotToken(): String = requireNotNull(props.username)
+    override fun getBotToken(): String = requireNotNull(props.token)
     override fun getBotPath(): String = requireNotNull(props.path)
 
     override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*> {

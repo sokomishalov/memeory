@@ -33,8 +33,9 @@ import ru.sokomishalov.memeory.telegram.util.api.sendPhoto
 class MemeoryBotImpl(
         private val props: TelegramBotProperties,
         private val botUserService: BotUserService,
-        private val topicService: TopicService
-) : DefaultAbsSender(ApiContext.getInstance(DefaultBotOptions::class.java)), MemeoryBot {
+        private val topicService: TopicService,
+        botOptions: DefaultBotOptions = ApiContext.getInstance(DefaultBotOptions::class.java)
+) : DefaultAbsSender(botOptions), MemeoryBot {
 
     companion object : Loggable
 
