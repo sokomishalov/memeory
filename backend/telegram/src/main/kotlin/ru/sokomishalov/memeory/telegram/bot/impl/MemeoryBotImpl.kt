@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -61,18 +62,19 @@ class MemeoryBotImpl(
                 TOPICS -> {
                     when {
                         query.id.isNullOrEmpty() -> drawTopics(update)
-                        else -> updateTopics(update, query)
+                        else -> updateDrawnTopics(update, query)
                     }
                 }
                 PROVIDERS -> Unit
                 CHANNELS -> Unit
+                null -> customizeCmd(update.callbackQuery.message, query)
             }
         } else {
             val message = update.message
             when (message.text.orEmpty()) {
-                START.cmd -> customizeBroadcasting(message)
-                CUSTOMIZE.cmd -> customizeBroadcasting(message)
-                else -> unknownCommand(message)
+                START.cmd -> startCmd(message)
+                CUSTOMIZE.cmd -> customizeCmd(message)
+                else -> unknownCmd(message)
             }
         }
     }
@@ -97,27 +99,44 @@ class MemeoryBotImpl(
         }
     }
 
-    private suspend fun customizeBroadcasting(message: Message) {
+    private suspend fun startCmd(message: Message) {
         val botUser = message.extractUserInfo()
         botUserService.save(botUser)
         logInfo("Registered user ${botUser.fullName}")
-        sendMessage(SendMessage().apply {
-            chatId = message.chatId.toString()
-            text = "Choose customization types:"
-            replyToMessageId = message.messageId
-            replyMarkup = InlineKeyboardMarkup().apply {
-                keyboard = listOf(FilterType.values().map {
-                    val query = BotCallbackQueryDTO(filterType = it)
-                    InlineKeyboardButton().apply {
-                        text = it.type.capitalize()
-                        callbackData = query.serialize()
-                    }
-                })
-            }
-        })
+        customizeCmd(message)
     }
 
-    private suspend fun unknownCommand(message: Message) {
+    private suspend fun customizeCmd(message: Message, query: BotCallbackQueryDTO? = null) {
+        val chat = message.chatId.toString()
+        val caption = "Choose customization types:"
+        val keyboardMarkup = InlineKeyboardMarkup().apply {
+            keyboard = listOf(FilterType.values().map {
+                val itemQuery = BotCallbackQueryDTO(filterType = it)
+                InlineKeyboardButton().apply {
+                    text = it.type.capitalize()
+                    callbackData = itemQuery.serialize()
+                }
+            })
+        }
+
+        if (query == null) {
+            sendMessage(SendMessage().apply {
+                chatId = chat
+                text = caption
+                replyToMessageId = message.messageId
+                replyMarkup = keyboardMarkup
+            })
+        } else {
+            sendEditMessageText(EditMessageText().apply {
+                chatId = chat
+                messageId = message.messageId
+                text = caption
+                replyMarkup = keyboardMarkup
+            })
+        }
+    }
+
+    private suspend fun unknownCmd(message: Message) {
         sendMessage(SendMessage().apply {
             chatId = message.chatId.toString()
             text = "Unsupported type of message '${message.text}' :("
@@ -164,11 +183,12 @@ class MemeoryBotImpl(
         val botUser = botUserService.findByUsername(callbackQuery.message.chat.userName)
         val activeTopics = botUser?.topics.orEmpty()
 
-        sendMessage(SendMessage().apply {
-            chatId = callbackQuery.from.id.toString()
+        sendEditMessageText(EditMessageText().apply {
+            chatId = callbackQuery.message.chatId.toString()
+            messageId = callbackQuery.message.messageId
             text = "Choose your relevant topics:"
             replyMarkup = InlineKeyboardMarkup().apply {
-                keyboard = topics
+                val buttons: MutableList<List<InlineKeyboardButton>> = topics
                         .map {
                             val query = BotCallbackQueryDTO(filterType = TOPICS, id = it.id)
                             val active = when (query.id) {
@@ -182,11 +202,19 @@ class MemeoryBotImpl(
                             }
                         }
                         .chunked(2)
+                        .toMutableList()
+
+                buttons += listOf(InlineKeyboardButton().apply {
+                    text = "Back"
+                    callbackData = BotCallbackQueryDTO().serialize()
+                })
+
+                keyboard = buttons
             }
         })
     }
 
-    private suspend fun updateTopics(update: Update, query: BotCallbackQueryDTO) {
+    private suspend fun updateDrawnTopics(update: Update, query: BotCallbackQueryDTO) {
         val callbackQuery = update.callbackQuery
 
         val botUser = botUserService.toggleTopic(callbackQuery.message.chat.userName, query.id.orEmpty())

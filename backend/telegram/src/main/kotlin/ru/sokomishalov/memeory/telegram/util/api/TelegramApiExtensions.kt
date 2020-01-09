@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.sokomishalov.commons.core.log.loggerFor
@@ -31,6 +32,15 @@ internal fun Message.extractUserInfo(): BotUserDTO {
 
 @PublishedApi
 internal suspend fun AbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
+    runCatching {
+        execute(message)
+    }.onFailure {
+        log.warn(it.message, it)
+    }.getOrNull()
+}
+
+@PublishedApi
+internal suspend fun AbsSender.sendEditMessageText(message: EditMessageText) = withContext(IO) {
     runCatching {
         execute(message)
     }.onFailure {

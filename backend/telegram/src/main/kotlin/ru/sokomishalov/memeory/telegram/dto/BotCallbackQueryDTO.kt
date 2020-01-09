@@ -6,6 +6,6 @@ import ru.sokomishalov.memeory.telegram.enum.FilterType
  * @author sokomishalov
  */
 data class BotCallbackQueryDTO(
-        val filterType: FilterType?,
+        val filterType: FilterType? = null,
         val id: String? = null
 )
