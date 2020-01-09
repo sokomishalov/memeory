@@ -174,7 +174,7 @@ class MemeoryBotImpl(
                         .toMutableList()
 
                 buttons += listOf(InlineKeyboardButton().apply {
-                    text = "Back"
+                    text = "⬅️ Back"
                     callbackData = BotCallbackQueryDTO().serialize()
                 })
 
