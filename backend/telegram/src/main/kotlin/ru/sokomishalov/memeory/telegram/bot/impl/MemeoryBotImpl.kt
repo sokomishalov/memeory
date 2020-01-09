@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.telegram.telegrambots.bots.DefaultAbsSender
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.meta.ApiContext
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
@@ -28,11 +29,11 @@ import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.dto.BotCallbackQueryDTO
+import ru.sokomishalov.memeory.telegram.enum.BotScreen.*
 import ru.sokomishalov.memeory.telegram.enum.Commands.CUSTOMIZE
 import ru.sokomishalov.memeory.telegram.enum.Commands.START
-import ru.sokomishalov.memeory.telegram.enum.FilterType
-import ru.sokomishalov.memeory.telegram.enum.FilterType.*
-import ru.sokomishalov.memeory.telegram.util.api.*
+import ru.sokomishalov.memeory.telegram.util.api.extractUserInfo
+import ru.sokomishalov.memeory.telegram.util.api.send
 
 /**
  * @author sokomishalov
@@ -54,23 +55,24 @@ class MemeoryBotImpl(
 
     override fun getBotToken(): String = requireNotNull(props.token)
 
-    override suspend fun receiveUpdate(update: Update) {
-        if (update.message == null) {
+    override suspend fun receiveUpdate(update: Update): BotApiMethod<*> {
+        return if (update.message == null) {
             val query = update.callbackQuery.data.deserializeCallbackQuery()
 
-            when (query.filterType) {
+            when (query.screen) {
                 TOPICS -> {
                     when {
                         query.id.isNullOrEmpty() -> drawTopics(update)
                         else -> updateDrawnTopics(update, query)
                     }
                 }
-                PROVIDERS -> Unit
-                CHANNELS -> Unit
+                PROVIDERS -> unknownCmd(update.callbackQuery.message)
+                CHANNELS -> unknownCmd(update.callbackQuery.message)
                 null -> customizeCmd(update.callbackQuery.message, query)
             }
         } else {
             val message = update.message
+
             when (message.text.orEmpty()) {
                 START.cmd -> startCmd(message)
                 CUSTOMIZE.cmd -> customizeCmd(message)
@@ -99,98 +101,65 @@ class MemeoryBotImpl(
         }
     }
 
-    private suspend fun startCmd(message: Message) {
+    private suspend fun startCmd(message: Message): BotApiMethod<*> {
         val botUser = message.extractUserInfo()
         botUserService.save(botUser)
         logInfo("Registered user ${botUser.fullName}")
-        customizeCmd(message)
+        return customizeCmd(message)
     }
 
-    private suspend fun customizeCmd(message: Message, query: BotCallbackQueryDTO? = null) {
+    private fun customizeCmd(message: Message, query: BotCallbackQueryDTO? = null): BotApiMethod<*> {
         val chat = message.chatId.toString()
         val caption = "Choose customization types:"
         val keyboardMarkup = InlineKeyboardMarkup().apply {
-            keyboard = listOf(FilterType.values().map {
-                val itemQuery = BotCallbackQueryDTO(filterType = it)
+            keyboard = listOf(listOf(TOPICS).map {
+                val itemQuery = BotCallbackQueryDTO(screen = it)
                 InlineKeyboardButton().apply {
-                    text = it.type.capitalize()
+                    text = it.type
                     callbackData = itemQuery.serialize()
                 }
             })
         }
 
-        if (query == null) {
-            sendMessage(SendMessage().apply {
+        return when (query) {
+            null -> SendMessage().apply {
                 chatId = chat
                 text = caption
                 replyToMessageId = message.messageId
                 replyMarkup = keyboardMarkup
-            })
-        } else {
-            sendEditMessageText(EditMessageText().apply {
+            }
+            else -> EditMessageText().apply {
                 chatId = chat
                 messageId = message.messageId
                 text = caption
                 replyMarkup = keyboardMarkup
-            })
-        }
-    }
-
-    private suspend fun unknownCmd(message: Message) {
-        sendMessage(SendMessage().apply {
-            chatId = message.chatId.toString()
-            text = "Unsupported type of message '${message.text}' :("
-            replyToMessageId = message.messageId
-        })
-    }
-
-    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
-        sendMediaGroup(SendMediaGroup().apply {
-            chatId = botUser.chatId.toString()
-            media = meme.attachments.mapNotNull { a ->
-                when (a.type) {
-                    IMAGE -> InputMediaPhoto().apply {
-                        media = a.url
-                        caption = meme.caption
-                    }
-                    VIDEO,
-                    NONE -> null
-                }
             }
-        })
-    }
-
-    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO) {
-        val a = meme.attachments.firstOrNull()
-        when (a?.type) {
-            IMAGE -> sendPhoto(SendPhoto().apply {
-                chatId = botUser.chatId.toString()
-                caption = meme.caption
-                photo = InputFile(a.url)
-            })
-            VIDEO -> sendMessage(SendMessage().apply {
-                chatId = botUser.chatId.toString()
-                text = "${meme.caption} \n\n ${a.url}"
-            })
-            NONE -> Unit
         }
     }
 
-    private suspend fun drawTopics(update: Update) {
+    private fun unknownCmd(message: Message): BotApiMethod<*> {
+        return SendMessage().apply {
+            chatId = message.chatId.toString()
+            text = "Unsupported action so far :("
+            replyToMessageId = message.messageId
+        }
+    }
+
+    private suspend fun drawTopics(update: Update): BotApiMethod<*> {
         val callbackQuery = update.callbackQuery
 
         val topics = topicService.findAll()
         val botUser = botUserService.findByUsername(callbackQuery.message.chat.userName)
         val activeTopics = botUser?.topics.orEmpty()
 
-        sendEditMessageText(EditMessageText().apply {
+        return EditMessageText().apply {
             chatId = callbackQuery.message.chatId.toString()
             messageId = callbackQuery.message.messageId
             text = "Choose your relevant topics:"
             replyMarkup = InlineKeyboardMarkup().apply {
                 val buttons: MutableList<List<InlineKeyboardButton>> = topics
                         .map {
-                            val query = BotCallbackQueryDTO(filterType = TOPICS, id = it.id)
+                            val query = BotCallbackQueryDTO(screen = TOPICS, id = it.id)
                             val active = when (query.id) {
                                 in activeTopics -> ACTIVE
                                 else -> INACTIVE
@@ -211,16 +180,16 @@ class MemeoryBotImpl(
 
                 keyboard = buttons
             }
-        })
+        }
     }
 
-    private suspend fun updateDrawnTopics(update: Update, query: BotCallbackQueryDTO) {
+    private suspend fun updateDrawnTopics(update: Update, query: BotCallbackQueryDTO): BotApiMethod<*> {
         val callbackQuery = update.callbackQuery
 
         val botUser = botUserService.toggleTopic(callbackQuery.message.chat.userName, query.id.orEmpty())
         val activeTopics = botUser?.topics.orEmpty()
 
-        sendEditMessageReplyMarkup(EditMessageReplyMarkup().apply {
+        return EditMessageReplyMarkup().apply {
             chatId = callbackQuery.message.chatId.toString()
             messageId = callbackQuery.message.messageId
             replyMarkup = callbackQuery.message.replyMarkup.apply {
@@ -234,7 +203,39 @@ class MemeoryBotImpl(
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
+        send(SendMediaGroup().apply {
+            chatId = botUser.chatId.toString()
+            media = meme.attachments.mapNotNull { a ->
+                when (a.type) {
+                    IMAGE -> InputMediaPhoto().apply {
+                        media = a.url
+                        caption = meme.caption
+                    }
+                    VIDEO,
+                    NONE -> null
+                }
+            }
         })
+    }
+
+    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO) {
+        val a = meme.attachments.firstOrNull()
+        when (a?.type) {
+            IMAGE -> send(SendPhoto().apply {
+                chatId = botUser.chatId.toString()
+                caption = meme.caption
+                photo = InputFile(a.url)
+            })
+            VIDEO -> send(SendMessage().apply {
+                chatId = botUser.chatId.toString()
+                text = "${meme.caption} \n\n ${a.url}"
+            })
+            NONE -> Unit
+        }
     }
 
     private fun String.deserializeCallbackQuery(): BotCallbackQueryDTO = OBJECT_MAPPER.readValue(this)

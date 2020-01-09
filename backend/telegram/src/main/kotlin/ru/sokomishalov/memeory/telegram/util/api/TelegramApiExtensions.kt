@@ -3,21 +3,18 @@ package ru.sokomishalov.memeory.telegram.util.api
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import org.telegram.telegrambots.ApiContextInitializer
-import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod
+import org.telegram.telegrambots.meta.api.methods.send.*
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.sokomishalov.commons.core.log.loggerFor
 import ru.sokomishalov.memeory.core.dto.BotUserDTO
+import java.io.Serializable
 
 /**
  * @author sokomishalov
  */
-private val log = loggerFor("TelegramApiUtils")
-
 fun initTelegramApi() = ApiContextInitializer.init()
 
 @PublishedApi
@@ -31,48 +28,24 @@ internal fun Message.extractUserInfo(): BotUserDTO {
 }
 
 @PublishedApi
-internal suspend fun AbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
+internal suspend inline fun <T : Serializable> AbsSender.send(method: PartialBotApiMethod<T>) = withContext(IO) {
     runCatching {
-        execute(message)
-    }.onFailure {
-        log.warn(it.message, it)
-    }.getOrNull()
-}
-
-@PublishedApi
-internal suspend fun AbsSender.sendEditMessageText(message: EditMessageText) = withContext(IO) {
-    runCatching {
-        execute(message)
-    }.onFailure {
-        log.warn(it.message, it)
-    }.getOrNull()
-}
-
-@PublishedApi
-internal suspend fun AbsSender.sendPhoto(photo: SendPhoto): Message? = withContext(IO) {
-    runCatching {
-        execute(photo)
-    }.onFailure {
-        log.warn(it.message, it)
-    }.getOrNull()
-}
-
-@PublishedApi
-internal suspend fun AbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {
-    runCatching {
-        execute(mediaGroup)
+        when (method) {
+            is SendMediaGroup -> execute(method)
+            is SendPhoto -> execute(method)
+            is SendVideo -> execute(method)
+            is SendAnimation -> execute(method)
+            is SendSticker -> execute(method)
+            //...
+            is BotApiMethod<T> -> execute(method)
+            else -> log.warn("Unknown method")
+        }
     }.onFailure {
         log.warn(it.message, it)
     }.getOrElse {
-        emptyList()
+        Unit
     }
 }
 
 @PublishedApi
-internal suspend fun AbsSender.sendEditMessageReplyMarkup(replyMarkup: EditMessageReplyMarkup) = withContext(IO) {
-    runCatching {
-        execute(replyMarkup)
-    }.onFailure {
-        log.warn(it.message, it)
-    }.getOrNull()
-}
+internal val log = loggerFor("TelegramApiExtensions")

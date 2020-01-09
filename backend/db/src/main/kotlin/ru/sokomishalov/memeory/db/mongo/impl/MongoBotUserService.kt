@@ -28,8 +28,15 @@ class MongoBotUserService(
 
     override suspend fun save(botUser: BotUserDTO): BotUserDTO {
         val entity = botUserMapper.toEntity(botUser)
-        val savedEntity = botUserRepository.save(entity).awaitStrict()
-        return botUserMapper.toDto(savedEntity)
+        val existedUser = botUserRepository.findById(botUser.username).await()
+
+        return when {
+            existedUser != null -> botUserMapper.toDto(existedUser)
+            else -> {
+                val savedEntity = botUserRepository.save(entity).awaitStrict()
+                botUserMapper.toDto(savedEntity)
+            }
+        }
     }
 
     override suspend fun toggleTopic(username: String, topic: String): BotUserDTO? {
