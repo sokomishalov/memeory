@@ -51,6 +51,7 @@ class MemeoryBotImpl(
     companion object : Loggable {
         const val ACTIVE = "✅"
         const val INACTIVE = "❌"
+        const val BACK = "⬅️"
     }
 
     override fun getBotToken(): String = requireNotNull(props.token)
@@ -174,7 +175,7 @@ class MemeoryBotImpl(
                         .toMutableList()
 
                 buttons += listOf(InlineKeyboardButton().apply {
-                    text = "⬅️ Back"
+                    text = "$BACK Back"
                     callbackData = BotCallbackQueryDTO().serialize()
                 })
 
