@@ -24,7 +24,6 @@ import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import java.time.Duration.ZERO
 
 /**
  * @author sokomishalov
@@ -49,7 +48,7 @@ class MemesFetchingScheduler(
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Any> = aMono {
         storeDefaults()
-        runScheduled(delay = ZERO, interval = props.fetchInterval) {
+        runScheduled(delay = props.fetchInterval, interval = props.fetchInterval) {
             loadMemes()
         }
     }

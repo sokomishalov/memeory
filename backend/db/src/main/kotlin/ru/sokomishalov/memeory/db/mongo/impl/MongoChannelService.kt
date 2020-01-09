@@ -3,7 +3,6 @@ package ru.sokomishalov.memeory.db.mongo.impl
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
 import ru.sokomishalov.commons.core.reactor.await
-import ru.sokomishalov.commons.core.reactor.awaitStrict
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.enums.Provider
 import ru.sokomishalov.memeory.db.ChannelService
@@ -49,13 +48,8 @@ class MongoChannelService(
     }
 
     override suspend fun save(vararg batch: ChannelDTO): List<ChannelDTO> {
-        val channelsToSave = batch
-                .toList()
-                .filter { repository.existsById(it.id).awaitStrict().not() }
-                .map { channelMapper.toEntity(it) }
-
+        val channelsToSave = batch.toList().map { channelMapper.toEntity(it) }
         val savedChannels = repository.saveAll(channelsToSave).await()
-
         return savedChannels.map { channelMapper.toDto(it) }
     }
 }
