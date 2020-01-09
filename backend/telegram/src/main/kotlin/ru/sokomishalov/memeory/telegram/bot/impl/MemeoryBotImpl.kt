@@ -2,6 +2,7 @@
 
 package ru.sokomishalov.memeory.telegram.bot.impl
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.telegram.telegrambots.bots.DefaultAbsSender
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.meta.ApiContext
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import ru.sokomishalov.commons.core.log.Loggable
+import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.core.dto.BotUserDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.core.enums.AttachmentType.*
@@ -24,9 +26,11 @@ import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
+import ru.sokomishalov.memeory.telegram.dto.BotCallbackQueryDTO
+import ru.sokomishalov.memeory.telegram.enum.Commands.CUSTOMIZE
 import ru.sokomishalov.memeory.telegram.enum.Commands.START
 import ru.sokomishalov.memeory.telegram.enum.FilterType
-import ru.sokomishalov.memeory.telegram.enum.FilterType.TOPICS
+import ru.sokomishalov.memeory.telegram.enum.FilterType.*
 import ru.sokomishalov.memeory.telegram.util.api.*
 
 /**
@@ -51,15 +55,23 @@ class MemeoryBotImpl(
 
     override suspend fun receiveUpdate(update: Update) {
         if (update.message == null) {
-            val query = update.callbackQuery.data
-            when {
-                query == TOPICS.type -> drawTopics(update)
-                query.startsWith(TOPICS.type) -> updateTopics(update)
+            val query = update.callbackQuery.data.deserializeCallbackQuery()
+
+            when (query.filterType) {
+                TOPICS -> {
+                    when {
+                        query.id.isNullOrEmpty() -> drawTopics(update)
+                        else -> updateTopics(update, query)
+                    }
+                }
+                PROVIDERS -> Unit
+                CHANNELS -> Unit
             }
         } else {
             val message = update.message
             when (message.text.orEmpty()) {
-                START.cmd -> startCommand(message)
+                START.cmd -> customizeBroadcasting(message)
+                CUSTOMIZE.cmd -> customizeBroadcasting(message)
                 else -> unknownCommand(message)
             }
         }
@@ -71,7 +83,7 @@ class MemeoryBotImpl(
 
         users.forEach { u ->
             val userRelevantChannels = channels
-                    .filter { (u.topics intersect it.topics).isNotEmpty() or (it.id in u.channels) or (it.provider in u.providers) }
+                    .filter { (u.topics intersect it.topics).isNotEmpty() }
                     .map { it.id }
 
             memes
@@ -85,7 +97,7 @@ class MemeoryBotImpl(
         }
     }
 
-    private suspend fun startCommand(message: Message) {
+    private suspend fun customizeBroadcasting(message: Message) {
         val botUser = message.extractUserInfo()
         botUserService.save(botUser)
         logInfo("Registered user ${botUser.fullName}")
@@ -95,9 +107,10 @@ class MemeoryBotImpl(
             replyToMessageId = message.messageId
             replyMarkup = InlineKeyboardMarkup().apply {
                 keyboard = listOf(FilterType.values().map {
+                    val query = BotCallbackQueryDTO(filterType = it)
                     InlineKeyboardButton().apply {
                         text = it.type.capitalize()
-                        callbackData = it.type
+                        callbackData = query.serialize()
                     }
                 })
             }
@@ -149,7 +162,7 @@ class MemeoryBotImpl(
 
         val topics = topicService.findAll()
         val botUser = botUserService.findByUsername(callbackQuery.message.chat.userName)
-        val activeTopics = botUser.activeTopics()
+        val activeTopics = botUser?.topics.orEmpty()
 
         sendMessage(SendMessage().apply {
             chatId = callbackQuery.from.id.toString()
@@ -157,15 +170,15 @@ class MemeoryBotImpl(
             replyMarkup = InlineKeyboardMarkup().apply {
                 keyboard = topics
                         .map {
-                            val id = it.id.addCallbackQueryPrefixToTopic()
-                            val active = when (id) {
+                            val query = BotCallbackQueryDTO(filterType = TOPICS, id = it.id)
+                            val active = when (query.id) {
                                 in activeTopics -> ACTIVE
                                 else -> INACTIVE
                             }
 
                             InlineKeyboardButton().apply {
                                 text = "$active ${it.caption}"
-                                callbackData = id
+                                callbackData = query.serialize()
                             }
                         }
                         .chunked(2)
@@ -173,14 +186,11 @@ class MemeoryBotImpl(
         })
     }
 
-    private suspend fun updateTopics(update: Update) {
+    private suspend fun updateTopics(update: Update, query: BotCallbackQueryDTO) {
         val callbackQuery = update.callbackQuery
 
-        val username = callbackQuery.message.chat.userName
-        val topic = callbackQuery.data.removeCallbackQueryPrefixFromTopic()
-
-        val botUser = botUserService.toggleTopic(username, topic)
-        val activeTopics = botUser.activeTopics()
+        val botUser = botUserService.toggleTopic(callbackQuery.message.chat.userName, query.id.orEmpty())
+        val activeTopics = botUser?.topics.orEmpty()
 
         sendEditMessageReplyMarkup(EditMessageReplyMarkup().apply {
             chatId = callbackQuery.message.chatId.toString()
@@ -188,7 +198,8 @@ class MemeoryBotImpl(
             replyMarkup = callbackQuery.message.replyMarkup.apply {
                 keyboard.forEach { rows ->
                     rows.forEach { item ->
-                        item.text = when (item.callbackData) {
+                        val itemQuery = item.callbackData.deserializeCallbackQuery()
+                        item.text = when (itemQuery.id) {
                             in activeTopics -> item.text.replace(INACTIVE, ACTIVE)
                             else -> item.text.replace(ACTIVE, INACTIVE)
                         }
@@ -198,7 +209,6 @@ class MemeoryBotImpl(
         })
     }
 
-    private fun BotUserDTO?.activeTopics(): List<String> = this?.topics.orEmpty().map { it.addCallbackQueryPrefixToTopic() }
-    private fun String.addCallbackQueryPrefixToTopic(): String = "${TOPICS.type}/${this}"
-    private fun String.removeCallbackQueryPrefixFromTopic(): String = this.removePrefix("${TOPICS.type}/")
+    private fun String.deserializeCallbackQuery(): BotCallbackQueryDTO = OBJECT_MAPPER.readValue(this)
+    private fun BotCallbackQueryDTO.serialize(): String = OBJECT_MAPPER.writeValueAsString(this)
 }
