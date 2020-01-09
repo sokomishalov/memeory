@@ -1,13 +1,16 @@
 package ru.sokomishalov.memeory.core.dto
 
-import ru.sokomishalov.commons.core.consts.EMPTY
+import ru.sokomishalov.memeory.core.enums.Provider
 
 /**
  * @author sokomishalov
  */
 data class BotUserDTO(
-        var username: String = EMPTY,
-        var fullName: String = EMPTY,
+        var username: String = "",
+        var fullName: String = "",
         var languageCode: String? = null,
-        var chatId: Long = 0
+        var chatId: Long = 0,
+        val topics: List<String> = emptyList(),
+        val channels: List<String> = emptyList(),
+        val providers: List<Provider> = emptyList()
 )

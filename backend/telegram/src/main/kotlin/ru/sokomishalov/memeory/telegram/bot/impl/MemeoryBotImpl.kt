@@ -15,9 +15,11 @@ import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import ru.sokomishalov.commons.core.log.Loggable
+import ru.sokomishalov.memeory.core.dto.BotUserDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
+import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
@@ -29,11 +31,16 @@ import ru.sokomishalov.memeory.telegram.util.api.sendMediaGroup
 import ru.sokomishalov.memeory.telegram.util.api.sendMessage
 import ru.sokomishalov.memeory.telegram.util.api.sendPhoto
 
-@Suppress("unused")
+/**
+ * @author sokomishalov
+ *
+ * todo refactor this
+ */
 class MemeoryBotImpl(
         private val props: TelegramBotProperties,
         private val botUserService: BotUserService,
         private val topicService: TopicService,
+        private val channelService: ChannelService,
         botOptions: DefaultBotOptions = ApiContext.getInstance(DefaultBotOptions::class.java)
 ) : DefaultAbsSender(botOptions), MemeoryBot {
 
@@ -58,57 +65,22 @@ class MemeoryBotImpl(
 
     override suspend fun broadcastMemes(memes: List<MemeDTO>) {
         val users = botUserService.findAll()
-        val chats = users.map { it.chatId.toString() }
+        val channels = channelService.findAll()
 
-        chats.forEach { c ->
-            memes.forEach { m ->
-                when {
-                    m.attachments.size <= 1 -> {
-                        val a = m.attachments.firstOrNull()
-                        when (a?.type) {
-                            IMAGE -> sendPhoto(SendPhoto().apply {
-                                chatId = c
-                                caption = m.caption
-                                photo = InputFile(a.url)
-                            })
-                            VIDEO -> sendMessage(SendMessage().apply {
-                                chatId = c
-                                text = "${m.caption} \n\n ${a.url}"
-                            })
-                            NONE -> Unit
+        users.forEach { u ->
+            val userRelevantChannels = channels
+                    .filter { (u.topics intersect it.topics).isNotEmpty() or (it.id in u.channels) or (it.provider in u.providers) }
+                    .map { it.id }
+
+            memes
+                    .filter { it.channelId in userRelevantChannels }
+                    .forEach { m ->
+                        when {
+                            m.attachments.size <= 1 -> sendSingleAttachment(m, u)
+                            else -> sendMultipleAttachments(m, u)
                         }
                     }
-                    else -> sendMediaGroup(SendMediaGroup().apply {
-                        chatId = c
-                        media = m.attachments.mapNotNull { a ->
-                            when (a.type) {
-                                IMAGE -> InputMediaPhoto().apply {
-                                    media = a.url
-                                    caption = m.caption
-                                }
-                                VIDEO,
-                                NONE -> null
-                            }
-                        }
-                    })
-                }
-            }
         }
-    }
-
-    private suspend fun drawTopics(update: Update) {
-        sendMessage(SendMessage().apply {
-            chatId = update.message.chatId.toString()
-            text = "Choose your relevant topics:"
-        })
-    }
-
-    private suspend fun unknownCommand(message: Message) {
-        sendMessage(SendMessage().apply {
-            chatId = message.chatId.toString()
-            text = "Unsupported type of message '${message.text}' :("
-            replyToMessageId = message.messageId
-        })
     }
 
     private suspend fun startCommand(message: Message) {
@@ -127,6 +99,66 @@ class MemeoryBotImpl(
                     }
                 })
             }
+        })
+    }
+
+    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
+        sendMediaGroup(SendMediaGroup().apply {
+            chatId = botUser.chatId.toString()
+            media = meme.attachments.mapNotNull { a ->
+                when (a.type) {
+                    IMAGE -> InputMediaPhoto().apply {
+                        media = a.url
+                        caption = meme.caption
+                    }
+                    VIDEO,
+                    NONE -> null
+                }
+            }
+        })
+    }
+
+    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO) {
+        val a = meme.attachments.firstOrNull()
+        when (a?.type) {
+            IMAGE -> sendPhoto(SendPhoto().apply {
+                chatId = botUser.chatId.toString()
+                caption = meme.caption
+                photo = InputFile(a.url)
+            })
+            VIDEO -> sendMessage(SendMessage().apply {
+                chatId = botUser.chatId.toString()
+                text = "${meme.caption} \n\n ${a.url}"
+            })
+            NONE -> Unit
+        }
+    }
+
+    private suspend fun drawTopics(update: Update) {
+        val topics = topicService.findAll()
+
+        sendMessage(SendMessage().apply {
+            chatId = update.callbackQuery.from.id.toString()
+            text = "Choose your relevant topics:"
+            replyMarkup = InlineKeyboardMarkup().apply {
+                keyboard = topics
+                        .map {
+                            InlineKeyboardButton().apply {
+                                text = it.caption
+                                callbackData = "${TOPICS.type}/${it.id}"
+                                switchInlineQuery = "${TOPICS.type}/${it.id}"
+                            }
+                        }
+                        .chunked(3)
+            }
+        })
+    }
+
+    private suspend fun unknownCommand(message: Message) {
+        sendMessage(SendMessage().apply {
+            chatId = message.chatId.toString()
+            text = "Unsupported type of message '${message.text}' :("
+            replyToMessageId = message.messageId
         })
     }
 }
