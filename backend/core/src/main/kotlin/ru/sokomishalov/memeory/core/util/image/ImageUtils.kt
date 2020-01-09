@@ -1,20 +1,20 @@
 package ru.sokomishalov.memeory.core.util.image
 
-import ru.sokomishalov.commons.core.http.REACTIVE_NETTY_HTTP_CLIENT
+import org.springframework.web.reactive.function.client.awaitBody
 import ru.sokomishalov.commons.core.reactor.awaitStrict
+import ru.sokomishalov.commons.spring.webclient.REACTIVE_WEB_CLIENT
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
 suspend fun getImageByteArray(url: String?, orElse: ByteArray = ByteArray(0)): ByteArray {
     return runCatching {
-        REACTIVE_NETTY_HTTP_CLIENT
+        REACTIVE_WEB_CLIENT
                 .get()
                 .uri(url.orEmpty())
-                .responseContent()
-                .aggregate()
-                .asByteArray()
+                .exchange()
                 .awaitStrict()
+                .awaitBody<ByteArray>()
     }.getOrElse {
         orElse
     }
