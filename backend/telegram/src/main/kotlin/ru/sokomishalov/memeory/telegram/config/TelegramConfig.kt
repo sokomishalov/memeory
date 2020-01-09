@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.generics.LongPollingBot
 import org.telegram.telegrambots.meta.generics.WebhookBot
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.db.BotUserService
+import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
@@ -30,8 +31,18 @@ class TelegramConfig {
     @Bean
     @Primary
     @ConditionalOnProperty(prefix = "memeory.telegram.bot", value = ["enabled"], havingValue = "true", matchIfMissing = false)
-    fun memeoryBot(props: TelegramBotProperties, botUserService: BotUserService, topicService: TopicService): MemeoryBot {
-        return MemeoryBotImpl(props = props, botUserService = botUserService, topicService = topicService)
+    fun memeoryBot(
+            props: TelegramBotProperties,
+            botUserService: BotUserService,
+            topicService: TopicService,
+            channelService: ChannelService
+    ): MemeoryBot {
+        return MemeoryBotImpl(
+                props = props,
+                botUserService = botUserService,
+                topicService = topicService,
+                channelService = channelService
+        )
     }
 
     @Bean
