@@ -10,7 +10,7 @@ data class BotUserDTO(
         var fullName: String = "",
         var languageCode: String? = null,
         var chatId: Long = 0,
-        val topics: List<String> = emptyList(),
-        val channels: List<String> = emptyList(),
-        val providers: List<Provider> = emptyList()
+        val topics: List<String> = mutableListOf(),
+        val channels: List<String> = mutableListOf(),
+        val providers: List<Provider> = mutableListOf()
 )

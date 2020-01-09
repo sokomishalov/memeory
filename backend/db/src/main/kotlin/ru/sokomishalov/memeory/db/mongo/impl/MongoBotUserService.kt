@@ -16,8 +16,8 @@ class MongoBotUserService(
         private val botUserMapper: BotUserMapper
 ) : BotUserService {
 
-    override suspend fun findById(id: String): BotUserDTO? {
-        val entity = botUserRepository.findById(id).await()
+    override suspend fun findByUsername(username: String): BotUserDTO? {
+        val entity = botUserRepository.findById(username).await()
         return entity?.let { botUserMapper.toDto(it) }
     }
 
@@ -30,5 +30,18 @@ class MongoBotUserService(
         val entity = botUserMapper.toEntity(botUser)
         val savedEntity = botUserRepository.save(entity).awaitStrict()
         return botUserMapper.toDto(savedEntity)
+    }
+
+    override suspend fun toggleTopic(username: String, topic: String): BotUserDTO? {
+        val botUser = botUserRepository.findById(username).await()
+
+        val topics = botUser?.topics.orEmpty().toMutableList()
+        when (topic) {
+            in topics -> topics -= topic
+            else -> topics += topic
+        }
+
+        val updatedUser = botUser?.copy(topics = topics)?.let { botUserRepository.save(it).await() }
+        return updatedUser?.let { botUserMapper.toDto(it) }
     }
 }

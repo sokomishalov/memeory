@@ -6,6 +6,7 @@ import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.sokomishalov.commons.core.log.loggerFor
@@ -28,6 +29,7 @@ internal fun Message.extractUserInfo(): BotUserDTO {
     )
 }
 
+@PublishedApi
 internal suspend fun AbsSender.sendMessage(message: SendMessage): Message? = withContext(IO) {
     runCatching {
         execute(message)
@@ -36,6 +38,7 @@ internal suspend fun AbsSender.sendMessage(message: SendMessage): Message? = wit
     }.getOrNull()
 }
 
+@PublishedApi
 internal suspend fun AbsSender.sendPhoto(photo: SendPhoto): Message? = withContext(IO) {
     runCatching {
         execute(photo)
@@ -44,6 +47,7 @@ internal suspend fun AbsSender.sendPhoto(photo: SendPhoto): Message? = withConte
     }.getOrNull()
 }
 
+@PublishedApi
 internal suspend fun AbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<Message> = withContext(IO) {
     runCatching {
         execute(mediaGroup)
@@ -52,4 +56,13 @@ internal suspend fun AbsSender.sendMediaGroup(mediaGroup: SendMediaGroup): List<
     }.getOrElse {
         emptyList()
     }
+}
+
+@PublishedApi
+internal suspend fun AbsSender.sendEditMessageReplyMarkup(replyMarkup: EditMessageReplyMarkup) = withContext(IO) {
+    runCatching {
+        execute(replyMarkup)
+    }.onFailure {
+        log.warn(it.message, it)
+    }.getOrNull()
 }

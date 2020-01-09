@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.ApiContext
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -26,10 +27,7 @@ import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.enum.Commands.START
 import ru.sokomishalov.memeory.telegram.enum.FilterType
 import ru.sokomishalov.memeory.telegram.enum.FilterType.TOPICS
-import ru.sokomishalov.memeory.telegram.util.api.extractUserInfo
-import ru.sokomishalov.memeory.telegram.util.api.sendMediaGroup
-import ru.sokomishalov.memeory.telegram.util.api.sendMessage
-import ru.sokomishalov.memeory.telegram.util.api.sendPhoto
+import ru.sokomishalov.memeory.telegram.util.api.*
 
 /**
  * @author sokomishalov
@@ -44,7 +42,10 @@ class MemeoryBotImpl(
         botOptions: DefaultBotOptions = ApiContext.getInstance(DefaultBotOptions::class.java)
 ) : DefaultAbsSender(botOptions), MemeoryBot {
 
-    companion object : Loggable
+    companion object : Loggable {
+        const val ACTIVE = "✅"
+        const val INACTIVE = "❌"
+    }
 
     override fun getBotToken(): String = requireNotNull(props.token)
 
@@ -53,6 +54,7 @@ class MemeoryBotImpl(
             val query = update.callbackQuery.data
             when {
                 query == TOPICS.type -> drawTopics(update)
+                query.startsWith(TOPICS.type) -> updateTopics(update)
             }
         } else {
             val message = update.message
@@ -102,6 +104,14 @@ class MemeoryBotImpl(
         })
     }
 
+    private suspend fun unknownCommand(message: Message) {
+        sendMessage(SendMessage().apply {
+            chatId = message.chatId.toString()
+            text = "Unsupported type of message '${message.text}' :("
+            replyToMessageId = message.messageId
+        })
+    }
+
     private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
         sendMediaGroup(SendMediaGroup().apply {
             chatId = botUser.chatId.toString()
@@ -135,30 +145,60 @@ class MemeoryBotImpl(
     }
 
     private suspend fun drawTopics(update: Update) {
+        val callbackQuery = update.callbackQuery
+
         val topics = topicService.findAll()
+        val botUser = botUserService.findByUsername(callbackQuery.message.chat.userName)
+        val activeTopics = botUser.activeTopics()
 
         sendMessage(SendMessage().apply {
-            chatId = update.callbackQuery.from.id.toString()
+            chatId = callbackQuery.from.id.toString()
             text = "Choose your relevant topics:"
             replyMarkup = InlineKeyboardMarkup().apply {
                 keyboard = topics
                         .map {
+                            val id = it.id.addCallbackQueryPrefixToTopic()
+                            val active = when (id) {
+                                in activeTopics -> ACTIVE
+                                else -> INACTIVE
+                            }
+
                             InlineKeyboardButton().apply {
-                                text = it.caption
-                                callbackData = "${TOPICS.type}/${it.id}"
-                                switchInlineQuery = "${TOPICS.type}/${it.id}"
+                                text = "$active ${it.caption}"
+                                callbackData = id
                             }
                         }
-                        .chunked(3)
+                        .chunked(2)
             }
         })
     }
 
-    private suspend fun unknownCommand(message: Message) {
-        sendMessage(SendMessage().apply {
-            chatId = message.chatId.toString()
-            text = "Unsupported type of message '${message.text}' :("
-            replyToMessageId = message.messageId
+    private suspend fun updateTopics(update: Update) {
+        val callbackQuery = update.callbackQuery
+
+        val username = callbackQuery.message.chat.userName
+        val topic = callbackQuery.data.removeCallbackQueryPrefixFromTopic()
+
+        val botUser = botUserService.toggleTopic(username, topic)
+        val activeTopics = botUser.activeTopics()
+
+        sendEditMessageReplyMarkup(EditMessageReplyMarkup().apply {
+            chatId = callbackQuery.message.chatId.toString()
+            messageId = callbackQuery.message.messageId
+            replyMarkup = callbackQuery.message.replyMarkup.apply {
+                keyboard.forEach { rows ->
+                    rows.forEach { item ->
+                        item.text = when (item.callbackData) {
+                            in activeTopics -> item.text.replace(INACTIVE, ACTIVE)
+                            else -> item.text.replace(ACTIVE, INACTIVE)
+                        }
+                    }
+                }
+            }
         })
     }
+
+    private fun BotUserDTO?.activeTopics(): List<String> = this?.topics.orEmpty().map { it.addCallbackQueryPrefixToTopic() }
+    private fun String.addCallbackQueryPrefixToTopic(): String = "${TOPICS.type}/${this}"
+    private fun String.removeCallbackQueryPrefixFromTopic(): String = this.removePrefix("${TOPICS.type}/")
 }
