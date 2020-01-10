@@ -92,13 +92,16 @@ class MemeoryBotImpl(
         val channels = channelService.findAll()
 
         users.forEach { user ->
-            val userRelevantChannels = channels
+            val relevantChannels = channels
                     .filter { (user.topics intersect it.topics).isNotEmpty() }
                     .map { it.id }
 
             memes
-                    .filter { it.channelId in userRelevantChannels }
-                    .sendTo(user, channels)
+                    .filter { it.channelId in relevantChannels }
+                    .forEach {
+                        val memeChannel = channels.find { c -> c.id == it.channelId }
+                        it.sendTo(user, memeChannel)
+                    }
         }
     }
 
@@ -152,7 +155,10 @@ class MemeoryBotImpl(
                 val pageRequest = MemesPageRequestDTO(topicId = botUser.topics.random(), pageNumber = 0, pageSize = amount)
                 val memes = memeService.getPage(pageRequest)
                 val channels = channelService.findAll()
-                memes.sendTo(botUser, channels)
+                memes.forEach {
+                    val memeChannel = channels.find { c -> c.id == it.channelId }
+                    it.sendTo(botUser, memeChannel)
+                }
                 null
             }
         }
@@ -227,55 +233,49 @@ class MemeoryBotImpl(
         }
     }
 
-    private suspend fun Iterable<MemeDTO>.sendTo(botUser: BotUserDTO, channels: List<ChannelDTO>) {
-        this.forEach {
-            when {
-                it.attachments.size <= 1 -> sendSingleAttachment(it, botUser, channels)
-                else -> sendMultipleAttachments(it, botUser)
-            }
-        }
-    }
-
-    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO, channels: List<ChannelDTO>) {
-        val a = meme.attachments.firstOrNull()
-        when (a?.type) {
-            IMAGE -> send(SendPhoto().apply {
-                chatId = botUser.chatId.toString()
-                caption = meme.caption.addCaptionSuffix(meme, channels)
-                photo = InputFile(a.url)
-                parseMode = "markdown"
-            })
-            VIDEO -> send(SendMessage().apply {
-                chatId = botUser.chatId.toString()
-                text = "${meme.caption} \n\n ${a.url}".addCaptionSuffix(meme, channels)
-                setParseMode("markdown")
-            })
-            NONE -> Unit
-        }
-    }
-
-    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
-        send(SendMediaGroup().apply {
-            chatId = botUser.chatId.toString()
-            media = meme.attachments.mapNotNull { a ->
-                when (a.type) {
-                    IMAGE -> InputMediaPhoto().apply {
-                        media = a.url
-                        caption = meme.caption
-                    }
-                    VIDEO,
-                    NONE -> null
+    private suspend fun MemeDTO.sendTo(botUser: BotUserDTO, memeChannel: ChannelDTO?) {
+        val meme = this
+        when {
+            meme.attachments.size <= 1 -> {
+                val a = meme.attachments.firstOrNull()
+                when (a?.type) {
+                    IMAGE -> send(SendPhoto().apply {
+                        chatId = botUser.chatId.toString()
+                        caption = meme.caption.addCaptionSuffix(meme, memeChannel)
+                        photo = InputFile(a.url)
+                        parseMode = "markdown"
+                    })
+                    VIDEO -> send(SendMessage().apply {
+                        chatId = botUser.chatId.toString()
+                        text = "${meme.caption} \n\n ${a.url}".addCaptionSuffix(meme, memeChannel)
+                        setParseMode("markdown")
+                    })
+                    NONE -> Unit
                 }
             }
-        })
+            else -> {
+                send(SendMediaGroup().apply {
+                    chatId = botUser.chatId.toString()
+                    media = meme.attachments.mapNotNull { a ->
+                        when (a.type) {
+                            IMAGE -> InputMediaPhoto().apply {
+                                media = a.url
+                                caption = meme.caption
+                            }
+                            VIDEO,
+                            NONE -> null
+                        }
+                    }
+                })
+            }
+        }
+
     }
 
-    private fun String?.addCaptionSuffix(meme: MemeDTO, channels: List<ChannelDTO>): String {
-        val channel = channels.find { it.id == meme.channelId }
-
+    private fun String?.addCaptionSuffix(meme: MemeDTO, memeChannel: ChannelDTO?): String {
         val channelHashTag = meme.channelId.cleanUpForHashTag()
-        val topicNames = channel?.topics?.firstOrNull().cleanUpForHashTag()
-        val provider = channel?.provider?.name.cleanUpForHashTag()
+        val topicNames = memeChannel?.topics?.firstOrNull().cleanUpForHashTag()
+        val provider = memeChannel?.provider?.name.cleanUpForHashTag()
 
         return """
                   |_${this.orEmpty()}_
