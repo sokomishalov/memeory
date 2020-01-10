@@ -24,7 +24,7 @@ The list of implemented meme sources looks like this so far:
 - [vk](https://vk.com)
 - [ifunny](https://ifunny.co)
 
-After fetching and parsing memes are ready to be stored in db. 
+After fetching and parsing memes are ready to be stored in the database. 
 MongoDB is current storage of all information so far.
 
 ### Client side
@@ -33,4 +33,4 @@ Clients allow to:
  - switch between light and dark themes `(mobile)`
  - choose memes' scrolling axis `(mobile)`
  - receive relevant memes every day `(bot)`
- - laugh out loud every day :) `(mobile/web)`
+ - laugh out loud every day :) `(mobile/web/bot)`
