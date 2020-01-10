@@ -11,6 +11,7 @@ import ru.sokomishalov.memeory.providers.util.client.CUSTOM_WEB_CLIENT
  * @author sokomishalov
  */
 
+@PublishedApi
 internal suspend fun getWebPage(url: String): Document {
     return CUSTOM_WEB_CLIENT
             .get()
