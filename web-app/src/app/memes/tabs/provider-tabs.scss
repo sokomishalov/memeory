@@ -1,0 +1,16 @@
+@import "../../common/styles/global-consts.scss";
+
+.provider-tabs {
+    position: absolute;
+    top: 7vh;
+    width: 100vw;
+    margin-top: 54px;
+
+    @media only screen and (min-width: $screen-mobile-limit) {
+        display: none;
+    }
+
+    @media only screen and (max-width: $screen-mobile-limit) {
+        display: block;
+    }
+}

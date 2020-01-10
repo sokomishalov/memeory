@@ -16,6 +16,7 @@ const val NINEGAG_URL = "https://9gag.com"
 const val PINTEREST_URL = "https://www.pinterest.com"
 const val VK_URL = "https://vk.com"
 const val IFUNNY_URL = "https://ifunny.co"
+const val INSTAGRAM_URL = "https://www.instagram.com"
 
 // Keys
 const val CHANNEL_LOGO_CACHE_KEY = "CHANNEL_LOGO"

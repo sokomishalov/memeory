@@ -146,3 +146,9 @@ $colors: black red green blue pink magenta red orange yellow gold cyan lime gree
 .float-right {
     float: right;
 }
+
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

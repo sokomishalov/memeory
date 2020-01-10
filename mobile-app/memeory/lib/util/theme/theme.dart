@@ -43,13 +43,13 @@ ThemeData themeBuilder(Brightness brightness) {
         );
 }
 
-IconThemeData getDefaultIconThemeData(context) {
+IconThemeData getDefaultIconThemeData(BuildContext context) {
   return Theme.of(context).brightness == Brightness.light
       ? ThemeData.light().iconTheme
       : ThemeData.dark().iconTheme;
 }
 
-TextTheme getDefaultTextTheme(context) {
+TextTheme getDefaultTextTheme(BuildContext context) {
   return Theme.of(context).brightness == Brightness.light
       ? ThemeData.light().textTheme
       : ThemeData.dark().textTheme;

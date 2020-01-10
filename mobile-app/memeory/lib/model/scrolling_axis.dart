@@ -5,7 +5,7 @@ enum ScrollingAxis {
   HORIZONTAL,
 }
 
-ScrollingAxis orientationFromString(String str) {
+ScrollingAxis scrollingAxisFromString(String str) {
   return ScrollingAxis.values.firstWhere(
     (e) => describeEnum(e) == str,
     orElse: () => ScrollingAxis.VERTICAL,

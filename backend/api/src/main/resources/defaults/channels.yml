@@ -1,0 +1,192 @@
+########################################
+############### REDDIT #################
+########################################
+
+- id: reddit:memes
+  name: memes (Reddit)
+  provider: REDDIT
+  uri: memes
+  topics:
+    - memes
+
+- id: reddit:videos
+  name: videos (Reddit)
+  provider: REDDIT
+  uri: videos
+  topics:
+    - videos
+
+- id: reddit:programmer-humor
+  name: ProgrammerHumor (Reddit)
+  provider: REDDIT
+  uri: ProgrammerHumor
+  topics:
+    - it
+
+########################################
+################ VK ####################
+########################################
+
+- id: vk:vgik
+  name: ВГИК (VK)
+  provider: VK
+  uri: komment
+  topics:
+    - sports
+
+- id: vk:p_drogba
+  name: Портье Дрогба (VK)
+  provider: VK
+  uri: p_drogba
+  topics:
+    - sports
+
+########################################
+############## FACEBOOK ################
+########################################
+
+- id: facebook:originaltrollfootball
+  name: Troll Football (Facebook)
+  provider: FACEBOOK
+  uri: originaltrollfootball
+  topics:
+    - sports
+
+########################################
+############## INSTAGRAM ###############
+########################################
+
+- id: instagram:originaltrollfootball
+  name: Troll Football (Instagram)
+  provider: INSTAGRAM
+  uri: originaltrollfootball
+  topics:
+    - sports
+
+########################################
+############## TWITTER #################
+########################################
+
+- id: twitter:russianmemesltd
+  name: Russian Memes United (Twitter)
+  provider: TWITTER
+  uri: russianmemesltd
+  topics:
+    - memes
+
+########################################
+############### 9GAG ###################
+########################################
+
+- id: 9gag:meme
+  name: memes (9gag)
+  provider: NINEGAG
+  uri: meme
+  topics:
+    - memes
+
+- id: 9gag:politics
+  name: politics (9gag)
+  provider: NINEGAG
+  uri: politics
+  topics:
+    - politics
+
+- id: 9gag:gaming
+  name: gaming (9gag)
+  provider: NINEGAG
+  uri: games
+  topics:
+    - games
+
+- id: 9gag:animals
+  name: animals (9gag)
+  provider: NINEGAG
+  uri: animals
+  topics:
+    - animals
+
+- id: 9gag:car
+  name: car (9gag)
+  provider: NINEGAG
+  uri: car
+  topics:
+    - cars
+
+- id: 9gag:video
+  name: video (9gag)
+  provider: NINEGAG
+  uri: video
+  topics:
+    - videos
+
+########################################
+############## PINTEREST ###############
+########################################
+
+- id: pinterest:celiatoler:pinterest-memes
+  name: some memes (pinterest)
+  provider: PINTEREST
+  uri: celiatoler/pinterest-memes
+  topics:
+    - memes
+
+########################################
+############## IFUNNY ##################
+########################################
+
+- id: ifunny:memes
+  name: memes (ifunny)
+  provider: IFUNNY
+  uri: memes
+  topics:
+    - memes
+
+- id: ifunny:animals-nature
+  name: animals (ifunny)
+  provider: IFUNNY
+  uri: animals-nature
+  topics:
+    - animals-and-nature
+
+- id: ifunny:car
+  name: car (ifunny)
+  provider: IFUNNY
+  uri: car
+  topics:
+    - cars
+
+- id: ifunny:gaming
+  name: gaming (ifunny)
+  provider: IFUNNY
+  uri: gaming
+  topics:
+    - games
+
+- id: ifunny:politics
+  name: politics (ifunny)
+  provider: IFUNNY
+  uri: politics
+  topics:
+    - politics
+
+- id: ifunny:movies
+  name: movies (ifunny)
+  provider: IFUNNY
+  uri: movies
+  topics:
+    - movies
+
+- id: ifunny:sports
+  name: sports (ifunny)
+  provider: IFUNNY
+  uri: sports
+  topics:
+    - sports
+
+- id: ifunny:science-tech
+  name: science-tech (ifunny)
+  provider: IFUNNY
+  uri: science-tech
+  topics:
+    - science-and-tech

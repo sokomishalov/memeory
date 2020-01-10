@@ -1,0 +1,30 @@
+- id: animals-and-nature
+  caption: 🐼 Animals and nature
+
+- id: cars
+  caption: 🚗 Cars
+
+- id: sports
+  caption: ⚽ Sports
+
+- id: games
+  caption: 🎮 Games
+
+- id: memes
+  caption: 😂 Memes
+
+- id: movies
+  caption: 🎬 Movies
+
+- id: videos
+  caption: 📹 Videos
+
+- id: politics
+  caption: 🌐 Politics
+
+- id: science-and-tech
+  caption: 💡 Science and tech
+
+- id: it
+  caption: 💻 IT
+

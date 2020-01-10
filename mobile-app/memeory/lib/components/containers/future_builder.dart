@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'error.dart';
 import 'loader.dart';
 
-class FutureWidget extends StatelessWidget {
+class FutureWidget<T> extends StatelessWidget {
   const FutureWidget({
     Key key,
     @required this.future,
-    @required this.render(dynamic data),
+    @required this.render(T data),
   }) : super(key: key);
 
-  final Future future;
-  final Function render;
+  final Future<T> future;
+  final Function(T) render;
 
   @override
   Widget build(BuildContext context) {

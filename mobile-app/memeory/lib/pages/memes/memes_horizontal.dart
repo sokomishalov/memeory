@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memeory/model/scrolling_axis.dart';
+import 'package:memeory/model/meme.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/theme/dark.dart';
 import 'package:memeory/util/theme/light.dart';
 import 'package:memeory/util/theme/theme.dart';
@@ -9,6 +11,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'memes_mixin.dart';
 
 class MemesHorizontal extends StatefulWidget {
+  const MemesHorizontal({Key key, this.screenArgs}) : super(key: key);
+
+  final MemesScreenArgs screenArgs;
+
   @override
   _MemesHorizontalState createState() => _MemesHorizontalState();
 }
@@ -33,11 +39,18 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: buildLoaderHeader(ScrollingAxis.HORIZONTAL),
-      footer: buildLoaderFooter(),
       controller: refreshController,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
+      onRefresh: () => onRefresh(widget.screenArgs),
+      onLoading: () => onLoading(widget.screenArgs),
+      header: ClassicHeader(
+        releaseText: "",
+        refreshingText: "",
+        completeText: "",
+        idleText: "",
+        failedText: t(context, "error_loading_memes"),
+        idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
+      ),
+      footer: buildLoaderFooter(),
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -45,11 +58,11 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
         physics: PageScrollPhysics(),
         itemCount: memes?.length ?? 0,
         itemBuilder: (context, index) {
-          var item = memes[index] ?? {};
+          Meme item = memes[index];
 
           return Container(
             width: MediaQuery.of(context).size.width,
-            key: Key(item["id"]),
+            key: Key(item.id),
             decoration: BoxDecoration(
               color: dependingOnThemeChoice(
                 context: context,
@@ -63,8 +76,8 @@ class _MemesHorizontalState extends State<MemesHorizontal> with MemesMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildMemeHeader(item, context),
-                    buildMemeCaption(item, context),
+                    buildMemeHeader(context, item),
+                    buildMemeCaption(item),
                     ...buildMemeAttachments(item),
                   ],
                 ),

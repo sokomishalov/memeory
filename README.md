@@ -4,8 +4,9 @@
 
 This repository contains:
  - [backend](./backend) (Kotlin + Spring boot) 
- - [mobile application](./mobile-app) (Flutter)
- - [web application](./web-app) (React JS) 
+ - [mobile application](./mobile-app/memeory) (Flutter)
+ - [web application](./web-app) (React) 
+ - [telegram bot](./backend/telegram) (Kotlin + Spring boot)
 
 This is just another pet project. There is no rocket science inside.
 
@@ -29,9 +30,7 @@ MongoDB is current storage of all information so far.
 ### Client side
 
 Clients allow to:
- - authorize with either google or facebook for sharing user 
- customizations between devices `(mobile/web)`
  - switch between light and dark themes `(mobile)`
  - choose memes' scrolling axis `(mobile)`
- - choose relevant channels `(mobile/web)`
+ - receive relevant memes every day `(bot)`
  - laugh out loud every day :) `(mobile/web)`

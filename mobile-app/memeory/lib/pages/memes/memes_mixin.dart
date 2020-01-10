@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:memeory/api/memes.dart';
 import 'package:memeory/components/bottom_sheet/bottom_sheet.dart';
-import 'package:memeory/components/containers/loader.dart';
 import 'package:memeory/components/images/channel_logo.dart';
 import 'package:memeory/components/message/messages.dart';
-import 'package:memeory/model/scrolling_axis.dart';
-import 'package:memeory/util/collections/collections.dart';
+import 'package:memeory/model/attachment_type.dart';
+import 'package:memeory/model/meme.dart';
+import 'package:memeory/model/memes_page_request.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/store/state/app_state.dart';
 import 'package:memeory/util/consts/consts.dart';
-import 'package:memeory/util/firebase/firebase.dart';
 import 'package:memeory/util/i18n/i18n.dart';
 import 'package:memeory/util/time/time.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:redux/redux.dart';
 import 'package:share/share.dart';
 
 import 'attachments/image.dart';
@@ -21,7 +24,7 @@ import 'attachments/video.dart';
 
 mixin MemesMixin<T extends StatefulWidget> on State<T> {
   int _currentPage;
-  List memes;
+  List<Meme> memes;
   RefreshController refreshController;
 
   @override
@@ -38,26 +41,32 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     super.dispose();
   }
 
-  Future<void> onRefresh() async {
-    await _loadMore(0);
+  Future<void> onRefresh(MemesScreenArgs memeScreenArgs) async {
+    await _loadMore(memeScreenArgs, 0);
     refreshController.refreshCompleted();
   }
 
-  Future<void> onLoading() async {
-    await _loadMore(_currentPage + 1);
+  Future<void> onLoading(MemesScreenArgs memeScreenArgs) async {
+    await _loadMore(memeScreenArgs, _currentPage + 1);
     refreshController.loadComplete();
   }
 
-  Future<void> _loadMore(int page) async {
-    var newMemes = await fetchMemes(page);
+  Future<void> _loadMore(MemesScreenArgs memeScreenArgs, int page) async {
+    final newMemes = await fetchMemes(MemesPageRequest(
+      pageNumber: page,
+      pageSize: MEMES_COUNT_ON_THE_PAGE,
+      providerId: memeScreenArgs.providerId,
+      topicId: memeScreenArgs.topicId,
+      channelId: memeScreenArgs.channelId,
+    ));
 
     setState(() {
       _currentPage = page;
-      memes = distinctByProperty([...memes, ...newMemes], "id");
+      memes = memes + newMemes;
     });
   }
 
-  Widget buildMemeHeader(item, context) {
+  Widget buildMemeHeader(BuildContext context, Meme item) {
     return Container(
       padding: EdgeInsets.only(
         left: 10,
@@ -67,20 +76,29 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
       ),
       child: Row(
         children: <Widget>[
-          ChannelLogo(channelId: item["channelId"]),
+          ChannelLogo(channelId: item.channelId),
           Spacer(flex: 1),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                item["channelName"],
-                style: TextStyle(fontSize: 12),
+              StoreConnector<AppState, String>(
+                converter: (Store<AppState> store) {
+                  return store.state.channels
+                          .firstWhere((it) => it.id == item.channelId)
+                          .name ?? "";
+                },
+                builder: (BuildContext context, String channelName) {
+                  return Text(
+                    channelName,
+                    style: TextStyle(fontSize: 12),
+                  );
+                },
               ),
               Container(
                 padding: EdgeInsets.only(top: 4),
                 child: Opacity(
                   child: Text(
-                    timeAgo(context, item["publishedAt"]),
+                    timeAgo(context, item.publishedAt),
                     style: TextStyle(fontSize: 12),
                   ),
                   opacity: 0.5,
@@ -98,33 +116,29 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget buildMemeCaption(item, context) {
+  Widget buildMemeCaption(Meme item) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Text(
-        item["caption"] ?? EMPTY,
+        item.caption ?? "",
         softWrap: true,
         style: TextStyle(fontSize: 16),
       ),
     );
   }
 
-  List<Widget> buildMemeAttachments(item) {
-    return item["attachments"]
+  List<Widget> buildMemeAttachments(Meme item) {
+    return item.attachments
             ?.map((a) {
-              var aspectRatio = a["aspectRatio"];
-              var url = a["url"];
-              var type = a["type"];
-
-              if (type == IMAGE_ATTACHMENT_TYPE) {
+              if (a.type == AttachmentType.IMAGE) {
                 return ImageAttachment(
-                  url: url,
-                  aspectRatio: aspectRatio,
+                  url: a.url,
+                  aspectRatio: a.aspectRatio,
                 );
-              } else if (type == VIDEO_ATTACHMENT_TYPE) {
+              } else if (a.type == AttachmentType.VIDEO) {
                 return VideoAttachment(
-                  url: url,
-                  aspectRatio: aspectRatio,
+                  url: a.url,
+                  aspectRatio: a.aspectRatio,
                 );
               } else {
                 return Container();
@@ -133,42 +147,6 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
             ?.cast<Widget>()
             ?.toList() ??
         [];
-  }
-
-  Widget buildLoaderHeader(ScrollingAxis orientation) {
-    return orientation == ScrollingAxis.HORIZONTAL
-        ? ClassicHeader(
-            releaseText: EMPTY,
-            refreshingText: EMPTY,
-            completeText: EMPTY,
-            idleText: EMPTY,
-            failedText: t(context, "error_loading_memes"),
-            idleIcon: const Icon(Icons.chevron_right, color: Colors.grey),
-          )
-        : WaterDropHeader(
-            completeDuration: Duration(milliseconds: 400),
-            refresh: SizedBox(
-              width: 25,
-              height: 25,
-              child: Loader(),
-            ),
-            complete: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.done, color: Colors.grey),
-                Container(width: 15.0)
-              ],
-            ),
-            failed: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.close, color: Colors.grey),
-                Container(width: 15.0),
-                Text(t(context, "error_loading_memes"),
-                    style: TextStyle(color: Colors.grey))
-              ],
-            ),
-          );
   }
 
   Widget buildLoaderFooter() {
@@ -197,7 +175,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  void onTapEllipsis(BuildContext context, Map<String, dynamic> item) {
+  void onTapEllipsis(BuildContext context, Meme item) {
     showMemeoryBottomSheet(
       context: context,
       items: [
@@ -205,7 +183,7 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
           caption: t(context, "share_meme"),
           icon: Icon(FontAwesomeIcons.shareAlt),
           onPressed: () async {
-            await _shareMeme(context, item);
+            await _shareMeme(item);
           },
         ),
         BottomSheetItem(
@@ -223,12 +201,8 @@ mixin MemesMixin<T extends StatefulWidget> on State<T> {
     errorToast(context, t(context, "report_your_ass"));
   }
 
-  Future _shareMeme(BuildContext context, Map<String, dynamic> item) async {
-    var baseUrl = await getFrontendUrl();
-    var url = "${baseUrl}meme/${item["id"]}";
-
-    Share.share(url);
-
-    await onRefresh();
+  Future _shareMeme(Meme item) async {
+    var url = getMemeShareUrl(item.id);
+    await Share.share(url);
   }
 }

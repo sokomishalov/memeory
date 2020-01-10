@@ -2,8 +2,6 @@ package ru.sokomishalov.memeory.api.scheduler
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -11,63 +9,79 @@ import org.springframework.context.event.EventListener
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
-import ru.sokomishalov.commons.core.common.unit
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.reactor.aMono
+import ru.sokomishalov.commons.core.scheduled.runScheduled
 import ru.sokomishalov.commons.core.serialization.YAML_OBJECT_MAPPER
-import ru.sokomishalov.commons.spring.locks.cluster.LockProvider
-import ru.sokomishalov.commons.spring.locks.cluster.withClusterLock
+import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
+import ru.sokomishalov.commons.distributed.locks.withDistributedLock
 import ru.sokomishalov.memeory.api.autoconfigure.MemeoryProperties
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
+import ru.sokomishalov.memeory.core.dto.TopicDTO
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.db.MemeService
+import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.providers.ProviderFactory
-import java.util.*
-import kotlin.concurrent.schedule
+import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 
 /**
  * @author sokomishalov
  */
 @Service
 class MemesFetchingScheduler(
-        private val channelService: ChannelService,
         private val props: MemeoryProperties,
-        private val providerFactory: ProviderFactory,
+        private val channelService: ChannelService,
         private val memeService: MemeService,
-        private val lockProvider: LockProvider,
-        @Value("classpath:channels.yml")
-        private val defaultChannels: Resource
-) : Loggable {
+        private val topicService: TopicService,
+        private val providerFactory: ProviderFactory,
+        private val bot: MemeoryBot,
+        private val lockProvider: DistributedLockProvider,
+        @Value("classpath:defaults/channels.yml")
+        private val defaultChannels: Resource,
+        @Value("classpath:defaults/topics.yml")
+        private val defaultTopics: Resource
+) {
+
+    companion object : Loggable
 
     @EventListener(ApplicationReadyEvent::class)
-    fun fetchMemes(): Mono<Unit> = aMono {
-        storeDefaultChannels()
-
-        Timer(true).schedule(delay = 0, period = props.fetchInterval.toMillis()) {
-            log("About to fetch some new memes")
-
-            GlobalScope.launch {
-                val fetchedMemes = channelService
-                        .findAllEnabled()
-                        .map { fetchMemesClusterable(it) }
-                        .flatten()
-
-                val savedMemes = memeService.saveBatch(fetchedMemes, props.memeLifeTime)
-                log("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
-            }
-        }.unit()
+    fun onApplicationStartUp(): Mono<Any> = aMono {
+        storeDefaults()
+        runScheduled(delay = props.fetchInterval, interval = props.fetchInterval) {
+            loadMemes()
+        }
     }
 
-    private suspend fun storeDefaultChannels() {
-        val channels = withContext(IO) { YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream) }
-        channelService.saveBatch(*channels)
+    private suspend fun storeDefaults() {
+        withContext(IO) {
+            val channels = YAML_OBJECT_MAPPER.readValue<Array<ChannelDTO>>(defaultChannels.inputStream)
+            val topics = YAML_OBJECT_MAPPER.readValue<Array<TopicDTO>>(defaultTopics.inputStream)
+
+            channelService.save(*channels)
+            topicService.save(*topics)
+        }
+    }
+
+    suspend fun loadMemes() {
+        log("About to fetch some new memes")
+
+        val fetchedMemes = channelService
+                .findAll()
+                .map { fetchMemesClusterable(it) }
+                .flatten()
+
+        val savedMemes = memeService.save(fetchedMemes, props.memeLifeTime)
+        logInfo("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+
+        bot.broadcastMemes(savedMemes)
+        logInfo("Finished broadcasting memes by bot")
     }
 
     private suspend fun fetchMemesClusterable(channel: ChannelDTO, orElse: List<MemeDTO> = emptyList()): List<MemeDTO> {
         return when {
             props.useClusterLocks -> {
-                lockProvider.withClusterLock(
+                lockProvider.withDistributedLock(
                         lockName = channel.id,
                         lockAtLeastFor = props.fetchInterval.minusMinutes(1)
                 ) {
@@ -76,21 +90,15 @@ class MemesFetchingScheduler(
             }
             else -> fetchMemes(channel, orElse)
         }
-
     }
 
     private suspend fun fetchMemes(channel: ChannelDTO, orElse: List<MemeDTO>): List<MemeDTO> {
-        val providerService = providerFactory.getService(channel.provider)
+        val providerService = providerFactory[channel.provider]
         return when {
             providerService != null -> runCatching {
                 providerService
                         .fetchMemes(channel, props.fetchLimit)
-                        .map {
-                            it.apply {
-                                it.channelId = channel.id
-                                it.channelName = channel.name
-                            }
-                        }
+                        .map { it.apply { it.channelId = channel.id } }
             }.getOrElse {
                 logWarn(it)
                 orElse

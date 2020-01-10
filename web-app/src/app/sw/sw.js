@@ -6,12 +6,10 @@ const isLocalhost = Boolean(
     )
 );
 
-export function register(config) {
+export const register = config => {
     if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
         const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-        if (publicUrl.origin !== window.location.origin) {
-            return;
-        }
+        if (publicUrl.origin !== window.location.origin) return;
 
         window.addEventListener('load', () => {
             const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
@@ -23,7 +21,7 @@ export function register(config) {
             }
         });
     }
-}
+};
 
 function registerValidSW(swUrl, config) {
     navigator.serviceWorker
@@ -31,9 +29,8 @@ function registerValidSW(swUrl, config) {
         .then(registration => {
             registration.onupdatefound = () => {
                 const installingWorker = registration.installing;
-                if (installingWorker == null) {
-                    return;
-                }
+                if (installingWorker == null) return;
+
                 installingWorker.onstatechange = () => {
                     if (installingWorker.state === 'installed') {
                         if (navigator.serviceWorker.controller) {
@@ -56,7 +53,7 @@ function registerValidSW(swUrl, config) {
         .catch(error => console.error('Error during service worker registration:', error));
 }
 
-function checkValidServiceWorker(swUrl, config) {
+const checkValidServiceWorker = (swUrl, config) => {
     fetch(swUrl)
         .then(response => {
             const contentType = response.headers.get('content-type');
@@ -67,10 +64,8 @@ function checkValidServiceWorker(swUrl, config) {
             }
         })
         .catch(() => console.log('No internet connection found. App is running in offline mode.'));
-}
+};
 
-export function unregister() {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(registration => registration.unregister());
-    }
+export const unregister = () => {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(registration => registration.unregister());
 }

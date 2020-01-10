@@ -1,8 +1,8 @@
 import React from 'react';
 import {withT} from "../../../util/locales/i18n";
-import {GITHUB_REPO, GITHUB_REPO_PAGE, USERNAME, YANDEX_DONATE_PAGE} from "../../../util/consts/consts";
+import {ABOUT_ME_PAGE, GITHUB_REPO, GITHUB_REPO_PAGE, USERNAME, YANDEX_DONATE_PAGE} from "../../../util/consts/consts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGithub, faYandexInternational} from "@fortawesome/free-brands-svg-icons"
+import {faGithub, faReact, faYandexInternational} from "@fortawesome/free-brands-svg-icons"
 import {Button} from "antd";
 
 const AboutApp = ({t}) => (
@@ -23,6 +23,16 @@ const AboutApp = ({t}) => (
                     style={{backgroundColor: "#e61400"}}
                     onClick={() => window.open(YANDEX_DONATE_PAGE, '_blank')}>
                 <FontAwesomeIcon icon={faYandexInternational} className="mr-10"/>
+                {USERNAME}
+            </Button>
+        </div>
+
+        <div className="settings-content-section">
+            <div className="caption">{t("creator")}</div>
+            <Button className="button"
+                    style={{backgroundColor: "#24292e"}}
+                    onClick={() => window.open(ABOUT_ME_PAGE, '_blank')}>
+                <FontAwesomeIcon icon={faReact} className="mr-10"/>
                 {USERNAME}
             </Button>
         </div>

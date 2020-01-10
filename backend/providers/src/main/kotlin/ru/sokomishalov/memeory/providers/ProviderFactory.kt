@@ -9,7 +9,7 @@ import ru.sokomishalov.memeory.core.enums.Provider
 @Component
 class ProviderFactory(private val providers: List<ProviderService>) {
 
-    fun getService(provider: Provider?): ProviderService? {
+    operator fun get(provider: Provider?): ProviderService? {
         return providers.find { it.provider == provider }
     }
 

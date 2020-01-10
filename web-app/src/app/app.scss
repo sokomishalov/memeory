@@ -1,0 +1,15 @@
+.memeory {
+    min-height: 100vh;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.am-tabs-default-bar {
+    background: rgba(26, 26, 27, 1) !important;
+    cursor: pointer;
+}
+
+.am-tabs-default-bar-nextpage,
+.am-tabs-default-bar-prevpage {
+    background: none !important;
+}

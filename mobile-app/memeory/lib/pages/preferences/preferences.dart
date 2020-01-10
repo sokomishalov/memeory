@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:memeory/api/profile.dart';
-import 'package:memeory/cache/repository/orientations_repo.dart';
 import 'package:memeory/cache/repository/visits_repo.dart';
+import 'package:memeory/pages/appearance/appearance.dart';
 import 'package:memeory/pages/memes/memes.dart';
-import 'package:memeory/pages/preferences/widgets/channels.dart';
-import 'package:memeory/pages/preferences/widgets/orientations.dart';
-import 'package:memeory/pages/preferences/widgets/socials.dart';
-import 'package:memeory/pages/preferences/widgets/themes.dart';
-import 'package:memeory/pages/preferences/widgets/wrapper.dart';
+import 'package:memeory/pages/memes/memes_screen_args.dart';
+import 'package:memeory/pages/preferences/preferences_wrapper.dart';
 import 'package:memeory/util/i18n/i18n.dart';
+import 'package:memeory/util/routes/routes.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 class UserPreferencesPage extends StatelessWidget {
   final _controller = PreloadPageController();
 
+  // maybe will be useful in future
+  // ignore: unused_element
   void _nextPage() {
     _controller.nextPage(
       duration: Duration(milliseconds: 300),
@@ -23,15 +22,15 @@ class UserPreferencesPage extends StatelessWidget {
   }
 
   void _close(context) async {
-    await saveProfile();
-
     await setAppVisitDatetime();
-    var orientation = await getPreferredOrientation();
 
-    Navigator.of(context).pushReplacement(
-      PageTransition(
+    Navigator.pushReplacementNamed(
+      context,
+      ROUTES.MEMES.route,
+      arguments: MemesScreenArgs(),
+      result: PageTransition(
         type: PageTransitionType.upToDown,
-        child: MemesPage(orientation: orientation),
+        child: MemesPage(),
       ),
     );
   }
@@ -43,26 +42,11 @@ class UserPreferencesPage extends StatelessWidget {
         controller: _controller,
         children: [
           PreferencesPageWrapper(
-            title: t(context, "choose_theme"),
-            nextPage: _nextPage,
-            child: ThemePreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "please_authorize"),
-            nextPage: _nextPage,
-            child: SocialPreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "choose_orientation"),
-            nextPage: _nextPage,
-            child: OrientationPreferences(),
-          ),
-          PreferencesPageWrapper(
-            title: t(context, "choose_channels"),
+            title: t(context, "customize_appearance"),
+            child: AppearancePreferences(),
             apply: () => _close(context),
             applyText: t(context, "start_watching_memes"),
-            child: ChannelPreferences(),
-          )
+          ),
         ],
       ),
     );

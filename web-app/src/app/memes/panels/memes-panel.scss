@@ -1,0 +1,31 @@
+@import "../../common/styles/global-consts.scss";
+.memes {
+    min-width: 300px;
+
+    @media only screen and (min-width: $screen-mobile-limit) {
+        margin: 10vh 25vw 20px;
+    }
+
+    @media only screen and (max-width: $screen-mobile-limit) {
+        width: 100vw;
+        margin: 25vh auto 0;
+
+        &-backtop {
+            bottom: 20px !important;
+            right: 20px !important;
+        }
+    }
+
+    &-no-more {
+        margin-top: 40px;
+        font-size: 20px;
+    }
+
+    &-backtop > .ant-back-top-content {
+        background-color: rgba(0, 128, 128, 0.7) !important;
+    }
+
+    &-caption {
+        font-size: 20px;
+    }
+}

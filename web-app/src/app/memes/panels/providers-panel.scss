@@ -1,0 +1,38 @@
+@import "../../common/styles/global-consts.scss";
+
+.providers {
+    position: fixed;
+    top: 10vh;
+    right: 0;
+    text-align: left;
+
+    @media only screen and (min-width: $screen-mobile-limit) {
+        width: 20vw;
+    }
+
+    @media only screen and (max-width: $screen-mobile-limit) {
+        width: 0;
+        display: none;
+    }
+
+    &-header {
+        font-size: 20px;
+    }
+
+    &-items {
+
+        &-item {
+            font-size: 18px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        &-item-active {
+            color: rgba(0, 150, 136, 1);
+        }
+
+        &-item:hover {
+            color: rgba(0, 150, 136, 1);
+        }
+    }
+}

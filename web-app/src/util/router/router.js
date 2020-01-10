@@ -5,18 +5,20 @@ export const PARAMS = {
 };
 
 export const ROUTE = {
-    CORE:           `/`,
-    CHANNELS:       `/channels`,
-    SETTINGS:       `/settings`,
-    MEME:           `/meme/${PARAMS.ID}`,
-    NOT_FOUND:      `/404`
+    CORE:             `/`,
+    MEMES:            `/memes`,
+    MEMES_PROVIDER:   `/memes/provider/${PARAMS.ID}`,
+    MEMES_TOPIC:      `/memes/topic/${PARAMS.ID}`,
+    MEMES_CHANNEL:    `/memes/channel/${PARAMS.ID}`,
+    MEMES_SINGLE:     `/memes/single/${PARAMS.ID}`,
+    SETTINGS:         `/settings`,
+    NOT_FOUND:        `/404`
 };
 
 export const SETTINGS_ROUTE = {
-    CHANNELS:       `${ROUTE.SETTINGS}/channels`,
-    SOCIALS:        `${ROUTE.SETTINGS}/socials`,
-    APPEARANCE:     `${ROUTE.SETTINGS}/appearance`,
-    ABOUT_APP:       `${ROUTE.SETTINGS}/about-app`,
+    CHANNELS:         `${ROUTE.SETTINGS}/channels`,
+    APPEARANCE:       `${ROUTE.SETTINGS}/appearance`,
+    ABOUT_APP:        `${ROUTE.SETTINGS}/about-app`,
 }
 
 // @formatter:on

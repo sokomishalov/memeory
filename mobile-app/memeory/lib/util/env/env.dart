@@ -16,14 +16,14 @@ class BuildEnvironment {
 
   BuildEnvironment._init({
     this.flavor,
-    this.backendUrl = "",
-    this.frontendUrl = "",
+    this.backendUrl,
+    this.frontendUrl,
   });
 
   static void init({
     @required flavor,
-    backendUrl = "",
-    frontendUrl = "",
+    backendUrl,
+    frontendUrl,
   }) =>
       _env ??= BuildEnvironment._init(
         flavor: flavor,
@@ -31,6 +31,15 @@ class BuildEnvironment {
         frontendUrl: frontendUrl,
       );
 }
+
+String getFrontendUrl({String uri = ""}) {
+  return "${env.frontendUrl}$uri";
+}
+
+String getBackendUrl({String uri = ""}) {
+  return "${env.backendUrl}$uri";
+}
+
 
 bool isDebugModeOn() {
   bool inDebugMode = false;

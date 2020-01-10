@@ -1,9 +1,9 @@
 import axios from "axios";
 import _ from "lodash";
-import {getBackendUrl} from "../firebase/firebase";
+import {getBackendUrl} from "../env/env";
 
 axios.interceptors.request.use(async (config) => {
-    const url = await getBackendUrl();
+    const url = getBackendUrl();
 
     axios.defaults.baseURL = url
     config.baseURL = url;
