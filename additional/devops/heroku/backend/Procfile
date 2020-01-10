@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dspring.profiles.active=heroku -Dserver.port=$PORT -Dspring.data.mongodb.uri=$MONGODB_URI -jar backend/api/build/libs/api.jar
+web: java $JAVA_OPTS -Dspring.profiles.active=heroku -Dserver.port=$PORT -Dspring.data.mongodb.uri=$MONGODB_URI -Dmemeory.telegram.bot.enabled=true -Dmemeory.telegram.bot.username=$TELEGRAM_BOT_USERNAME -Dmemeory.telegram.bot.token=$TELEGRAM_BOT_TOKEN -jar backend/api/build/libs/api.jar
