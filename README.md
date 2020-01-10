@@ -1,5 +1,5 @@
 <a href="https://sokomishalov.github.io/memeory/">
-    <img src="./additional/logo/logo.png" width="200" height="200" style="border-radius: 50%;"/>
+    <img src="./additional/logo/logo.png" width="200" height="200"/>
 </a>
 
 # Memeory
