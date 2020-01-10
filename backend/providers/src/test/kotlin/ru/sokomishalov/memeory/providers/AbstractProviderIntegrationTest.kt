@@ -40,10 +40,8 @@ abstract class AbstractProviderIntegrationTest {
 
     @Test
     fun `Check that channel logo has been fetched`() {
-        val orElse = ByteArray(0)
-        val image = runBlocking { getImageByteArray(service.getLogoUrl(channel), orElse) }
+        val image = runBlocking { getImageByteArray(service.getLogoUrl(channel)) } ?: ByteArray(0)
 
-        assertNotEquals(orElse.size, image.size)
-        assertNotEquals(orElse, image)
+        assertNotEquals(0, image.size)
     }
 }
