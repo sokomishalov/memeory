@@ -9,17 +9,24 @@ import {connect} from "react-redux";
 
 const TopicTabs = ({topics, match, history}) => {
 
-    const activeTabIndex = _.findIndex(topics, o => o["id"] === _.get(match, "params.id", ""))
+    const topicTabs = _.map(topics, it => ({key: it["id"], title: it["caption"]}))
+    const activeTabIndex = _.findIndex(topicTabs, o => o.key === _.get(match, "params.id", ""))
 
     return (
         <div className="topic-tabs">
-            <Tabs tabs={topics}
+            <Tabs tabs={topicTabs}
                   swipeable
                   page={activeTabIndex}
-                  renderTab={o => _.truncate(o["caption"], {"length": 10})}
-                  onTabClick={o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o["id"]))}
+                  onTabClick={o => history.push(ROUTE.MEMES_TOPIC.replace(PARAMS.ID, o.key))}
                   tabBarActiveTextColor={activeTabIndex === -1 ? "inherit" : null}
-                  tabBarUnderlineStyle={activeTabIndex === -1 ? {border: "none"} : null}
+                  tabBarUnderlineStyle={activeTabIndex === -1 ? {border: "none"} : {}}
+                  renderTabBar={props => (
+                      <Tabs.DefaultTabBar
+                          page={3}
+                          renderTab={o => _.truncate(o.title, {"length": 12})}
+                          {...props}
+                      />
+                  )}
             />
         </div>
     )
