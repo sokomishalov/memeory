@@ -32,9 +32,11 @@ class NinegagProviderService : ProviderService, Loggable {
 
         val latestPostsIds = webPage
                 .getElementById("jsid-latest-entries")
-                .text()
-                .split(",")
-                .take(limit)
+                ?.text()
+                ?.split(",")
+                ?.take(limit)
+                .orEmpty()
+
 
         return latestPostsIds
                 .map {
@@ -45,7 +47,7 @@ class NinegagProviderService : ProviderService, Loggable {
                     MemeDTO(
                             id = "${channel.id}$DELIMITER$it",
                             caption = fixCaption(gagInfoMap["headline"]),
-                            publishedAt = parsePublishedDate(gagInfoMap),
+                            publishedAt = gagInfoMap.parsePublishedDate(),
                             attachments = listOf(AttachmentDTO(
                                     type = IMAGE,
                                     url = gagInfoMap["image"],
@@ -66,8 +68,8 @@ class NinegagProviderService : ProviderService, Loggable {
 
     override val provider: Provider = NINEGAG
 
-    private fun parsePublishedDate(gagInfoMap: Map<String, String>): Date {
-        return dateFrom(zonedDateTimeParse(gagInfoMap["datePublished"]).toInstant())
+    private fun Map<String, String>.parsePublishedDate(): Date {
+        return dateFrom(zonedDateTimeParse(this["datePublished"]).toInstant())
     }
 
     private fun fixCaption(caption: String?): String = caption?.replace(" - 9GAG", EMPTY) ?: EMPTY

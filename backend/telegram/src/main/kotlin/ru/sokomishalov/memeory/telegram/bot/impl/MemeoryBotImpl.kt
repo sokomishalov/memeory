@@ -21,6 +21,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.core.dto.BotUserDTO
+import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
@@ -95,7 +96,7 @@ class MemeoryBotImpl(
                     .filter { it.channelId in userRelevantChannels }
                     .forEach { m ->
                         when {
-                            m.attachments.size <= 1 -> sendSingleAttachment(m, u)
+                            m.attachments.size <= 1 -> sendSingleAttachment(m, u, channels)
                             else -> sendMultipleAttachments(m, u)
                         }
                     }
@@ -223,22 +224,42 @@ class MemeoryBotImpl(
         })
     }
 
-    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO) {
+    private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO, channels: List<ChannelDTO>) {
         val a = meme.attachments.firstOrNull()
         when (a?.type) {
             IMAGE -> send(SendPhoto().apply {
                 chatId = botUser.chatId.toString()
-                caption = meme.caption
+                caption = meme.caption.addCaptionSuffix(meme, channels)
                 photo = InputFile(a.url)
+                parseMode = "markdown"
             })
             VIDEO -> send(SendMessage().apply {
                 chatId = botUser.chatId.toString()
-                text = "${meme.caption} \n\n ${a.url}"
+                text = "${meme.caption} \n\n ${a.url}".addCaptionSuffix(meme, channels)
+                setParseMode("markdown")
             })
             NONE -> Unit
         }
     }
 
+    private fun String?.addCaptionSuffix(meme: MemeDTO, channels: List<ChannelDTO>): String {
+        val channel = channels.find { it.id == meme.channelId }
+
+        val channelHashTag = meme.channelId.cleanUpForHashTag()
+        val topicNames = channel?.topics?.firstOrNull().cleanUpForHashTag()
+        val provider = channel?.provider?.name.cleanUpForHashTag()
+
+        return """
+                  |_${this.orEmpty()}_
+                  |
+                  |*Channel:* $channelHashTag 
+                  |*Topic:* $topicNames
+                  |*Provider:* $provider
+                  |
+                  |""".trimMargin()
+    }
+
+    private fun String?.cleanUpForHashTag(): String = this.orEmpty().filter { it.isLetterOrDigit() }.toLowerCase().let { "#${it}" }
     private fun String.deserializeCallbackQuery(): BotCallbackQueryDTO = OBJECT_MAPPER.readValue(this)
     private fun BotCallbackQueryDTO.serialize(): String = OBJECT_MAPPER.writeValueAsString(this)
 }

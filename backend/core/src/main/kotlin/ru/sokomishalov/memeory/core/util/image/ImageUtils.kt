@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
-suspend fun getImageByteArray(url: String?, orElse: ByteArray = ByteArray(0)): ByteArray {
+suspend fun getImageByteArray(url: String?): ByteArray? {
     return runCatching {
         REACTIVE_WEB_CLIENT
                 .get()
@@ -15,9 +15,7 @@ suspend fun getImageByteArray(url: String?, orElse: ByteArray = ByteArray(0)): B
                 .exchange()
                 .awaitStrict()
                 .awaitBody<ByteArray>()
-    }.getOrElse {
-        orElse
-    }
+    }.getOrNull()
 }
 
 
@@ -29,22 +27,10 @@ fun ByteArray.toBufferedImage(): BufferedImage {
 
 suspend fun getImageDimensions(url: String?, default: Pair<Int, Int> = 1 to 1): Pair<Int, Int> {
     return runCatching {
-        val imageByteArray = getImageByteArray(url)
-        imageByteArray.toBufferedImage().run { width to height }
-    }.getOrElse {
-        default
-    }
+        getImageByteArray(url)?.toBufferedImage()?.run { width to height }
+    }.getOrNull() ?: default
 }
 
 suspend fun getImageAspectRatio(url: String?): Double {
-    return getImageDimensions(url).run { first.toDouble().div(second) }
-}
-
-suspend fun checkImageUrl(url: String?): Boolean {
-    return runCatching {
-        getImageByteArray(url).toBufferedImage()
-        true
-    }.getOrElse {
-        false
-    }
+    return getImageDimensions(url).run { first.toDouble() / second }
 }

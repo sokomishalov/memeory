@@ -44,10 +44,10 @@ class ChannelController(private val channelService: ChannelService,
                 channel?.let { providerFactory[it.provider]?.getLogoUrl(it) }
             }.getOrNull()
 
-            getImageByteArray(url, orElse = placeholder).also {
+            getImageByteArray(url)?.also {
                 cache.put(CHANNEL_LOGO_CACHE_KEY, channelId, it)
             }
-        }
+        } ?: placeholder
 
         return ResponseEntity
                 .ok()

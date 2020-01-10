@@ -43,7 +43,7 @@ class CommonConfiguration {
 
     @Bean
     @Qualifier("placeholder")
-    fun placeholder(@Value("classpath:images/logo.png") logoPlaceHolder: Resource): ByteArray {
+    fun placeholder(@Value("classpath:providers/memeory.png") logoPlaceHolder: Resource): ByteArray {
         return logoPlaceHolder.inputStream.use {
             it.toByteArray()
         }
