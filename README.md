@@ -1,4 +1,6 @@
-![Memeory](./additional/logo/logo.png =80px)
+<a href="https://sokomishalov.github.io/memeory/">
+    <img src="./additional/logo/logo.png" width="200" height="200" style="border-radius: 50%;"/>
+</a>
 
 # Memeory
 [![MIT license](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
