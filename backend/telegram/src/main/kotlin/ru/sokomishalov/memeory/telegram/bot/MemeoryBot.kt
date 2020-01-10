@@ -6,7 +6,7 @@ import ru.sokomishalov.memeory.core.dto.MemeDTO
 
 interface MemeoryBot {
 
-    suspend fun receiveUpdate(update: Update) : BotApiMethod<*>
+    suspend fun receiveUpdate(update: Update) : BotApiMethod<*>?
 
     suspend fun broadcastMemes(memes: List<MemeDTO>)
 

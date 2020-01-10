@@ -63,7 +63,7 @@ class MongoMemeService(
             // paginated memes by specific topic
             request.topicId.isNotNullOrBlank() -> {
                 val channelIds = channelService
-                        .findByTopic(request.topicId!!)
+                        .findByTopics(request.topicId!!)
                         .map { it.id }
                 repository.findAllByChannelIdIn(channelIds, pageRequest).await()
             }

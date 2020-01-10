@@ -33,9 +33,9 @@ class MongoChannelService(
                 ?.let { channelMapper.toDto(it) }
     }
 
-    override suspend fun findByTopic(topicId: String): List<ChannelDTO> {
+    override suspend fun findByTopics(vararg topics: String): List<ChannelDTO> {
         return repository
-                .findAllByTopicsIn(topicId)
+                .findAllByTopicsIn(topics.toList())
                 .await()
                 .let { channelMapper.toDtoList(it) }
     }

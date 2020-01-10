@@ -10,7 +10,7 @@ interface ChannelService {
 
     suspend fun findById(id: String): ChannelDTO?
 
-    suspend fun findByTopic(topicId: String): List<ChannelDTO>
+    suspend fun findByTopics(vararg topics: String): List<ChannelDTO>
 
     suspend fun findByProvider(providerId: Provider): List<ChannelDTO>
 

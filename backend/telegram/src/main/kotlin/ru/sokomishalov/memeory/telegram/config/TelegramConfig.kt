@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.generics.WebhookBot
 import ru.sokomishalov.commons.core.log.Loggable
 import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.db.ChannelService
+import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
@@ -34,11 +35,13 @@ class TelegramConfig {
     fun memeoryBot(
             props: TelegramBotProperties,
             botUserService: BotUserService,
+            memeService: MemeService,
             topicService: TopicService,
             channelService: ChannelService
     ): MemeoryBot {
         return MemeoryBotImpl(
                 props = props,
+                memeService = memeService,
                 botUserService = botUserService,
                 topicService = topicService,
                 channelService = channelService

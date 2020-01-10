@@ -13,7 +13,7 @@ import ru.sokomishalov.memeory.db.mongo.entity.Channel
 @Repository
 interface ChannelRepository : ReactiveMongoRepository<Channel, String> {
 
-    fun findAllByTopicsIn(topicId: String): Flux<Channel>
+    fun findAllByTopicsIn(topics: Iterable<String>): Flux<Channel>
 
     fun findAllByProvider(providerId: Provider): Flux<Channel>
 

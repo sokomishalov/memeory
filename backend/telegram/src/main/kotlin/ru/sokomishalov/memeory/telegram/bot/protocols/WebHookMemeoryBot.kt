@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
+import ru.sokomishalov.memeory.telegram.util.api.SendEchoMessage
 
 class WebHookMemeoryBot(
         private val props: TelegramBotProperties,
@@ -14,5 +15,7 @@ class WebHookMemeoryBot(
     override fun getBotUsername(): String = requireNotNull(props.username)
     override fun getBotToken(): String = requireNotNull(props.token)
     override fun getBotPath(): String = requireNotNull(props.path)
-    override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*> = runBlocking { bot.receiveUpdate(update) }
+    override fun onWebhookUpdateReceived(update: Update): BotApiMethod<*> = runBlocking {
+        bot.receiveUpdate(update) ?: SendEchoMessage(update)
+    }
 }

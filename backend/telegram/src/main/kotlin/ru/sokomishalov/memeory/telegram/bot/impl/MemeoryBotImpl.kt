@@ -23,16 +23,17 @@ import ru.sokomishalov.commons.core.serialization.OBJECT_MAPPER
 import ru.sokomishalov.memeory.core.dto.BotUserDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
+import ru.sokomishalov.memeory.core.dto.MemesPageRequestDTO
 import ru.sokomishalov.memeory.core.enums.AttachmentType.*
 import ru.sokomishalov.memeory.db.BotUserService
 import ru.sokomishalov.memeory.db.ChannelService
+import ru.sokomishalov.memeory.db.MemeService
 import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.telegram.autoconfigure.TelegramBotProperties
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 import ru.sokomishalov.memeory.telegram.dto.BotCallbackQueryDTO
 import ru.sokomishalov.memeory.telegram.enum.BotScreen.*
-import ru.sokomishalov.memeory.telegram.enum.Commands.CUSTOMIZE
-import ru.sokomishalov.memeory.telegram.enum.Commands.START
+import ru.sokomishalov.memeory.telegram.enum.Commands.*
 import ru.sokomishalov.memeory.telegram.util.api.extractUserInfo
 import ru.sokomishalov.memeory.telegram.util.api.send
 
@@ -43,6 +44,7 @@ import ru.sokomishalov.memeory.telegram.util.api.send
  */
 class MemeoryBotImpl(
         private val props: TelegramBotProperties,
+        private val memeService: MemeService,
         private val botUserService: BotUserService,
         private val topicService: TopicService,
         private val channelService: ChannelService,
@@ -57,7 +59,7 @@ class MemeoryBotImpl(
 
     override fun getBotToken(): String = requireNotNull(props.token)
 
-    override suspend fun receiveUpdate(update: Update): BotApiMethod<*> {
+    override suspend fun receiveUpdate(update: Update): BotApiMethod<*>? {
         return if (update.message == null) {
             val query = update.callbackQuery.data.deserializeCallbackQuery()
 
@@ -74,10 +76,12 @@ class MemeoryBotImpl(
             }
         } else {
             val message = update.message
+            val text = message.text.orEmpty()
 
-            when (message.text.orEmpty()) {
-                START.cmd -> startCmd(message)
-                CUSTOMIZE.cmd -> customizeCmd(message)
+            when {
+                text == START.cmd -> startCmd(message)
+                text == CUSTOMIZE.cmd -> customizeCmd(message)
+                text.startsWith(RANDOM.cmd) -> randomCmd(message)
                 else -> unknownCmd(message)
             }
         }
@@ -87,19 +91,14 @@ class MemeoryBotImpl(
         val users = botUserService.findAll()
         val channels = channelService.findAll()
 
-        users.forEach { u ->
+        users.forEach { user ->
             val userRelevantChannels = channels
-                    .filter { (u.topics intersect it.topics).isNotEmpty() }
+                    .filter { (user.topics intersect it.topics).isNotEmpty() }
                     .map { it.id }
 
             memes
                     .filter { it.channelId in userRelevantChannels }
-                    .forEach { m ->
-                        when {
-                            m.attachments.size <= 1 -> sendSingleAttachment(m, u, channels)
-                            else -> sendMultipleAttachments(m, u)
-                        }
-                    }
+                    .sendTo(user, channels)
         }
     }
 
@@ -135,6 +134,26 @@ class MemeoryBotImpl(
                 messageId = message.messageId
                 text = caption
                 replyMarkup = keyboardMarkup
+            }
+        }
+    }
+
+    private suspend fun randomCmd(message: Message?): BotApiMethod<*>? {
+        val username = message?.extractUserInfo()?.username.orEmpty()
+        val amount = message?.text.orEmpty().removePrefix(RANDOM.cmd).toIntOrNull() ?: 1
+        val botUser = botUserService.findByUsername(username)
+
+        return when {
+            botUser == null || botUser.topics.isEmpty() -> SendMessage().apply {
+                chatId = message?.chatId.toString()
+                text = "Select relevant channels first. Use ${START.cmd} or ${CUSTOMIZE.cmd} command"
+            }
+            else -> {
+                val pageRequest = MemesPageRequestDTO(topicId = botUser.topics.random(), pageNumber = 0, pageSize = amount)
+                val memes = memeService.getPage(pageRequest)
+                val channels = channelService.findAll()
+                memes.sendTo(botUser, channels)
+                null
             }
         }
     }
@@ -208,20 +227,13 @@ class MemeoryBotImpl(
         }
     }
 
-    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
-        send(SendMediaGroup().apply {
-            chatId = botUser.chatId.toString()
-            media = meme.attachments.mapNotNull { a ->
-                when (a.type) {
-                    IMAGE -> InputMediaPhoto().apply {
-                        media = a.url
-                        caption = meme.caption
-                    }
-                    VIDEO,
-                    NONE -> null
-                }
+    private suspend fun Iterable<MemeDTO>.sendTo(botUser: BotUserDTO, channels: List<ChannelDTO>) {
+        this.forEach {
+            when {
+                it.attachments.size <= 1 -> sendSingleAttachment(it, botUser, channels)
+                else -> sendMultipleAttachments(it, botUser)
             }
-        })
+        }
     }
 
     private suspend fun sendSingleAttachment(meme: MemeDTO, botUser: BotUserDTO, channels: List<ChannelDTO>) {
@@ -240,6 +252,22 @@ class MemeoryBotImpl(
             })
             NONE -> Unit
         }
+    }
+
+    private suspend fun sendMultipleAttachments(meme: MemeDTO, botUser: BotUserDTO) {
+        send(SendMediaGroup().apply {
+            chatId = botUser.chatId.toString()
+            media = meme.attachments.mapNotNull { a ->
+                when (a.type) {
+                    IMAGE -> InputMediaPhoto().apply {
+                        media = a.url
+                        caption = meme.caption
+                    }
+                    VIDEO,
+                    NONE -> null
+                }
+            }
+        })
     }
 
     private fun String?.addCaptionSuffix(meme: MemeDTO, channels: List<ChannelDTO>): String {
