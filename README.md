@@ -1,3 +1,5 @@
+![Memeory](./additional/logo/logo.png =80px)
+
 # Memeory
 [![MIT license](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![codebeat badge](https://codebeat.co/badges/1232b163-6bdf-4f75-951f-9252af33cdaf)](https://codebeat.co/projects/github-com-sokomishalov-memeory-master)
