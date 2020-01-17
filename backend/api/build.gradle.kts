@@ -5,6 +5,7 @@ dependencies {
     api(project(":db"))
     api(project(":providers"))
     api(project(":telegram"))
+    api(project(":heroku-keepalive"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

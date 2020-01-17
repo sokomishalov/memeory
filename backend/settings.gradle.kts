@@ -1,4 +1,4 @@
-include("api", "core", "db", "providers", "telegram")
+include("api", "core", "db", "providers", "telegram", "heroku-keepalive")
 
 pluginManagement {
     repositories {
