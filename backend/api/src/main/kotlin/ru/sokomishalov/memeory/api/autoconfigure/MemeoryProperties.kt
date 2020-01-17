@@ -15,6 +15,5 @@ data class MemeoryProperties(
         val fetchLimit: Int = 100,
         val fetchInterval: Duration = ofMinutes(30),
         val memeLifeTime: Duration = ofDays(10),
-        val useClusterLocks: Boolean = false,
         val admins: List<AdminUserDTO> = emptyList()
 )

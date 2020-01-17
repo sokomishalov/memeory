@@ -1,7 +1,6 @@
 package ru.sokomishalov.memeory.db.mongo.config
 
 import com.mongodb.MongoClientOptions
-import com.mongodb.reactivestreams.client.MongoClient
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -12,8 +11,6 @@ import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
-import ru.sokomishalov.commons.distributed.locks.DistributedLockProvider
-import ru.sokomishalov.commons.distributed.locks.mongo.MongoReactiveDistributedLockProvider
 import ru.sokomishalov.memeory.core.util.consts.MONGO_KEY_DOT_REPLACEMENT
 import java.time.Duration.ofSeconds
 
@@ -25,12 +22,6 @@ import java.time.Duration.ofSeconds
 @EnableReactiveMongoRepositories("ru.sokomishalov.memeory.db.mongo.repository")
 @EnableConfigurationProperties(MongoProperties::class)
 class MongoConfig {
-
-    @Bean
-    @Primary
-    fun mongoReactiveLockProvider(client: MongoClient): DistributedLockProvider {
-        return MongoReactiveDistributedLockProvider(client = client)
-    }
 
     @Bean
     @Primary

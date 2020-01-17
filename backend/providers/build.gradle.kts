@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 dependencies {
     api(project(":core"))
 
-    implementation("org.jsoup:jsoup:1.12.1")
+    api("com.github.sokomishalov.skraper:skrapers:0.0.4")
 
     testImplementation("junit:junit:4.12")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

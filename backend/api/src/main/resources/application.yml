@@ -13,7 +13,6 @@ memeory:
   fetch-limit: 100
   fetch-interval: 30m
   meme-life-time: 10d
-  use-cluster-locks: false
 
 management:
   health:

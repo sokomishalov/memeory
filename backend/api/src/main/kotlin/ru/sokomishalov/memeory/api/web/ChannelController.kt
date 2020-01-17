@@ -15,9 +15,9 @@ import ru.sokomishalov.commons.spring.cache.put
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.util.consts.CHANNEL_LOGO_CACHE_KEY
 import ru.sokomishalov.memeory.core.util.consts.DELIMITER
-import ru.sokomishalov.memeory.core.util.image.getImageByteArray
 import ru.sokomishalov.memeory.db.ChannelService
 import ru.sokomishalov.memeory.providers.ProviderFactory
+import ru.sokomishalov.memeory.providers.getChannelLogoByteArray
 
 /**
  * @author sokomishalov
@@ -38,16 +38,15 @@ class ChannelController(private val channelService: ChannelService,
 
     @GetMapping("/logo/{channelId}")
     suspend fun logo(@PathVariable("channelId") channelId: String): ResponseEntity<ByteArray> {
-        val logoByteArray = cache.get<ByteArray>(CHANNEL_LOGO_CACHE_KEY, channelId) ?: run {
-            val url = runCatching {
-                val channel = channelService.findById(channelId)
-                channel?.let { providerFactory[it.provider]?.getLogoUrl(it) }
-            }.getOrNull()
-
-            getImageByteArray(url)?.also {
-                cache.put(CHANNEL_LOGO_CACHE_KEY, channelId, it)
-            }
-        } ?: placeholder
+        val logoByteArray = cache.get<ByteArray>(CHANNEL_LOGO_CACHE_KEY, channelId)
+                ?: run {
+                    runCatching {
+                        val channel = channelService.findById(channelId)
+                        val bytes = channel?.let { providerFactory[it.provider].getChannelLogoByteArray(it) }
+                        bytes?.also { cache.put(CHANNEL_LOGO_CACHE_KEY, channelId, it) }
+                    }.getOrNull()
+                }
+                ?: placeholder
 
         return ResponseEntity
                 .ok()
