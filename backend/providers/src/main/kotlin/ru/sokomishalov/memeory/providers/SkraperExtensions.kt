@@ -9,8 +9,6 @@ import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.getPageLogoByteArray
 import ru.sokomishalov.skraper.model.AttachmentType.IMAGE
 import ru.sokomishalov.skraper.model.AttachmentType.VIDEO
-import ru.sokomishalov.skraper.model.GetLatestPostsOptions
-import ru.sokomishalov.skraper.model.GetPageLogoUrlOptions
 import java.time.Duration
 import java.util.*
 
@@ -19,8 +17,7 @@ import java.util.*
  */
 
 suspend fun Skraper.fetchMemes(channel: ChannelDTO, limit: Int = 100): List<MemeDTO> {
-    val options = GetLatestPostsOptions(uri = channel.uri, limit = limit, fetchAspectRatio = true)
-    return getLatestPosts(options).mapIndexed { index, post ->
+    return getLatestPosts(uri = channel.uri, limit = limit, fetchAspectRatio = true).mapIndexed { index, post ->
         MemeDTO(
                 id = "${channel.id}${DELIMITER}${post.id}",
                 channelId = channel.id,
@@ -41,8 +38,7 @@ suspend fun Skraper.fetchMemes(channel: ChannelDTO, limit: Int = 100): List<Meme
 }
 
 suspend fun Skraper.getChannelLogoByteArray(channel: ChannelDTO): ByteArray? {
-    val options = GetPageLogoUrlOptions(uri = channel.uri)
-    return getPageLogoByteArray(options)
+    return getPageLogoByteArray(uri = channel.uri)
 }
 
 
