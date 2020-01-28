@@ -1,23 +1,19 @@
 package ru.sokomishalov.memeory.providers
 
-import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
-import ru.sokomishalov.memeory.core.enums.AttachmentType
-import ru.sokomishalov.memeory.core.util.consts.DELIMITER
 import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.getPageLogoByteArray
 import ru.sokomishalov.skraper.model.AttachmentType.IMAGE
 import ru.sokomishalov.skraper.model.AttachmentType.VIDEO
 import java.time.Duration
-import java.util.*
 
 /**
  * @author sokomishalov
  */
 
 suspend fun Skraper.fetchMemes(channel: ChannelDTO, limit: Int = 100): List<MemeDTO> {
-    return getLatestPosts(uri = channel.uri, limit = limit, fetchAspectRatio = true).mapIndexed { index, post ->
+    return getLatestPosts(uri = channel.uri, limit = limit).mapIndexed { index, post ->
         MemeDTO(
                 id = "${channel.id}${DELIMITER}${post.id}",
                 channelId = channel.id,

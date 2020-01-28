@@ -6,7 +6,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 plugins {
     base
 
-    id("org.springframework.boot") version "2.2.2.RELEASE" apply false
+    id("org.springframework.boot") version "2.2.4.RELEASE" apply false
 
     val kotlinVersion = "1.3.61"
     kotlin("jvm") version kotlinVersion
