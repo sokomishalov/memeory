@@ -4,9 +4,13 @@ import ru.sokomishalov.memeory.core.dto.ChannelDTO
 import ru.sokomishalov.memeory.core.dto.MemeDTO
 import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.getPageLogoByteArray
+import ru.sokomishalov.memeory.core.util.consts.DELIMITER
+import ru.sokomishalov.memeory.core.enums.AttachmentType
+import ru.sokomishalov.memeory.core.dto.AttachmentDTO
 import ru.sokomishalov.skraper.model.AttachmentType.IMAGE
 import ru.sokomishalov.skraper.model.AttachmentType.VIDEO
 import java.time.Duration
+import java.util.Date
 
 /**
  * @author sokomishalov
