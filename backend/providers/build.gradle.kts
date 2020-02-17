@@ -3,7 +3,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 dependencies {
     api(project(":core"))
 
-    api("com.github.sokomishalov.skraper:skrapers:0.0.7")
+    api("com.github.sokomishalov.skraper:skrapers:0.1.4")
 
     testImplementation("junit:junit:4.12")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

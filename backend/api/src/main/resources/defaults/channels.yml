@@ -5,21 +5,21 @@
 - id: reddit:memes
   name: memes (Reddit)
   provider: REDDIT
-  uri: memes
+  uri: /r/memes
   topics:
     - memes
 
 - id: reddit:videos
   name: videos (Reddit)
   provider: REDDIT
-  uri: videos
+  uri: /r/videos
   topics:
     - videos
 
 - id: reddit:programmer-humor
   name: ProgrammerHumor (Reddit)
   provider: REDDIT
-  uri: ProgrammerHumor
+  uri: /r/ProgrammerHumor
   topics:
     - it
 
@@ -30,14 +30,14 @@
 - id: vk:vgik
   name: ВГИК (VK)
   provider: VK
-  uri: komment
+  uri: /komment
   topics:
     - sports
 
 - id: vk:p_drogba
   name: Портье Дрогба (VK)
   provider: VK
-  uri: p_drogba
+  uri: /p_drogba
   topics:
     - sports
 
@@ -48,7 +48,7 @@
 - id: facebook:originaltrollfootball
   name: Troll Football (Facebook)
   provider: FACEBOOK
-  uri: originaltrollfootball
+  uri: /originaltrollfootball
   topics:
     - sports
 
@@ -59,7 +59,7 @@
 - id: instagram:originaltrollfootball
   name: Troll Football (Instagram)
   provider: INSTAGRAM
-  uri: originaltrollfootball
+  uri: /originaltrollfootball
   topics:
     - sports
 
@@ -70,7 +70,7 @@
 - id: twitter:russianmemesltd
   name: Russian Memes United (Twitter)
   provider: TWITTER
-  uri: russianmemesltd
+  uri: /russianmemesltd
   topics:
     - memes
 
@@ -81,42 +81,42 @@
 - id: 9gag:meme
   name: memes (9gag)
   provider: NINEGAG
-  uri: meme
+  uri: /meme
   topics:
     - memes
 
 - id: 9gag:politics
   name: politics (9gag)
   provider: NINEGAG
-  uri: politics
+  uri: /politics
   topics:
     - politics
 
 - id: 9gag:gaming
   name: gaming (9gag)
   provider: NINEGAG
-  uri: games
+  uri: /games
   topics:
     - games
 
 - id: 9gag:animals
   name: animals (9gag)
   provider: NINEGAG
-  uri: animals
+  uri: /animals
   topics:
     - animals
 
 - id: 9gag:car
   name: car (9gag)
   provider: NINEGAG
-  uri: car
+  uri: /car
   topics:
     - cars
 
 - id: 9gag:video
   name: video (9gag)
   provider: NINEGAG
-  uri: video
+  uri: /video
   topics:
     - videos
 
@@ -127,7 +127,7 @@
 - id: pinterest:celiatoler:pinterest-memes
   name: some memes (pinterest)
   provider: PINTEREST
-  uri: celiatoler/pinterest-memes
+  uri: /levato/meme
   topics:
     - memes
 
@@ -138,55 +138,55 @@
 - id: ifunny:memes
   name: memes (ifunny)
   provider: IFUNNY
-  uri: memes
+  uri: /memes
   topics:
     - memes
 
 - id: ifunny:animals-nature
   name: animals (ifunny)
   provider: IFUNNY
-  uri: animals-nature
+  uri: /animals-nature
   topics:
     - animals-and-nature
 
 - id: ifunny:car
   name: car (ifunny)
   provider: IFUNNY
-  uri: car
+  uri: /car
   topics:
     - cars
 
 - id: ifunny:gaming
   name: gaming (ifunny)
   provider: IFUNNY
-  uri: gaming
+  uri: /gaming
   topics:
     - games
 
 - id: ifunny:politics
   name: politics (ifunny)
   provider: IFUNNY
-  uri: politics
+  uri: /politics
   topics:
     - politics
 
 - id: ifunny:movies
   name: movies (ifunny)
   provider: IFUNNY
-  uri: movies
+  uri: /movies
   topics:
     - movies
 
 - id: ifunny:sports
   name: sports (ifunny)
   provider: IFUNNY
-  uri: sports
+  uri: /sports
   topics:
     - sports
 
 - id: ifunny:science-tech
   name: science-tech (ifunny)
   provider: IFUNNY
-  uri: science-tech
+  uri: /science-tech
   topics:
     - science-and-tech

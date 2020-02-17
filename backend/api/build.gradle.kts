@@ -16,7 +16,7 @@ dependencies {
     implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
     implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
 
-    implementation("io.netty:netty-transport-native-epoll:4.1.44.Final")
+    implementation("io.netty:netty-transport-native-epoll:4.1.45.Final")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.2")
 }
 

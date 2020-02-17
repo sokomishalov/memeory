@@ -36,16 +36,16 @@ class CommonConfiguration {
     fun reactiveWebClient(): WebClient = REACTIVE_WEB_CLIENT
 
     @Bean
+    @Primary
     fun jackson2JsonDecoder(): Jackson2JsonDecoder = JACKSON_DECODER
 
     @Bean
+    @Primary
     fun jackson2JsonEncoder(): Jackson2JsonEncoder = JACKSON_ENCODER
 
     @Bean
     @Qualifier("placeholder")
-    fun placeholder(@Value("classpath:providers/memeory.png") logoPlaceHolder: Resource): ByteArray {
-        return logoPlaceHolder.inputStream.use {
-            it.toByteArray()
-        }
+    fun placeholder(@Value("classpath:logo/memeory.png") logoPlaceHolder: Resource): ByteArray {
+        return logoPlaceHolder.inputStream.use { it.toByteArray() }
     }
 }

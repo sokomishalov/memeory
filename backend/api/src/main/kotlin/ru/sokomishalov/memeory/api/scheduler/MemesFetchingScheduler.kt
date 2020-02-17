@@ -59,24 +59,22 @@ class MemesFetchingScheduler(
     }
 
     suspend fun loadMemes() {
-        log("About to fetch some new memes")
+        logInfo { "About to fetch some new memes" }
 
-        val fetchedMemes = channelService
-                .findAll()
-                .map { fetchMemes(it) }
-                .flatten()
+        val channels = channelService.findAll()
+        val fetchedMemes = channels.flatMap { fetchMemes(channel = it) }
 
-        val savedMemes = memeService.save(fetchedMemes, props.memeLifeTime)
-        logInfo("Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}.")
+        val savedMemes = memeService.save(batch = fetchedMemes, ttl = props.memeLifeTime)
+        logInfo { "Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}." }
 
         bot.broadcastMemes(savedMemes)
-        logInfo("Finished broadcasting memes by bot")
+        logInfo { "Finished broadcasting memes by bot" }
     }
 
     private suspend fun fetchMemes(channel: ChannelDTO): List<MemeDTO> {
         return runCatching {
             providerFactory[channel.provider]
-                    .fetchMemes(channel, props.fetchLimit)
+                    .fetchMemes(channel = channel, limit = props.fetchLimit)
                     .map { it.apply { it.channelId = channel.id } }
         }.onFailure {
             logWarn(it)

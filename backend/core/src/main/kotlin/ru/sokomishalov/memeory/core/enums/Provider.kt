@@ -5,8 +5,11 @@ enum class Provider {
     FACEBOOK,
     INSTAGRAM,
     TWITTER,
+    YOUTUBE,
     NINEGAG,
     PINTEREST,
+    TUMBLR,
+    IFUNNY,
     VK,
-    IFUNNY
+    PIKABU
 }
