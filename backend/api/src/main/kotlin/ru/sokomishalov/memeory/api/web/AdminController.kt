@@ -2,6 +2,7 @@ package ru.sokomishalov.memeory.api.web
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.web.bind.annotation.*
 import ru.sokomishalov.memeory.api.scheduler.MemesFetchingScheduler
 import ru.sokomishalov.memeory.core.dto.ChannelDTO
@@ -18,7 +19,7 @@ import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
 class AdminController(
         private val channelService: ChannelService,
         private val memeService: MemeService,
-        private val bot: MemeoryBot,
+        private val bot: ObjectProvider<MemeoryBot>,
         private val scheduler: MemesFetchingScheduler
 ) {
 
@@ -44,7 +45,7 @@ class AdminController(
                     pageNumber = page,
                     pageSize = count
             ))
-            bot.broadcastMemes(memes)
+            bot.ifAvailable?.broadcastMemes(memes)
         }
     }
 
@@ -54,7 +55,7 @@ class AdminController(
     ) {
         GlobalScope.launch {
             val meme = memeService.findById(id)
-            bot.broadcastMemes(listOfNotNull(meme))
+            bot.ifAvailable?.broadcastMemes(listOfNotNull(meme))
         }
     }
 }

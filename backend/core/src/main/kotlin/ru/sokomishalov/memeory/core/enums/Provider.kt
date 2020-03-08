@@ -8,6 +8,7 @@ enum class Provider {
     YOUTUBE,
     NINEGAG,
     PINTEREST,
+    FLICKR,
     TUMBLR,
     IFUNNY,
     VK,

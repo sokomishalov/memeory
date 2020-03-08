@@ -7,6 +7,7 @@ import ru.sokomishalov.skraper.Skraper
 import ru.sokomishalov.skraper.SkraperClient
 import ru.sokomishalov.skraper.client.spring.SpringReactiveSkraperClient
 import ru.sokomishalov.skraper.provider.facebook.FacebookSkraper
+import ru.sokomishalov.skraper.provider.flickr.FlickrSkraper
 import ru.sokomishalov.skraper.provider.ifunny.IFunnySkraper
 import ru.sokomishalov.skraper.provider.instagram.InstagramSkraper
 import ru.sokomishalov.skraper.provider.ninegag.NinegagSkraper
@@ -34,6 +35,7 @@ class ProviderFactory {
             YOUTUBE to YoutubeSkraper(client = client),
             NINEGAG to NinegagSkraper(client = client),
             PINTEREST to PinterestSkraper(client = client),
+            FLICKR to FlickrSkraper(client = client),
             TUMBLR to TumblrSkraper(client = client),
             IFUNNY to IFunnySkraper(client = client),
             VK to VkSkraper(client = client),

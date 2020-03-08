@@ -1,6 +1,7 @@
 package ru.sokomishalov.memeory.api.scheduler
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -21,7 +22,6 @@ import ru.sokomishalov.memeory.db.TopicService
 import ru.sokomishalov.memeory.providers.ProviderFactory
 import ru.sokomishalov.memeory.providers.fetchMemes
 import ru.sokomishalov.memeory.telegram.bot.MemeoryBot
-import java.time.Duration
 
 /**
  * @author sokomishalov
@@ -33,7 +33,7 @@ class MemesFetchingScheduler(
         private val memeService: MemeService,
         private val topicService: TopicService,
         private val providerFactory: ProviderFactory,
-        private val bot: MemeoryBot,
+        private val bot: ObjectProvider<MemeoryBot>,
         @Value("classpath:defaults/channels.yml")
         private val defaultChannels: Resource,
         @Value("classpath:defaults/topics.yml")
@@ -45,7 +45,7 @@ class MemesFetchingScheduler(
     @EventListener(ApplicationReadyEvent::class)
     fun onApplicationStartUp(): Mono<Any> = aMono {
         storeDefaults()
-        runScheduled(delay = Duration.ZERO, interval = props.fetchInterval) {
+        runScheduled(interval = props.fetchInterval) {
             loadMemes()
         }
     }
@@ -67,7 +67,7 @@ class MemesFetchingScheduler(
         val savedMemes = memeService.save(batch = fetchedMemes, ttl = props.memeLifeTime)
         logInfo { "Finished fetching memes. Total fetched: ${fetchedMemes.size}. Total saved: ${savedMemes.size}." }
 
-        bot.broadcastMemes(savedMemes)
+        bot.ifAvailable?.broadcastMemes(savedMemes)
         logInfo { "Finished broadcasting memes by bot" }
     }
 

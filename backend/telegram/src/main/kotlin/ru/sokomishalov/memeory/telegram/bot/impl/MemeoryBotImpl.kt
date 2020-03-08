@@ -278,7 +278,7 @@ class MemeoryBotImpl(
         val provider = memeChannel?.provider?.name.cleanUpForHashTag()
 
         return """
-                  |_${this.orEmpty()}_
+                  |${this.orEmpty()}
                   |
                   |*Channel:* $channelHashTag 
                   |*Topic:* $topicNames
