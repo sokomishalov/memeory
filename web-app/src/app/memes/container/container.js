@@ -2,21 +2,22 @@ import React from 'react'
 import "./container.css"
 import VideoAttachment from "./video/video-attachment"
 import ImageAttachment from "./image/image-attachment"
-import {timeAgo} from "../../../util/time/time"
-import {ChannelLogo} from "../../common/logo/channel"
+import { timeAgo } from "../../../util/time/time"
+import { ChannelLogo } from "../../common/logo/channel"
 import _ from "lodash"
-import {Button, Carousel, Dropdown, Menu} from "antd"
-import {AspectRatio} from "react-aspect-ratio"
-import {ATTACHMENT_TYPE, MEME_BORDER_RADIUS} from "../../../util/consts/consts"
-import {withT} from "../../../util/locales/i18n";
-import {errorToast, successToast} from "../../common/toast/toast";
+import { Button, Carousel, Dropdown, Menu } from "antd"
+import { EllipsisOutlined } from "@ant-design/icons"
+import { AspectRatio } from "react-aspect-ratio"
+import { ATTACHMENT_TYPE, MEME_BORDER_RADIUS } from "../../../util/consts/consts"
+import { withT } from "../../../util/locales/i18n";
+import { errorToast, successToast } from "../../common/toast/toast";
 import copy from "copy-to-clipboard";
-import {PARAMS, ROUTE} from "../../../util/router/router";
-import {isBrowser} from "react-device-detect"
-import {withRouter} from "react-router";
-import {stopPropagation} from "../../common/event/events";
-import {connect} from "react-redux";
-import {selectChannel} from "../../../store/selectors/channels";
+import { PARAMS, ROUTE } from "../../../util/router/router";
+import { isBrowser } from "react-device-detect"
+import { withRouter } from "react-router";
+import { stopPropagation } from "../../common/event/events";
+import { connect } from "react-redux";
+import { selectChannel } from "../../../store/selectors/channels";
 
 const MemeContainer = ({t, history, meme, channel}) => {
 
@@ -117,7 +118,7 @@ const MemeContainer = ({t, history, meme, channel}) => {
                                   </Menu>
                               }>
 
-                        <Button icon="ellipsis"
+                        <Button icon={<EllipsisOutlined/>}
                                 onClick={stopPropagation}
                                 style={{
                                     background: "transparent"

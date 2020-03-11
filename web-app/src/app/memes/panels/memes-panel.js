@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import "./memes-panel.css"
 import InfiniteScroll from "react-infinite-scroller";
 import _ from "lodash";
 import MemeContainer from "../container/container";
 import OnScrollUpReveal from "../../common/event/on-scroll-up-reveal";
-import {BackTop, Icon} from "antd";
-import {getMemesPage, getSingleMeme} from "../../../api/memes";
-import {withT} from "../../../util/locales/i18n";
+import { BackTop } from "antd";
+import { MehOutlined } from "@ant-design/icons"
+import { getMemesPage, getSingleMeme } from "../../../api/memes";
+import { withT } from "../../../util/locales/i18n";
 import Loader from "../../common/loader/loader";
 
 const MemesList = ({t, providerId = null, topicId = null, channelId = null, memeId = null}) => {
@@ -63,7 +64,7 @@ const MemesList = ({t, providerId = null, topicId = null, channelId = null, meme
                 {_.map(memes, (meme) => <MemeContainer key={meme["id"]} meme={meme}/>)}
                 {!hasMore && (
                     <div className="memes-no-more">
-                        <Icon type="meh" className="mr-5"/>
+                        <MehOutlined className="mr-5"/>
                         {t("no.more.memes")}
                     </div>
                 )}
