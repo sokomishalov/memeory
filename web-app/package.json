@@ -9,7 +9,7 @@
     "@fortawesome/free-brands-svg-icons": "~5.13.0",
     "@fortawesome/free-solid-svg-icons": "~5.13.0",
     "@fortawesome/react-fontawesome": "~0.1.9",
-    "antd": "^4.2.4",
+    "antd": "^4.5.3",
     "antd-mobile": "^2.3.3",
     "axios": "^0.19.2",
     "copy-to-clipboard": "~3.3.1",
