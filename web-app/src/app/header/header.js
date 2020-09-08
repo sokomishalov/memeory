@@ -44,7 +44,7 @@ const Header = ({t, history}) => {
                     height: 40,
                     backgroundColor: "inherit"
                 }}>
-                    <Avatar icon={<UserOutlined/>} style={{marginRight: 10}}/>
+                    <Avatar icon={<UserOutlined/>} style={{marginRight: 10, margitTop: -5}}/>
                     <DownOutlined className="ml-10"/>
                 </Button>
             </Dropdown>

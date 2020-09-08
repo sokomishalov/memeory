@@ -6,9 +6,9 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 plugins {
     base
 
-    id("org.springframework.boot") version "2.2.5.RELEASE" apply false
+    id("org.springframework.boot") version "2.2.8.RELEASE" apply false
 
-    val kotlinVersion = "1.3.70"
+    val kotlinVersion = "1.4.0"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion apply false
     kotlin("plugin.spring") version kotlinVersion apply false

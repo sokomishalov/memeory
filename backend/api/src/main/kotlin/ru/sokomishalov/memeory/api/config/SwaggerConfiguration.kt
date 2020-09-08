@@ -17,27 +17,26 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType.SWAGGER_2
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
 
 /**
  * @author sokomishalov
  */
 @Configuration
-@EnableSwagger2WebFlux
 class SwaggerConfiguration {
 
     @Bean
-    fun customImplementation(): Docket =
-            Docket(SWAGGER_2)
-                    .select()
-                    .apis(basePackage(MemeoryApplication::class.java.`package`.name))
-                    .paths { true }
-                    .build()
-                    .customize(
-                            title = "Memeory API",
-                            securityContext = securityContext(),
-                            securityScheme = securityScheme()
-                    )
+    fun customImplementation(): Docket {
+        return Docket(SWAGGER_2)
+                .select()
+                .apis(basePackage(MemeoryApplication::class.java.`package`.name))
+                .paths { true }
+                .build()
+                .customize(
+                        title = "Memeory API",
+                        securityContext = securityContext(),
+                        securityScheme = securityScheme()
+                )
+    }
 
     @Bean
     fun router(): RouterFunction<ServerResponse> = router {
